@@ -1,0 +1,62 @@
+body {
+	margin: 0;
+	padding: 0;
+}
+
+#visual {
+	margin: 10px;
+}
+#visual, #VisualJSTooltip {
+	font-family: Verdana,Arial,Helvetica,sans-serif;
+	font-size: 13px;
+	background-color: #fff;
+}
+
+#visual , #visual  h1 {
+	font-size: 13px;
+}
+#visual h2, #VisualJSTooltip {
+	font-size: 11px;
+	font-weight: normal;
+}
+
+/* Flot */
+#visual .VisualJSmini .flot-tick-label {
+	font-size: 8px;
+}
+#VisualJSTooltip {
+	display: none;
+	position: absolute;
+/*	border: 1px solid #69c;*/
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	padding: 4px;
+	background-color: #f6f6f6;
+	opacity: 0.90;
+	white-space: nowrap;
+}
+#VisualJSTooltip strong {
+	display: block;
+}
+
+#visual .VisualJSnw {
+	white-space: nowrap;
+}
+
+/* SVG */
+#visual .area {
+	fill: #808080;
+	stroke: none;
+}
+
+#visual svg g.llegenda{
+	stroke:#808080;
+	stroke-width:1px;
+}
+
+#visual svg g.llegenda text{
+	font-size: 11px;
+	fill: black;
+	stroke: none;
+	
+}
