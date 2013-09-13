@@ -13,19 +13,19 @@
 
 # Configuration
 
-Edit visual.setup.js and visual.css to meet your needs. You might need to provide your own maps and adapt the VisualJS.func.legend function inside visual.maps.js (see the maps folder).
+Edit [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js) and [visual.css](https://github.com/idescat/visual/blob/master/visual.css) to meet your needs. You might need to provide your own maps and adapt the *VisualJS.func.legend* function inside [visual.maps.js](https://github.com/idescat/visual/blob/master/maps/visual.maps.max.js) (see the [maps folder](https://github.com/idescat/visual/tree/master/maps)).
 
 # Installation
 
 **Visual** allows two running modes: **webpage** (recommended) and **direct** (experimental). See the examples in the test folder.
 
-## Webpage mode
+### Webpage mode
 
-In the webpage mode, the visualization is the only content in an html5 page. Use the webpage.html template to build your page. To embed the visualization, use an iframe pointing to your page.
+In the webpage mode, the visualization is the only content in an html5 page. Use the [webpage template](https://github.com/idescat/visual/blob/master/templates/webpage.html) to build your page. To embed the visualization, use an iframe pointing to your page.
 
-## Direct mode
+### Direct mode
 
-In the direct mode, the visualization is directly embedded in a page. Use the direct.html template as an example. If you are embedding a single visualization, include the same javascripts as in the webpage.html template.
+In the direct mode, the visualization is directly embedded in a page. Use the [direct template](https://github.com/idescat/visual/blob/master/templates/direct.html) as an example. If you are embedding a single visualization, include the same javascripts as in the webpage.html template.
 
 If you are embedding more than one visualization in the page, LazyLoad will only include the javascripts needed for the first visualization in the **visual** function. Instead, include all the needed javascripts manually. Do not include LazyLoad. You will also need to specify an *id* and its size (in the *fixed* property: *[width, height]*) for each visualization.
 
@@ -45,6 +45,6 @@ These libraries are only loaded when needed.
 
 [D3](http://d3js.org) requires a modern browser (versions of Internet Explorer prior to 9 are not supported). **Visual** uses D3 for choropleth maps.
 
-The VisualJS.func.colors function inside visual.maps.js dynamically adds styles to the document. Some browsers might enforce a same domain policy: visual.maps.js must be in the same domain as the page where the styles will be inserted.
+The *VisualJS.func.colors* function inside [visual.maps.js](https://github.com/idescat/visual/blob/master/maps/visual.maps.max.js) dynamically adds styles to the document. Some browsers might enforce a same domain policy: [visual.maps.js](https://github.com/idescat/visual/blob/master/maps/visual.maps.max.js) must be in the same domain as the page where the styles will be inserted.
 
 The non-stacked time series chart supports a maximum of three series.
