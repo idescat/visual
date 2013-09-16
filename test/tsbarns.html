@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]><html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]><html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html> <!--<![endif]-->
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<link href="../visual.css" rel="stylesheet" type="text/css" />
+		<script src="../lib/lazyload.js"></script>
+		<script src="../visual.js"></script>
+		<script src="../visual.setup.js"></script>
+	</head>
+	
+	<body>
+		<div id="visual"></div>
+		<script>
+			visual(
+				{
+					title: "TSBAR non-stacked example",
+					geo: "Catalonia",
+					time: ["1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012"], //Array? It's a time series
+					source: "The source goes here.",
+					symbol: {text: "M €"}, //Use 'position: "start"' to move the symbol text
+					type: "tsbar",
+					data: [
+						{ label: "Exportacions", val: [ 27147.8, 27890.6, 33796.5, 36694.5, 37275.9, 37648.5, 39485.1, 42703.4, 47218.8, 49679.8, 50515.7, 41461.7, 48871.6, 54999.9, 58321.7 ] },
+						{ label: "Importacions", val: [ 36203.7, 40316.5, 48761.7, 50497.9, 51891.8, 54344.7, 60731, 67813.3, 74787.8, 80363.4, 77233.9, 57663.8, 67621.1, 72280.2, 69343.1 ] }
+					]
+				}
+			);
+		</script>
+	</body>
+</html>

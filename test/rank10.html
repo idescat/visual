@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]><html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]><html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html> <!--<![endif]-->
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<link href="../visual.css" rel="stylesheet" type="text/css" />
+		<script src="../lib/lazyload.js"></script>
+		<script src="../visual.js"></script>
+		<script src="../visual.setup.js"></script>
+	</head>
+	
+	<body>
+		<div id="visual"></div>
+		<script>
+			visual(
+				{
+					title: "RANK example (10 data)",
+					geo: "Catalonia",
+					time: "2009",
+					symbol: {text: "milers €"}, //Array? It's a time series
+					source: "The source goes here.",
+					type: "rank",
+					data: [ ["Matadepera", 30700], ["Alella", 26900], ["Teià", 26500], ["Cabrils", 26400], ["Sant Just Desvern", 25400], ["Tiana", 23200], ["Ametlla del Vallès, l'", 23000], ["Sant Cugat del Vallès", 22800], ["Sant Vicenç de Montalt", 22800], ["Sant Pol de Mar", 22500] ]
+				}
+			);
+		</script>
+	</body>
+</html>
