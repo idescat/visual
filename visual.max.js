@@ -252,42 +252,10 @@ var VisualJS={
 						xy=d3.geo.mercator()
 							.center([1.74, 41.7])
 							.scale(9000)
-							.translate([VisualJS.hwmin/2, VisualJS.hwmin/2])
-						
-
-
-/*
-
-center([1.375, 41.97]).scale(11700).translate([VisualJS.hwmin/2, VisualJS.hwmin/2]);
-
-GOOD
-xy=d3.geo.mercator().center([1.74, 41.7])
-
-.translate([VisualJS.hwmin/2, VisualJS.hwmin/2]);
-
-
-
-
-.translate([480, 250]).scale(500)*/
+							.translate([VisualJS.hwmin/2, VisualJS.hwmin/2]),
 						path=d3.geo.path().projection(xy),
 						tooltip=d3.select("#" + VisualJS.setup.tooltipid)
 					;
-/*
-
-  var scale = 500,
-      translate = [480, 250];
-
-	  var projection = d3.geo.albers()
-    .center([0, 55.4])
-    .rotate([4.4, 0])
-    .parallels([50, 60])
-    .scale(6000)
-    .translate([VisualJS.hwmin / 2, VisualJS.hwmin / 2]);
-
-scale: 56000,
-	translate: [-20,7400],
-
-	*/
 
 					if (typeof o.dec!=="undefined"){
 						VisualJS.dec=o.dec;
