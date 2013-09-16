@@ -11,13 +11,17 @@
 * Population pyramid: *pyram*
 * Choropleth map: *cmap*
 
+# Test
+
+Download the [full source and tests](https://github.com/idescat/visual/archive/master.zip) and try the examples in the [test folder](https://github.com/idescat/visual/tree/master/maps). Some browsers (Firefox) might throw a security error if the project is not run on a web server. This issue only affects coropleth maps.
+
 # Configuration
 
 Edit [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js) and [visual.css](https://github.com/idescat/visual/blob/master/visual.css) to meet your needs. You might need to provide your own maps and adapt the *VisualJS.func.legend* function inside [visual.maps.js](https://github.com/idescat/visual/blob/master/maps/visual.maps.max.js) (see the [maps folder](https://github.com/idescat/visual/tree/master/maps)).
 
 # Installation
 
-**Visual** allows two running modes: **webpage** (recommended) and **direct** (experimental). See the examples in the test folder.
+**Visual** allows two running modes: **webpage** (recommended) and **direct** (experimental). See the examples in the [test folder](https://github.com/idescat/visual/tree/master/maps).
 
 ### Webpage mode
 
