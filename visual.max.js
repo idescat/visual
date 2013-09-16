@@ -1,6 +1,7 @@
 /*
+Visual
 Copyright (c) 2013 Institut d'Estadistica de Catalunya (Idescat)
-http://www.idescat.cat
+http://www.idescat.cat (https://github.com/idescat/visual)
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -23,8 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.1.7",
-
+	version: "0.1.8",
 	id: "visual",
 	symbol : {
 		text: "", 
@@ -34,7 +34,6 @@ var VisualJS={
 	//Used in maps
 	dec: 0, //Used in the map legend
 	filter: 0.05, //Used in color assignation in maps
-
 	fixed: null,
 	width: 500,
 	bwidth: 500, //body width
@@ -221,13 +220,6 @@ var VisualJS={
 			}else{
 				VisualJS.addJS( VisualJS.setup.lib.maps, true );
 				VisualJS.addJS( VisualJS.setup.lib.d3, true );
-/*
-				if( VisualJS.addJS( VisualJS.setup.lib.d3, true ) ){ //No d3? then add geo without checking (exists conditions won't work).
-					VisualJS.addJS( VisualJS.setup.lib.d3.geo, false );
-				}else{ //Has d3: Ok, check if d3.geo
-					VisualJS.addJS( VisualJS.setup.lib.d3.geo, true );
-				}
-*/
 
 				switch(o.by){
 					case "mun":
@@ -244,10 +236,10 @@ var VisualJS={
 				///////// CHART
 				VisualJS.chart=function(){
 					var 
-						min=(typeof o.filter!=="undefined") ? o.filter : VisualJS.filter,
+						min=(typeof o.filter!=="undefined" ) ? o.filter : VisualJS.filter,
 						max=1-min,
-						num=100,
-						colors=VisualJS.func.colors(VisualJS.setup.colors.map,num, "fill","q"),
+						num=VisualJS.setup.colors.map.max,
+						colors=VisualJS.func.colors(VisualJS.setup.colors.map.base, num, "fill", "q"),
 						visual=d3.select(selector),
 						xy=d3.geo.mercator()
 							.center([1.74, 41.7])
@@ -256,6 +248,8 @@ var VisualJS={
 						path=d3.geo.path().projection(xy),
 						tooltip=d3.select("#" + VisualJS.setup.tooltipid)
 					;
+					
+
 
 					if (typeof o.dec!=="undefined"){
 						VisualJS.dec=o.dec;
@@ -276,6 +270,7 @@ var VisualJS={
 								.attr("width", VisualJS.hwmin)
 								.attr("height", VisualJS.hwmin)
 						;
+						
 						for (var i=0, odata=o.data, len=odata.length; i<len; i++) {
 							var r=odata[i];
 							valors.set(r.id, r.val);
@@ -284,7 +279,7 @@ var VisualJS={
 						val.sort(function(a, b) {
 							return a - b;
 						});
-
+					
 						var
 							inf=d3.quantile(val, min).toFixed(VisualJS.dec),
 							sup=d3.quantile(val, max).toFixed(VisualJS.dec),

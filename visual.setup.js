@@ -29,7 +29,10 @@ VisualJS.setup={
 	mini: "VisualJSmini",
 	deflang: "ca",
 	colors: {
-		map: "#09111a",
+		map: {
+			max: 100,
+			base: "#09111a"
+		},
 		series: ["#2b527b", "#a52a2a", "#008000", "#ffbf00"]	
 	},	
 	lib: {
