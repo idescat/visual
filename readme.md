@@ -33,6 +33,56 @@ In the direct mode, the visualization is directly embedded in a page. Use the [d
 
 If you are embedding more than one visualization in the page, LazyLoad will only include the javascripts needed for the first visualization in the **visual** function. Instead, include all the needed javascripts manually. Do not include LazyLoad. You will also need to specify an *id* and its size (in the *fixed* property: *[width, height]*) for each visualization.
 
+# Options
+
+**Visual** is executed by passing a visual object to the *visual* function.
+
+```js
+visual( {...} )
+```
+
+If you already have a *visual* function defined, you can run **Visual** like this:
+
+```js
+VisualJS.load( {...} )
+```
+
+The visual object accepts the following properties:
+
+### General properties
+
+#### lang
+String ("ca", "es", "en"). Language. Default is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
+
+#### title
+String. Required. First level title's text.
+
+#### source
+String. Required. Foot text.
+
+#### geo
+String. Required. Geographical area.
+
+####  time
+String or array. Required. Time period or periods.
+
+#### symbol
+Object with two properties: *text* (string) and *position* (string. "start", "end"). Default is no text. *position*'s default is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
+
+Warning: *text* cannot contain HTML entities when *type* is "cmap".
+
+#### type
+String ("tsline", "bar", "tsbar", "rank", "pyram", "cmap"). Required. Chart type. It determines the *data* and *time* formats and the specific properties available.
+
+#### data
+Array. Required. It includes the data values but also series labels and IDs. The format is determined by *type*.
+
+#### id
+String. On [direct mode](#direct-mode), it is the ID of the HTML element where the visualization has to be embedded.
+
+#### fixed
+Array. On [direct mode](#direct-mode), it is the *[width, height]* in pixels of the visualization container.
+
 # Dependencies
 
 **Visual** uses internally the following libraries (see the lib folder):
