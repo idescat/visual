@@ -13,7 +13,7 @@
 
 # Test
 
-Download the [full source and tests](https://github.com/idescat/visual/archive/master.zip) and try the examples in the [test folder](https://github.com/idescat/visual/tree/master/maps). Some browsers (Firefox) might throw a security error if the project is not run on a web server. This issue only affects coropleth maps.
+Download the [full source and tests](https://github.com/idescat/visual/archive/master.zip) and try the examples in the [test folder](https://github.com/idescat/visual/tree/master/maps).
 
 # Configuration
 
@@ -48,7 +48,5 @@ These libraries are only loaded when needed.
 # Known limitations
 
 [D3](http://d3js.org) requires a modern browser (versions of Internet Explorer prior to 9 are not supported). **Visual** uses D3 for choropleth maps.
-
-The *VisualJS.func.colors* function inside [visual.maps.js](https://github.com/idescat/visual/blob/master/maps/visual.maps.max.js) dynamically adds styles to the document. Some browsers might enforce a same domain policy: [visual.maps.js](https://github.com/idescat/visual/blob/master/maps/visual.maps.max.js) must be in the same domain as the page where the styles will be inserted.
 
 The non-stacked time series chart supports a maximum of three series.

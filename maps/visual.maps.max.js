@@ -23,7 +23,7 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-VisualJS.func.colors=function (cHexa, rang, atribut, clas){
+VisualJS.func.colors=function(cHexa, rang, atribut, clas){
 	var 
 		d=document,
 		HueToRgb=function (m1, m2, hue) {
@@ -37,7 +37,8 @@ VisualJS.func.colors=function (cHexa, rang, atribut, clas){
 			return 255 * v;
 		},
 		hsl2rgb=function (hsl) {
-			var h=hsl.h,
+			var 
+				h=hsl.h,
 				s=hsl.s/100,
 				l=hsl.l/100,
 				m1, m2, hue, r, g, b
@@ -62,7 +63,8 @@ VisualJS.func.colors=function (cHexa, rang, atribut, clas){
 			return {r:hex2Dec(c.substr(0,2)), g:hex2Dec(c.substr(2,2)) ,b:hex2Dec(c.substr(4,2))};
 		},
 		rgb2hsl=function (rgb){
-			var r=rgb.r/255,
+			var 
+				r=rgb.r/255,
 				g=rgb.g/255,
 				b=rgb.b/255,
 				max=Math.max(r, g, b), min=Math.min(r, g, b),
@@ -83,33 +85,26 @@ VisualJS.func.colors=function (cHexa, rang, atribut, clas){
 			}
 			return {h:Math.floor(h * 360), s:Math.floor(s * 100), l:Math.floor(l * 100)};
 		},
-		inserirRegla=function (regla, mystylesheet){
-			if (mystylesheet.insertRule){
-				mystylesheet.insertRule(regla, 0);
-			}else{ //IE
-				mystylesheet.addRule(regla, 0);
-			}
-		},
 		stylesheet=d.createElement("style"),
 		colors=new Array(),
-		hsl=rgb2hsl(hex2rgb(cHexa));
+		hsl=rgb2hsl(hex2rgb(cHexa))
 	;
 
-	//Security: must be run in same domain as page in some browsers (FF)
 	stylesheet.setAttribute("type", "text/css");
 	d.getElementsByTagName('head')[0].appendChild(stylesheet);
-	var mystylesheet=d.styleSheets[0];
-
-	var incr=(97-hsl.l)/--rang;
-	var i=0;
+	var 
+		incr=(97-hsl.l)/--rang,
+		i=0,
+		rules = ""
+	;
 	while(i <= rang){
 		rgb=hsl2rgb (hsl);
 		colors[i]={r:rgb.r, g:rgb.g, b:rgb.b};
-		inserirRegla('.'+clas+(rang-i)+'{' + atribut + ': rgb('+rgb.r+','+rgb.g+','+rgb.b+')}',
-			mystylesheet);
+		rules += '.'+clas+(rang-i)+'{' + atribut + ': rgb('+rgb.r+','+rgb.g+','+rgb.b+')}';
 		i++;
 		hsl.l += incr;
 	}
+	stylesheet.innerHTML = rules;
 	return colors;
 };
 
