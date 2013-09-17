@@ -5,9 +5,9 @@
 **Visual** currently supports the following visualizations:
 
 * Distribution of a categorical variable (vertical bar chart): *bar*
+* Ranking (horizontal bar chart): *rank*
 * Stacked/non-stacked time series (vertical bar chart): *tsbar*
 * Time series (line chart): *tsline*
-* Ranking (horizontal bar chart): *rank*
 * Population pyramid: *pyram*
 * Choropleth map: *cmap*
 
@@ -72,7 +72,7 @@ Object with two properties: *text* (string) and *position* (string. "start", "en
 Warning: *text* cannot contain HTML entities when *type* is "cmap".
 
 #### type
-String ("tsline", "bar", "tsbar", "rank", "pyram", "cmap"). Required. Chart type. It determines the *data* and *time* formats and the specific properties available.
+String ("bar", "rank", "tsbar", "tsline", "pyram", "cmap"). Required. Chart type. It determines the *data* and *time* formats and the specific properties available.
 
 #### data
 Array. Required. It includes the data values but also series labels and IDs. The format is determined by *type*.
@@ -82,6 +82,307 @@ String. On [direct mode](#direct-mode), it is the ID of the HTML element where t
 
 #### fixed
 Array. On [direct mode](#direct-mode), it is the *[width, height]* in pixels of the visualization container.
+
+### *bar* properties
+
+Distribution of a categorical variable (vertical bar chart).
+
+```js
+visual({
+   title: "BAR example",
+   geo: "Alt Camp",
+   time: "2012",
+   source: "The source goes here.",
+   symbol: {text: "persones"},
+   type: "bar",
+   data : [
+      ["0-14 anys", 7329],
+      ["15-64 anys", 30231],
+      ["65-84 anys", 6485],
+      ["85 anys o més", 1254]
+   ]
+});
+```
+
+####  time
+String. Required. Time period.
+
+#### data
+Array of arrays. Required. The first array contains as many elements as categories. Each element is an array of two elements: a string (label) and a number (value).
+
+### *rank* properties
+
+Ranking (horizontal bar chart).
+
+```js
+visual({
+   title: "RANK example (40 data)",
+   geo: "Catalonia",
+   time: "2009",
+   source: "The source goes here.",
+   symbol: {text: "milers €"},
+   type: "rank",
+   data : [
+      ["Val d'Aran", 20300], 
+      ["Pallars Jussà", 19300], 
+      ["Ripollès", 19100], 
+      ["Urgell", 18900], 
+      ["Conca de Barberà", 18800], 
+      ["Gironès", 18700], 
+      ["Pallars Sobirà", 18700], 
+      ["Alta Ribagorça", 18600], 
+      ["Cerdanya", 18600], 
+      ["Garrotxa", 18600], 
+      ["Pla de l'Estany", 18600], 
+      ["Barcelonès", 18300], 
+      ["Priorat", 18300], 
+      ["Ribera d'Ebre", 18200], 
+      ["Segrià ", 18100], 
+      ["Garrigues", 18000], 
+      ["Baix Empordà", 17700], 
+      ["Maresme", 17700], 
+      ["Alt Camp", 17600], 
+      ["Noguera", 17600], 
+      ["Tarragonès", 17600], 
+      ["Terra Alta", 17600], 
+      ["Segarra", 17400], 
+      ["Alt Empordà", 17300], 
+      ["Baix Penedès", 17300], 
+      ["Solsonès", 17300], 
+      ["Vallès Occidental", 17300], 
+      ["Berguedà", 17200], 
+      ["Baix Camp", 17100], 
+      ["Pla d'Urgell", 17100], 
+      ["Montsià", 17000], 
+      ["Alt Penedès", 16900], 
+      ["Bages", 16900], 
+      ["Baix Ebre", 16900], 
+      ["Garraf", 16900], 
+      ["Alt Urgell", 16600], 
+      ["Selva", 16300], 
+      ["Osona", 16200], 
+      ["Vallès Oriental", 16200], 
+      ["Baix Llobregat", 16000], 
+      ["Anoia", 15800]
+   ]
+});
+```
+
+####  time
+String. Required. Time period.
+
+####  data
+Array of arrays. Required. The first array contains as many elements as categories. Each element is an array of two elements: a string (label) and a number (value).
+
+### *tsbar* properties
+
+Stacked/non-stacked time series (vertical bar chart).
+
+```js
+visual({
+   title: "TSBAR example",
+   geo: "Catalonia",
+   time : [
+      "1998", "1999", "2000", "2001", "2002", 
+      "2003", "2004", "2005", "2006", "2007", 
+      "2008", "2009", "2010", "2011", "2012"
+   ],
+   source: "The source goes here.",
+   symbol: {text: "M €"},
+   type: "tsbar",
+   data : [ 
+      { 
+         label: "Exportacions", 
+         val: [ 
+            27147.8, 27890.6, 33796.5, 36694.5, 37275.9, 
+            37648.5, 39485.1, 42703.4, 47218.8, 49679.8, 
+            50515.7, 41461.7, 48871.6, null, 58321.7 
+         ]
+      }, 
+      { 
+         label: "Importacions", 
+         val: [ 
+            36203.7, 40316.5, 48761.7, 50497.9, 51891.8, 
+            54344.7, 60731, 67813.3, 74787.8, 80363.4, 
+            77233.9, 57663.8, 67621.1, null, 69343.1 
+         ]
+      }
+   ]
+});
+```
+
+####  time
+Array of strings. Required. Time periods.
+
+#### data
+Array of objects. Required. The array contains as many elements as series. Each element is an object with two properties: *label* (string) and *val* (array of values).
+
+#### stacked
+
+Boolean. Default: *false*. When bars are not stacked, only three series are allowed.
+
+### *tsline* properties
+
+Time series (line chart).
+
+```js
+visual({
+   title: "TSLINE example",
+   geo: "Catalonia",
+   time : [
+      "1998", "1999", "2000", "2001", "2002", 
+      "2003", "2004", "2005", "2006", "2007", 
+      "2008", "2009", "2010", "2011", "2012"
+   ],
+   source: "The source goes here.",
+   symbol: {text: "M €"},
+   type: "tsline",
+   data : [ 
+      { 
+         label: "Exportacions", 
+         val: [ 
+            27147.8, 27890.6, 33796.5, 36694.5, 37275.9, 
+            37648.5, 39485.1, 42703.4, 47218.8, 49679.8, 
+            50515.7, 41461.7, 48871.6, null, 58321.7 
+         ]
+      }, 
+      {
+         label: "Importacions", 
+         val: [ 
+            36203.7, 40316.5, 48761.7, 50497.9, 51891.8, 
+            54344.7, 60731, 67813.3, 74787.8, 80363.4, 
+            77233.9, 57663.8, 67621.1, null, 69343.1 
+         ]
+      }
+   ]
+});
+```
+####  time
+Array of strings. Required. Time periods.
+
+#### data
+Array of objects. Required. The array contains as many elements as series. Each element is an object with two properties: *label* (string) and *val* (array of values).
+
+### *pyram* properties
+
+Population pyramid.
+
+```js
+visual({
+   title: "PYRAM example",
+   geo: "Some country",
+   time: "2012",
+   source: "The source goes here.",
+   symbol: {text: "persones"},
+   type: "pyram",
+   by: [
+      "0-4", "5-9", "10-14", "15-19", "20-24", "25-29", 
+      "30-34", "35-39", "40-44", "45-49", "50-54", "55-59",
+      "60-64", "65-69", "70-74", "75-79", "80-84", "85-89", 
+      "90-94", "95-99", "100+"
+   ],
+   data: [
+      { 
+         label: "Homes", 
+	 val: [
+	    130229, 132460, 109072, 115983, 133972, 166757, 
+	    207016, 211782, 195472, 176832, 152151, 122107, 
+	    117375, 99405, 80274, 73283, 47597, 24195, 6997, 1532, 260
+	 ]
+      },
+      { 
+         label: "Dones", 
+	 val: [
+	    124757, 112944, 103163, 104773, 122879, 152743, 
+	    196767, 193411, 194849, 174780, 155177, 133712, 
+	    126386, 117169, 98444, 99468, 76448, 47515,17929, 4284, 548
+	 ]
+      }
+   ]
+});
+```
+####  time
+String. Required. Time period.
+
+#### data
+Array of objects. Required. The array contains two elements: one for each sex. Each element is an object with two properties: *label* (string) and *val* (array of values).
+
+#### by
+Array of strings. Required. Each element is an age label.
+
+### *cmap* properties
+
+Choropleth map
+
+```js
+visual({
+   title: "CMAP example with missing data", 
+   geo: "Catalonia", 
+   time: "2001",
+   source: "The source goes here.", 
+   symbol: {text: "%"},
+   type: "cmap", 
+   dec: 2,
+   by: "com",
+   data: [
+      {id: "01", val: 85.50}, 
+      {id: "02", val: 79.40}, 
+      {id: "03", val: 80.91}, 
+      {id: "04", val: 86.50}, 
+      {id: "05", val: 83.01}, 
+      {id: "06", val: 79.04}, 
+      {id: "07", val: 82.74}, 
+      {id: "08", val: 77.31}, 
+      {id: "09", val: 86.48}, 
+      {id: "10", val: 79.94}, 
+      {id: "11", val: 65.79}, 
+      {id: "12", val: 73.04}, 
+      {id: "13", val: 70.35}, 
+      {id: "14", val: 89.96}, 
+      {id: "15", val: 84.79}, 
+      {id: "16", val: 91.06}, 
+      {id: "17", val: 75.31}, 
+      {id: "18", val: 92.95}, 
+      {id: "19", val: 89.95}, 
+      {id: "20", val: 82.50}, 
+      {id: "21", val: 77.03}, 
+      {id: "22", val: 86.48}, 
+      {id: "23", val: 90.73}, 
+      {id: "24", val: 86.06}, 
+      {id: "25", val: 88.94}, 
+      {id: "26", val: 91.67}, 
+      {id: "27", val: 88.38}, 
+      {id: "28", val: 88.68}, 
+      {id: "29", val: 92.49}, 
+      {id: "30", val: 90.66}, 
+      {id: "31", val: 88.24}, 
+      {id: "32", val: 86.17}, 
+      {id: "33", val: 83.71}, 
+      {id: "34", val: 77.71}, 
+      {id: "35", val: 90.53}, 
+      {id: "36", val: 74.20}, 
+      {id: "34", val: 91.87}, 
+      {id: "38", val: 88.66}, 
+      {id: "39", val: 77.98}, 
+      {id: "40", val: 71.31}, 
+      {id: "41", val: 75.56}
+   ]
+});
+```
+####  time
+String. Required. Time period.
+
+####  data
+Array of objects. Required. The array contains as many elements as map areas. Each element is an object with two properties: area *id* (string) and *val* (number).
+
+####  by
+String. Required. Selects a certain map. Possible values ("mun", "com", "prov") are set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
+
+####  dec
+Number. Default: 0. Number of decimals in the data. It is used to assign colors and build the legend.
+
+####  filter
+Number between 0 and 0.49. Default: 0.05. It determines the color assignation. For example, 0.05 assigns colors excluding values below the 5th percentile and above the 95th percentile.
 
 # Dependencies
 
