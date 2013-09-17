@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.1.8",
+	version: "0.1.9",
 	id: "visual",
 	symbol : {
 		text: "", 
@@ -244,7 +244,7 @@ var VisualJS={
 						xy=d3.geo.mercator()
 							.center([1.74, 41.7])
 							.scale(9000)
-							.translate([VisualJS.hwmin/2, VisualJS.hwmin/2]),
+							.translate([250, 250]), //500/2
 						path=d3.geo.path().projection(xy),
 						tooltip=d3.select("#" + VisualJS.setup.tooltipid)
 					;
