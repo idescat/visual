@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]><html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]><html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html> <!--<![endif]-->
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<script src="../lib/jquery.1.8.3.js"></script>
+		<script src="../lib/jquery.flot.js"></script>
+		<script src="../lib/jquery.flot.pyramid.js"></script>
+		<script src="../lib/d3.v3.js"></script>
+		<script src="../visual.js"></script>
+		<script src="../visual.setup.js"></script>
+		<script src="../maps/visual.maps.js"></script>
+		<script src="../maps/cat2013com.js"></script>
+		<style>
+			body {
+				font-family: Verdana, Arial, Helvetica, sans-serif;
+				padding: 10px;
+				font-size: 13px;
+				width: 900px;
+				margin: 0 auto;
+			}
+			h1 {
+				font-size: 12px;
+			}
+			h2 {
+				font-size: 11px;
+				font-weight: normal;
+			}
+			p {
+				text-align: justify;
+				line-height: 1.6;
+			}
+			#pyram, #map {
+				float: right;
+				height: 320px;
+				width: 320px;
+				margin: -6px 0 0 20px;
+				font-size: 11px;
+			}			
+			#VisualJSTooltip {
+				font-size: 10px;
+				display: none;
+				position: absolute;
+				border: 1px solid #ccc;
+				border-radius: 4px;
+				padding: 4px;
+				background-color: #f6f6f6;
+				opacity: 0.90;
+				white-space: nowrap;
+			}
+			#VisualJSTooltip strong {
+				display: block;
+			}
+			/* SVG */
+			#map .area {
+				fill: #808080;
+				stroke: none;
+			}
+			#map svg g.llegenda{
+				stroke:#808080;
+				stroke-width:1px;
+			}
+			#map svg g.llegenda text{
+				font-size: 11px;
+				fill: black;
+				stroke: none;
+			}
+		</style>
+	</head>
+	<body>
+		<p><span id="pyram"></span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ac porta tortor. Donec sed adipiscing dui, sit amet posuere dui. Etiam adipiscing faucibus dui, euismod pretium elit semper venenatis. Fusce id vehicula nisl. Fusce sed elit id nisi vehicula faucibus elementum sit amet tellus. Duis lectus quam, rhoncus at sapien nec, placerat ultricies velit. Suspendisse quis tempor urna. Curabitur facilisis, enim quis mattis aliquam, est erat sagittis sapien, nec varius metus ligula mollis justo. Aenean id metus elementum, tempor metus vel, eleifend nunc. Nullam bibendum interdum neque ut auctor. Praesent eget tincidunt velit.</p>
+		<p>Donec vehicula neque vitae sodales euismod. Maecenas cursus erat vitae dui vestibulum lobortis. Praesent viverra turpis et laoreet aliquam. Donec sit amet orci velit. Vestibulum pretium tristique metus, eu varius dui consequat at. In hac habitasse platea dictumst. Vivamus malesuada dictum risus eget pretium. Suspendisse sollicitudin posuere lorem, et blandit nibh imperdiet in. Donec blandit libero id tincidunt adipiscing. Pellentesque accumsan aliquam posuere. Morbi sollicitudin elit at vulputate varius. Sed et augue est.</p>
+		<p>Integer eget ornare lorem. Maecenas orci lacus, condimentum sit amet tortor eget, porttitor sagittis leo. Morbi semper enim at sem condimentum, et hendrerit nunc vehicula. Vivamus bibendum quam nec dolor interdum, posuere vestibulum odio semper. Donec sit amet auctor quam. Fusce tempus diam nec tempor facilisis. Duis scelerisque sollicitudin lectus, id cursus magna facilisis pretium. Phasellus tempus diam neque, vitae laoreet dolor tempus ut. Sed blandit, mi vitae placerat placerat, turpis mauris ultrices urna, ac dapibus urna metus non diam. Phasellus consectetur, arcu a pulvinar malesuada, enim magna malesuada enim, nec pretium dolor velit sit amet erat. Maecenas interdum congue sagittis. Praesent non placerat arcu. Proin commodo ultrices metus. Nunc sodales ligula urna. Curabitur mollis, sem et egestas venenatis, magna magna elementum elit, vel vehicula diam lacus vitae turpis. Interdum et malesuada fames ac ante ipsum primis in faucibus.</p>
+		<p><span id="map"></span> Morbi eget fermentum sem, sit amet fringilla massa. Aenean quis tellus a nulla tincidunt feugiat. Aenean magna tortor, ultrices non pretium id, lacinia a nisl. Quisque vitae velit orci. Vivamus tempus arcu sed feugiat aliquet. Fusce molestie porta orci, laoreet rhoncus sem faucibus id. Nam quis consequat elit. Donec porttitor enim felis, eget fermentum nisl vehicula eu. Nam convallis, diam in iaculis aliquam, libero diam porttitor lectus, sed vestibulum urna ipsum a justo. Duis ut elit id orci cursus tempus. Nulla urna metus, porta et arcu nec, auctor pharetra nisi. Maecenas facilisis luctus arcu quis fringilla. Vestibulum vestibulum nisl massa, at pharetra lectus ultrices quis.</p>
+		<p>Nullam elementum, nunc sed rhoncus tempus, lorem sem imperdiet magna, at ultrices elit velit vel sapien. In in mauris massa. Donec non dui quam. Nullam faucibus mauris sit amet lectus pretium, vehicula auctor felis iaculis. Cras massa lorem, hendrerit vel laoreet a, feugiat posuere velit. Etiam nec urna blandit quam consequat dictum. Fusce gravida id risus at sollicitudin. Curabitur ac malesuada lorem. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;</p>
+		<p>Donec quis massa sit amet massa suscipit pellentesque sed et purus. Nullam tempor urna massa, et convallis nunc pharetra vitae. Suspendisse porta scelerisque vulputate. Etiam vel varius enim. Phasellus malesuada velit tempor scelerisque feugiat. Vestibulum egestas, nulla sit amet molestie feugiat, odio libero mollis odio, euismod porta ligula nisi eget enim. Aenean ultricies, augue vitae pharetra fermentum, diam lacus dignissim massa, sit amet congue dui ante vel ante. Ut laoreet magna ante, vel euismod neque ullamcorper a. Sed posuere purus a elit ornare viverra. Fusce viverra nisi vitae dui faucibus, vel feugiat nisi cursus. Praesent interdum malesuada mi, et volutpat nunc. Vivamus ornare non urna id mattis. Sed dictum leo pharetra placerat consequat. Praesent rutrum arcu id varius lobortis.</p>
+
+		<p>See also an example of <a href="index.html">webpage embedding</a>.</p>
+		<p><strong>Warning:</strong> The previous charts are provided as sample visualizations. The data might not be correct, updated or even real.</p>
+
+		<script>
+			visual([
+				{
+					lang: "en",
+					id: "pyram",
+					fixed: [340, 320],
+					title: "PYRAM example",
+					geo: "Some country",
+					time: "2012",
+					source: "The source goes here.",
+					symbol: {text: "people"},
+					type: "pyram",
+					by: ["0-4","5-9","10-14","15-19","20-24","25-29","30-34","35-39","40-44","45-49","50-54","55-59","60-64","65-69","70-74","75-79","80-84","85-89","90-94","95-99","100+"], //Required if type: "pyram"
+					data: [
+						{ label: "Men", val: [130229, 132460, 109072, 115983, 133972, 166757, 207016, 211782, 195472, 176832, 152151, 122107, 117375, 99405, 80274, 73283, 47597, 24195, 6997, 1532, 260] },
+						{ label: "Women", val: [124757, 112944, 103163, 104773, 122879, 152743, 196767, 193411, 194849, 174780, 155177, 133712, 126386, 117169, 98444, 99468, 76448, 47515,17929, 4284, 548]}
+					]
+				},
+
+				{
+					lang: "en",
+					id: "map",
+					fixed: [340, 320],
+					title: "CMAP example",
+					geo: "Catalonia",
+					time: "2001",
+					source: "The source goes here.",
+					symbol: {text: "%"},
+					type: "cmap", 
+					dec: 2, //Number of decimal positions of the data (default: 0). Used in the map legend. 
+					by: "com", //Required if type: "cmap". Area unit of the data and map.
+					data: [{id: "01", val: 85.50}, {id: "02", val: 79.40}, {id: "03", val: 80.91}, {id: "04", val: 86.50}, {id: "05", val: 83.01}, {id: "06", val: 79.04}, {id: "07", val: 82.74}, {id: "08", val: 77.31}, {id: "09", val: 86.48}, {id: "10", val: 79.94}, {id: "11", val: 65.79}, {id: "12", val: 73.04}, {id: "13", val: 70.35}, {id: "14", val: 89.96}, {id: "15", val: 84.79}, {id: "16", val: 91.06}, {id: "17", val: 75.31}, {id: "18", val: 92.95}, {id: "19", val: 89.95}, {id: "20", val: 82.50}, {id: "21", val: 77.03}, {id: "22", val: 86.48}, {id: "23", val: 90.73}, {id: "24", val: 86.06}, {id: "25", val: 88.94}, {id: "26", val: 91.67}, {id: "27", val: 88.38}, {id: "28", val: 88.68}, {id: "29", val: 92.49}, {id: "30", val: 90.66}, {id: "31", val: 88.24}, {id: "32", val: 86.17}, {id: "33", val: 83.71}, {id: "34", val: 77.71}, {id: "35", val: 90.53}, {id: "36", val: 74.20}, {id: "34", val: 91.87}, {id: "38", val: 88.66}, {id: "39", val: 77.98}, {id: "40", val: 71.31}, {id: "41", val: 75.56}]
+				}
+			]);
+		</script>
+	</body>
+</html>
