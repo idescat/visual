@@ -108,7 +108,7 @@ VisualJS.func.colors=function(cHexa, rang, atribut, clas){
 	return colors;
 };
 
-VisualJS.func.legend=function(sup, inf, colorSup, colorInf, vis, tooltip, hwmin) {
+VisualJS.func.legend=function(id, sup, inf, colorSup, colorInf, vis, tooltip, hwmin) {
 	var 
 		showValLimit=250, // height/width less than this value -> don't show text legend
 		minLimit=170, // height/width less than this value -> don't show legend
@@ -141,9 +141,9 @@ VisualJS.func.legend=function(sup, inf, colorSup, colorInf, vis, tooltip, hwmin)
 			s.parentNode.removeChild(s);
 			return bb;	
 		}, 
-		bbHigherVal=getBB(VisualJS.tooltipText(null, info[0].text)),
+		bbHigherVal=getBB(VisualJS.tooltipText(id, null, info[0].text)),
 		//xIni (horitzontal starting position of the legend: locate at 85% of the visual width, move to left considering legend's max width (to a certain point)
-		xIni=Math.max(( vis.attr("width") * 0.9 - Math.max( bbHigherVal.width, getBB(VisualJS.tooltipText(null, info[1].text)).width ) ), vis.attr("width") * 0.4),
+		xIni=Math.max(( vis.attr("width") * 0.9 - Math.max( bbHigherVal.width, getBB(VisualJS.tooltipText(id, null, info[1].text)).width ) ), vis.attr("width") * 0.4),
 		yIni=vis.attr("height") * 0.65, // vertical starting position of the legend (South-West)
 		posX=xIni-incr,
 		posY=yIni
@@ -170,13 +170,13 @@ VisualJS.func.legend=function(sup, inf, colorSup, colorInf, vis, tooltip, hwmin)
 				.append("svg:text")
 				.attr("x",xIni+incr+5) //Horizontal space of 5px between square and text
 				.attr("y",function(){posY+=incr+offsetY; return posY;}) 
-				.text(function(d){return VisualJS.tooltipText(null, d.text);})
+				.text(function(d){return VisualJS.tooltipText(id, null, d.text);})
 			;								
 		}else{ //case 2: show tooltip
 			// Attach tooltip
 			leg.selectAll("rect")
 				.on("mousemove", function(d){
-					VisualJS.showTooltip(VisualJS.tooltipText(null, d.text), d3.event.pageX, d3.event.pageY);
+					VisualJS.showTooltip(VisualJS.tooltipText(id, null, d.text), d3.event.pageX, d3.event.pageY);
 				})
 				.on("mouseout", function(){tooltip.style("display", "none");})	 
 		}

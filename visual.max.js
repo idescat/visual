@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.1.9",
+	version: "0.1.10",
 	id: "visual",
 	symbol : {
 		text: "", 
@@ -41,12 +41,10 @@ var VisualJS={
 	hwmin: 500,
 	normal: 500, //If less than this value, apply mini style; otherwise, normal style (see setup)
 	scripts: [],
+	container: {}, //To allow multiple direct embedding, particular features of every container are saved here
 	func: {}, //Space for external functions
 
 	/* Functions */
-	chart: function(){},
-	canvas: function(){},
-
 	draw: function(){
 		VisualJS.tooltip();
 		VisualJS.chart();
@@ -145,28 +143,26 @@ var VisualJS={
 
 	format: function(n){
 		if(typeof n==="undefined" || n===null){
-			return VisualJS.setup.msg.na[VisualJS.lang];
+			return VisualJS.setup.i18n.text.na[VisualJS.lang];
 		}
-		var 
-			decs=(VisualJS.lang!=="en") ? "," : ".",
-			mils=(VisualJS.lang!=="en") ? "." : ",",
-			rgx=/(\d+)(\d{3})/
-		;
 		n+="";
-		x=n.split(".");
-		x1=x[0];
-		x2=(x.length>1) ? decs + x[1] : "";
+		var 
+			rgx=/(\d+)(\d{3})/,
+			x=n.split("."),
+			x1=x[0],
+			x2=(x.length>1) ? VisualJS.setup.i18n.text.dec[VisualJS.lang] + x[1] : ""
+		;
 		while (rgx.test(x1)) {
-			x1=x1.replace(rgx, "$1" + mils + "$2");
+			x1=x1.replace(rgx, "$1" + VisualJS.setup.i18n.text.k[VisualJS.lang] + "$2");
 		}
-		return x1 + x2;
+		return x1+x2;
 	},	
 
-	tooltipText: function(l,v) {
+	tooltipText: function(id, l, v) {
 		var 
-			si=(v) ? VisualJS.symbol.text : "",
+			si=(v) ? VisualJS.container[id].symbol.text : "",
 			va=(l) ? VisualJS.format(v) : v,
-			t=(VisualJS.symbol.position==="end") ? va+ " "+si : si+" "+va
+			t=(VisualJS.container[id].symbol.position==="end") ? va+ " "+si : si+" "+va
 		;
 		return l ? "<strong>"+t+"</strong> "+l : t; //no need to atext()
 	},	
@@ -199,14 +195,16 @@ var VisualJS={
 			VisualJS.fixed=o.fixed;
 		}
 		if(typeof o.symbol!=="undefined"){
-			if(typeof o.symbol.text!=="undefined"){
-				VisualJS.symbol.text=o.symbol.text;
-			}
-			if(typeof o.symbol.position!=="undefined"){
-				VisualJS.symbol.position=o.symbol.position;
-			}
+			VisualJS.container[VisualJS.id]={
+				symbol: {
+					text: (typeof o.symbol.text!=="undefined") ? o.symbol.text : VisualJS.symbol.text,
+					position: (typeof o.symbol.position!=="undefined") ? o.symbol.position : VisualJS.symbol.position
+				}
+			};
+		}else{
+			VisualJS.container[VisualJS.id].symbol=o.symbol;
 		}
-		VisualJS.lang=o.lang || VisualJS.setup.deflang;
+		VisualJS.lang=o.lang || VisualJS.setup.i18n.lang;
 
 		var
 			selector="#" + VisualJS.id,
@@ -216,7 +214,7 @@ var VisualJS={
 
 		if(o.type==="cmap"){
 			if(ie8){
-				document.getElementById(VisualJS.id).innerHTML="<p>"+VisualJS.setup.msg.oldbrowser[VisualJS.lang]+"</p>";
+				document.getElementById(VisualJS.id).innerHTML="<p>"+VisualJS.setup.i18n.text.oldbrowser[VisualJS.lang]+"</p>";
 			}else{
 				VisualJS.addJS( VisualJS.setup.lib.maps, true );
 				VisualJS.addJS( VisualJS.setup.lib.d3, true );
@@ -248,8 +246,6 @@ var VisualJS={
 						path=d3.geo.path().projection(xy),
 						tooltip=d3.select("#" + VisualJS.setup.tooltipid)
 					;
-					
-
 
 					if (typeof o.dec!=="undefined"){
 						VisualJS.dec=o.dec;
@@ -279,7 +275,7 @@ var VisualJS={
 						val.sort(function(a, b) {
 							return a - b;
 						});
-					
+
 						var
 							inf=d3.quantile(val, min).toFixed(VisualJS.dec),
 							sup=d3.quantile(val, max).toFixed(VisualJS.dec),
@@ -301,6 +297,7 @@ var VisualJS={
 							.on("mousemove", function(d){
 								VisualJS.showTooltip(
 									VisualJS.tooltipText(
+										VisualJS.id,
 										d.properties[VisualJS.map.label],
 										valors.get(d.properties[VisualJS.map.id])
 									), 
@@ -310,7 +307,7 @@ var VisualJS={
 							})
 							.on("mouseout", function(){return tooltip.style("display", "none");})
 						;
-						VisualJS.func.legend(VisualJS.format(sup), VisualJS.format(inf), colors[colors.length-1], colors[0], vis, tooltip, VisualJS.hwmin);
+						VisualJS.func.legend(VisualJS.id, VisualJS.format(sup), VisualJS.format(inf), colors[colors.length-1], colors[0], vis, tooltip, VisualJS.hwmin);
 					};
 					VisualJS.canvas();
 				}
@@ -463,7 +460,7 @@ var VisualJS={
 			VisualJS.chart=function(){
 				transform(o.data, o.time, o.by);
 
-				$.fn.UseTooltip=function () {
+				$.fn.UseTooltip=function (id) {
 					var previousPoint=[];
 					
 					$(this).bind("plothover", function (event, pos, item) {
@@ -497,6 +494,7 @@ var VisualJS={
 								;
 								VisualJS.showTooltip(
 									VisualJS.tooltipText(
+										id,
 										(tick) ? label+" ("+tick+")" : label, 
 										val
 									), 
@@ -589,7 +587,7 @@ var VisualJS={
 								setup
 							);
 					}
-					$(canvas).UseTooltip();		
+					$(canvas).UseTooltip(VisualJS.id);		
 				}
 				VisualJS.canvas();
 			}

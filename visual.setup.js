@@ -1,6 +1,6 @@
 /*
 Copyright (c) 2013 Institut d'Estadistica de Catalunya (Idescat)
-http://www.idescat.cat
+http://www.idescat.cat (https://github.com/idescat/visual)
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -27,7 +27,6 @@ VisualJS.setup={
 	nowrapclass: "VisualJSnw",
 	normal: "VisualJSnormal",
 	mini: "VisualJSmini",
-	deflang: "ca",
 	colors: {
 		map: {
 			max: 100,
@@ -35,6 +34,31 @@ VisualJS.setup={
 		},
 		series: ["#2b527b", "#a52a2a", "#008000", "#ffbf00"]	
 	},	
+	i18n: {
+		lang: "ca",
+		text: {
+			dec: {
+				ca: ",",
+				es: ",",
+				en:  "."
+			},
+			k: {
+				ca: ".",
+				es: ".",
+				en:  ","
+			},
+			na: {
+				ca: "Valor no disponible",
+				es: "Valor no disponible",
+				en:  "Value not available"
+			},
+			oldbrowser: {
+				ca: "Per visualitzar el mapa cal un navegador més modern.",
+				es: "Para visualizar el mapa es preciso un navegador más moderno.",
+				en:  "To view the map you must use a modern browser."
+			}
+		}
+	},
 	lib: {
 		d3: {
 			js: "../lib/d3.v3.js",
@@ -87,18 +111,6 @@ VisualJS.setup={
 		prov: {
 			js: "../maps/cat2013prov.js",
 			exists: function(){ return typeof VisualJS.map!=="undefined" && VisualJS.map.id==="PROVINCIA"; }
-		}
-	},
-	msg: {
-		na: {
-			ca: "Valor no disponible",
-			es: "Valor no disponible",
-			en:  "Value not available"
-		},
-		oldbrowser: {
-			ca: "Per visualitzar el mapa cal un navegador més modern.",
-			es: "Para visualizar el mapa es preciso un navegador más moderno.",
-			en:  "To view the map you must use a modern browser."
 		}
 	},
 	func: {
