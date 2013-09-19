@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.2.0",
+	version: "0.2.1",
 	id: "visual",
 	symbol : {
 		text: "", 
@@ -202,7 +202,7 @@ var VisualJS={
 				}
 			};
 		}else{
-			VisualJS.container[VisualJS.id].symbol=o.symbol;
+			VisualJS.container[VisualJS.id]={symbol: VisualJS.symbol};
 		}
 		VisualJS.lang=o.lang || VisualJS.setup.i18n.lang;
 
