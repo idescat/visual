@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.1.10",
+	version: "0.2.0",
 	id: "visual",
 	symbol : {
 		text: "", 
@@ -234,14 +234,16 @@ var VisualJS={
 				///////// CHART
 				VisualJS.chart=function(){
 					var 
-						min=(typeof o.filter!=="undefined" ) ? o.filter : VisualJS.filter,
+						min=(typeof o.filter!=="undefined") ? o.filter : VisualJS.filter,
 						max=1-min,
-						num=VisualJS.setup.colors.map.max,
-						colors=VisualJS.func.colors(VisualJS.setup.colors.map.base, num, "fill", "q"),
+						//hasGroup: grouped property exists, is object (array), has content and data seems to include a group property
+						hasGroup=(typeof o.grouped==="object" && o.grouped.length>0 && o.data[0].hasOwnProperty("group")),
+						num=(hasGroup) ? o.grouped.length : VisualJS.setup.colors.map.max,
+						colors=VisualJS.func.colors( VisualJS.setup.colors.map.base, num, "fill", "q" ),
 						visual=d3.select(selector),
 						xy=d3.geo.mercator()
-							.center([1.74, 41.7])
-							.scale(9000)
+							.center(VisualJS.map.center)
+							.scale(VisualJS.map.scale)
 							.translate([250, 250]), //500/2
 						path=d3.geo.path().projection(xy),
 						tooltip=d3.select("#" + VisualJS.setup.tooltipid)
@@ -261,28 +263,71 @@ var VisualJS={
 							left=Math.round((VisualJS.width-VisualJS.hwmin)/2),
 							valors=d3.map(),
 							val=[],
+							groups, //key: id, value: group
+							setGroups=function(g,r){},
+							legend=function(){},
+							checkGrouped,
+							groupLabel,
+							inf,
+							sup,
 							vis=visual
 								.insert("svg:svg", "h2")
 								.attr("width", VisualJS.hwmin)
 								.attr("height", VisualJS.hwmin)
 						;
-						
-						for (var i=0, odata=o.data, len=odata.length; i<len; i++) {
+
+						if(hasGroup){
+							groups=d3.map();
+							setGroups=function(g, r){
+								g.set(r.id, r.group);
+							}; 
+							checkGrouped=function(g, v, p, inf, sup){
+								return "q" + (g.get(p[VisualJS.map.id])-1);
+							};
+							groupLabel=function(g, p){
+								var 
+									em=o.grouped[(g.get(p[VisualJS.map.id])-1)],
+									ret=p[VisualJS.map.label]
+								;
+								if(typeof em!=="undefined"){
+									ret+=" <em>" + em + "</em>";
+								}
+								return ret;
+							};
+							
+						}else{
+							checkGrouped=function(g, v, p, inf, sup){
+								var quantize=d3.scale.quantize()
+									.domain([inf, sup])
+									.range(d3.range(num).map(function(i) { return "q" + i; }))
+								;
+								return quantize(v.get(p[VisualJS.map.id]));
+							};
+							groupLabel=function(g, p){
+								return p[VisualJS.map.label];
+							};							
+							legend=VisualJS.func.legend;
+						}
+
+						for (var i=0, odata=o.data, len=odata.length; i<len; i++){
 							var r=odata[i];
-							valors.set(r.id, r.val);
+							if(r.hasOwnProperty("val")){
+								valors.set(r.id, r.val);
+							}else{ //If no val property on data (for example, grouped info), then do not print value on tooltip.
+								valors.set(r.id, "");
+							}
 							val.push(r.val);
+							setGroups(groups, r); //Does nothing if no groups
 						}
 						val.sort(function(a, b) {
-							return a - b;
+							return a-b;
 						});
 
 						var
 							inf=d3.quantile(val, min).toFixed(VisualJS.dec),
-							sup=d3.quantile(val, max).toFixed(VisualJS.dec),
-							quantize=d3.scale.quantize()
-								.domain([inf, sup])
-								.range(d3.range(num).map(function(i) { return "q" + i; }))
+							sup=d3.quantile(val, max).toFixed(VisualJS.dec)
 						;
+
 						vis.style("margin-left", left+"px");
 						vis.append("svg:g")
 							.attr("class", "area")
@@ -291,14 +336,14 @@ var VisualJS={
 							.data(VisualJS.map.features)
 							.enter().append("svg:path")
 							.attr("class", function(d) {
-								return quantize(valors.get(d.properties[VisualJS.map.id]));
+								return checkGrouped(groups, valors, d.properties, inf, sup);
 							})
 							.attr("d", path)
 							.on("mousemove", function(d){
 								VisualJS.showTooltip(
 									VisualJS.tooltipText(
 										VisualJS.id,
-										d.properties[VisualJS.map.label],
+										groupLabel(groups, d.properties),
 										valors.get(d.properties[VisualJS.map.id])
 									), 
 									d3.event.pageX, 
@@ -307,7 +352,7 @@ var VisualJS={
 							})
 							.on("mouseout", function(){return tooltip.style("display", "none");})
 						;
-						VisualJS.func.legend(VisualJS.id, VisualJS.format(sup), VisualJS.format(inf), colors[colors.length-1], colors[0], vis, tooltip, VisualJS.hwmin);
+						legend(VisualJS.id, VisualJS.format(sup), VisualJS.format(inf), colors[colors.length-1], colors[0], vis, tooltip, VisualJS.hwmin);
 					};
 					VisualJS.canvas();
 				}
