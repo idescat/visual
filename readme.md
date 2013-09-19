@@ -104,6 +104,8 @@ visual({
 });
 ```
 
+Examples:  [bar.html](https://github.com/idescat/visual/blob/master/test/bar.html)
+
 ####  time
 String. Required. Time period.
 
@@ -168,6 +170,8 @@ visual({
 });
 ```
 
+Examples:  [rank.html](https://github.com/idescat/visual/blob/master/test/rank.html), [rank10.html](https://github.com/idescat/visual/blob/master/test/rank10.html)
+
 ####  time
 String. Required. Time period.
 
@@ -210,6 +214,8 @@ visual({
    ]
 });
 ```
+
+Examples:  [tsbar.html](https://github.com/idescat/visual/blob/master/test/tsbar.html), [tsbar2.html](https://github.com/idescat/visual/blob/master/test/tsbar2.html), [tsbarns.html](https://github.com/idescat/visual/blob/master/test/tsbarns.html)
 
 ####  time
 Array of strings. Required. Time periods.
@@ -257,6 +263,9 @@ visual({
    ]
 });
 ```
+
+Examples:  [tsline2.html](https://github.com/idescat/visual/blob/master/test/tsline2.html)
+
 ####  time
 Array of strings. Required. Time periods.
 
@@ -301,6 +310,9 @@ visual({
    ]
 });
 ```
+
+Examples:  [pyram.html](https://github.com/idescat/visual/blob/master/test/pyram.html)
+
 ####  time
 String. Required. Time period.
 
@@ -369,6 +381,9 @@ visual({
    ]
 });
 ```
+
+Examples:  [cmap.html](https://github.com/idescat/visual/blob/master/test/cmap.html), [cmap-com.html](https://github.com/idescat/visual/blob/master/test/cmap-com.html), [cmap-f0.html](https://github.com/idescat/visual/blob/master/test/cmap-f0.html), [cmap-f020.html](https://github.com/idescat/visual/blob/master/test/cmap-f020.html)
+
 ####  time
 String. Required. Time period.
 
