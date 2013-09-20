@@ -388,7 +388,10 @@ Examples:  [cmap.html](https://github.com/idescat/visual/blob/master/test/cmap.h
 String. Required. Time period.
 
 ####  data
-Array of objects. Required. The array contains as many elements as map areas. Each element is an object with two properties: area *id* (string) and *val* (number).
+Array of objects. Required. The array contains as many elements as map areas. Each element is an object with at least one property: the area *id* (string). In this case, a map  will be created with the included areas highlighted. If *val* (number) is included, it will be used to automatically assigned colors to areas, unless [grouped](#grouped) has been specified. In that case, the *group* property (counter starting with 1) is required and will be used to assign colors, but *val* can still be specified if needed.
+
+####  grouped
+Array. Each element is a group label string (first label will be attached to areas with a *group* property of 1 in **data**, and so on).
 
 ####  by
 String. Required. Selects a certain map. Possible values ("mun", "com", "prov") are set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
