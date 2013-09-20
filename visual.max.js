@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.2.1",
+	version: "0.2.2",
 	id: "visual",
 	symbol : {
 		text: "", 
@@ -238,7 +238,8 @@ var VisualJS={
 						max=1-min,
 						//hasGroup: grouped property exists, is object (array), has content and data seems to include a group property
 						hasGroup=(typeof o.grouped==="object" && o.grouped.length>0 && o.data[0].hasOwnProperty("group")),
-						num=(hasGroup) ? o.grouped.length : VisualJS.setup.colors.map.max,
+						hasValues=(!hasGroup && o.data[0].hasOwnProperty("val")),
+						num=(hasGroup) ? o.grouped.length : ((hasValues) ? VisualJS.setup.colors.map.max : 1),
 						colors=VisualJS.func.colors( VisualJS.setup.colors.map.base, num, "fill", "q" ),
 						visual=d3.select(selector),
 						xy=d3.geo.mercator()
@@ -296,17 +297,23 @@ var VisualJS={
 							};
 							
 						}else{
-							checkGrouped=function(g, v, p, inf, sup){
-								var quantize=d3.scale.quantize()
-									.domain([inf, sup])
-									.range(d3.range(num).map(function(i) { return "q" + i; }))
-								;
-								return quantize(v.get(p[VisualJS.map.id]));
-							};
+							if(hasValues){
+								checkGrouped=function(g, v, p, inf, sup){
+									var quantize=d3.scale.quantize()
+										.domain([inf, sup])
+										.range(d3.range(num).map(function(i) { return "q" + i; }))
+									;
+									return quantize(v.get(p[VisualJS.map.id]));
+								};
+								legend=VisualJS.func.legend;							
+							}else{ 
+								checkGrouped=function(g, v, p, inf, sup){
+									return (v.get(p[VisualJS.map.id])!=="") ? "" : "q"+(num-1);
+								};	
+							}
 							groupLabel=function(g, p){
 								return p[VisualJS.map.label];
-							};							
-							legend=VisualJS.func.legend;
+							};
 						}
 
 						for (var i=0, odata=o.data, len=odata.length; i<len; i++){
@@ -322,7 +329,7 @@ var VisualJS={
 						val.sort(function(a, b) {
 							return a-b;
 						});
-
+						
 						var
 							inf=d3.quantile(val, min).toFixed(VisualJS.dec),
 							sup=d3.quantile(val, max).toFixed(VisualJS.dec)
@@ -340,15 +347,17 @@ var VisualJS={
 							})
 							.attr("d", path)
 							.on("mousemove", function(d){
-								VisualJS.showTooltip(
-									VisualJS.tooltipText(
-										VisualJS.id,
-										groupLabel(groups, d.properties),
-										valors.get(d.properties[VisualJS.map.id])
-									), 
-									d3.event.pageX, 
-									d3.event.pageY
-								);
+								if(hasValues || typeof valors.get(d.properties[VisualJS.map.id])!=="undefined"){
+									VisualJS.showTooltip(
+										VisualJS.tooltipText(
+											VisualJS.id,
+											groupLabel(groups, d.properties),
+											valors.get(d.properties[VisualJS.map.id])
+										), 
+										d3.event.pageX, 
+										d3.event.pageY
+									);
+								}
 							})
 							.on("mouseout", function(){return tooltip.style("display", "none");})
 						;
