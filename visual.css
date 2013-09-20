@@ -33,6 +33,7 @@ body {
 }
 #VisualJSTooltip strong, #VisualJSTooltip em {
 	display: block;
+	font-weight: bold;
 }
 #VisualJSTooltip em {
 	font-style: normal;
