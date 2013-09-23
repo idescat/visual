@@ -24,8 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.2.4",
-	id: "visual",
+	version: "0.2.5",
 	symbol : {
 		text: "", 
 		position: "end"
@@ -197,9 +196,7 @@ var VisualJS={
 
 	//o: object passed thru visual(o)
 	get: function (o) {
-		if(typeof o.id!=="undefined") {
-			VisualJS.id=o.id;
-		}
+		VisualJS.id=(typeof o.id!=="undefined") ? o.id : VisualJS.setup.id;
 		if(typeof o.fixed!=="undefined"){
 			VisualJS.fixed=o.fixed;
 		}

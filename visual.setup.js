@@ -23,10 +23,14 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 VisualJS.setup={
-	tooltipid: "VisualJSTooltip",
-	nowrapclass: "VisualJSnw",
-	normal: "VisualJSnormal",
-	mini: "VisualJSmini",
+	//Classes and ids of elements created by visual
+	id: "visual", //id to style the container
+	tooltipid: "VisualJSTooltip", //id to style the tooltip
+	nowrapclass: "VisualJSnw", //class to define blocks of wrappable content in the title
+	normal: "VisualJSnormal", //visualitzation's normal size class
+	mini: "VisualJSmini", //visualitzation's small size class
+
+	//Colors for maps and series
 	colors: {
 		map: {
 			max: 100,
@@ -34,31 +38,35 @@ VisualJS.setup={
 		},
 		series: ["#2b527b", "#a52a2a", "#008000", "#ffbf00"]	
 	},	
+
+	//Internationalization options
 	i18n: {
-		lang: "ca",
+		lang: "ca", //default lang when no lang is specified
 		text: {
-			dec: {
+			dec: { //decimal separator
 				ca: ",",
 				es: ",",
 				en:  "."
 			},
-			k: {
+			k: { //thousands separator
 				ca: ".",
 				es: ".",
 				en:  ","
 			},
-			na: {
+			na: { //text in tooltip when value is not available 
 				ca: "Valor no disponible",
 				es: "Valor no disponible",
 				en:  "Value not available"
 			},
-			oldbrowser: {
+			oldbrowser: { //Warning message when IE<9 (maps)
 				ca: "Per visualitzar el mapa cal un navegador més modern.",
 				es: "Para visualizar el mapa es preciso un navegador más moderno.",
 				en:  "To view the map you must use a modern browser."
 			}
 		}
 	},
+
+	//Libraries: path and existence function
 	lib: {
 		d3: {
 			js: "../lib/d3.v3.js",
@@ -99,6 +107,8 @@ VisualJS.setup={
 			exists: function(){ return typeof G_vmlCanvasManager!=="undefined"; }
 		}
 	},
+
+	//Maps: path and existence function
 	map: {
 		mun: {
 			js: "../maps/cat2013mun.js",
@@ -113,9 +123,13 @@ VisualJS.setup={
 			exists: function(){ return typeof VisualJS.map!=="undefined" && VisualJS.map.id==="PROVINCIA"; }
 		}
 	},
+	
+	//IE check
 	func: {
 		old: function(ie) { return RegExp("(^|\\s)lt-"+ie+"(\\s|$)").test(document.documentElement.className); }
 	},
+
+	//Margins and paddings used in container
 	margin: 10,
 	padding: {
 		w: 30,
