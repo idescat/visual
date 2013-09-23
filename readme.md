@@ -55,16 +55,16 @@ The visual object accepts the following properties:
 String ("ca", "es", "en"). Language. Default is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
 
 #### title
-String. Required. First level title's text.
+String. First level title's text.
 
 #### source
-String. Required. Foot text.
+String. Foot text.
 
 #### geo
-String. Required. Geographical area.
+String. Geographical area.
 
 ####  time
-String or array. Required. Time period or periods.
+String (optional) or array (required). Time period or periods.
 
 #### symbol
 Object with two properties: *text* (string) and *position* (string. "start", "end"). Default is no text. *position*'s default is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
@@ -107,7 +107,7 @@ visual({
 Examples:  [bar.html](https://github.com/idescat/visual/blob/master/test/bar.html)
 
 ####  time
-String. Required. Time period.
+String. Time period.
 
 #### data
 Array of arrays. Required. The first array contains as many elements as categories. Each element is an array of two elements: a string (label) and a number (value).
@@ -173,7 +173,7 @@ visual({
 Examples:  [rank.html](https://github.com/idescat/visual/blob/master/test/rank.html), [rank10.html](https://github.com/idescat/visual/blob/master/test/rank10.html)
 
 ####  time
-String. Required. Time period.
+String. Time period.
 
 ####  data
 Array of arrays. Required. The first array contains as many elements as categories. Each element is an array of two elements: a string (label) and a number (value).
@@ -314,7 +314,7 @@ visual({
 Examples:  [pyram.html](https://github.com/idescat/visual/blob/master/test/pyram.html)
 
 ####  time
-String. Required. Time period.
+String. Time period.
 
 #### data
 Array of objects. Required. The array contains two elements: one for each sex. Each element is an object with two properties: *label* (string) and *val* (array of values).
@@ -385,7 +385,7 @@ visual({
 Examples:  [cmap.html](https://github.com/idescat/visual/blob/master/test/cmap.html), [cmap-com.html](https://github.com/idescat/visual/blob/master/test/cmap-com.html), [cmap-f0.html](https://github.com/idescat/visual/blob/master/test/cmap-f0.html), [cmap-f020.html](https://github.com/idescat/visual/blob/master/test/cmap-f020.html), [cmap-groups1.html](https://github.com/idescat/visual/blob/master/test/cmap-groups1.html), [cmap-groups2.html](https://github.com/idescat/visual/blob/master/test/cmap-groups2.html)
 
 ####  time
-String. Required. Time period.
+String. Time period.
 
 ####  data
 Array of objects. Required. The array contains as many elements as map areas. Each element is an object with at least one property: the area *id* (string). In this case, a map  will be created with the included areas highlighted. If *val* (number) is included, it will be used to automatically assigned colors to areas, unless [grouped](#grouped) has been specified. In that case, the *group* property (counter starting with 1) is required and will be used to assign colors, but *val* can still be specified if needed.

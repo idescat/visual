@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.2.3",
+	version: "0.2.4",
 	id: "visual",
 	symbol : {
 		text: "", 
@@ -98,8 +98,17 @@ var VisualJS={
 	},
 
 	getTitle: function (o) {
-		var t=(typeof o.time === "string") ? o.title+". "+o.geo+'. <span class="'+VisualJS.setup.nowrapclass+'">'+o.time+"</span>" : o.title+". "+o.geo+'. <span class="'+VisualJS.setup.nowrapclass+'">'+o.time[0]+"&ndash;"+o.time[o.time.length-1]+"</span>";
-		return VisualJS.atext(t);
+		var 
+			t=[],
+			add=function(s){ if(typeof s==="string"){ t.push('<span class="'+VisualJS.setup.nowrapclass+'">' + s + "</span>"); }},
+			time=(o.time!==null && typeof o.time==="object") ? o.time[0]+"&ndash;"+o.time[o.time.length-1] : o.time || ""
+		;
+		add(o.title);
+		add(o.geo);
+		if(o.time!==null) {
+			add(time);
+		}
+		return  VisualJS.atext(t.join(". "));
 	},
 
 	// Add "script" to scripts' array 
@@ -250,7 +259,7 @@ var VisualJS={
 					VisualJS.canvas=function(){
 						visual.html('<h1></h1><h2></h2>');
 						d3.select(selector+" h1").html(VisualJS.getTitle(o));
-						d3.select(selector+" h2").html(VisualJS.atext(o.source));
+						d3.select(selector+" h2").html(VisualJS.atext(o.source || ""));
 						VisualJS.getsize(VisualJS.id);
 
 						var 
@@ -591,7 +600,7 @@ var VisualJS={
 				VisualJS.canvas=function(){
 					$(selector).html('<h1></h1><h2></h2>');
 					$(selector+" h1").html(title);
-					$(selector+" h2").html(VisualJS.atext(o.source));
+					$(selector+" h2").html(VisualJS.atext(o.source || ""));
 					VisualJS.getsize(VisualJS.id);
 					$(selector+" h1").after('<div class="vis '+VisualJS.visualsize+'" style="width: '+VisualJS.width+'px; height: '+VisualJS.height+'px;"></div>');
 
@@ -607,7 +616,7 @@ var VisualJS={
 						break;
 						case "rank":
 							setup.series.bars.horizontal=true;
-							setup.yaxis.ticks=( (VisualJS.height/ticks.length) > 11) ? ticks : null; //If too many categories and not enough height, remove y-labels
+							setup.yaxis.ticks=( (VisualJS.height/ticks.length) > 11) ? ticks : 0; //If too many categories and not enough height, remove y-labels
 							setup.xaxis.max=o.data[0][1]*(1.02); //Increase area by 2% of the longest bar
 							setup.yaxis.autoscaleMargin=0;
 							setup.series.bars.barWidth=0.5;
@@ -616,7 +625,7 @@ var VisualJS={
 								[series],
 								setup
 							);
-							break;
+						break;
 						case "bar":
 							setup.xaxis.mode="categories";
 							setup.xaxis.tickLength=0;
@@ -625,7 +634,7 @@ var VisualJS={
 								[series],
 								setup
 							);
-							break;
+						break;
 						default:
 							setup.xaxis.ticks=ticks;
 							$.plot(
