@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.2.2",
+	version: "0.2.3",
 	id: "visual",
 	symbol : {
 		text: "", 
@@ -216,20 +216,13 @@ var VisualJS={
 			if(ie8){
 				document.getElementById(VisualJS.id).innerHTML="<p>"+VisualJS.setup.i18n.text.oldbrowser[VisualJS.lang]+"</p>";
 			}else{
+				if(typeof o.by!=="string"){
+					return;
+				}
+
 				VisualJS.addJS( VisualJS.setup.lib.maps, true );
 				VisualJS.addJS( VisualJS.setup.lib.d3, true );
-
-				switch(o.by){
-					case "mun":
-						VisualJS.addJS( VisualJS.setup.map.mun, true );
-						break;
-					case "com":
-						VisualJS.addJS( VisualJS.setup.map.com, true );
-						break;
-					case "prov":
-						VisualJS.addJS( VisualJS.setup.map.prov, true );
-						break;
-				}
+				VisualJS.addJS( VisualJS.setup.map[o.by], true );
 
 				///////// CHART
 				VisualJS.chart=function(){
