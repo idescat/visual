@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.2.6",
+	version: "0.2.7",
 	symbol : {
 		text: "", 
 		position: "end"
@@ -99,12 +99,21 @@ var VisualJS={
 	getTitle: function (o) {
 		var 
 			t=[],
-			add=function(s){ if(typeof s==="string"){ t.push('<span class="'+VisualJS.setup.nowrapclass+'">' + s + "</span>"); }},
-			time=(o.time!==null && typeof o.time==="object") ? o.time[0]+"&ndash;"+o.time[o.time.length-1] : o.time || ""
+			add=function(s){ if(typeof s==="string"){ t.push('<span class="'+VisualJS.setup.nowrapclass+'">' + s + "</span>"); }}
 		;
+		if(o.time!==null && typeof o.time==="object"){
+			var 
+				start=VisualJS.tformat(o.time[0]),
+				end=VisualJS.tformat(o.time[o.time.length-1]),
+				time=start+"&ndash;"+end
+			;
+		}else{
+			var time=VisualJS.tformat(o.time);
+		}
+
 		add(o.title);
 		add(o.geo);
-		if(o.time!==null) {
+		if(time!==null) {
 			add(time);
 		}
 		return  VisualJS.atext(t.join(". "));
@@ -165,6 +174,36 @@ var VisualJS={
 		}
 		return x1+x2;
 	},	
+
+	tformat: function(t){
+		if(!t){//undefined, null, "", 0
+			return null;
+		}
+		//Formatted dates are string numbers
+		if(isNaN(t)){
+			return t;
+		}
+		switch(t.length){
+			case 5:
+				var f="quarter";
+			break;
+			case 6:
+				var f="month";
+			break;
+			default:
+				return t;
+		}
+
+		var label=VisualJS.setup.i18n.text[f];
+		if(typeof label==="undefined"){
+			return t;
+		}
+		var text=label[VisualJS.lang];
+		if(typeof text==="undefined"){
+			return t;
+		}
+		return text[t.slice(4)-1]+" <span>"+t.slice(0,4)+"</span>";
+	},
 
 	tooltipText: function(id, l, v) {
 		var 
@@ -649,21 +688,7 @@ var VisualJS={
 								formatTime=function(freq){
 									var
 										xticks=[],
-										ratio=VisualJS.width/ticklen,
-										tformat=function(t, f){
-											if(f!=="month" && f!=="quarter"){
-												return t;
-											}
-											var label=VisualJS.setup.i18n.text[f];
-											if(typeof label==="undefined"){
-												return t;
-											}
-											var text=label[VisualJS.lang];
-											if(typeof text==="undefined"){
-												return t;
-											}
-											return text[t.slice(4)-1]+" <span>"+t.slice(0,4)+"</span>";
-										}
+										ratio=VisualJS.width/ticklen
 									;
 									switch(freq){
 										case "year":
@@ -692,13 +717,13 @@ var VisualJS={
 														:
 														[ ticks[i][0], ticks[i][1].slice(0,4) ]
 													//Formatting time
-													ticks[i][1]=tformat(ticks[i][1], freq);
+													ticks[i][1]=VisualJS.tformat(ticks[i][1]);
 												}
 												setup.xaxis.ticks=xticks;
 											}else{
 												for(var i=0; i<ticklen; i++){
 													//Formatting time
-													ticks[i][1]=tformat(ticks[i][1], freq);
+													ticks[i][1]=VisualJS.tformat(ticks[i][1]);
 												}
 												setup.xaxis.ticks=ticks;
 											}
