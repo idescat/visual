@@ -49,6 +49,9 @@ body {
 #visual .VisualJSmini .flot-tick-label {
 	font-size: 8px;
 }
+#visual .flot-tick-label span {
+	display: block;
+}
 
 /* SVG */
 #visual .area {

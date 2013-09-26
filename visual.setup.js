@@ -53,6 +53,16 @@ VisualJS.setup={
 				es: ".",
 				en:  ","
 			},
+			month: { //Month axis labels
+				ca: ["Gen", "Feb", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Des"],
+				es:  ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+				en:  ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+			},
+			quarter: { //Quarter axis labels
+				ca: ["I", "II", "III", "IV"],
+				es:  ["I", "II", "III", "IV"],
+				en:  ["Q1", "Q2", "Q3", "Q4"]
+			},
 			na: { //text in tooltip when value is not available 
 				ca: "Valor no disponible",
 				es: "Valor no disponible",
