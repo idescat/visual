@@ -24,16 +24,17 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.2.7",
+	version: "0.2.8",
 	symbol : {
 		text: "", 
 		position: "end"
 	},
-	
+
 	//Used in maps
 	dec: 0, //Used in the map legend
 	filter: 0.05, //Used in color assignation in maps
 	fixed: null,
+	autoheading: true,
 	width: 500,
 	bwidth: 500, //body width
 	height: 500,
@@ -97,9 +98,20 @@ var VisualJS={
 	},
 
 	getTitle: function (o) {
+		if(VisualJS.autoheading===false){
+			return o.title;
+		}
+
 		var 
 			t=[],
-			add=function(s){ if(typeof s==="string"){ t.push('<span class="'+VisualJS.setup.nowrapclass+'">' + s + "</span>"); }}
+			add=function(s, nw){ 
+				if(typeof s==="string"){ 
+					if(nw===true){
+						s='<span class="'+VisualJS.setup.nowrapclass+'">' + s + "</span>";
+					}
+					t.push(s);
+				}
+			}
 		;
 		if(o.time!==null && typeof o.time==="object"){
 			var 
@@ -111,10 +123,10 @@ var VisualJS={
 			var time=VisualJS.tformat(o.time);
 		}
 
-		add(o.title);
-		add(o.geo);
+		add(o.title, false);
+		add(o.geo, true);
 		if(time!==null) {
-			add(time);
+			add(time, true);
 		}
 		return  VisualJS.atext(t.join(". "));
 	},
@@ -249,6 +261,7 @@ var VisualJS={
 		}else{
 			VisualJS.container[VisualJS.id]={symbol: VisualJS.symbol};
 		}
+		VisualJS.autoheading=(typeof o.autoheading!=="undefined") ? !!o.autoheading : VisualJS.autoheading;
 		VisualJS.lang=o.lang || VisualJS.setup.i18n.lang;
 
 		var
