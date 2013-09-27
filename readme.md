@@ -64,7 +64,9 @@ String. Foot text.
 String. Geographical area.
 
 ####  time
-String (optional) or array (required). Time period or periods.
+String (optional) or array of strings (required). Time period or periods.
+
+Visual will treat the following string time formats using the "quarter" and "month" properties in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js): "20131" (first quarter of 2013) and "201301" (January 2013). Any other time pattern will be displayed untreated.
 
 #### symbol
 Object with two properties: *text* (string) and *position* (string. "start", "end"). Default is no text. *position*'s default is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
