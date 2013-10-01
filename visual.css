@@ -12,14 +12,12 @@ body {
 	font-size: 13px;
 	background-color: #fff;
 }
-
-#visual , #visual  h1 {
+#visual  h1 {
 	font-size: 13px;
 }
-
-#visual h2, #VisualJSTooltip {
+#visual p {
 	font-size: 11px;
-	font-weight: normal;
+	margin: 10px 0 0 0;
 }
 
 #VisualJSTooltip {
@@ -31,6 +29,7 @@ body {
 	background-color: #f6f6f6;
 	opacity: 0.90;
 	white-space: nowrap;
+	font-size: 11px;
 }
 #VisualJSTooltip strong, #VisualJSTooltip em {
 	display: block;

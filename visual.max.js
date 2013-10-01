@@ -24,13 +24,14 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.2.8",
+	version: "0.3.0",
 	symbol : {
 		text: "", 
 		position: "end"
 	},
 
 	//Used in maps
+	map: {},
 	dec: 0, //Used in the map legend
 	filter: 0.05, //Used in color assignation in maps
 	fixed: null,
@@ -38,10 +39,9 @@ var VisualJS={
 	width: 500,
 	bwidth: 500, //body width
 	height: 500,
-	hwmin: 500,
 	normal: 500, //If less than this value, apply mini style; otherwise, normal style (see setup)
 	scripts: [],
-	container: {}, //To allow multiple direct embedding, particular features of every container are saved here
+	container: {}, //To allow multiple direct embeddings, particular features of every container are saved here
 	func: {}, //Space for external functions
 
 	/* Functions */
@@ -68,28 +68,27 @@ var VisualJS={
 			w=window,
 			d=document,
 			e=d.documentElement,
-			g=d.getElementsByTagName('body')[0],
+			g=d.getElementsByTagName("body")[0],
 			vis=d.getElementById(id),
-			h1=vis.getElementsByTagName('h1')[0],
-			h2=vis.getElementsByTagName('h2')[0],
+			h1=vis.getElementsByTagName("h1")[0],
+			p=vis.getElementsByTagName("p")[0],
 			hh1=h1.clientHeight,
-			hh2=h2.clientHeight,
+			hp=p.clientHeight,
 			bheight=w.innerHeight || e.clientHeight || g.clientHeight
 		;
-		if(typeof bheight!=="undefined" && typeof hh1!=="undefined" && typeof hh2!=="undefined"){
+		if(typeof bheight!=="undefined" && typeof hh1!=="undefined" && typeof hp!=="undefined"){
 			if(VisualJS.fixed===null){ //Normal case: full page for visualization (embedded via iframe)
 				VisualJS.bwidth=w.innerWidth || e.clientWidth || g.clientWidth;
 				VisualJS.width=VisualJS.bwidth-VisualJS.setup.padding.w;
-				VisualJS.height=bheight-VisualJS.setup.padding.h-hh1-hh2;
+				VisualJS.height=bheight-VisualJS.setup.padding.h-hh1-hp;
 			}else{ //Embed visualization on a page via script
 				VisualJS.bwidth=e.clientWidth || g.clientWidth;
 				VisualJS.width=VisualJS.fixed[0]-VisualJS.setup.padding.w;
-				VisualJS.height=VisualJS.fixed[1]-VisualJS.setup.padding.h-hh1-hh2;
+				VisualJS.height=VisualJS.fixed[1]-VisualJS.setup.padding.h-hh1-hp;
 			}
 		}
-		
-		VisualJS.hwmin=Math.min(VisualJS.width,VisualJS.height);
-		// We take into account width instead of hwmin because height has little impact on label space
+
+		// We take into account width because height has little impact on label space
 		VisualJS.visualsize=(VisualJS.width<VisualJS.normal) ? VisualJS.setup.mini : VisualJS.setup.normal;
 	},
 
@@ -97,7 +96,7 @@ var VisualJS={
 		return String(s).replace(/&amp;/g, "&"); //More general .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"');
 	},
 
-	getTitle: function (o) {
+	getHeading: function (o) {
 		if(VisualJS.autoheading===false){
 			return o.title;
 		}
@@ -148,26 +147,26 @@ var VisualJS={
 	showTooltip: function(html, x, y) {
 		var	
 			tt=document.getElementById(VisualJS.setup.tooltipid),
-			visRightLimit=VisualJS.bwidth - VisualJS.setup.margin, //Visual right limit
+			visRightLimit=VisualJS.bwidth-VisualJS.setup.margin, //Visual right limit
 			pos={} //Final tooltip position
 		;
 		tt.innerHTML=html;
 		tt.style.display="block"; //Paint to get width
 		var ttHalfWidth=tt.clientWidth/2; //Half of tooltip width
 		//Default: tooltip top and centered
-		pos.x=x - ttHalfWidth; 
-		pos.y=y - tt.clientHeight - 5; //5 to avoid cursor
+		pos.x=x-ttHalfWidth; 
+		pos.y=y-tt.clientHeight-5; //5 to avoid cursor
 
 		if(x + ttHalfWidth > visRightLimit){ //Outside right: --> move to left
-			pos.x -=  (x + ttHalfWidth) - visRightLimit;
-		}else if (pos.x < VisualJS.setup.margin){ //Outside left --> move to right
-			pos.x += VisualJS.setup.margin - pos.x ;
+			pos.x-= (x + ttHalfWidth)-visRightLimit;
+		}else if(pos.x<VisualJS.setup.margin){ //Outside left --> move to right
+			pos.x+=VisualJS.setup.margin-pos.x ;
 		}//Outside top --> move down
-		if(pos.y < VisualJS.setup.margin){
-			pos.y += tt.clientHeight*1.75;
+		if(pos.y<VisualJS.setup.margin){
+			pos.y+=tt.clientHeight*1.75;
 		}//Outside bottom not possible
-		tt.style.left=pos.x + 'px';
-		tt.style.top=pos.y + 'px';
+		tt.style.left=pos.x+"px";
+		tt.style.top=pos.y+"px";
 	},
 
 	format: function(n){
@@ -285,6 +284,7 @@ var VisualJS={
 				///////// CHART
 				VisualJS.chart=function(){
 					var 
+						map=VisualJS.map[o.by],
 						min=(typeof o.filter!=="undefined") ? o.filter : VisualJS.filter,
 						max=1-min,
 						//hasGroup: grouped property exists, is object (array), has content and data seems to include a group property
@@ -293,10 +293,10 @@ var VisualJS={
 						num=(hasGroup) ? o.grouped.length : ((hasValues) ? VisualJS.setup.colors.map.max : 1),
 						colors=VisualJS.func.colors( VisualJS.setup.colors.map.base, num, "fill", "q" ),
 						visual=d3.select(selector),
-						xy=d3.geo.mercator()
-							.center(VisualJS.map.center)
-							.scale(VisualJS.map.scale)
-							.translate([250, 250]), //500/2
+						xy=map.projection //d3.geo projection; for example: d3.geo.mercator()
+							.center(map.center)
+							.scale(map.scale)
+							.translate([map.width/2, map.height/2]),
 						path=d3.geo.path().projection(xy),
 						tooltip=d3.select("#" + VisualJS.setup.tooltipid)
 					;
@@ -306,13 +306,12 @@ var VisualJS={
 					}
 
 					VisualJS.canvas=function(){
-						visual.html('<h1></h1><h2></h2>');
-						d3.select(selector+" h1").html(VisualJS.getTitle(o));
-						d3.select(selector+" h2").html(VisualJS.atext(o.source || ""));
+						visual.html("<h1></h1><p></p>");
+						d3.select(selector+" h1").html(VisualJS.getHeading(o));
+						d3.select(selector+" p").html(VisualJS.atext(o.source || ""));
 						VisualJS.getsize(VisualJS.id);
 
 						var 
-							left=Math.round((VisualJS.width-VisualJS.hwmin)/2),
 							valors=d3.map(),
 							val=[],
 							groups, //key: id, value: group
@@ -322,10 +321,23 @@ var VisualJS={
 							groupLabel,
 							inf,
 							sup,
+							hh=VisualJS.height/map.height,
+							ww=VisualJS.width/map.width,
+							width=Math.min(
+								Math.round( map.width*hh ),
+								VisualJS.width
+							),
+							height=Math.min(
+								Math.round( map.height*ww ),
+								VisualJS.height
+							),
+							left=Math.floor( (VisualJS.width-width)/2 ),
+							topbottom=Math.floor( (VisualJS.height-height)/2 ),
+							scale=(hh<ww) ? hh : ww,
 							vis=visual
-								.insert("svg:svg", "h2")
-								.attr("width", VisualJS.hwmin)
-								.attr("height", VisualJS.hwmin)
+								.insert("svg:svg", "p")
+								.attr("width", width)
+								.attr("height", height)
 						;
 
 						if(hasGroup){
@@ -334,19 +346,18 @@ var VisualJS={
 								g.set(r.id, r.group);
 							}; 
 							checkGrouped=function(g, v, p, inf, sup){
-								return "q" + (g.get(p[VisualJS.map.id])-1);
+								return "q" + (g.get(p[map.id])-1);
 							};
 							groupLabel=function(g, p){
 								var 
-									em=o.grouped[(g.get(p[VisualJS.map.id])-1)],
-									ret=p[VisualJS.map.label]
+									em=o.grouped[(g.get(p[map.id])-1)],
+									ret=p[map.label]
 								;
 								if(typeof em!=="undefined"){
 									ret+=" <em>" + em + "</em>";
 								}
 								return ret;
 							};
-							
 						}else{
 							if(hasValues){
 								checkGrouped=function(g, v, p, inf, sup){
@@ -354,16 +365,16 @@ var VisualJS={
 										.domain([inf, sup])
 										.range(d3.range(num).map(function(i) { return "q" + i; }))
 									;
-									return quantize(v.get(p[VisualJS.map.id]));
+									return quantize(v.get(p[map.id]));
 								};
 								legend=VisualJS.func.legend;							
 							}else{ 
 								checkGrouped=function(g, v, p, inf, sup){
-									return (v.get(p[VisualJS.map.id])!=="") ? "" : "q"+(num-1);
+									return (v.get(p[map.id])!=="") ? "" : "q"+(num-1);
 								};	
 							}
 							groupLabel=function(g, p){
-								return p[VisualJS.map.label];
+								return p[map.label];
 							};
 						}
 
@@ -385,25 +396,27 @@ var VisualJS={
 							inf=d3.quantile(val, min).toFixed(VisualJS.dec),
 							sup=d3.quantile(val, max).toFixed(VisualJS.dec)
 						;
-
+						
 						vis.style("margin-left", left+"px");
+						vis.style("margin-top", topbottom+"px");
+						vis.style("margin-bottom", topbottom+"px");
 						vis.append("svg:g")
 							.attr("class", "area")
-							.attr("transform", "scale("+(VisualJS.hwmin/500)+")")
+							.attr("transform", "scale("+scale+")")
 							.selectAll("path")
-							.data(VisualJS.map.features)
+							.data(map.features)
 							.enter().append("svg:path")
 							.attr("class", function(d) {
 								return checkGrouped(groups, valors, d.properties, inf, sup);
 							})
 							.attr("d", path)
 							.on("mousemove", function(d){
-								if(hasValues || typeof valors.get(d.properties[VisualJS.map.id])!=="undefined"){
+								if(hasValues || typeof valors.get(d.properties[map.id])!=="undefined"){
 									VisualJS.showTooltip(
 										VisualJS.tooltipText(
 											VisualJS.id,
 											groupLabel(groups, d.properties),
-											valors.get(d.properties[VisualJS.map.id])
+											valors.get(d.properties[map.id])
 										), 
 										d3.event.pageX, 
 										d3.event.pageY
@@ -412,7 +425,7 @@ var VisualJS={
 							})
 							.on("mouseout", function(){return tooltip.style("display", "none");})
 						;
-						legend(VisualJS.id, VisualJS.format(sup), VisualJS.format(inf), colors[colors.length-1], colors[0], vis, tooltip, VisualJS.hwmin);
+						legend(VisualJS.id, VisualJS.format(sup), VisualJS.format(inf), colors[colors.length-1], colors[0], vis, tooltip, map.width, map.height, map.legend);
 					};
 					VisualJS.canvas();
 				}
@@ -480,7 +493,7 @@ var VisualJS={
 						}
 						shlegend=(slen>1);
 					};
-					return VisualJS.getTitle(o);
+					return VisualJS.getHeading(o);
 				}
 			;
 
@@ -506,7 +519,7 @@ var VisualJS={
 						lines=false,
 						points=false,
 						bars=false,
-						title=VisualJS.getTitle(o)
+						heading=VisualJS.getHeading(o)
 					;
 				break;
 				case "rank":
@@ -525,7 +538,7 @@ var VisualJS={
 						lines=false,
 						points=false,
 						bars=true,
-						title=VisualJS.getTitle(o)
+						heading=VisualJS.getHeading(o)
 					;
 					break;
 				case "bar":
@@ -539,12 +552,12 @@ var VisualJS={
 						lines=false,
 						points=false,
 						bars=true,
-						title=VisualJS.getTitle(o)
+						heading=VisualJS.getHeading(o)
 					;
 					break;
 				case "tsline":
 					var 
-						title=ts(),
+						heading=ts(),
 						stack=null,
 						lines=true,
 						points=true,
@@ -553,7 +566,7 @@ var VisualJS={
 					break;
 				case "tsbar":
 					var 
-						title=ts(),
+						heading=ts(),
 						stack=true,
 						lines=false,
 						points=false,
@@ -647,9 +660,9 @@ var VisualJS={
 				;
 
 				VisualJS.canvas=function(){
-					$(selector).html('<h1></h1><h2></h2>');
-					$(selector+" h1").html(title);
-					$(selector+" h2").html(VisualJS.atext(o.source || ""));
+					$(selector).html("<h1></h1><p></p>");
+					$(selector+" h1").html(heading);
+					$(selector+" p").html(VisualJS.atext(o.source || ""));
 					VisualJS.getsize(VisualJS.id);
 					$(selector+" h1").after('<div class="vis '+VisualJS.visualsize+'" style="width: '+VisualJS.width+'px; height: '+VisualJS.height+'px;"></div>');
 

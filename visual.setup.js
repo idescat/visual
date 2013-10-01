@@ -122,15 +122,15 @@ VisualJS.setup={
 	map: {
 		mun: {
 			js: "../maps/cat2013mun.js",
-			exists: function(){ return typeof VisualJS.map!=="undefined" && VisualJS.map.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.mun!=="undefined" && VisualJS.map.mun.id==="MUNICIPI"; }
 		},
 		com: {
 			js: "../maps/cat2013com.js",
-			exists: function(){ return typeof VisualJS.map!=="undefined" && VisualJS.map.id==="COMARCA"; }
+			exists: function(){ return typeof VisualJS.map.com!=="undefined" && VisualJS.map.com.id==="COMARCA"; }
 		},
 		prov: {
 			js: "../maps/cat2013prov.js",
-			exists: function(){ return typeof VisualJS.map!=="undefined" && VisualJS.map.id==="PROVINCIA"; }
+			exists: function(){ return typeof VisualJS.map.prov!=="undefined" && VisualJS.map.prov.id==="PROVINCIA"; }
 		}
 	},
 	
