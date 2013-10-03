@@ -1,0 +1,11 @@
+{
+	"name": "visual",
+	"description": "A Javascript library for data visualization developed by the Statistical Institute of Catalonia (Idescat).",
+	"version": "0.3.2",
+	"main": ["visual.css", "visual.js", "visual.setup.js", "./lib/*", "./maps/*"],
+	"ignore": [
+		"**/.*"
+	],
+	"dependencies": {},
+	"devDependencies": {}
+}
