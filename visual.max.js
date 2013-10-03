@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.3.1",
+	version: "0.3.2",
 	symbol : {
 		text: "", 
 		position: "end"
@@ -285,6 +285,8 @@ var VisualJS={
 				VisualJS.chart=function(){
 					var 
 						map=VisualJS.map[o.by],
+						mwidth=map.area[0],
+						mheight=map.area[1],
 						min=(typeof o.filter!=="undefined") ? o.filter : VisualJS.filter,
 						max=1-min,
 						//hasGroup: grouped property exists, is object (array), has content and data seems to include a group property
@@ -298,7 +300,7 @@ var VisualJS={
 						proj=(typeof map.center==="object" && typeof map.projection.center==="function") ? map.projection.center(map.center) : map.projection,
 						xy=proj
 							.scale(map.scale)
-							.translate([map.width/2, map.height/2]),
+							.translate([mwidth/2, mheight/2]),
 						path=d3.geo.path().projection(xy),
 						tooltip=d3.select("#" + VisualJS.setup.tooltipid)
 					;
@@ -323,14 +325,14 @@ var VisualJS={
 							groupLabel,
 							inf,
 							sup,
-							hh=VisualJS.height/map.height,
-							ww=VisualJS.width/map.width,
+							hh=VisualJS.height/mheight,
+							ww=VisualJS.width/mwidth,
 							width=Math.min(
-								Math.round( map.width*hh ),
+								Math.round( mwidth*hh ),
 								VisualJS.width
 							),
 							height=Math.min(
-								Math.round( map.height*ww ),
+								Math.round( mheight*ww ),
 								VisualJS.height
 							),
 							left=Math.floor( (VisualJS.width-width)/2 ),
@@ -427,7 +429,9 @@ var VisualJS={
 							})
 							.on("mouseout", function(){return tooltip.style("display", "none");})
 						;
-						legend(VisualJS.id, VisualJS.format(sup), VisualJS.format(inf), colors[colors.length-1], colors[0], vis, tooltip, map.width, map.height, map.legend);
+						if(typeof map.legend==="object") { //If legend specified (array), draw it
+							legend(VisualJS.id, VisualJS.format(sup), VisualJS.format(inf), colors[colors.length-1], colors[0], vis, tooltip, map.area, map.legend);
+						}
 					};
 					VisualJS.canvas();
 				}

@@ -1,11 +1,10 @@
 VisualJS.map.prov={
-	height: 500,
-	width: 500,
+	area: [500, 500],
 
 	projection: d3.geo.mercator(),
 	scale: 9000,
 	center: [1.74, 41.7],
-	legend: [300, 335],
+	legend: [280, 345],
 
 	id: "PROVINCIA",
 	label: "NOM_PROV",
