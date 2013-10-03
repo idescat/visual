@@ -131,9 +131,12 @@ VisualJS.setup={
 		prov: {
 			js: "../maps/cat2013prov.js",
 			exists: function(){ return typeof VisualJS.map.prov!=="undefined" && VisualJS.map.prov.id==="PROVINCIA"; }
+		},
+		usastates: {
+			js: "../maps/usa2013states.js",
+			exists: function(){ return typeof VisualJS.map.usastates!=="undefined" && VisualJS.map.usastates.id==="STATE"; }
 		}
 	},
-	
 	//IE check
 	func: {
 		old: function(ie) { return RegExp("(^|\\s)lt-"+ie+"(\\s|$)").test(document.documentElement.className); }
