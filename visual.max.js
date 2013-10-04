@@ -24,23 +24,26 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.3.2",
+	version: "0.3.3",
 	symbol : {
 		text: "", 
 		position: "end"
 	},
+	legend: true,
+	autoheading: true,
 
 	//Used in maps
-	map: {},
 	dec: 0, //Used in the map legend
 	filter: 0.05, //Used in color assignation in maps
+
 	fixed: null,
-	autoheading: true,
 	width: 500,
 	bwidth: 500, //body width
 	height: 500,
 	normal: 500, //If less than this value, apply mini style; otherwise, normal style (see setup)
+
 	scripts: [],
+	map: {},
 	container: {}, //To allow multiple direct embeddings, particular features of every container are saved here
 	func: {}, //Space for external functions
 
@@ -261,6 +264,7 @@ var VisualJS={
 			VisualJS.container[VisualJS.id]={symbol: VisualJS.symbol};
 		}
 		VisualJS.autoheading=(typeof o.autoheading!=="undefined") ? !!o.autoheading : VisualJS.autoheading;
+		VisualJS.legend=(typeof o.legend!=="undefined") ? !!o.legend: VisualJS.legend;
 		VisualJS.lang=o.lang || VisualJS.setup.i18n.lang;
 
 		var
@@ -429,7 +433,7 @@ var VisualJS={
 							})
 							.on("mouseout", function(){return tooltip.style("display", "none");})
 						;
-						if(typeof map.legend==="object") { //If legend specified (array), draw it
+						if(VisualJS.legend && typeof map.legend==="object") { //If legend specified (array), draw it
 							legend(VisualJS.id, VisualJS.format(sup), VisualJS.format(inf), colors[colors.length-1], colors[0], vis, tooltip, map.area, map.legend);
 						}
 					};
@@ -539,7 +543,7 @@ var VisualJS={
 							}
 							series={data: data};
 						},
-						shlegend=false, //Currently only one series aloowed when rank (no series loop)
+						shlegend=false, //Currently only one series allowed when rank (no series loop)
 						stack=false, //See previous line
 						lines=false,
 						points=false,
@@ -632,7 +636,8 @@ var VisualJS={
 						}
 					});
 				};
-				
+
+				shlegend=VisualJS.legend && shlegend;
 				var setup={
 						colors: VisualJS.setup.colors.series,
 						series: {
