@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.3.3",
+	version: "0.3.4",
 	symbol : {
 		text: "", 
 		position: "end"
@@ -222,7 +222,7 @@ var VisualJS={
 	tooltipText: function(id, l, v) {
 		var 
 			si=(v) ? VisualJS.container[id].symbol.text : "",
-			va=(l) ? VisualJS.format(v) : v,
+			va= VisualJS.format(v),
 			t=(VisualJS.container[id].symbol.position==="end") ? va+ " "+si : si+" "+va
 		;
 		return l ? "<strong>"+t+"</strong> "+l : t; //no need to atext()
@@ -434,7 +434,7 @@ var VisualJS={
 							.on("mouseout", function(){return tooltip.style("display", "none");})
 						;
 						if(VisualJS.legend && typeof map.legend==="object") { //If legend specified (array), draw it
-							legend(VisualJS.id, VisualJS.format(sup), VisualJS.format(inf), colors[colors.length-1], colors[0], vis, tooltip, map.area, map.legend);
+							legend(VisualJS.id, VisualJS.tooltipText(VisualJS.id, null, sup), VisualJS.tooltipText(VisualJS.id, null, inf), colors[colors.length-1], colors[0], vis, tooltip, map.area, map.legend);
 						}
 					};
 					VisualJS.canvas();
