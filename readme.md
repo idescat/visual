@@ -13,23 +13,23 @@
 
 # Test
 
-Download the [full source and tests](archive/master.zip) and try the examples in the [test folder](tree/master/test).
+Download the [full source and tests](https://github.com/idescat/visual/archive/master.zip) and try the examples in the [test folder](https://github.com/idescat/visual/tree/master/test).
 
 # Configuration
 
-Edit [visual.setup.js](blob/master/visual.setup.js) and [visual.css](blob/master/visual.css) to meet your needs. You might need to provide your own maps and adapt the *VisualJS.func.legend* function inside [visual.maps.js](blob/master/maps/visual.maps.max.js) (see the [maps folder](tree/master/maps)).
+Edit [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js) and [visual.css](https://github.com/idescat/visual/blob/master/visual.css) to meet your needs. You might need to provide your own maps and adapt the *VisualJS.func.legend* function inside [visual.maps.js](https://github.com/idescat/visual/blob/master/maps/visual.maps.max.js) (see the [maps folder](https://github.com/idescat/visual/tree/master/maps)).
 
 # Installation
 
-**Visual** allows two running modes: **webpage** (recommended) and **direct** (experimental). See the examples in the [test folder](tree/master/test).
+**Visual** allows two running modes: **webpage** (recommended) and **direct** (experimental). See the examples in the [test folder](https://github.com/idescat/visual/tree/master/test).
 
 ### Webpage mode
 
-In the webpage mode, the visualization is the only content in an html5 page. Use the [webpage template](blob/master/templates/webpage.html) to build your page. To embed the visualization, use an iframe pointing to your page ([example](blob/master/test/index.html)).
+In the webpage mode, the visualization is the only content in an html5 page. Use the [webpage template](https://github.com/idescat/visual/blob/master/templates/webpage.html) to build your page. To embed the visualization, use an iframe pointing to your page ([example](https://github.com/idescat/visual/blob/master/test/index.html)).
 
 ### Direct mode
 
-In the direct mode, the visualization is directly embedded in a page. Use the [direct template](blob/master/templates/direct.html) as an example. If you are embedding a single visualization, include the same javascripts as in the webpage template ([example](blob/master/test/direct.html)).
+In the direct mode, the visualization is directly embedded in a page. Use the [direct template](https://github.com/idescat/visual/blob/master/templates/direct.html) as an example. If you are embedding a single visualization, include the same javascripts as in the webpage template ([example](https://github.com/idescat/visual/blob/master/test/direct.html)).
 
 If you are embedding more than one visualization in the page, LazyLoad will only include the javascripts needed for the first visualization in the **visual** function. Instead, include all the needed javascripts manually. Do not include LazyLoad. You will also need to specify an *id* and its size (in the *fixed* property: *[width, height]*) for each visualization.
 
@@ -52,7 +52,7 @@ The visual object accepts the following properties:
 ### General properties
 
 #### lang
-String ("ca", "es", "en"). Language. Default is set in [visual.setup.js](blob/master/visual.setup.js).
+String ("ca", "es", "en"). Language. Default is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
 
 #### title
 String. First level title's text.
@@ -66,7 +66,7 @@ String. Geographical area.
 ####  time
 String (optional) or array of strings (required). Time period or periods.
 
-Visual will treat the following string time formats using the "quarter" and "month" properties in [visual.setup.js](blob/master/visual.setup.js): "20131" (first quarter of 2013) and "201301" (January 2013). Any other time pattern will be displayed untreated.
+Visual will treat the following string time formats using the "quarter" and "month" properties in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js): "20131" (first quarter of 2013) and "201301" (January 2013). Any other time pattern will be displayed untreated.
 
 ### autoheading
 Boolean. It determines if the heading is built by composition from "title", "geo" and "time". If *false*, only "title" will be used as heading. Default is *true*.
@@ -75,7 +75,7 @@ Boolean. It determines if the heading is built by composition from "title", "geo
 Boolean. It determines if the chart/map legend must be shown. Default is *true*.
 
 #### symbol
-Object with two properties: *text* (string) and *position* (string. "start", "end"). Default is no text. *position*'s default is set in [visual.setup.js](blob/master/visual.setup.js).
+Object with two properties: *text* (string) and *position* (string. "start", "end"). Default is no text. *position*'s default is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
 
 Warning: *text* cannot contain HTML entities when *type* is "cmap".
 
@@ -112,7 +112,7 @@ visual({
 });
 ```
 
-Examples:  [bar.html](blob/master/test/bar.html)
+Examples:  [bar.html](https://github.com/idescat/visual/blob/master/test/bar.html)
 
 ####  time
 String. Time period.
@@ -178,7 +178,7 @@ visual({
 });
 ```
 
-Examples:  [rank.html](blob/master/test/rank.html), [rank10.html](blob/master/test/rank10.html)
+Examples:  [rank.html](https://github.com/idescat/visual/blob/master/test/rank.html), [rank10.html](https://github.com/idescat/visual/blob/master/test/rank10.html)
 
 ####  time
 String. Time period.
@@ -223,7 +223,7 @@ visual({
 });
 ```
 
-Examples:  [tsbar.html](blob/master/test/tsbar.html), [tsbar2.html](blob/master/test/tsbar2.html), [tsbarns.html](blob/master/test/tsbarns.html)
+Examples:  [tsbar.html](https://github.com/idescat/visual/blob/master/test/tsbar.html), [tsbar2.html](https://github.com/idescat/visual/blob/master/test/tsbar2.html), [tsbarns.html](https://github.com/idescat/visual/blob/master/test/tsbarns.html)
 
 ####  time
 Array of strings. Required. Time periods.
@@ -272,7 +272,7 @@ visual({
 });
 ```
 
-Examples:  [tsline2.html](blob/master/test/tsline2.html)
+Examples:  [tsline2.html](https://github.com/idescat/visual/blob/master/test/tsline2.html)
 
 ####  time
 Array of strings. Required. Time periods.
@@ -319,7 +319,7 @@ visual({
 });
 ```
 
-Examples:  [pyram.html](blob/master/test/pyram.html)
+Examples:  [pyram.html](https://github.com/idescat/visual/blob/master/test/pyram.html)
 
 ####  time
 String. Time period.
@@ -390,7 +390,7 @@ visual({
 });
 ```
 
-Examples:  [cmap.html](blob/master/test/cmap.html), [cmap-com.html](blob/master/test/cmap-com.html), [cmap-f0.html](blob/master/test/cmap-f0.html), [cmap-f020.html](blob/master/test/cmap-f020.html), [cmap-groups1.html](blob/master/test/cmap-groups1.html), [cmap-groups2.html](blob/master/test/cmap-groups2.html)
+Examples:  [cmap.html](https://github.com/idescat/visual/blob/master/test/cmap.html), [cmap-com.html](https://github.com/idescat/visual/blob/master/test/cmap-com.html), [cmap-f0.html](https://github.com/idescat/visual/blob/master/test/cmap-f0.html), [cmap-f020.html](https://github.com/idescat/visual/blob/master/test/cmap-f020.html), [cmap-groups1.html](https://github.com/idescat/visual/blob/master/test/cmap-groups1.html), [cmap-groups2.html](https://github.com/idescat/visual/blob/master/test/cmap-groups2.html)
 
 ####  time
 String. Time period.
@@ -402,7 +402,7 @@ Array of objects. Required. The array contains as many elements as map areas. Ea
 Array. Each element is a group label string (first label will be attached to areas with a *group* property of 1 in **data**, and so on).
 
 ####  by
-String. Required. Selects a certain map. Possible values ("mun", "com", "prov") are set in [visual.setup.js](blob/master/visual.setup.js).
+String. Required. Selects a certain map. Possible values ("mun", "com", "prov") are set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
 
 ####  dec
 Number. Default: 0. Number of decimals in the data. It is used to assign colors and build the legend.
@@ -411,7 +411,7 @@ Number. Default: 0. Number of decimals in the data. It is used to assign colors 
 Number between 0 and 0.49. Default: 0.05. It determines the color assignation. For example, 0.05 assigns colors excluding values below the 5th percentile and above the 95th percentile.
 
 # Maps
-Sample maps are stored at the [maps folder](tree/master/maps). A map is a Javascript file that adds a new property (the name of the map) to the VisualJS.map object. The value of this new property is a Visual map object.
+Sample maps are stored at the [maps folder](https://github.com/idescat/visual/tree/master/maps). A map is a Javascript file that adds a new property (the name of the map) to the VisualJS.map object. The value of this new property is a Visual map object.
 
 ### Visual map object
 
@@ -449,7 +449,7 @@ These values will not determine the final size of your map (maps will scale to t
 
 ### Map setup
 
-Maps must be declared in [visual.setup.js](blob/master/visual.setup.js). To include a new map, edit [visual.setup.js](blob/master/visual.setup.js) and create a new property with the name of the map inside VisualJS.setup.map. This name must match the name in VisualJS.map (in the Javascript map file) and will be used in the [by](#by-1) property. The value of this property must be an object with two properties: the address of the map ("js") and an existence function ("exists").
+Maps must be declared in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js). To include a new map, edit [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js) and create a new property with the name of the map inside VisualJS.setup.map. This name must match the name in VisualJS.map (in the Javascript map file) and will be used in the [by](#by-1) property. The value of this property must be an object with two properties: the address of the map ("js") and an existence function ("exists").
 
 # Dependencies
 
@@ -463,7 +463,7 @@ Maps must be declared in [visual.setup.js](blob/master/visual.setup.js). To incl
 
 These libraries are only loaded when needed.
 
-For convenience, they are included in the [lib folder](tree/master/lib) but you can use any location (for example, a CDN) in [visual.setup.js](blob/master/visual.setup.js).
+For convenience, they are included in the [lib folder](https://github.com/idescat/visual/tree/master/lib) but you can use any location (for example, a CDN) in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
 
 # Known limitations
 
