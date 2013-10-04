@@ -68,10 +68,10 @@ String (optional) or array of strings (required). Time period or periods.
 
 Visual will treat the following string time formats using the "quarter" and "month" properties in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js): "20131" (first quarter of 2013) and "201301" (January 2013). Any other time pattern will be displayed untreated.
 
-### autoheading
+#### autoheading
 Boolean. It determines if the heading is built by composition from "title", "geo" and "time". If *false*, only "title" will be used as heading. Default is *true*.
 
-### legend
+#### legend
 Boolean. It determines if the chart/map legend must be shown. Default is *true*.
 
 #### symbol
