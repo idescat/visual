@@ -57,7 +57,7 @@ String ("ca", "es", "en"). Language. Default is set in [visual.setup.js](https:/
 #### title
 String. First level title's text.
 
-#### source
+#### footer
 String. Foot text.
 
 #### geo
@@ -74,10 +74,13 @@ Boolean. It determines if the heading is built by composition from "title", "geo
 #### legend
 Boolean. It determines if the chart/map legend must be shown. Default is *true*.
 
-#### symbol
-Object with two properties: *text* (string) and *position* (string. "start", "end"). Default is no text. *position*'s default is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
+#### unit
+Object with three properties: *label* (string), *symbol* (string) and symbol *position* (string. "start", "end"). All properties are optional. Default: no unit text is used.
 
-Warning: *text* cannot contain HTML entities when *type* is "cmap".
+Warning: *label* and *symbol* cannot contain HTML entities when *type* is "cmap".
+
+####  dec
+Number. Number of decimals in the data. It is used in the tooltip and map legend. Even though this is an optional property, it is strongly recommended that the number of decimals is specified: otherwise, all unneeded trailing zeros will be removed and computed values could be shown with more decimals than the original values.
 
 #### type
 String ("bar", "rank", "tsbar", "tsline", "pyram", "cmap"). Required. Chart type. It determines the *data* and *time* formats and the specific properties available.
@@ -91,6 +94,9 @@ String. On [direct mode](#direct-mode), it is the ID of the HTML element where t
 #### fixed
 Array. On [direct mode](#direct-mode), it is the *[width, height]* in pixels of the visualization container.
 
+#### callback
+Function. This function will be called after the chart has been drawn.
+
 ### *bar* properties
 
 Distribution of a categorical variable (vertical bar chart).
@@ -100,8 +106,9 @@ visual({
    title: "BAR example",
    geo: "Alt Camp",
    time: "2012",
-   source: "The source goes here.",
-   symbol: {text: "persones"},
+   footer: "The source goes here.",
+   unit: {label: "persones"},
+   dec: 0,
    type: "bar",
    data : [
       ["0-14 anys", 7329],
@@ -129,8 +136,9 @@ visual({
    title: "RANK example (40 data)",
    geo: "Catalonia",
    time: "2009",
-   source: "The source goes here.",
-   symbol: {text: "milers €"},
+   footer: "The source goes here.",
+   unit: {label: "milers", symbol: "€"},
+   dec: 0,
    type: "rank",
    data : [
       ["Val d'Aran", 20300], 
@@ -199,8 +207,9 @@ visual({
       "2003", "2004", "2005", "2006", "2007", 
       "2008", "2009", "2010", "2011", "2012"
    ],
-   source: "The source goes here.",
-   symbol: {text: "M €"},
+   footer: "The source goes here.",
+   unit: {label: "M", symbol: "€"},
+   dec: 1,
    type: "tsbar",
    data : [ 
       { 
@@ -248,8 +257,9 @@ visual({
       "2003", "2004", "2005", "2006", "2007", 
       "2008", "2009", "2010", "2011", "2012"
    ],
-   source: "The source goes here.",
-   symbol: {text: "M €"},
+   footer: "The source goes here.",
+   unit: {label: "M", symbol: "€"},
+   dec: 1,
    type: "tsline",
    data : [ 
       { 
@@ -289,8 +299,9 @@ visual({
    title: "PYRAM example",
    geo: "Some country",
    time: "2012",
-   source: "The source goes here.",
-   symbol: {text: "persones"},
+   footer: "The source goes here.",
+   unit: {label: "persones"},
+   dec: 0,
    type: "pyram",
    by: [
       "0-4", "5-9", "10-14", "15-19", "20-24", "25-29", 
@@ -339,8 +350,8 @@ visual({
    title: "CMAP example with missing data", 
    geo: "Catalonia", 
    time: "2001",
-   source: "The source goes here.", 
-   symbol: {text: "%"},
+   footer: "The source goes here.", 
+   unit: {symbol: "%"},
    type: "cmap", 
    dec: 2,
    by: "com",
@@ -403,9 +414,6 @@ Array. Each element is a group label string (first label will be attached to are
 
 ####  by
 String. Required. Selects a certain map. Possible values ("mun", "com", "prov") are set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
-
-####  dec
-Number. Default: 0. Number of decimals in the data. It is used to assign colors and build the legend.
 
 ####  filter
 Number between 0 and 0.49. Default: 0.05. It determines the color assignation. For example, 0.05 assigns colors excluding values below the 5th percentile and above the 95th percentile.

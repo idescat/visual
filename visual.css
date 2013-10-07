@@ -53,16 +53,16 @@ body {
 }
 
 /* SVG */
-#visual .area {
+#visual .VisualJSarea {
 	fill: #808080;
 	stroke: #000;
 	stroke-width: 0.05px;
 }
-#visual svg g.llegenda {
+#visual svg g.VisualJSlegend {
 	stroke: #808080;
 	stroke-width: 1px;
 }
-#visual svg g.llegenda text {
+#visual svg g.VisualJSlegend text {
 	font-size: 11px;
 	fill: black;
 	stroke: none;

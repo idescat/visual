@@ -4,6 +4,7 @@
 <!--[if IE 8]><html class="lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html> <!--<![endif]-->
 	<head>
+		<title>Idescat Visual sample page</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 		<script src="../lib/jquery.1.8.3.js"></script>
@@ -51,16 +52,16 @@
 				display: block;
 			}
 			/* SVG */
-			#map .area {
+			#map .VisualJSareaclass {
 				fill: #808080;
 				stroke: #000;
 				stroke-width: 0.1px;
 			}
-			#map svg g.llegenda{
+			#map svg g.VisualJSlegendclass {
 				stroke:#808080;
 				stroke-width: 1px;
 			}
-			#map svg g.llegenda text{
+			#map svg g.VisualJSlegendclass text {
 				font-size: 11px;
 				fill: #000;
 				stroke: none;
@@ -87,8 +88,9 @@
 					title: "PYRAM example",
 					geo: "Some country",
 					time: "2012",
-					source: "The source goes here.",
-					symbol: {text: "people"},
+					footer: "The source goes here.",
+					unit: {label: "people"},
+					dec: 0,
 					type: "pyram",
 					by: ["0-4","5-9","10-14","15-19","20-24","25-29","30-34","35-39","40-44","45-49","50-54","55-59","60-64","65-69","70-74","75-79","80-84","85-89","90-94","95-99","100+"], //Required if type: "pyram"
 					data: [
@@ -104,10 +106,10 @@
 					title: "CMAP example",
 					geo: "Catalonia",
 					time: "2001",
-					source: "The source goes here.",
-					symbol: {text: "%"},
-					type: "cmap", 
+					footer: "The source goes here.",
+					unit: {symbol: "%"},
 					dec: 2, //Number of decimal positions of the data (default: 0). Used in the map legend. 
+					type: "cmap", 
 					by: "com", //Required if type: "cmap". Area unit of the data and map.
 					data: [{id: "01", val: 85.50}, {id: "02", val: 79.40}, {id: "03", val: 80.91}, {id: "04", val: 86.50}, {id: "05", val: 83.01}, {id: "06", val: 79.04}, {id: "07", val: 82.74}, {id: "08", val: 77.31}, {id: "09", val: 86.48}, {id: "10", val: 79.94}, {id: "11", val: 65.79}, {id: "12", val: 73.04}, {id: "13", val: 70.35}, {id: "14", val: 89.96}, {id: "15", val: 84.79}, {id: "16", val: 91.06}, {id: "17", val: 75.31}, {id: "18", val: 92.95}, {id: "19", val: 89.95}, {id: "20", val: 82.50}, {id: "21", val: 77.03}, {id: "22", val: 86.48}, {id: "23", val: 90.73}, {id: "24", val: 86.06}, {id: "25", val: 88.94}, {id: "26", val: 91.67}, {id: "27", val: 88.38}, {id: "28", val: 88.68}, {id: "29", val: 92.49}, {id: "30", val: 90.66}, {id: "31", val: 88.24}, {id: "32", val: 86.17}, {id: "33", val: 83.71}, {id: "34", val: 77.71}, {id: "35", val: 90.53}, {id: "36", val: 74.20}, {id: "34", val: 91.87}, {id: "38", val: 88.66}, {id: "39", val: 77.98}, {id: "40", val: 71.31}, {id: "41", val: 75.56}]
 				}

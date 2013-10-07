@@ -4,6 +4,7 @@
 <!--[if IE 8]><html class="lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html> <!--<![endif]-->
 	<head>
+		<title>Idescat Visual sample page</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 		<link href="../visual.css" rel="stylesheet" type="text/css" />
@@ -20,8 +21,9 @@
 					title: "RANK example (10 data)",
 					geo: "Catalonia",
 					time: "2009",
-					symbol: {text: "milers €"}, //Array? It's a time series
-					source: "The source goes here.",
+					unit: {label: "milers €"},
+					dec: 0,
+					footer: "The source goes here.",
 					type: "rank",
 					data: [ ["Matadepera", 30700], ["Alella", 26900], ["Teià", 26500], ["Cabrils", 26400], ["Sant Just Desvern", 25400], ["Tiana", 23200], ["Ametlla del Vallès, l'", 23000], ["Sant Cugat del Vallès", 22800], ["Sant Vicenç de Montalt", 22800], ["Sant Pol de Mar", 22500] ]
 				}

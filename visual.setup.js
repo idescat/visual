@@ -23,13 +23,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 VisualJS.setup={
-	//Classes and ids of elements created by visual
-	id: "visual", //id to style the container
-	tooltipid: "VisualJSTooltip", //id to style the tooltip
-	nowrapclass: "VisualJSnw", //class to define blocks of wrappable content in the title
-	normal: "VisualJSnormal", //visualitzation's normal size class
-	mini: "VisualJSmini", //visualitzation's small size class
-
 	//Colors for maps and series
 	colors: {
 		map: {
@@ -74,6 +67,22 @@ VisualJS.setup={
 				en:  "To view the map you must use a modern browser."
 			}
 		}
+	},
+
+	//Classes and ids of elements created by visual
+	id: "visual", //id to style the container
+	tooltipid: "VisualJSTooltip", //id to style the tooltip
+	nowrapclass: "VisualJSnw", //class to define blocks of wrappable content in the title
+	canvasclass: "VisualJScanvas", //canvas container (Flot)
+	areaclass: "VisualJSarea", //svg:g class (D3 maps)
+	legendclass: "VisualJSlegend", //svg:g class (D3 maps)
+	normal: "VisualJSnormal", //visualitzation's normal size class
+	mini: "VisualJSmini", //visualitzation's small size class
+
+	//Markup created by visual
+	html: {
+		heading: "h1",
+		footer: "p" //"footer" element not supported by IE8
 	},
 
 	//Libraries: path and existence function
@@ -135,8 +144,9 @@ VisualJS.setup={
 		usastates: {
 			js: "../maps/usa2013states.js",
 			exists: function(){ return typeof VisualJS.map.usastates!=="undefined" && VisualJS.map.usastates.id==="STATE"; }
-		}
+		},
 	},
+
 	//IE check
 	func: {
 		old: function(ie) { return RegExp("(^|\\s)lt-"+ie+"(\\s|$)").test(document.documentElement.className); }
