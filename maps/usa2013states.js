@@ -1,7 +1,7 @@
 VisualJS.map.usastates={
 	area: [570, 330],
 
-	projection: d3.geo.albersUsa(),
+	projection: "albersUsa",
 	scale: 660,
 	legend: [290, 285],
 

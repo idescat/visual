@@ -1,7 +1,7 @@
 ﻿VisualJS.map.mun={
 	area: [500, 500],
 
-	projection: d3.geo.mercator(),
+	projection: "mercator",
 	scale: 9000,
 	center: [1.74, 41.7],
 	legend: [280, 345],

@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.4.0",
+	version: "0.4.1",
 	unit : {
 		label: "", 
 		symbol: "",
@@ -320,9 +320,9 @@ var VisualJS={
 						num=(hasGroup) ? o.grouped.length : ((hasValues) ? vsetup.colors.map.max : 1),
 						colors=VisualJS.func.colors( vsetup.colors.map.base, num, "fill", "q" ),
 						visual=d3.select(selector),
-						//map.projection = d3.geo projection; for example: d3.geo.mercator().
+						projection=d3.geo[map.projection](),
 						//Support for projections that don't support the center method (albersUSA, for example).
-						proj=(typeof map.center==="object" && typeof map.projection.center==="function") ? map.projection.center(map.center) : map.projection,
+						proj=(typeof map.center==="object" && typeof projection.center==="function") ? projection.center(map.center) : projection,
 						xy=proj
 							.scale(map.scale)
 							.translate([mwidth/2, mheight/2]),

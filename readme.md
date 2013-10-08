@@ -437,9 +437,9 @@ Geographic information must be provided in the [GeoJSON](http://geojson.org) for
 
 #### Projection properties: projection, scale, center
 
-"projection" must be a valid [D3 geo projection](https://github.com/mbostock/d3/wiki/Geo-Projections). "scale" is the projection scale (a number) and "center" is the projection center (a coordinate array).
+"projection" (string) must be a valid [D3 geo projection](https://github.com/mbostock/d3/wiki/Geo-Projections) function name. "scale" is the projection scale (a number) and "center" is the projection center (a coordinate array).
 
-	projection: d3.geo.mercator(),
+	projection: "mercator",
 	scale: 9000,
 	center: [1.74, 41.7],
 
