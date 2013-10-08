@@ -58,7 +58,7 @@ String ("ca", "es", "en"). Language. Default is set in [visual.setup.js](https:/
 String. First level title's text.
 
 #### footer
-String. Foot text.
+String. Text of footer.
 
 #### geo
 String. Geographical area.
@@ -95,7 +95,7 @@ String. On [direct mode](#direct-mode), it is the ID of the HTML element where t
 Array. On [direct mode](#direct-mode), it is the *[width, height]* in pixels of the visualization container.
 
 #### callback
-Function. This function will be called after the chart has been drawn.
+Function. This function will be called after the chart has been drawn. The *this* keyword would point to the chart's id.
 
 ### *bar* properties
 
@@ -419,7 +419,15 @@ String. Required. Selects a certain map. Possible values ("mun", "com", "prov") 
 Number between 0 and 0.49. Default: 0.05. It determines the color assignation. For example, 0.05 assigns colors excluding values below the 5th percentile and above the 95th percentile.
 
 # Maps
-Sample maps are stored at the [maps folder](https://github.com/idescat/visual/tree/master/maps). A map is a Javascript file that adds a new property (the name of the map) to the VisualJS.map object. The value of this new property is a Visual map object.
+The following sample maps are provided:
+
+* Catalonia by municipalities, counties and provinces (3 maps)
+* Counties of Catalonia by municipalities (41 maps)
+* United States of America by states (1 map)
+
+They are stored at the [maps folder](https://github.com/idescat/visual/tree/master/maps).
+
+A map is a UTF-8 Javascript file that adds a new property (the name of the map) to the VisualJS.map object. The value of this new property is a Visual map object.
 
 ### Visual map object
 
