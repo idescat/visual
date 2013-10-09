@@ -1,5 +1,13 @@
 **Visual** is a Javascript library for data visualization developed by the **Statistical Institute of Catalonia ([Idescat](http://www.idescat.cat/en/))**. It is based on popular open source solutions. **Visual** offers a simple interface that encapsulates the complexity of these solutions for the most common chart types.
 
+* [Supported visualizations](#supported-visualizations)
+* [Configuration](#configuration)
+* [Installation](#installation)
+* [Options](#options)
+* [Maps](#maps)
+* [Dependencies](#dependencies)
+* [Known limitations](#known-limitations)
+
 # Supported visualizations
 
 **Visual** currently supports the following visualizations:
@@ -72,7 +80,7 @@ Visual will treat the following string time formats using the "quarter" and "mon
 Boolean. It determines if the heading is built by composition from "title", "geo" and "time". If *false*, only "title" will be used as heading. Default is *true*.
 
 #### legend
-Boolean. It determines if the chart/map legend must be shown. Default is *true*.
+Boolean. It determines if the chart legend must be shown. Default is *true*.
 
 #### unit
 Object with three properties: *label* (string), *symbol* (string) and symbol *position* (string. "start", "end"). All properties are optional. Default: no unit text is used.
@@ -96,6 +104,21 @@ Array. On [direct mode](#direct-mode), it is the *[width, height]* in pixels of 
 
 #### callback
 Function. This function will be called after the chart has been drawn. The *this* keyword would point to the chart's id.
+
+#### show
+Boolean. It determines if the chart must be shown. When *false*, all the necessary files will be included but the chart will not be inserted: you'll need to use a callback function that executes at some point VisualJS.chart(). Default is *true*.
+
+```js
+VisualJS.load({
+	show: false,
+	callback: function(){
+		if(window.confirm("Are you sure you want to see this chart?")){
+			VisualJS.chart();
+		}
+	},
+	...
+});
+```
 
 ### *bar* properties
 

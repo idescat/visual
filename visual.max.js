@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.4.1",
+	version: "0.4.2",
 	unit : {
 		label: "", 
 		symbol: "",
@@ -33,6 +33,7 @@ var VisualJS={
 	dec: null, //Show only needed decimals (remove ending zeros) unless (recommended) valid dec has been specified by user
 	legend: true,
 	autoheading: true,
+	show: true,
 
 	//Used in maps
 	filter: 0.05, //Used in color assignation
@@ -52,7 +53,7 @@ var VisualJS={
 	/* Functions */
 	draw: function(){
 		VisualJS.tooltip();
-		VisualJS.chart();
+		VisualJS.show && VisualJS.chart();
 		window.onresize=function(){
 			VisualJS.canvas();
 		};
@@ -284,6 +285,7 @@ var VisualJS={
 		}
 
 		VisualJS.container[VisualJS.id].dec=(typeof o.dec==="number") ? o.dec : VisualJS.dec;
+		VisualJS.show=(typeof o.show==="boolean") ? o.show : VisualJS.show;
 		VisualJS.autoheading=(typeof o.autoheading==="boolean") ? o.autoheading : VisualJS.autoheading;
 		VisualJS.legend=(typeof o.legend==="boolean") ? o.legend: VisualJS.legend;
 		VisualJS.lang=o.lang || vsetup.i18n.lang;
@@ -820,7 +822,7 @@ var VisualJS={
 								setup
 							);
 					}
-					$(canvas).UseTooltip(VisualJS.id);		
+					$(canvas).UseTooltip(VisualJS.id);	
 				}
 				VisualJS.canvas();
 			}
