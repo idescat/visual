@@ -1,3 +1,6 @@
+ADVANCED OPTIONS
+
+
 **Visual** is a Javascript library for data visualization developed by the **Statistical Institute of Catalonia ([Idescat](http://www.idescat.cat/en/))**. It is based on popular open source solutions. **Visual** offers a simple interface that encapsulates the complexity of these solutions for the most common chart types.
 
 * [Supported visualizations](#supported-visualizations)
@@ -516,7 +519,7 @@ The non-stacked time series chart supports a maximum of three series. This is no
 
 You are welcome to contribute to this project! Areas where your participation can be very useful are, for example:
 
-* Support for new chart types
-* Maps of your territory
+* Support for new **chart types**
+* **Maps** of your territory
 
-To contribute, [fork this repository](/idescat/visual/fork), push changes to your personal fork and send a pull request.
+To contribute, [fork this repository](https://github.com/idescat/visual/fork), push changes to your personal fork and send a pull request.
