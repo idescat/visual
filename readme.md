@@ -104,7 +104,7 @@ String. On [direct mode](#direct-mode), it is the ID of the HTML element where t
 Array. On [direct mode](#direct-mode), it is the *[width, height]* in pixels of the visualization container.
 
 #### callback
-Function. This function will be called after the chart has been drawn. The *this* keyword would point to the chart's id.
+Function. This function will be called after the chart has been drawn. The *this* keyword would point to an object with two properties: "id" (the chart's id: string) and "chart" (a boolean indicating if the chart is drawable or not: if false, VisualJS.chart() would not be defined).
 
 #### show
 Boolean. It determines if the chart must be shown. When *false*, all the necessary files will be included but the chart will not be inserted: you'll need to use a callback function that executes at some point VisualJS.chart(). Default is *true*.
@@ -113,7 +113,7 @@ Boolean. It determines if the chart must be shown. When *false*, all the necessa
 VisualJS.load({
 	show: false,
 	callback: function(){
-		if(window.confirm("Are you sure you want to see this chart?")){
+		if(this.chart && window.confirm("Are you sure you want to see this chart?")){
 			VisualJS.chart();
 		}
 	},

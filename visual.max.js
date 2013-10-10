@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.4.2",
+	version: "0.4.3",
 	unit : {
 		label: "", 
 		symbol: "",
@@ -33,7 +33,8 @@ var VisualJS={
 	dec: null, //Show only needed decimals (remove ending zeros) unless (recommended) valid dec has been specified by user
 	legend: true,
 	autoheading: true,
-	show: true,
+	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
+	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 
 	//Used in maps
 	filter: 0.05, //Used in color assignation
@@ -52,13 +53,17 @@ var VisualJS={
 
 	/* Functions */
 	draw: function(){
-		VisualJS.tooltip();
-		VisualJS.show && VisualJS.chart();
-		window.onresize=function(){
-			VisualJS.canvas();
-		};
+		var chart=false;
+		if(typeof VisualJS.chart==="function"){ //can be undefined if "cmap" && old browser
+			VisualJS.tooltip();
+			VisualJS.show && VisualJS.chart();
+			window.onresize=function(){
+				VisualJS.canvas();
+			};
+			chart=true;
+		}
 		if(VisualJS.callback!==null){
-			VisualJS.callback.call(VisualJS.id);
+			VisualJS.callback.call( {id: VisualJS.id, chart: chart} );
 		}
 	},
 
@@ -265,7 +270,7 @@ var VisualJS={
 			html=vsetup.html,
 			headingElement=html.heading,
 			footerElement=html.footer,
-			ie8=vsetup.func.old("ie9") //Means: less than IE9
+			ie8=VisualJS.old||vsetup.func.old("ie9") //Means: less than IE9
 		;
 
 		VisualJS.id=(typeof o.id!=="undefined") ? o.id : vsetup.id;
