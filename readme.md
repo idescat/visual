@@ -8,6 +8,7 @@
 * [Maps](#maps)
 * [Dependencies](#dependencies)
 * [Known limitations](#known-limitations)
+* [How to contribute](#how-to-contribute)
 
 # Supported visualizations
 
@@ -507,6 +508,15 @@ For convenience, they are included in the [lib folder](https://github.com/idesca
 
 # Known limitations
 
-[D3](http://d3js.org) requires a modern browser (versions of Internet Explorer prior to 9 are not supported). **Visual** uses D3 for choropleth maps.
+[D3](http://d3js.org) requires a modern browser (versions of Internet Explorer prior to 9 are not supported). **Visual** uses D3 only for choropleth maps (chart type: "cmap").
 
-The non-stacked time series chart supports a maximum of three series.
+The non-stacked time series chart supports a maximum of three series. This is not a technical limitation but a visual one.
+
+# How to contribute
+
+You are welcome to contribute to this project! Areas where your participation can be very useful are, for example:
+
+* Support for new chart types
+* Maps of your territory
+
+To contribute, [fork this repository](/idescat/visual/fork), push changes to your personal fork and send a pull request.
