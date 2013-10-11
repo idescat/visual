@@ -1,6 +1,3 @@
-ADVANCED OPTIONS
-
-
 **Visual** is a Javascript library for data visualization developed by the **Statistical Institute of Catalonia ([Idescat](http://www.idescat.cat/en/))**. It is based on popular open source solutions. **Visual** offers a simple interface that encapsulates the complexity of these solutions for the most common chart types.
 
 * [Supported visualizations](#supported-visualizations)
