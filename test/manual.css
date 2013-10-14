@@ -1,0 +1,50 @@
+body {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	padding: 10px;
+	font-size: 13px;
+	width: 900px;
+	margin: 0 auto;
+}
+h1 {
+	font-size: 12px;
+}
+p {
+	text-align: justify;
+	line-height: 1.6;
+}
+#pyram, #map {
+	float: right;
+	height: 320px;
+	width: 320px;
+	margin: -6px 0 0 20px;
+	font-size: 11px;
+}
+#VisualJSTooltip {
+	font-size: 10px;
+	display: none;
+	position: absolute;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	padding: 4px;
+	background-color: #f6f6f6;
+	opacity: 0.90;
+	white-space: nowrap;
+}
+#VisualJSTooltip strong {
+	display: block;
+}
+/* SVG */
+#map .VisualJSarea {
+	fill: #808080;
+	stroke: #000;
+	stroke-width: 0.1px;
+}
+#map svg g.VisualJSlegend {
+	stroke:#808080;
+	stroke-width: 1px;
+}
+#map svg g.VisualJSlegend text {
+	font-size: 11px;
+	fill: #000;
+	stroke: none;
+}

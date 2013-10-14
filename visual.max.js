@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.4.3",
+	version: "0.5.0",
 	unit : {
 		label: "", 
 		symbol: "",
@@ -242,8 +242,61 @@ var VisualJS={
 			t=(VisualJS.container[id].unit.position==="end") ? va+lab+" "+si : si+va+lab
 		;
 		return l ? "<strong>"+t+"</strong> "+l : t; //no need to atext()
-	},	
-	
+	},
+
+	iframe: function(o, css){
+		var
+			vsetup=VisualJS.setup,
+			clas=(typeof o.clas==="string") ? o.clas : vsetup.clas,
+			html="<html><head>",
+			old=vsetup.func.old("ie9"),
+			create=function(){
+				var 
+					d=document,
+					iframe=d.createElement("iframe"),
+					e=d.getElementById(o.id)
+				;
+
+				//iframe.seamless="seamless";
+				iframe.scrolling="no";
+				e.parentNode.insertBefore(iframe, e.nextSibling); //we insert iframe after script
+				return iframe;				
+			},
+			content=function(iframe, html){
+				if(typeof iframe !=="undefined"){
+					var iframeDoc;
+					if(iframe.contentDocument){
+						iframeDoc=iframe.contentDocument;
+					}
+					else if(iframe.contentWindow){
+						iframeDoc=iframe.contentWindow.document;
+					}
+					else if(window.frames[iframe.name]){
+						iframeDoc=window.frames[iframe.name].document;
+					}
+					if(iframeDoc){
+						iframeDoc.open();
+						iframeDoc.write(html);
+						iframeDoc.close();
+					}
+				}
+			}
+		;
+
+		if(typeof css==="string"){
+			if(css.indexOf(" ")===-1){ //No white space? We assume it's a URI
+				html+= '<link href="'+ css +'" rel="stylesheet" type="text/css"\/>';
+			}else{
+				html+= '<style type="text/css">'+ css +'<\/style>';
+			}
+		}
+		html+= '<script type="text/javascript" src="'+ VisualJS.setup.main.visual +'"><\/script>';
+		html+= '<script type="text/javascript" src="'+ VisualJS.setup.main.setup +'"><\/script>';
+		html+= '<script type="text/javascript" src="'+ VisualJS.setup.main.lazy +'"><\/script>';
+		html+= '<\/head><body><div id="'+ o.id +'" class="'+ clas +'"><\/div><script>window.setTimeout(function(){VisualJS.old='+ old +'; visual('+ JSON.stringify(o) +');},1);<\/script><\/body><\/html>';
+		content(create(), html);
+	},
+
 	//if o is array, then loop
 	load: function (o) {
 		function isArray(o) {
@@ -273,16 +326,16 @@ var VisualJS={
 			ie8=VisualJS.old||vsetup.func.old("ie9") //Means: less than IE9
 		;
 
-		VisualJS.id=(typeof o.id!=="undefined") ? o.id : vsetup.id;
-		if(typeof o.fixed!=="undefined"){
+		VisualJS.id=(typeof o.id==="string") ? o.id : vsetup.id;
+		if(typeof o.fixed==="object"){
 			VisualJS.fixed=o.fixed;
 		}
-		if(typeof o.unit!=="undefined"){
+		if(typeof o.unit==="object"){
 			VisualJS.container[VisualJS.id]={
 				unit: {
-					label: (typeof o.unit.label!=="undefined") ? o.unit.label : VisualJS.unit.label,
-					symbol: (typeof o.unit.symbol!=="undefined") ? o.unit.symbol: VisualJS.unit.symbol,
-					position: (typeof o.unit.position!=="undefined") ? o.unit.position : VisualJS.unit.position
+					label: (typeof o.unit.label==="string") ? o.unit.label : VisualJS.unit.label,
+					symbol: (typeof o.unit.symbol==="string") ? o.unit.symbol: VisualJS.unit.symbol,
+					position: (typeof o.unit.position==="string") ? o.unit.position : VisualJS.unit.position
 				}
 			};
 		}else{

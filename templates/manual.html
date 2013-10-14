@@ -5,19 +5,26 @@
 <!--[if gt IE 8]><!--> <html> <!--<![endif]-->
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-	<title>Webpage mode template</title>
+	<title>Manual mode template</title>
 	<link href="../visual.css" rel="stylesheet" type="text/css" />
-	<script src="../lib/lazyload.js"></script>
+	<!-- Manually include here the needed libraries (lib folder) for your visualizations -->
 	<script src="../visual.js"></script>
 	<script src="../visual.setup.js"></script>
+	<!-- Manually include here the needed maps and map functions (maps folder) -->
 </head>
-
+  
 <body>
-	<div id="visual"></div>
+	<div id="viz1"></div>
+	<div id="viz2"></div>
 	<script>
 		visual(
-		/* visual object here */
+			/* Visual object or array here:
+			[
+				{ id : "viz1", fixed: [...], ... },
+				{ id : "viz2", fixed: [...], ... }
+			]
+			*/
 		);
-	</script>
+  </script>
 </body>
 </html>

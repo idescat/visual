@@ -4,9 +4,10 @@
 <!--[if IE 8]><html class="lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html> <!--<![endif]-->
 	<head>
-		<title>Idescat Visual sample page</title>
+		<title>Manual mode sample</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<link href="manual.css" rel="stylesheet" type="text/css" />
 		<script src="../lib/jquery.1.8.3.js"></script>
 		<script src="../lib/jquery.flot.js"></script>
 		<script src="../lib/jquery.flot.pyramid.js"></script>
@@ -15,58 +16,6 @@
 		<script src="../visual.setup.js"></script>
 		<script src="../maps/visual.maps.js"></script>
 		<script src="../maps/cat2013com.js"></script>
-		<style>
-			body {
-				font-family: Verdana, Arial, Helvetica, sans-serif;
-				padding: 10px;
-				font-size: 13px;
-				width: 900px;
-				margin: 0 auto;
-			}
-			h1 {
-				font-size: 12px;
-			}
-			p {
-				text-align: justify;
-				line-height: 1.6;
-			}
-			#pyram, #map {
-				float: right;
-				height: 320px;
-				width: 320px;
-				margin: -6px 0 0 20px;
-				font-size: 11px;
-			}
-			#VisualJSTooltip {
-				font-size: 10px;
-				display: none;
-				position: absolute;
-				border: 1px solid #ccc;
-				border-radius: 4px;
-				padding: 4px;
-				background-color: #f6f6f6;
-				opacity: 0.90;
-				white-space: nowrap;
-			}
-			#VisualJSTooltip strong {
-				display: block;
-			}
-			/* SVG */
-			#map .VisualJSareaclass {
-				fill: #808080;
-				stroke: #000;
-				stroke-width: 0.1px;
-			}
-			#map svg g.VisualJSlegendclass {
-				stroke:#808080;
-				stroke-width: 1px;
-			}
-			#map svg g.VisualJSlegendclass text {
-				font-size: 11px;
-				fill: #000;
-				stroke: none;
-			}
-		</style>
 	</head>
 	<body>
 		<p><span id="pyram"></span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ac porta tortor. Donec sed adipiscing dui, sit amet posuere dui. Etiam adipiscing faucibus dui, euismod pretium elit semper venenatis. Fusce id vehicula nisl. Fusce sed elit id nisi vehicula faucibus elementum sit amet tellus. Duis lectus quam, rhoncus at sapien nec, placerat ultricies velit. Suspendisse quis tempor urna. Curabitur facilisis, enim quis mattis aliquam, est erat sagittis sapien, nec varius metus ligula mollis justo. Aenean id metus elementum, tempor metus vel, eleifend nunc. Nullam bibendum interdum neque ut auctor. Praesent eget tincidunt velit.</p>
@@ -76,7 +25,7 @@
 		<p>Nullam elementum, nunc sed rhoncus tempus, lorem sem imperdiet magna, at ultrices elit velit vel sapien. In in mauris massa. Donec non dui quam. Nullam faucibus mauris sit amet lectus pretium, vehicula auctor felis iaculis. Cras massa lorem, hendrerit vel laoreet a, feugiat posuere velit. Etiam nec urna blandit quam consequat dictum. Fusce gravida id risus at sollicitudin. Curabitur ac malesuada lorem. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;</p>
 		<p>Donec quis massa sit amet massa suscipit pellentesque sed et purus. Nullam tempor urna massa, et convallis nunc pharetra vitae. Suspendisse porta scelerisque vulputate. Etiam vel varius enim. Phasellus malesuada velit tempor scelerisque feugiat. Vestibulum egestas, nulla sit amet molestie feugiat, odio libero mollis odio, euismod porta ligula nisi eget enim. Aenean ultricies, augue vitae pharetra fermentum, diam lacus dignissim massa, sit amet congue dui ante vel ante. Ut laoreet magna ante, vel euismod neque ullamcorper a. Sed posuere purus a elit ornare viverra. Fusce viverra nisi vitae dui faucibus, vel feugiat nisi cursus. Praesent interdum malesuada mi, et volutpat nunc. Vivamus ornare non urna id mattis. Sed dictum leo pharetra placerat consequat. Praesent rutrum arcu id varius lobortis.</p>
 
-		<p>See also an example of <a href="index.html">webpage embedding</a>.</p>
+		<p>See also an example of <a href="index.html">webpage embedding</a> and <a href="simple.html">simple embedding</a>.</p>
 		<p><strong>Warning:</strong> The previous charts are provided as sample visualizations. The data might not be correct, updated or even real.</p>
 
 		<script>
@@ -108,9 +57,10 @@
 					time: "2001",
 					footer: "The source goes here.",
 					unit: {symbol: "%"},
-					dec: 2, //Number of decimal positions of the data (default: 0). Used in the map legend. 
+					dec: 2,
+					legend: false,
 					type: "cmap", 
-					by: "com", //Required if type: "cmap". Area unit of the data and map.
+					by: "com",
 					data: [{id: "01", val: 85.50}, {id: "02", val: 79.40}, {id: "03", val: 80.91}, {id: "04", val: 86.50}, {id: "05", val: 83.01}, {id: "06", val: 79.04}, {id: "07", val: 82.74}, {id: "08", val: 77.31}, {id: "09", val: 86.48}, {id: "10", val: 79.94}, {id: "11", val: 65.79}, {id: "12", val: 73.04}, {id: "13", val: 70.35}, {id: "14", val: 89.96}, {id: "15", val: 84.79}, {id: "16", val: 91.06}, {id: "17", val: 75.31}, {id: "18", val: 92.95}, {id: "19", val: 89.95}, {id: "20", val: 82.50}, {id: "21", val: 77.03}, {id: "22", val: 86.48}, {id: "23", val: 90.73}, {id: "24", val: 86.06}, {id: "25", val: 88.94}, {id: "26", val: 91.67}, {id: "27", val: 88.38}, {id: "28", val: 88.68}, {id: "29", val: 92.49}, {id: "30", val: 90.66}, {id: "31", val: 88.24}, {id: "32", val: 86.17}, {id: "33", val: 83.71}, {id: "34", val: 77.71}, {id: "35", val: 90.53}, {id: "36", val: 74.20}, {id: "34", val: 91.87}, {id: "38", val: 88.66}, {id: "39", val: 77.98}, {id: "40", val: 71.31}, {id: "41", val: 75.56}]
 				}
 			]);

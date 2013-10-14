@@ -5,18 +5,19 @@
 <!--[if gt IE 8]><!--> <html> <!--<![endif]-->
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-	<title>Webpage mode template</title>
-	<link href="../visual.css" rel="stylesheet" type="text/css" />
-	<script src="../lib/lazyload.js"></script>
+	<title>Simple mode template</title>
 	<script src="../visual.js"></script>
 	<script src="../visual.setup.js"></script>
 </head>
 
 <body>
-	<div id="visual"></div>
-	<script>
-		visual(
-		/* visual object here */
+	<script id="viz1">
+		VisualJS.iframe(
+			/* Visual object here (arrays are not allowed):
+					{ id : "viz1", fixed: [...], ... },
+				and optional CSS file (use absolute address) or CSS rules:
+					"http://example.com/styles/iframe.css"
+			*/
 		);
 	</script>
 </body>

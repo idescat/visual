@@ -71,6 +71,7 @@ VisualJS.setup={
 
 	//Classes and ids of elements created by visual
 	id: "visual", //id to style the container
+	clas: "visual", //class to style the container
 	tooltipid: "VisualJSTooltip", //id to style the tooltip
 	nowrapclass: "VisualJSnw", //class to define blocks of wrappable content in the title
 	canvasclass: "VisualJScanvas", //canvas container (Flot)
@@ -86,6 +87,11 @@ VisualJS.setup={
 	},
 
 	//Libraries: path and existence function
+	main: { //Do not use relative paths for main files in production: they'll be relative to the path where VisualJS.iframe is executed.
+		visual: "../visual.js",
+		setup: "../visual.setup.js",
+		lazy: "../lib/lazyload.js"
+	},
 	lib: {
 		d3: {
 			js: "../lib/d3.v3.js",

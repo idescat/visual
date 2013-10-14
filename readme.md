@@ -31,15 +31,19 @@ Edit [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setu
 
 # Installation
 
-**Visual** allows two running modes: **webpage** (recommended) and **direct** (experimental). See the examples in the [test folder](https://github.com/idescat/visual/tree/master/test).
+**Visual** allows three running modes: **webpage** (recommended), **simple** and **manual**. See the examples in the [test folder](https://github.com/idescat/visual/tree/master/test).
 
 ### Webpage mode
 
 In the webpage mode, the visualization is the only content in an html5 page. Use the [webpage template](https://github.com/idescat/visual/blob/master/templates/webpage.html) to build your page. To embed the visualization, use an iframe pointing to your page ([example](https://github.com/idescat/visual/blob/master/test/index.html)).
 
-### Direct mode
+### Simple mode
 
-In the direct mode, the visualization is directly embedded in a page. Use the [direct template](https://github.com/idescat/visual/blob/master/templates/direct.html) as an example. If you are embedding a single visualization, include the same javascripts as in the webpage template ([example](https://github.com/idescat/visual/blob/master/test/direct.html)).
+In the simple mode, the visualization is embedded in a page using the VisualJS.iframe() function. Use the [simple template](https://github.com/idescat/visual/blob/master/templates/simple.html) to build your page. To embed the visualization, include the visual.js and visual.setup.js files and use a script tag with a unique ID and invoke VisualJS.iframe() passing a visual object (with the same ID as the script tag) and a CSS file (or CSS rules) ([example](https://github.com/idescat/visual/blob/master/test/simple.html)).
+
+### Manual mode
+
+In the manual mode, the visualization is directly embedded in a page. Use the [manual template](https://github.com/idescat/visual/blob/master/templates/manual.html) as an example. If you are embedding a single visualization, include the same javascripts as in the webpage template ([example](https://github.com/idescat/visual/blob/master/test/manual.html)).
 
 If you are embedding more than one visualization in the page, LazyLoad will only include the javascripts needed for the first visualization in the **visual** function. Instead, include all the needed javascripts manually. Do not include LazyLoad. You will also need to specify an *id* and its size (in the *fixed* property: *[width, height]*) for each visualization.
 
@@ -99,10 +103,10 @@ String ("bar", "rank", "tsbar", "tsline", "pyram", "cmap"). Required. Chart type
 Array. Required. It includes the data values but also series labels and IDs. The format is determined by *type*.
 
 #### id
-String. On [direct mode](#direct-mode), it is the ID of the HTML element where the visualization has to be embedded.
+String. On [simple mode](#simple-mode) and [manual mode](#manual-mode), it is the ID of the HTML element where the visualization has to be embedded.
 
 #### fixed
-Array. On [direct mode](#direct-mode), it is the *[width, height]* in pixels of the visualization container.
+Array. On [simple mode](#simple-mode) and [manual mode](#manual-mode), it is the *[width, height]* in pixels of the visualization container.
 
 #### callback
 Function. This function will be called after the chart has been drawn. The *this* keyword would point to an object with two properties: "id" (the chart's id: string) and "chart" (a boolean indicating if the chart is drawable or not: if false, VisualJS.chart() would not be defined).

@@ -1,0 +1,22 @@
+body {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	padding: 10px;
+	font-size: 13px;
+	width: 900px;
+	margin: 0 auto;
+}
+h1 {
+	font-size: 12px;
+}
+p {
+	text-align: justify;
+	line-height: 1.6;
+}
+iframe {
+	float: right;
+	height: 320px;
+	width: 320px;
+	margin: -6px 0 0 20px;
+	padding: 0;
+	border: none;
+}
