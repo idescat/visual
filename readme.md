@@ -95,7 +95,7 @@ Boolean. It determines if the chart legend must be shown. Default (*true*) is se
 #### grid
 Object with a single property: *width* (number). Default width (*0*) is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
 
-### axis
+#### axis
 Object with two properties: *x* (boolean) and *y* (boolean).  They determine if the axes must be shown. Default (*true*) is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
 
 #### unit
