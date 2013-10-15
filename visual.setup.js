@@ -30,7 +30,26 @@ VisualJS.setup={
 			base: "#09111a"
 		},
 		series: ["#2b527b", "#a52a2a", "#008000", "#ffbf00"]	
-	},	
+	},
+	//Default options (They can be dynamically modified thru visual().)
+	canvas: {
+		unit : {
+			label: "", 
+			symbol: "",
+			position: "end"
+		},
+		legend: true,
+		grid: {
+			width: 0
+		}, //grid width
+		axis: { //show axes?
+			x: true,
+			y: true
+		},
+		dec: null, //Show only needed decimals (remove ending zeros) unless (recommended) valid dec has been specified by user
+		autoheading: true,
+		filter: 0.05 //Used in color assignation in maps
+	},
 
 	//Internationalization options
 	i18n: {
@@ -328,4 +347,4 @@ VisualJS.setup={
 		w: 30,
 		h: 45
 	}
-}
+};
