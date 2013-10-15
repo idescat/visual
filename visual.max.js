@@ -24,21 +24,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.5.0",
-	unit : {
-		label: "", 
-		symbol: "",
-		position: "end"
-	},
-	dec: null, //Show only needed decimals (remove ending zeros) unless (recommended) valid dec has been specified by user
-	legend: true,
-	autoheading: true,
+	version: "0.5.1",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
-
-	//Used in maps
-	filter: 0.05, //Used in color assignation
-
 	fixed: null,
 	width: 500,
 	bwidth: 500, //body width
@@ -238,8 +226,11 @@ var VisualJS={
 			lab=" "+VisualJS.container[id].unit.label,
 			si=(v) ? VisualJS.container[id].unit.symbol : "",
 			v=(v && d!==null) ? v.toFixed(d) : v,
-			va= VisualJS.format(v),
-			t=(VisualJS.container[id].unit.position==="end") ? va+lab+" "+si : si+va+lab
+			va=VisualJS.format(v),
+			t=(va!==	VisualJS.setup.i18n.text.na[VisualJS.lang]) ?
+				( (VisualJS.container[id].unit.position==="end") ? va+lab+" "+si : si+va+lab )
+				: // Value not available
+				va
 		;
 		return l ? "<strong>"+t+"</strong> "+l : t; //no need to atext()
 	},
@@ -284,7 +275,7 @@ var VisualJS={
 		;
 
 		if(typeof css==="string"){
-			if(css.indexOf(" ")===-1){ //No white space? We assume it's a URI
+			if(css.indexOf("{")===-1){ //No "{"? We assume it's a URI
 				html+= '<link href="'+ css +'" rel="stylesheet" type="text/css"\/>';
 			}else{
 				html+= '<style type="text/css">'+ css +'<\/style>';
@@ -321,6 +312,7 @@ var VisualJS={
 		var
 			vsetup=VisualJS.setup,
 			html=vsetup.html,
+			scanvas=vsetup.canvas,
 			headingElement=html.heading,
 			footerElement=html.footer,
 			ie8=VisualJS.old||vsetup.func.old("ie9") //Means: less than IE9
@@ -333,21 +325,37 @@ var VisualJS={
 		if(typeof o.unit==="object"){
 			VisualJS.container[VisualJS.id]={
 				unit: {
-					label: (typeof o.unit.label==="string") ? o.unit.label : VisualJS.unit.label,
-					symbol: (typeof o.unit.symbol==="string") ? o.unit.symbol: VisualJS.unit.symbol,
-					position: (typeof o.unit.position==="string") ? o.unit.position : VisualJS.unit.position
+					label: (typeof o.unit.label==="string") ? o.unit.label : scanvas.unit.label,
+					symbol: (typeof o.unit.symbol==="string") ? o.unit.symbol: scanvas.unit.symbol,
+					position: (typeof o.unit.position==="string") ? o.unit.position : scanvas.unit.position
 				}
 			};
 		}else{
-			VisualJS.container[VisualJS.id]={unit: VisualJS.unit};
+			VisualJS.container[VisualJS.id]={unit: scanvas.unit};
 		}
 
-		VisualJS.container[VisualJS.id].dec=(typeof o.dec==="number") ? o.dec : VisualJS.dec;
+		VisualJS.container[VisualJS.id].dec=(typeof o.dec==="number") ? o.dec : scanvas.dec;
 		VisualJS.show=(typeof o.show==="boolean") ? o.show : VisualJS.show;
-		VisualJS.autoheading=(typeof o.autoheading==="boolean") ? o.autoheading : VisualJS.autoheading;
-		VisualJS.legend=(typeof o.legend==="boolean") ? o.legend: VisualJS.legend;
+		VisualJS.autoheading=(typeof o.autoheading==="boolean") ? o.autoheading : scanvas.autoheading;
+		VisualJS.legend=(typeof o.legend==="boolean") ? o.legend: scanvas.legend;
 		VisualJS.lang=o.lang || vsetup.i18n.lang;
 		VisualJS.callback=(typeof o.callback==="function") ? o.callback: VisualJS.callback;
+
+		if(typeof o.grid==="object"){
+			VisualJS.grid={
+				width: (typeof o.grid.width==="number") ? o.grid.width : scanvas.grid.width
+			};
+		}else{
+			VisualJS.grid=scanvas.grid;
+		}
+		if(typeof o.axis==="object"){
+			VisualJS.axis={
+				x: (typeof o.axis.x==="boolean") ? o.axis.x : scanvas.axis.x,
+				y: (typeof o.axis.y==="boolean") ? o.axis.y : scanvas.axis.y
+			};
+		}else{
+			VisualJS.axis=scanvas.axis;
+		}
 
 		var
 			selector="#" + VisualJS.id,
@@ -372,7 +380,7 @@ var VisualJS={
 						map=VisualJS.map[o.by],
 						mwidth=map.area[0],
 						mheight=map.area[1],
-						min=(typeof o.filter!=="undefined") ? o.filter : VisualJS.filter,
+						min=(typeof o.filter==="number") ? o.filter : scanvas.filter,
 						max=1-min,
 						//hasGroup: grouped property exists, is object (array), has content and data seems to include a group property
 						hasGroup=(typeof o.grouped==="object" && o.grouped.length>0 && o.data[0].hasOwnProperty("group")),
@@ -748,13 +756,13 @@ var VisualJS={
 							show: shlegend
 						},
 						grid: {
-							borderWidth: 1,
+							borderWidth: VisualJS.grid.width,
 							hoverable: true,
 							clickable: false,
 							mouseActiveRadius: 10
 						},
-						xaxis:{ },
-						yaxis:{ }
+						xaxis:{ show: VisualJS.axis.x },
+						yaxis:{ show: VisualJS.axis.y }
 					}
 				;
 

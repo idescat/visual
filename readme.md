@@ -41,11 +41,15 @@ In the webpage mode, the visualization is the only content in an html5 page. Use
 
 In the simple mode, the visualization is embedded in a page using the VisualJS.iframe() function. Use the [simple template](https://github.com/idescat/visual/blob/master/templates/simple.html) to build your page. To embed the visualization, include the visual.js and visual.setup.js files and use a script tag with a unique ID and invoke VisualJS.iframe() passing a visual object (with the same ID as the script tag) and a CSS file (or CSS rules) ([example](https://github.com/idescat/visual/blob/master/test/simple.html)).
 
+Warning: This mode has not been fully tested in old browsers.
+
 ### Manual mode
 
 In the manual mode, the visualization is directly embedded in a page. Use the [manual template](https://github.com/idescat/visual/blob/master/templates/manual.html) as an example. If you are embedding a single visualization, include the same javascripts as in the webpage template ([example](https://github.com/idescat/visual/blob/master/test/manual.html)).
 
 If you are embedding more than one visualization in the page, LazyLoad will only include the javascripts needed for the first visualization in the **visual** function. Instead, include all the needed javascripts manually. Do not include LazyLoad. You will also need to specify an *id* and its size (in the *fixed* property: *[width, height]*) for each visualization.
+
+Warning: This mode has not been fully tested in old browsers.
 
 # Options
 
@@ -66,7 +70,7 @@ The visual object accepts the following properties:
 ### General properties
 
 #### lang
-String ("ca", "es", "en"). Language. Default is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
+String ("ca", "es", "en"). Language. Default (*ca*) is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
 
 #### title
 String. First level title's text.
@@ -83,18 +87,24 @@ String (optional) or array of strings (required). Time period or periods.
 Visual will treat the following string time formats using the "quarter" and "month" properties in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js): "20131" (first quarter of 2013) and "201301" (January 2013). Any other time pattern will be displayed untreated.
 
 #### autoheading
-Boolean. It determines if the heading is built by composition from "title", "geo" and "time". If *false*, only "title" will be used as heading. Default is *true*.
+Boolean. It determines if the heading is built by composition from "title", "geo" and "time". If *false*, only "title" will be used as heading. Default (*true*) is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
 
 #### legend
-Boolean. It determines if the chart legend must be shown. Default is *true*.
+Boolean. It determines if the chart legend must be shown. Default (*true*) is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
+
+#### grid
+Object with a single property: *width* (number). Default width (*0*) is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
+
+### axis
+Object with two properties: *x* (boolean) and *y* (boolean).  They determine if the axes must be shown. Default (*true*) is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
 
 #### unit
-Object with three properties: *label* (string), *symbol* (string) and symbol *position* (string. "start", "end"). All properties are optional. Default: no unit text is used.
+Object with three properties: *label* (string), *symbol* (string) and symbol *position* (string. "start", "end"). All properties are optional. Default (no label, no symbol, position: end) is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
 
 Warning: *label* and *symbol* cannot contain HTML entities when *type* is "cmap".
 
 ####  dec
-Number. Number of decimals in the data. It is used in the tooltip and map legend. Even though this is an optional property, it is strongly recommended that the number of decimals is specified: otherwise, all unneeded trailing zeros will be removed and computed values could be shown with more decimals than the original values.
+Number. Number of decimals in the data. It is used in the tooltip and map legend. Even though this is an optional property, it is strongly recommended that the number of decimals is specified: otherwise, all unneeded trailing zeros will be removed and computed values could be shown with more decimals than the original values. Default value can be set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
 
 #### type
 String ("bar", "rank", "tsbar", "tsline", "pyram", "cmap"). Required. Chart type. It determines the *data* and *time* formats and the specific properties available.
