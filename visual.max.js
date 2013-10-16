@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.5.1",
+	version: "0.5.2",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -702,7 +702,7 @@ var VisualJS={
 												ticks[x][1]
 												:
 												(
-													(o.type==="pyram") ? item.series.yaxis.ticks[item.dataIndex].label : ticks[item.dataIndex][1]
+													(o.type==="pyram") ? series[pos.x<0 ? 0 : 1].data[item.dataIndex][0] : ticks[item.dataIndex][1] // item.series.yaxis.ticks[item.dataIndex].label won't work in pyram if axis : {y: false}
 												)
 										)
 										: false
