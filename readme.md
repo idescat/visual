@@ -14,12 +14,12 @@
 
 **Visual** currently supports the following visualizations:
 
-* Distribution of a categorical variable (vertical bar chart): *bar*
-* Ranking (horizontal bar chart): *rank*
-* Stacked/non-stacked time series (vertical bar chart): *tsbar*
-* Time series (line chart): *tsline*
-* Population pyramid: *pyram*
-* Choropleth map: *cmap*
+* Distribution of a categorical variable (vertical bar chart): *[bar](#bar-properties)*
+* Ranking (horizontal bar chart): *[rank](#rank-properties)*
+* Stacked/non-stacked time series (vertical bar chart): *[tsbar](#tsbar-properties)*
+* Time series (line chart): *[tsline](#tsline-properties)*
+* Population pyramid: *[pyram](#pyram-properties)*
+* Choropleth map: *[cmap](#cmap-properties)*
 
 # Test
 
