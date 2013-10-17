@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.5.2",
+	version: "0.5.3",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -224,8 +224,8 @@ var VisualJS={
 		var
 			d=VisualJS.container[id].dec,
 			lab=" "+VisualJS.container[id].unit.label,
-			si=(v) ? VisualJS.container[id].unit.symbol : "",
-			v=(v && d!==null) ? v.toFixed(d) : v,
+			si=(typeof v==="number") ? VisualJS.container[id].unit.symbol : "",
+			v=(typeof v==="number" && d!==null) ? v.toFixed(d) : v,
 			va=VisualJS.format(v),
 			t=(va!==	VisualJS.setup.i18n.text.na[VisualJS.lang]) ?
 				( (VisualJS.container[id].unit.position==="end") ? va+lab+" "+si : si+va+lab )
@@ -290,15 +290,11 @@ var VisualJS={
 
 	//if o is array, then loop
 	load: function (o) {
-		function isArray(o) {
-			return Object.prototype.toString.call(o) === "[object Array]";
-		}
-
 		if(typeof VisualJS.setup==="undefined"){
 			window.alert("Visual: Setup not found (visual.setup.js)!");
 		}
 
-		if(!isArray(o)){
+		if(Object.prototype.toString.call(o)!=="[object Array]"){
 			VisualJS.get(o);
 		}else{
 			for(var i=0, len=o.length; i<len; i++){
@@ -380,8 +376,6 @@ var VisualJS={
 						map=VisualJS.map[o.by],
 						mwidth=map.area[0],
 						mheight=map.area[1],
-						min=(typeof o.filter==="number") ? o.filter : scanvas.filter,
-						max=1-min,
 						//hasGroup: grouped property exists, is object (array), has content and data seems to include a group property
 						hasGroup=(typeof o.grouped==="object" && o.grouped.length>0 && o.data[0].hasOwnProperty("group")),
 						hasValues=(!hasGroup && o.data[0].hasOwnProperty("val")),
@@ -413,6 +407,8 @@ var VisualJS={
 							legend=function(){},
 							checkGrouped,
 							groupLabel,
+							min=(typeof o.filter==="number") ? o.filter : scanvas.filter,
+							max=1-min,
 							inf,
 							sup,
 							hh=VisualJS.height/mheight,
@@ -485,11 +481,20 @@ var VisualJS={
 						val.sort(function(a, b) {
 							return a-b;
 						});
-						
-						var
-							inf=d3.quantile(val, min),
-							sup=d3.quantile(val, max)
-						;
+
+						if(
+							Object.prototype.toString.call(o.filter)==="[object Array]" && 
+							o.filter.length===2 && 
+							typeof o.filter[0]==="number" && 
+							typeof o.filter[1]==="number" &&
+							o.filter[0]<o.filter[1]
+						){
+							inf=o.filter[0];
+							sup=o.filter[1];
+						}else{
+							inf=d3.quantile(val, min);
+							sup=d3.quantile(val, max);
+						}
 						
 						vis.style("margin-left", left+"px");
 						vis.style("margin-top", topbottom+"px");

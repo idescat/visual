@@ -455,7 +455,7 @@ Array. Each element is a group label string (first label will be attached to are
 String. Required. Selects a certain map. Possible values ("mun", "com", "prov") are set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
 
 ####  filter
-Number between 0 and 0.49. Default: 0.05. It determines the color assignation. For example, 0.05 assigns colors excluding values below the 5th percentile and above the 95th percentile.
+Number or array. It determines the color assignation. When it is a number, it must be between 0 and 0.49. Default: 0.05, which means color assignation excludes values below the 5th percentile and above the 95th percentile. When it is an array, it defines a range: it has two and only two elements. The first is a mininum (mumber) and the second is a maximum (mumber). Color assignation will be done between those values.
 
 # Maps
 The following sample maps are provided:
