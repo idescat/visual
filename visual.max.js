@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.5.3",
+	version: "0.5.4",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -34,6 +34,7 @@ var VisualJS={
 	normal: 500, //If less than this value, apply mini style; otherwise, normal style (see setup)
 
 	scripts: [],
+	ticks: [],
 	map: {},
 	container: {}, //To allow multiple direct embeddings, particular features of every container are saved here
 	func: {}, //Space for external functions
@@ -249,6 +250,7 @@ var VisualJS={
 				;
 
 				//iframe.seamless="seamless";
+				iframe.frameBorder="0";
 				iframe.scrolling="no";
 				e.parentNode.insertBefore(iframe, e.nextSibling); //we insert iframe after script
 				return iframe;				
@@ -581,6 +583,7 @@ var VisualJS={
 					transform=function(d,t,b){ // Local in load(), not ts().
 						for(var i=0, len=t.length; i<len; i++){
 							ticks.push([i,t[i]]);
+							VisualJS.ticks.push([i,t[i]]); //keep original ticks
 						}
 						for(var i=0, len=d.length; i<len; i++){
 							for(var data=[], v=d[i].val, vlen=v.length, j=0; j<vlen; j++){
@@ -688,7 +691,6 @@ var VisualJS={
 
 			VisualJS.chart=function(){
 				transform(o.data, o.time, o.by);
-
 				$.fn.UseTooltip=function (id) {
 					var previousPoint=[];
 					
@@ -794,7 +796,7 @@ var VisualJS={
 						break;
 						case "rank":
 							setup.series.bars.horizontal=true;
-							setup.yaxis.ticks=( (VisualJS.height/ticklen) > 11) ? ticks : 0; //If too many categories and not enough height, remove y-labels
+							setup.yaxis.ticks=( (VisualJS.height/ticklen) > 11) ? ticks.slice(0) : 0; //If too many categories and not enough height, remove y-labels
 							setup.xaxis.max=o.data[0][1]*(1.02); //Increase area by 2% of the longest bar
 							setup.xaxis.tickFormatter=function(val, axis) {
 								return VisualJS.format(val);
@@ -822,66 +824,52 @@ var VisualJS={
 						//Time series
 						case "tsline":
 						case "tsbar":
-							var 
-								formatTime=function(freq){
-									var
-										xticks=[],
-										ratio=VisualJS.width/ticklen
-									;
-									switch(freq){
-										case "year":
-											// Magic rule: Only one year of every two must be displayed if width (mini) is small in comparison with # of ticks
-											if(ratio<25){
-												for(var i=0; i<ticklen; i++){
-													xticks[i]=(i % 2) ? 
-														[ ticks[i][0], "" ]
-														:
-														[ ticks[i][0], ticks[i][1] ]
-													;
-												}
-												setup.xaxis.ticks=xticks;
-											}else{
-												setup.xaxis.ticks=ticks;
-											}
-										break;
-										case "month":
-										case "quarter":
-											var crit=(freq==="month") ? "01" : "1";
-											//Magic rule: do not show month/quarter when width is small in comparison with # of ticks
-											if(ratio<35){
-												for(var i=0; i<ticklen; i++){
-													xticks[i]=(ticks[i][1].slice(4)!==crit) ?
-														[ ticks[i][0], "" ]
-														:
-														[ ticks[i][0], ticks[i][1].slice(0,4) ]
-													//Formatting time
-													ticks[i][1]=VisualJS.tformat(ticks[i][1]);
-												}
-												setup.xaxis.ticks=xticks;
-											}else{
-												for(var i=0; i<ticklen; i++){
-													//Formatting time
-													ticks[i][1]=VisualJS.tformat(ticks[i][1]);
-												}
-												setup.xaxis.ticks=ticks;
-											}
-									}
-								}
-							;
-
 							setup.yaxis.tickFormatter=function(val, axis) {
 								return VisualJS.format(val);
 							}
 
-							switch(ticks[0][1].length){ //Assuming al time periods follow the same pattern
-								case 4://Annual time series (4 digits)
-									formatTime("year");
+							var 
+								ratio=VisualJS.width/ticklen,
+								xticks=[],
+								digcrit="01" //first month
+							;
+							switch(VisualJS.ticks[0][1].length){ //Assuming all time periods follow the same pattern
+								case 4: //Annual time series (4 digits)
+									// Magic rule: Only one year of every two must be displayed if width (mini) is small in comparison with # of ticks
+									if(ratio<25){
+										for(var i=0; i<ticklen; i++){
+											xticks[i]=(i % 2) ? 
+												[ ticks[i][0], "" ]
+												:
+												[ ticks[i][0], ticks[i][1] ]
+											;
+										}
+										setup.xaxis.ticks=xticks;
+									}else{
+										setup.xaxis.ticks=ticks;
+									}
 								break;
 								case 5: //quarterly (5 digits)
-									formatTime("quarter");
-								break;
+									digcrit="1"; //first quarter
 								case 6: //monthly (6 digits)
-									formatTime("month");
+									//Magic rule: do not show month/quarter when width is small in comparison with # of ticks
+									if(ratio<35){
+										for(var i=0; i<ticklen; i++){
+											xticks[i]=(VisualJS.ticks[i][1].slice(4)!==digcrit) ?
+												[ VisualJS.ticks[i][0], "" ]
+												:
+												[ VisualJS.ticks[i][0], VisualJS.ticks[i][1].slice(0,4) ]
+											//Formatting time
+											ticks[i][1]=VisualJS.tformat(VisualJS.ticks[i][1]);
+										}
+										setup.xaxis.ticks=xticks;
+									}else{
+										for(var i=0; i<ticklen; i++){
+											//Formatting time
+											ticks[i][1]=VisualJS.tformat(VisualJS.ticks[i][1]);
+										}
+										setup.xaxis.ticks=ticks;
+									}
 								break;
 								default: //leave ticks alone
 									setup.xaxis.ticks=ticks;
