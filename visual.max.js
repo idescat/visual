@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.5.5",
+	version: "0.5.6",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -178,17 +178,20 @@ var VisualJS={
 		if(typeof n==="undefined" || n===null){
 			return VisualJS.setup.i18n.text.na[VisualJS.lang];
 		}
-		var 
-			s=n.toFixed(VisualJS.container[VisualJS.id].dec),
-			rgx=/(\d+)(\d{3})/,
-			x=s.split("."),
-			x1=x[0],
-			x2=(x.length>1) ? VisualJS.setup.i18n.text.dec[VisualJS.lang] + x[1] : ""
-		;
-		while (rgx.test(x1)) {
-			x1=x1.replace(rgx, "$1" + VisualJS.setup.i18n.text.k[VisualJS.lang] + "$2");
+		if(typeof n==="number"){
+			var 
+				s=n.toFixed(VisualJS.container[VisualJS.id].dec),
+				rgx=/(\d+)(\d{3})/,
+				x=s.split("."),
+				x1=x[0],
+				x2=(x.length>1) ? VisualJS.setup.i18n.text.dec[VisualJS.lang] + x[1] : ""
+			;
+			while(rgx.test(x1)){
+				x1=x1.replace(rgx, "$1" + VisualJS.setup.i18n.text.k[VisualJS.lang] + "$2");
+			}
+			return x1+x2;
 		}
-		return x1+x2;
+		return "";
 	},	
 
 	tformat: function(t){
