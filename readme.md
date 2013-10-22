@@ -464,7 +464,7 @@ The following sample maps are provided:
 * Counties of Catalonia by municipalities (41 maps)
 * United States of America by states (1 map)
 
-These are stored in the [maps folder](https://github.com/idescat/visual/tree/master/maps).
+These are stored in the [maps folder](https://github.com/idescat/visual/tree/master/maps). The [map maker](https://github.com/idescat/visual/tree/master/maps/maker/) allows you to preview these maps and fine-tune them.
 
 A map is a UTF-8 Javascript file that adds a new property (the name of the map) to the VisualJS.map object. The value of this new property is a Visual map object.
 
@@ -505,6 +505,8 @@ These values will not determine the final size of your map (maps will scale to t
 ### Map setup
 
 Maps must be declared in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js). To include a new map, edit [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js) and create a new property with the name of the map inside VisualJS.setup.map. This name must match the name in VisualJS.map (in the Javascript map file) and will be used in the [by](#by-1) property. The value of this property must be an object with two properties: the address of the map ("js") and an existence function ("exists").
+
+Once your map has been added to [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js), use the [map maker](https://github.com/idescat/visual/tree/master/maps/maker/) to fine-tune it.
 
 # Dependencies
 
