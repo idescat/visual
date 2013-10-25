@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]><html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]><html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html> <!--<![endif]-->
+	<head>
+		<title>Idescat Visual sample page</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<link href="../visual.css" rel="stylesheet" type="text/css" />
+		<script src="../lib/lazyload.js"></script>
+		<script src="../visual.js"></script>
+		<script src="../visual.setup.js"></script>
+		<style type="text/css">
+			#visual {
+				opacity: 0;
+			}
+		</style>
+	</head>
+	
+	<body>
+		<div id="visual"></div>
+		<script>
+			VisualJS.load({
+				callback: function(){
+					//You can use D3 transitions because	type: "cmap" includes D3
+					d3.select("#visual").transition().duration(4000).style("opacity", 1);
+				},
+				lang: "en",
+				title: "Advanced example: Using transitions",
+				unit: {symbol: "%"},
+				dec: 2,
+				legend: false,
+				by: "com",
+				type: "cmap",
+				data: [{id: "01", val: 85.50}, {id: "02", val: 79.40}, {id: "03", val: 80.91}, {id: "04", val: 86.50}, {id: "05", val: 83.01}, {id: "06", val: 79.04}, {id: "07", val: 82.74}, {id: "08", val: 77.31}, {id: "09", val: 86.48}, {id: "10", val: 79.94}, {id: "11", val: 65.79}, {id: "12", val: 73.04}, {id: "13", val: 70.35}, {id: "14", val: 89.96}, {id: "15", val: 84.79}, {id: "16", val: 91.06}, {id: "17", val: 75.31}, {id: "18", val: 92.95}, {id: "19", val: 89.95}, {id: "20", val: 82.50}, {id: "21", val: 77.03}, {id: "22", val: 86.48}, {id: "23", val: 90.73}, {id: "24", val: 86.06}, {id: "25", val: 88.94}, {id: "26", val: 91.67}, {id: "27", val: 88.38}, {id: "28", val: 88.68}, {id: "29", val: 92.49}, {id: "30", val: 90.66}, {id: "31", val: 88.24}, {id: "32", val: 86.17}, {id: "33", val: 83.71}, {id: "34", val: 77.71}, {id: "35", val: 90.53}, {id: "36", val: 74.20}, {id: "34", val: 91.87}, {id: "38", val: 88.66}, {id: "39", val: 77.98}, {id: "40", val: 71.31}, {id: "41", val: 75.56}]
+			});
+		</script>
+	</body>
+</html>

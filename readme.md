@@ -121,6 +121,8 @@ Array. In [simple mode](#simple-mode) and [manual mode](#manual-mode), this is t
 #### callback
 Function. This function will be called after the chart has been drawn. The *this* keyword will point to an object with two properties: "id" (the chart's id: string) and "chart" (a boolean indicating whether the chart is drawable or not: if false, VisualJS.chart() would not be defined).
 
+Examples:  [adv-01.html](https://github.com/idescat/visual/blob/master/test/adv-01.html), [adv-02.html](https://github.com/idescat/visual/blob/master/test/adv-02.html), [adv-03.html](https://github.com/idescat/visual/blob/master/test/adv-03.html).
+
 #### show
 Boolean. This determines whether the chart should be shown. When *false*, all the necessary files will be included but the chart will not be inserted: you will need to use a callback function that executes VisualJS.chart() at some point. Default is *true*.
 
