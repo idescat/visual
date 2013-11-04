@@ -4,18 +4,18 @@ body {
 	background-color: #fff;
 }
 
-#visual {
+.visual {
 	margin: 10px;
 }
-#visual, #VisualJSTooltip {
+.visual, #VisualJSTooltip {
 	font-family: Verdana,Arial,Helvetica,sans-serif;
 	font-size: 13px;
 	background-color: #fff;
 }
-#visual  h1 {
+.visual h1 {
 	font-size: 13px;
 }
-#visual p {
+.visual p {
 	font-size: 11px;
 	margin: 10px 0 0 0;
 }
@@ -40,29 +40,29 @@ body {
 	margin-top: 4px;
 }
 
-#visual .VisualJSnw {
+.visual .VisualJSnw {
 	white-space: nowrap;
 }
 
 /* Flot */
-#visual .VisualJSmini .flot-tick-label {
+.visual .VisualJSmini .flot-tick-label {
 	font-size: 8px;
 }
-#visual .flot-tick-label span {
+.visual .flot-tick-label span {
 	display: block;
 }
 
 /* SVG */
-#visual .VisualJSarea {
+.visual .VisualJSarea {
 	fill: #808080;
 	stroke: #000;
 	stroke-width: 0.05px;
 }
-#visual svg g.VisualJSlegend {
+.visual svg g.VisualJSlegend {
 	stroke: #808080;
 	stroke-width: 1px;
 }
-#visual svg g.VisualJSlegend text {
+.visual svg g.VisualJSlegend text {
 	font-size: 11px;
 	fill: black;
 	stroke: none;

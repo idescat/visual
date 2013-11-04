@@ -14,14 +14,14 @@
 	</head>
 	
 	<body>
-		<div id="visual"></div>
+		<div id="visual" class="visual"></div>
 		<script>
 			VisualJS.load({
 					callback: function(){
 						window.setInterval(function(){
 							VisualJS.setup.colors.map.base=(VisualJS.setup.colors.map.base==="#09111a") ? "#0e1708" : "#09111a";
 							VisualJS.chart();
-						}, 500);
+						}, 1000);
 					},
 					title: "Advanced example: Changing the color dynamically",
 					unit: {symbol: "%"},
