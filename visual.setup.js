@@ -22,7 +22,7 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-VisualJS.setup={
+VisualJS.setup={ //v.0.6.0
 	//Colors for maps and series
 	colors: {
 		map: {
@@ -81,8 +81,8 @@ VisualJS.setup={
 				en:  "Value not available"
 			},
 			oldbrowser: { //Warning message when IE<9 (maps)
-				ca: "Per visualitzar el mapa cal un navegador més modern.",
-				es: "Para visualizar el mapa es preciso un navegador más moderno.",
+				ca: "Per visualitzar el mapa cal un navegador m&eacute;s modern.",
+				es: "Para visualizar el mapa es preciso un navegador m&aacute;s moderno.",
 				en:  "To view the map you must use a modern browser."
 			}
 		}
@@ -91,6 +91,7 @@ VisualJS.setup={
 	//Classes and ids of elements created by visual
 	id: "visual", //id to style the container
 	clas: "visual", //class to style the container
+	compareids: ["VisualJSleft", "VisualJSright"], //ids to style each VisualJS.compare containers
 	tooltipid: "VisualJSTooltip", //id to style the tooltip
 	nowrapclass: "VisualJSnw", //class to define blocks of wrappable content in the title
 	canvasclass: "VisualJScanvas", //canvas container (Flot)
@@ -346,5 +347,7 @@ VisualJS.setup={
 	padding: {
 		w: 30,
 		h: 45
-	}
+	},
+	//VisualJS.compare separator width
+	separator: 4
 };

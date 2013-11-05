@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.5.6",
+	version: "0.6.0",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -226,7 +226,6 @@ var VisualJS={
 
 	tooltipText: function(id, l, v) {
 		var
-			d=VisualJS.container[id].dec,
 			lab=" "+VisualJS.container[id].unit.label,
 			si=(typeof v==="number") ? VisualJS.container[id].unit.symbol : "",
 			va=VisualJS.format(v),
@@ -290,6 +289,86 @@ var VisualJS={
 		html+= '<script type="text/javascript" src="'+ VisualJS.setup.main.lazy +'"><\/script>';
 		html+= '<\/head><body><div id="'+ o.id +'" class="'+ clas +'"><\/div><script>window.setTimeout(function(){VisualJS.old='+ old +'; visual('+ JSON.stringify(o) +');},1);<\/script><\/body><\/html>';
 		content(create(), html);
+	},
+
+	/* Draws two charts side by side 
+		Input: {
+				css : "/styles/visual.css", //CSS file or CSS rules, or array of size 2 of CSS files or CSS rules
+				title : "Optional",
+				footer : "Optional",
+				load : [{},{}]
+		}
+	*/
+	compare: function(o){
+		var 
+			vsetup=VisualJS.setup,
+			sepw=VisualJS.setup.separator,
+			id=(typeof o.id==="string") ? o.id : vsetup.id,
+			css=
+				(Object.prototype.toString.call(o.css)==="[object Array]") ? 
+					((o.css.length===0) ? 
+						["", ""] 
+						: 
+						((o.css.length===1) ? 
+							[o.css[0], o.css[0]]
+							:
+							o.css
+						)
+					)
+					: //Not an array (string assumed)
+					[o.css, o.css]
+				,
+			d=document,
+			h1=d.createElement(vsetup.html.heading),
+			par=d.createElement(vsetup.html.footer),
+			div=d.getElementById(id),
+			separator=d.createElement("div"),
+			style=d.createElement("style"),
+			resize=function(){
+				VisualJS.getsize(id);
+				var 
+					height=VisualJS.height+(vsetup.margin*2),
+					width=VisualJS.width+(vsetup.margin),
+					rule="iframe{ float: left; width: "+Math.floor((width-sepw)/2)+"px; height:"+height+"px; }" //Let's round it down instead of letting browsers use their own criterion
+				;
+				div.style.height=height+"px";
+				div.style.width=width+"px"; 
+				if (style.styleSheet){ //IE
+					style.styleSheet.cssText=rule;
+				}else{
+					style.innerHTML=rule;
+				}
+				separator.style.height=height+"px";
+			}
+		;
+
+		h1.innerHTML=(typeof o.title==="string") ? o.title : "";
+		par.innerHTML=(typeof o.footer==="string") ? o.footer : "";
+		par.style.clear="both";
+		div.appendChild(h1);
+		div.appendChild(par);
+
+		d.getElementsByTagName("head")[0].appendChild(style);
+		separator.style.width=sepw+"px";
+		if("styleFloat" in separator.style) { //IE
+			separator.style.styleFloat="left";
+		}else{
+			separator.style.cssFloat="left";
+		}
+
+		for(var i=0; i<2; i++){
+			var span=d.createElement("span");
+			if(typeof o.load[i].id!=="string"){
+				o.load[i].id=vsetup.compareids[i];
+			}
+			span.id=o.load[i].id;
+			div.insertBefore(span, par);
+			VisualJS.iframe(o.load[i], css[i]);
+		}	
+		div.insertBefore(separator, span);
+
+		resize();
+		window.onresize=resize;
 	},
 
 	//if o is array, then loop
@@ -407,7 +486,7 @@ var VisualJS={
 							valors=d3.map(),
 							val=[],
 							groups, //key: id, value: group
-							setGroups=function(g,r){},
+							setGroups=function(){},
 							legend=function(){},
 							checkGrouped,
 							groupLabel,
@@ -439,7 +518,7 @@ var VisualJS={
 							setGroups=function(g, r){
 								g.set(r.id, r.group);
 							}; 
-							checkGrouped=function(g, v, p, inf, sup){
+							checkGrouped=function(g, v, p){
 								return "q" + (g.get(p[map.id])-1);
 							};
 							groupLabel=function(g, p){
@@ -463,7 +542,7 @@ var VisualJS={
 								};
 								legend=VisualJS.func.legend;							
 							}else{ 
-								checkGrouped=function(g, v, p, inf, sup){
+								checkGrouped=function(g, v, p){
 									return (v.get(p[map.id])!=="") ? "" : "q"+(num-1);
 								};	
 							}
@@ -569,7 +648,7 @@ var VisualJS={
 				opt=[],
 				stacked=o.stacked || false,
 				ts=function(){
-					var fbars=function(si){
+					var fbars=function(){
 						return; //When stacked an undefined is expected in bars (null or false won't work)
 					}
 					if(stacked){
@@ -582,7 +661,7 @@ var VisualJS={
 							}
 						}
 					}
-					transform=function(d,t,b){ // Local in load(), not ts().
+					transform=function(d,t){ // Local in load(), not ts().
 						for(var i=0, len=t.length; i<len; i++){
 							ticks.push([i,t[i]]);
 							VisualJS.ticks.push([i,t[i]]); //keep original ticks
@@ -621,8 +700,9 @@ var VisualJS={
 						return Math.max.apply(Math, a);
 					};
 					var 
+						max,
 						transform=function(d,t,b){
-							max=Math.max( Array.max(d[0].val) , Array.max(d[1].val) ),
+							max=Math.max( Array.max(d[0].val) , Array.max(d[1].val) );
 							series[0]={label: d[0].label, data: [], pyramid: {direction: "L"}};
 							series[1]={label: d[1].label, data: []};
 							for(var i=0, len=b.length; i<len; i++){
@@ -641,7 +721,7 @@ var VisualJS={
 				case "rank":
 					var 
 						data=[],
-						transform=function(d,t,b){
+						transform=function(d){
 							for(var i=0, len=d.length; i<len; i++){
 								//Include in reverse order
 								ticks[i]=[i,d[len-i-1][0]];
@@ -660,7 +740,7 @@ var VisualJS={
 				case "bar":
 					VisualJS.addJS( vsetup.lib.jquery.flot.categories, hasFlot ); //Check plugin only if we have Flot
 					var 
-						transform=function(d,t,b){
+						transform=function(d){
 							series=d;
 							shlegend=(series.length>1);
 						},
@@ -787,7 +867,7 @@ var VisualJS={
 						case "pyram":
 							setup.series.pyramid={show: true, barWidth: 1};
 							setup.xaxis.max=max*(1.02); //Increase area by 2% of the longest bar
-							setup.xaxis.tickFormatter=function(val, axis) {
+							setup.xaxis.tickFormatter=function(val) {
 								return VisualJS.format(val);
 							}
 							$.plot(
@@ -800,7 +880,7 @@ var VisualJS={
 							setup.series.bars.horizontal=true;
 							setup.yaxis.ticks=( (VisualJS.height/ticklen) > 11) ? ticks.slice(0) : 0; //If too many categories and not enough height, remove y-labels
 							setup.xaxis.max=o.data[0][1]*(1.02); //Increase area by 2% of the longest bar
-							setup.xaxis.tickFormatter=function(val, axis) {
+							setup.xaxis.tickFormatter=function(val) {
 								return VisualJS.format(val);
 							}
 							setup.yaxis.autoscaleMargin=0;
@@ -814,7 +894,7 @@ var VisualJS={
 						case "bar":
 							setup.xaxis.mode="categories";
 							setup.xaxis.tickLength=0;
-							setup.yaxis.tickFormatter=function(val, axis) {
+							setup.yaxis.tickFormatter=function(val) {
 								return VisualJS.format(val);
 							}
 							$.plot(
@@ -826,7 +906,7 @@ var VisualJS={
 						//Time series
 						case "tsline":
 						case "tsbar":
-							setup.yaxis.tickFormatter=function(val, axis) {
+							setup.yaxis.tickFormatter=function(val) {
 								return VisualJS.format(val);
 							}
 							var 

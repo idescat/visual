@@ -19,6 +19,9 @@ body {
 	font-size: 11px;
 	margin: 10px 0 0 0;
 }
+#VisualJSleft, #VisualJSright {
+	text-align: center;
+}
 
 #VisualJSTooltip {
 	display: none;

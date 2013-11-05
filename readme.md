@@ -6,6 +6,7 @@
 * [Installation](#installation)
 * [Options](#options)
 * [Maps](#maps)
+* [Public functions](#public-functions)
 * [Dependencies](#dependencies)
 * [Known limitations](#known-limitations)
 * [How to contribute](#how-to-contribute)
@@ -509,6 +510,58 @@ These values will not determine the final size of your map (maps will scale to t
 Maps must be declared in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js). To include a new map, edit [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js) and create a new property with the name of the map inside VisualJS.setup.map. This name must match the name in VisualJS.map (in the Javascript map file) and will be used in the [by](#by-1) property. The value of this property must be an object with two properties: the address of the map ("js") and an existence function ("exists").
 
 Once your map has been added to [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js), use the [map maker](https://github.com/idescat/visual/tree/master/maps/maker/) to fine-tune it.
+
+# Public functions
+
+## VisualJS.load
+
+This is the main function. It loads the data and, if the property **show** is *true* (default), draws the chart using VisualJS.chart(). It only accepts one argument: a [visual object](#options).
+
+```js
+VisualJS.load( {...} ); //Same as: visual( {...} );
+```
+
+This function is used in [webpage mode](#webpage-mode).
+
+## VisualJS.chart
+
+This function does the actual drawing of the chart. It does not accept any argument.
+
+```js
+VisualJS.chart( );
+```
+
+It will usually be invoked inside a [callback function](#callback).
+
+Examples:  [adv-01.html](https://github.com/idescat/visual/blob/master/test/adv-01.html), [adv-03.html](https://github.com/idescat/visual/blob/master/test/adv-03.html).
+
+## VisualJS.iframe
+
+In [simple mode](simple-mode), this function is used to embed visualizations. It accepts two arguments: a [visual object](#options) and a string (a CSS file address or CSS rules).
+
+```js
+VisualJS.chart( {...} , "http://mydomain/path/iframe.css" );
+```
+
+Example: [simple.html](https://github.com/idescat/visual/blob/master/test/simple.html).
+
+## VisualJS.compare
+
+This function creates a comparison visualization (two charts side by side). It accepts one argument: an object with the following properties:
+
+### title
+String. Text of title.
+
+### footer
+String. Text of footer.
+
+### load
+Array of two [visual objects](#options) (required).
+
+### css
+String or array of two strings. The strings can be CSS file addresses or CSS rules. When two strings are provided, the first style is used in the left chart and the second in the right one.
+
+Example:  [adv-04.html](https://github.com/idescat/visual/blob/master/test/adv-04.html).
 
 # Dependencies
 
