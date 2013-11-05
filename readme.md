@@ -40,7 +40,7 @@ In webpage mode, the visualization is the only content on an html5 page. Use the
 
 ### Simple mode
 
-In simple mode, the visualization is embedded in a page using the VisualJS.iframe() function. Use the [simple template](https://github.com/idescat/visual/blob/master/templates/simple.html) to build your page. To embed the visualization, include the visual.js and visual.setup.js files and use a script tag with a unique ID and invoke VisualJS.iframe() passing a visual object (with the same ID as the script tag) and a CSS file (or CSS rules) ([example](https://github.com/idescat/visual/blob/master/test/simple.html)).
+In simple mode, the visualization is embedded in a page using the [VisualJS.iframe](#visualjsiframe) function. Use the [simple template](https://github.com/idescat/visual/blob/master/templates/simple.html) to build your page. To embed the visualization, include the visual.js and visual.setup.js files and use a script tag with a unique ID and invoke [VisualJS.iframe](#visualjsiframe) passing a visual object (with the same ID as the script tag) and a CSS file (or CSS rules) ([example](https://github.com/idescat/visual/blob/master/test/simple.html)).
 
 Warning: This mode has not been fully tested on old browsers.
 
@@ -120,12 +120,12 @@ String. In [simple mode](#simple-mode) and [manual mode](#manual-mode), this is 
 Array. In [simple mode](#simple-mode) and [manual mode](#manual-mode), this is the *[width, height]* in pixels of the visualization container.
 
 #### callback
-Function. This function will be called after the chart has been drawn. The *this* keyword will point to an object with two properties: "id" (the chart's id: string) and "chart" (a boolean indicating whether the chart is drawable or not: if false, VisualJS.chart() would not be defined).
+Function. This function will be called after the chart has been drawn. The *this* keyword will point to an object with two properties: "id" (the chart's id: string) and "chart" (a boolean indicating whether the chart is drawable or not: if false, [VisualJS.chart](#visualjschart) would not be defined).
 
 Examples:  [adv-01.html](https://github.com/idescat/visual/blob/master/test/adv-01.html), [adv-02.html](https://github.com/idescat/visual/blob/master/test/adv-02.html), [adv-03.html](https://github.com/idescat/visual/blob/master/test/adv-03.html).
 
 #### show
-Boolean. This determines whether the chart should be shown. When *false*, all the necessary files will be included but the chart will not be inserted: you will need to use a callback function that executes VisualJS.chart() at some point. Default is *true*.
+Boolean. This determines whether the chart should be shown. When *false*, all the necessary files will be included but the chart will not be inserted: you will need to use a callback function that executes [VisualJS.chart](#visualjschart) at some point. Default is *true*.
 
 ```js
 VisualJS.load({
@@ -515,7 +515,7 @@ Once your map has been added to [visual.setup.js](https://github.com/idescat/vis
 
 ## VisualJS.load
 
-This is the main function. It loads the data and, if the property **show** is *true* (default), draws the chart using VisualJS.chart(). It only accepts one argument: a [visual object](#options).
+This is the main function. It loads the data and, if the property **show** is *true* (default), draws the chart using [VisualJS.chart](#visualjschart). It only accepts one argument: a [visual object](#options).
 
 ```js
 VisualJS.load( {...} ); //Same as: visual( {...} );
@@ -559,7 +559,7 @@ String. Text of footer.
 Array of two [visual objects](#options) (required).
 
 ### css
-String or array of two strings. The strings can be CSS file addresses or CSS rules. When two strings are provided, the first style is used in the left chart and the second in the right one.
+String or array of two strings. The strings can be CSS file addresses or CSS rules. When two strings are provided, the first style is used in the left chart and the second one is used in the right chart.
 
 Example:  [adv-04.html](https://github.com/idescat/visual/blob/master/test/adv-04.html).
 
