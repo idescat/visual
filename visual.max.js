@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.6.1",
+	version: "0.6.2",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -905,6 +905,7 @@ var VisualJS={
 						break;
 						//Time series
 						case "tsline":
+							setup.grid.markings=[ { color: "#999", lineWidth: 1, yaxis: { from: 0, to: 0 } }]; //Zero line in tsline
 						case "tsbar":
 							setup.yaxis.tickFormatter=function(val) {
 								return VisualJS.format(val);

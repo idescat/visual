@@ -23,7 +23,7 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-var VisualJS={version:"0.6.1",show:!0,old:!1,fixed:null,width:500,bwidth:500,height:500,normal:500,scripts:[],ticks:[],map:{},container:{},func:{},callback:null,draw:function(){var t=!1
+var VisualJS={version:"0.6.2",show:!0,old:!1,fixed:null,width:500,bwidth:500,height:500,normal:500,scripts:[],ticks:[],map:{},container:{},func:{},callback:null,draw:function(){var t=!1
 "function"==typeof VisualJS.chart&&(VisualJS.tooltip(),VisualJS.show&&VisualJS.chart(),window.onresize=function(){VisualJS.canvas()},t=!0),null!==VisualJS.callback&&VisualJS.callback.call({id:VisualJS.id,chart:t})},tooltip:function(){var t=document
 if(!t.getElementById(VisualJS.setup.tooltipid)){var e=t.createElement("div")
 e.id=VisualJS.setup.tooltipid,e.style.display="none",t.body.appendChild(e)}},getsize:function(t){var e=VisualJS.setup,a=e.html,i=a.heading,s=a.footer,l=window,n=document,r=n.documentElement,o=n.getElementsByTagName("body")[0],u=n.getElementById(t),d=u.getElementsByTagName(i)[0].clientHeight,c=u.getElementsByTagName(s)[0].clientHeight,p=l.innerHeight||r.clientHeight||o.clientHeight
@@ -62,12 +62,12 @@ if("cmap"===t.type)if(n)document.getElementById(VisualJS.id).innerHTML="<p>"+e.i
 else{if("string"!=typeof t.by)return
 VisualJS.addJS(e.lib.maps,!0),VisualJS.addJS(e.lib.d3,!0),VisualJS.addJS(e.map[t.by],!0),VisualJS.chart=function(){var a=VisualJS.map[t.by],n=a.area[0],o=a.area[1],u="object"==typeof t.grouped&&t.grouped.length>0&&t.data[0].hasOwnProperty("group"),d=!u&&t.data[0].hasOwnProperty("val"),c=u?t.grouped.length:d?e.colors.map.max:1,p=VisualJS.func.colors(e.colors.map.base,c,"fill","q"),f=d3.select(r),h=d3.geo[a.projection](),S="object"==typeof a.center&&"function"==typeof h.center?h.center(a.center):h,g=S.scale(a.scale).translate([n/2,o/2]),J=d3.geo.path().projection(g),V=d3.select("#"+e.tooltipid)
 VisualJS.canvas=function(){f.html("<"+s+"></"+s+"><"+l+"></"+l+">"),d3.select(r+" "+s).html(VisualJS.getHeading(t)),d3.select(r+" "+l).html(VisualJS.atext(t.footer||"")),VisualJS.getsize(VisualJS.id)
-var h,S,g,y,m,b=VisualJS.id,x=d3.map(),v=[],w=function(){},k=function(){},j="number"==typeof t.filter?t.filter:i.filter,T=1-j,E=VisualJS.height/o,H=VisualJS.width/n,M=Math.min(Math.round(n*E),VisualJS.width),q=Math.min(Math.round(o*H),VisualJS.height),z=Math.floor((VisualJS.width-M)/2),B=Math.floor((VisualJS.height-q)/2),W=H>E?E:H,$=f.insert("svg:svg",l).attr("width",M).attr("height",q)
+var h,S,g,y,m,b=VisualJS.id,x=d3.map(),v=[],w=function(){},k=function(){},j="number"==typeof t.filter?t.filter:i.filter,T=1-j,E=VisualJS.height/o,H=VisualJS.width/n,M=Math.min(Math.round(n*E),VisualJS.width),q=Math.min(Math.round(o*H),VisualJS.height),W=Math.floor((VisualJS.width-M)/2),z=Math.floor((VisualJS.height-q)/2),B=H>E?E:H,$=f.insert("svg:svg",l).attr("width",M).attr("height",q)
 u?(h=d3.map(),w=function(t,e){t.set(e.id,e.group)},S=function(t,e,i){return"q"+(t.get(i[a.id])-1)},g=function(e,i){var s=t.grouped[e.get(i[a.id])-1],l=i[a.label]
 return"undefined"!=typeof s&&(l+=" <em>"+s+"</em>"),l}):(d?(S=function(t,e,i,s,l){var n=d3.scale.quantize().domain([s,l]).range(d3.range(c).map(function(t){return"q"+t}))
 return n(e.get(i[a.id]))},k=VisualJS.func.legend):S=function(t,e,i){return""!==e.get(i[a.id])?"":"q"+(c-1)},g=function(t,e){return e[a.label]})
 for(var I=0,L=t.data,A=L.length;A>I;I++){var F=L[I]
-F.hasOwnProperty("val")?x.set(F.id,F.val):x.set(F.id,""),v.push(F.val),w(h,F)}v.sort(function(t,e){return t-e}),"[object Array]"===Object.prototype.toString.call(t.filter)&&2===t.filter.length&&"number"==typeof t.filter[0]&&"number"==typeof t.filter[1]&&t.filter[0]<t.filter[1]?(y=t.filter[0],m=t.filter[1]):(y=d3.quantile(v,j),m=d3.quantile(v,T)),$.style("margin-left",z+"px"),$.style("margin-top",B+"px"),$.style("margin-bottom",B+"px"),$.append("svg:g").attr("class",e.areaclass).attr("transform","scale("+W+")").selectAll("path").data(a.features).enter().append("svg:path").attr("class",function(t){return S(h,x,t.properties,y,m)}).attr("d",J).on("mousemove",function(t){(d||"undefined"!=typeof x.get(t.properties[a.id]))&&VisualJS.showTooltip(VisualJS.tooltipText(b,g(h,t.properties),x.get(t.properties[a.id])),d3.event.pageX,d3.event.pageY)}).on("mouseout",function(){return V.style("display","none")}),VisualJS.legend&&"object"==typeof a.legend&&k(b,VisualJS.tooltipText(b,null,m),VisualJS.tooltipText(b,null,y),p[p.length-1],p[0],$,V,a.area,a.legend)},VisualJS.canvas()}}else{if(VisualJS.addJS(e.lib.jquery,!0)){var u=!1
+F.hasOwnProperty("val")?x.set(F.id,F.val):x.set(F.id,""),v.push(F.val),w(h,F)}v.sort(function(t,e){return t-e}),"[object Array]"===Object.prototype.toString.call(t.filter)&&2===t.filter.length&&"number"==typeof t.filter[0]&&"number"==typeof t.filter[1]&&t.filter[0]<t.filter[1]?(y=t.filter[0],m=t.filter[1]):(y=d3.quantile(v,j),m=d3.quantile(v,T)),$.style("margin-left",W+"px"),$.style("margin-top",z+"px"),$.style("margin-bottom",z+"px"),$.append("svg:g").attr("class",e.areaclass).attr("transform","scale("+B+")").selectAll("path").data(a.features).enter().append("svg:path").attr("class",function(t){return S(h,x,t.properties,y,m)}).attr("d",J).on("mousemove",function(t){(d||"undefined"!=typeof x.get(t.properties[a.id]))&&VisualJS.showTooltip(VisualJS.tooltipText(b,g(h,t.properties),x.get(t.properties[a.id])),d3.event.pageX,d3.event.pageY)}).on("mouseout",function(){return V.style("display","none")}),VisualJS.legend&&"object"==typeof a.legend&&k(b,VisualJS.tooltipText(b,null,m),VisualJS.tooltipText(b,null,y),p[p.length-1],p[0],$,V,a.area,a.legend)},VisualJS.canvas()}}else{if(VisualJS.addJS(e.lib.jquery,!0)){var u=!1
 VisualJS.addJS(e.lib.jquery.flot,!1)}else if(VisualJS.addJS(e.lib.jquery.flot,!0))var u=!1
 else var u=!0
 n&&VisualJS.addJS(e.lib.excanvas,!0)
@@ -103,7 +103,8 @@ case"rank":a.series.bars.horizontal=!0,a.yaxis.ticks=VisualJS.height/i>11?p.slic
 break
 case"bar":a.xaxis.mode="categories",a.xaxis.tickLength=0,a.yaxis.tickFormatter=function(t){return VisualJS.format(t)},$.plot(o,[c],a)
 break
-case"tsline":case"tsbar":a.yaxis.tickFormatter=function(t){return VisualJS.format(t)}
+case"tsline":a.grid.markings=[{color:"#999",lineWidth:1,yaxis:{from:0,to:0}}]
+case"tsbar":a.yaxis.tickFormatter=function(t){return VisualJS.format(t)}
 var n=VisualJS.width/i,u=[],d="01"
 switch(VisualJS.ticks[0][1].length){case 4:if(30>n){for(var h=n>15?2:n>8?3:4,S=0;i>S;S++)u[S]=S%h?[p[S][0],""]:[p[S][0],p[S][1]]
 a.xaxis.ticks=u}else a.xaxis.ticks=p
