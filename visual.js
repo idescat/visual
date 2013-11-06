@@ -23,7 +23,7 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-var VisualJS={version:"0.6.0",show:!0,old:!1,fixed:null,width:500,bwidth:500,height:500,normal:500,scripts:[],ticks:[],map:{},container:{},func:{},callback:null,draw:function(){var t=!1
+var VisualJS={version:"0.6.1",show:!0,old:!1,fixed:null,width:500,bwidth:500,height:500,normal:500,scripts:[],ticks:[],map:{},container:{},func:{},callback:null,draw:function(){var t=!1
 "function"==typeof VisualJS.chart&&(VisualJS.tooltip(),VisualJS.show&&VisualJS.chart(),window.onresize=function(){VisualJS.canvas()},t=!0),null!==VisualJS.callback&&VisualJS.callback.call({id:VisualJS.id,chart:t})},tooltip:function(){var t=document
 if(!t.getElementById(VisualJS.setup.tooltipid)){var e=t.createElement("div")
 e.id=VisualJS.setup.tooltipid,e.style.display="none",t.body.appendChild(e)}},getsize:function(t){var e=VisualJS.setup,a=e.html,i=a.heading,s=a.footer,l=window,n=document,r=n.documentElement,o=n.getElementsByTagName("body")[0],u=n.getElementById(t),d=u.getElementsByTagName(i)[0].clientHeight,c=u.getElementsByTagName(s)[0].clientHeight,p=l.innerHeight||r.clientHeight||o.clientHeight
@@ -105,12 +105,12 @@ case"bar":a.xaxis.mode="categories",a.xaxis.tickLength=0,a.yaxis.tickFormatter=f
 break
 case"tsline":case"tsbar":a.yaxis.tickFormatter=function(t){return VisualJS.format(t)}
 var n=VisualJS.width/i,u=[],d="01"
-switch(VisualJS.ticks[0][1].length){case 4:if(25>n){for(var h=0;i>h;h++)u[h]=h%2?[p[h][0],""]:[p[h][0],p[h][1]]
+switch(VisualJS.ticks[0][1].length){case 4:if(30>n){for(var h=n>15?2:n>8?3:4,S=0;i>S;S++)u[S]=S%h?[p[S][0],""]:[p[S][0],p[S][1]]
 a.xaxis.ticks=u}else a.xaxis.ticks=p
 break
 case 5:d="1"
-case 6:if(35>n){for(var h=0;i>h;h++)u[h]=VisualJS.ticks[h][1].slice(4)!==d?[VisualJS.ticks[h][0],""]:[VisualJS.ticks[h][0],VisualJS.ticks[h][1].slice(0,4)],p[h][1]=VisualJS.tformat(VisualJS.ticks[h][1])
-a.xaxis.ticks=u}else{for(var h=0;i>h;h++)p[h][1]=VisualJS.tformat(VisualJS.ticks[h][1])
+case 6:if(35>n){for(var S=0;i>S;S++)u[S]=VisualJS.ticks[S][1].slice(4)!==d?[VisualJS.ticks[S][0],""]:[VisualJS.ticks[S][0],VisualJS.ticks[S][1].slice(0,4)],p[S][1]=VisualJS.tformat(VisualJS.ticks[S][1])
+a.xaxis.ticks=u}else{for(var S=0;i>S;S++)p[S][1]=VisualJS.tformat(VisualJS.ticks[S][1])
 a.xaxis.ticks=p}break
 default:a.xaxis.ticks=p}$.plot(o,f,a)}$(o).UseTooltip(VisualJS.id)},VisualJS.canvas()}}VisualJS.scripts.length&&"object"==typeof LazyLoad?LazyLoad.js(VisualJS.scripts,VisualJS.draw):VisualJS.draw()}}
 if("function"!=typeof visual)var visual=VisualJS.load

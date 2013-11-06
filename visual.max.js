@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.6.0",
+	version: "0.6.1",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -917,9 +917,10 @@ var VisualJS={
 							switch(VisualJS.ticks[0][1].length){ //Assuming all time periods follow the same pattern
 								case 4: //Annual time series (4 digits)
 									// Magic rule: Only one year of every two must be displayed if width (mini) is small in comparison with # of ticks
-									if(ratio<25){
+ 									if(ratio<30){
+										var freq=(ratio>15) ? 2 : ((ratio>8) ? 3 : 4); //if very small, only paint 1 of 3 ticks
 										for(var i=0; i<ticklen; i++){
-											xticks[i]=(i % 2) ? 
+											xticks[i]=(i % freq) ? 
 												[ ticks[i][0], "" ]
 												:
 												[ ticks[i][0], ticks[i][1] ]
