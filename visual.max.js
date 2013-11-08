@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.6.2",
+	version: "0.7.0",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -460,10 +460,29 @@ var VisualJS={
 						mwidth=map.area[0],
 						mheight=map.area[1],
 						//hasGroup: grouped property exists, is object (array), has content and data seems to include a group property
-						hasGroup=(typeof o.grouped==="object" && o.grouped.length>0 && o.data[0].hasOwnProperty("group")),
+						hasGroup=(
+							typeof o.grouped==="object" &&
+							typeof o.grouped.label==="object" &&
+							o.grouped.label.length>0 &&
+							o.data[0].hasOwnProperty("group")
+						),
 						hasValues=(!hasGroup && o.data[0].hasOwnProperty("val")),
-						num=(hasGroup) ? o.grouped.length : ((hasValues) ? vsetup.colors.map.max : 1),
-						colors=VisualJS.func.colors( vsetup.colors.map.base, num, "fill", "q" ),
+						num=(hasGroup) ? o.grouped.label.length : ((hasValues) ? vsetup.colors.map.max : 1),
+						prefix=vsetup.colorclassprefix,
+						colors=VisualJS.func.colors( vsetup.colors.map.base, num, "fill", prefix, 
+							(
+								(
+									hasGroup && 
+									typeof o.grouped.color==="object" && 
+									o.grouped.color.length===o.grouped.label.length
+								) 
+								? 
+								o.grouped.color
+								: 
+								[]
+							),
+							VisualJS.id 
+						),
 						visual=d3.select(selector),
 						projection=d3.geo[map.projection](),
 						//Support for projections that don't support the center method (albersUSA, for example).
@@ -519,11 +538,11 @@ var VisualJS={
 								g.set(r.id, r.group);
 							}; 
 							checkGrouped=function(g, v, p){
-								return "q" + (g.get(p[map.id])-1);
+								return prefix + (g.get(p[map.id])-1);
 							};
 							groupLabel=function(g, p){
 								var 
-									em=o.grouped[(g.get(p[map.id])-1)],
+									em=o.grouped.label[(g.get(p[map.id])-1)],
 									ret=p[map.label]
 								;
 								if(typeof em!=="undefined"){
@@ -536,14 +555,14 @@ var VisualJS={
 								checkGrouped=function(g, v, p, inf, sup){
 									var quantize=d3.scale.quantize()
 										.domain([inf, sup])
-										.range(d3.range(num).map(function(i) { return "q" + i; }))
+										.range(d3.range(num).map(function(i) { return prefix + i; }))
 									;
 									return quantize(v.get(p[map.id]));
 								};
 								legend=VisualJS.func.legend;							
 							}else{ 
 								checkGrouped=function(g, v, p){
-									return (v.get(p[map.id])!=="") ? "" : "q"+(num-1);
+									return (v.get(p[map.id])!=="") ? "" : prefix+(num-1);
 								};	
 							}
 							groupLabel=function(g, p){

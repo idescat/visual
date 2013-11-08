@@ -22,7 +22,7 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-VisualJS.setup={ //v.0.6.0
+VisualJS.setup={ //v.0.7.0
 	//Colors for maps and series
 	colors: {
 		map: {
@@ -99,6 +99,7 @@ VisualJS.setup={ //v.0.6.0
 	legendclass: "VisualJSlegend", //svg:g class (D3 maps)
 	normal: "VisualJSnormal", //visualitzation's normal size class
 	mini: "VisualJSmini", //visualitzation's small size class
+	colorclassprefix: "c", //prefix for color class in maps: c0, c1, c2...
 
 	//Markup created by visual
 	html: {
