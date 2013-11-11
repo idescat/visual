@@ -335,7 +335,24 @@ VisualJS.setup={ //v.0.7.0
 		com41: {
 			js: "../maps/com412013mun.js",
 			exists: function(){ return typeof VisualJS.map.com41!=="undefined" && VisualJS.map.com41.id==="MUNICIPI"; }
-		}
+		},
+		prov08: {
+			js: "../maps/prov082013mun.js",
+			exists: function(){ return typeof VisualJS.map.prov08!=="undefined" && VisualJS.map.prov08.id==="PROVINCIA"; }
+		},
+		prov17: {
+			js: "../maps/prov172013mun.js",
+			exists: function(){ return typeof VisualJS.map.prov17!=="undefined" && VisualJS.map.prov17.id==="PROVINCIA"; }
+		},
+		prov25: {
+			js: "../maps/prov252013mun.js",
+			exists: function(){ return typeof VisualJS.map.prov25!=="undefined" && VisualJS.map.prov25.id==="PROVINCIA"; }
+		},
+		prov43: {
+			js: "../maps/prov432013mun.js",
+			exists: function(){ return typeof VisualJS.map.prov43!=="undefined" && VisualJS.map.prov43.id==="PROVINCIA"; }
+		}		
+		
 	},
 
 	//IE check
