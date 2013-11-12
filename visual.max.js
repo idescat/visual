@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.7.0",
+	version: "0.7.1",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -759,8 +759,18 @@ var VisualJS={
 				case "bar":
 					VisualJS.addJS( vsetup.lib.jquery.flot.categories, hasFlot ); //Check plugin only if we have Flot
 					var 
-						transform=function(d){
-							series=d;
+						transform=function(d,t,b){
+							if(typeof b!=="object"){  //Without "by": simplified call
+								series=d;
+							}else{
+								//An array without "label" and "val"
+								if(typeof d[0]==="number"){
+									for(var i=0, len=b.length; i<len; i++){
+										series[i]=[ b[i] , d[i] ];
+									}
+								}
+								//Pending: An array with "label" and "val" for multiple bars per category...
+							}
 							shlegend=(series.length>1);
 						},
 						stack=true,

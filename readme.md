@@ -167,7 +167,10 @@ Examples:  [bar.html](https://github.com/idescat/visual/blob/master/test/bar.htm
 String. Time period.
 
 #### data
-Array of arrays. Required. The first array contains as many elements as categories. Each element is an array of two elements: a string (label) and a number (value).
+Array of numbers or array of arrays. Required. If *by* has not been specified, the array contains as many elements as categories and each element is an array with two elements: a string (label) and a number (value). Otherwise, it is an array of numbers (values) while their label is specified in the *by* property.
+
+#### by
+Array of strings. See the *data* property.
 
 ### *rank* properties
 

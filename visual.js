@@ -22,7 +22,7 @@ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-var VisualJS={version:"0.7.0",show:!0,old:!1,fixed:null,width:500,bwidth:500,height:500,normal:500,scripts:[],ticks:[],map:{},container:{},func:{},callback:null,draw:function(){var t=!1
+var VisualJS={version:"0.7.1",show:!0,old:!1,fixed:null,width:500,bwidth:500,height:500,normal:500,scripts:[],ticks:[],map:{},container:{},func:{},callback:null,draw:function(){var t=!1
 "function"==typeof VisualJS.chart&&(VisualJS.tooltip(),VisualJS.show&&VisualJS.chart(),window.onresize=function(){VisualJS.canvas()},t=!0),null!==VisualJS.callback&&VisualJS.callback.call({id:VisualJS.id,chart:t})},tooltip:function(){var t=document
 if(!t.getElementById(VisualJS.setup.tooltipid)){var e=t.createElement("div")
 e.id=VisualJS.setup.tooltipid,e.style.display="none",t.body.appendChild(e)}},getsize:function(t){var e=VisualJS.setup,a=e.html,i=a.heading,l=a.footer,s=window,n=document,r=n.documentElement,o=n.getElementsByTagName("body")[0],u=n.getElementById(t),d=u.getElementsByTagName(i)[0].clientHeight,c=u.getElementsByTagName(l)[0].clientHeight,p=s.innerHeight||r.clientHeight||o.clientHeight
@@ -85,7 +85,9 @@ case"rank":var v=[],d=function(t){for(var e=0,a=t.length;a>e;e++)p[e]=[e,t[a-e-1
 c={data:v}},J=!1,y=!1,V=!1,m=!1,b=!0,x=VisualJS.getHeading(t)
 break
 case"bar":VisualJS.addJS(e.lib.jquery.flot.categories,u)
-var d=function(t){c=t,J=c.length>1},y=!0,V=!1,m=!1,b=!0,x=VisualJS.getHeading(t)
+var d=function(t,e,a){if("object"!=typeof a)c=t
+else if("number"==typeof t[0])for(var i=0,l=a.length;l>i;i++)c[i]=[a[i],t[i]]
+J=c.length>1},y=!0,V=!1,m=!1,b=!0,x=VisualJS.getHeading(t)
 break
 case"tsline":var x=g(),y=null,V=!0,m=!0,b=!1
 break
