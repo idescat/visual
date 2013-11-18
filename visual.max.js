@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.7.1",
+	version: "0.7.2",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -459,20 +459,20 @@ var VisualJS={
 						map=VisualJS.map[o.by],
 						mwidth=map.area[0],
 						mheight=map.area[1],
-						//hasGroup: grouped property exists, is object (array), has content and data seems to include a group property
-						hasGroup=(
+						//hasGroups: grouped property exists, is object (array), has content and data seems to include a group property
+						hasGroups=(
 							typeof o.grouped==="object" &&
 							typeof o.grouped.label==="object" &&
 							o.grouped.label.length>0 &&
 							o.data[0].hasOwnProperty("group")
 						),
-						hasValues=(!hasGroup && o.data[0].hasOwnProperty("val")),
-						num=(hasGroup) ? o.grouped.label.length : ((hasValues) ? vsetup.colors.map.max : 1),
+						hasValues=o.data[0].hasOwnProperty("val"),
+						num=(hasGroups) ? o.grouped.label.length : ((hasValues) ? vsetup.colors.map.max : 1),
 						prefix=vsetup.colorclassprefix,
 						colors=VisualJS.func.colors( vsetup.colors.map.base, num, "fill", prefix, 
 							(
 								(
-									hasGroup && 
+									hasGroups && 
 									typeof o.grouped.color==="object" && 
 									o.grouped.color.length===o.grouped.label.length
 								) 
@@ -532,7 +532,7 @@ var VisualJS={
 								.attr("height", height)
 						;
 
-						if(hasGroup){
+						if(hasGroups){
 							groups=d3.map();
 							setGroups=function(g, r){
 								g.set(r.id, r.group);
@@ -597,7 +597,7 @@ var VisualJS={
 							inf=d3.quantile(val, min);
 							sup=d3.quantile(val, max);
 						}
-						
+
 						vis.style("margin-left", left+"px");
 						vis.style("margin-top", topbottom+"px");
 						vis.style("margin-bottom", topbottom+"px");
@@ -612,7 +612,7 @@ var VisualJS={
 							})
 							.attr("d", path)
 							.on("mousemove", function(d){
-								if(hasValues || typeof valors.get(d.properties[map.id])!=="undefined"){
+								if(hasValues || hasGroups || typeof valors.get(d.properties[map.id])!=="undefined"){ //hasGroups
 									VisualJS.showTooltip(
 										VisualJS.tooltipText(
 											id,
