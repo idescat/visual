@@ -462,7 +462,7 @@ Array of objects. Required. The array contains as many elements as map areas. Ea
 Object with at least one property: "label" (array of strings). Each element in this array is a group label string (the first label will be attached to areas with a *group* property of 1 in **data**, and so on). A second property ("color", array of strings) can be provided to assign a custom color to each group. Colors must be specified as three two-digit hexadecimal numbers, starting with a # sign (for example, "#000000" means black).
 
 ####  by
-String. Required. Selects a certain map. Possible values ("mun", "com", "prov") are set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
+String. Required. Selects a certain map. Possible values ("mun", "com", "prov", etc.) are set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
 
 ####  filter
 Number or array. This determines the color assignation. When it is a number, it must be between 0 and 0.49. Default: 0.05, which means color assignation excludes values below the 5th percentile and above the 95th percentile. When it is an array, it defines a range: it has two and only two elements. The first (number) is a minimum and the second (number) is a maximum. Colors will be assigned between those values.
