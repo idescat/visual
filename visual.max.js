@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.7.2",
+	version: "0.7.3",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -507,7 +507,7 @@ var VisualJS={
 							groups, //key: id, value: group
 							setGroups=function(){},
 							legend=function(){},
-							checkGrouped,
+							colorClass,
 							groupLabel,
 							min=(typeof o.filter==="number") ? o.filter : scanvas.filter,
 							max=1-min,
@@ -537,7 +537,7 @@ var VisualJS={
 							setGroups=function(g, r){
 								g.set(r.id, r.group);
 							}; 
-							checkGrouped=function(g, v, p){
+							colorClass=function(g, v, p){
 								return prefix + (g.get(p[map.id])-1);
 							};
 							groupLabel=function(g, p){
@@ -552,16 +552,18 @@ var VisualJS={
 							};
 						}else{
 							if(hasValues){
-								checkGrouped=function(g, v, p, inf, sup){
-									var quantize=d3.scale.quantize()
-										.domain([inf, sup])
-										.range(d3.range(num).map(function(i) { return prefix + i; }))
+								colorClass=function(g, v, p, inf, sup){
+									var 
+										quantize=d3.scale.quantize()
+											.domain([inf, sup])
+											.range(d3.range(num).map(function(i) { return prefix + i; })),
+										value=v.get(p[map.id])
 									;
-									return quantize(v.get(p[map.id]));
+									return (value!==null) ? quantize(value) : null; //d3.quantize treats nulls as zeros
 								};
 								legend=VisualJS.func.legend;							
 							}else{ 
-								checkGrouped=function(g, v, p){
+								colorClass=function(g, v, p){
 									return (v.get(p[map.id])!=="") ? "" : prefix+(num-1);
 								};	
 							}
@@ -608,11 +610,11 @@ var VisualJS={
 							.data(map.features)
 							.enter().append("svg:path")
 							.attr("class", function(d) {
-								return checkGrouped(groups, valors, d.properties, inf, sup);
+								return colorClass(groups, valors, d.properties, inf, sup);
 							})
 							.attr("d", path)
 							.on("mousemove", function(d){
-								if(hasValues || hasGroups || typeof valors.get(d.properties[map.id])!=="undefined"){ //hasGroups
+								if(hasValues || hasGroups || typeof valors.get(d.properties[map.id])!=="undefined"){
 									VisualJS.showTooltip(
 										VisualJS.tooltipText(
 											id,
