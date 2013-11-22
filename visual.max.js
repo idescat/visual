@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.7.3",
+	version: "0.7.4",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -559,7 +559,7 @@ var VisualJS={
 											.range(d3.range(num).map(function(i) { return prefix + i; })),
 										value=v.get(p[map.id])
 									;
-									return (value!==null) ? quantize(value) : null; //d3.quantize treats nulls as zeros
+									return quantize(value);
 								};
 								legend=VisualJS.func.legend;							
 							}else{ 
@@ -575,11 +575,13 @@ var VisualJS={
 						for (var i=0, odata=o.data, len=odata.length; i<len; i++){
 							var r=odata[i];
 							if(r.hasOwnProperty("val")){
-								valors.set(r.id, r.val);
+								if(r.val!==null){ //Remove regions with val: null
+									valors.set(r.id, r.val);
+									val.push(r.val);
+								}
 							}else{ //If no val property on data (for example, grouped info), then do not print value on tooltip.
 								valors.set(r.id, "");
 							}
-							val.push(r.val);
 							setGroups(groups, r); //Does nothing if no groups
 						}
 						val.sort(function(a, b) {
