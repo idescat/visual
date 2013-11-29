@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.7.4",
+	version: "0.7.5",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -212,8 +212,8 @@ var VisualJS={
 			default:
 				return t;
 		}
-
 		var label=VisualJS.setup.i18n.text[f];
+
 		if(typeof label==="undefined"){
 			return t;
 		}
@@ -221,7 +221,11 @@ var VisualJS={
 		if(typeof text==="undefined"){
 			return t;
 		}
-		return text[t.slice(4)-1]+" <span>"+t.slice(0,4)+"</span>";
+		var period=text[t.slice(4)-1];
+		if(typeof period==="undefined"){
+			return t;
+		}
+		return period+" <span>"+t.slice(0,4)+"</span>";
 	},
 
 	tooltipText: function(id, l, v) {
@@ -735,6 +739,7 @@ var VisualJS={
 						},
 						shlegend=true,
 						stack=false,
+						stacked=false, //if stacked was included when pyram, false it
 						lines=false,
 						points=false,
 						bars=false,
@@ -764,7 +769,7 @@ var VisualJS={
 					VisualJS.addJS( vsetup.lib.jquery.flot.categories, hasFlot ); //Check plugin only if we have Flot
 					var 
 						transform=function(d,t,b){
-							if(typeof b!=="object"){  //Without "by": simplified call
+							if(typeof b!=="object" || b===null){  //Without "by": simplified call
 								series=d;
 							}else{
 								//An array without "label" and "val"
