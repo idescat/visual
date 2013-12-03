@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.7.5",
+	version: "0.7.6",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -557,11 +557,14 @@ var VisualJS={
 						}else{
 							if(hasValues){
 								colorClass=function(g, v, p, inf, sup){
+									var value=v.get(p[map.id]);
+									if(inf===sup){ //No variation in the data: use centered color (quantize would return undefined)
+										return (typeof value!=="undefined") ? prefix + (num/2).toFixed(0) : null;
+									}
 									var 
 										quantize=d3.scale.quantize()
 											.domain([inf, sup])
-											.range(d3.range(num).map(function(i) { return prefix + i; })),
-										value=v.get(p[map.id])
+											.range(d3.range(num).map(function(i) { return prefix + i; }))
 									;
 									return quantize(value);
 								};
