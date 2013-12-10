@@ -22,15 +22,15 @@ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-var VisualJS={version:"0.7.6",show:!0,old:!1,fixed:null,width:500,bwidth:500,height:500,normal:500,scripts:[],ticks:[],map:{},container:{},func:{},callback:null,draw:function(){var t=!1
+var VisualJS={version:"0.7.7",show:!0,old:!1,fixed:null,width:500,bwidth:500,height:500,normal:500,scripts:[],ticks:[],map:{},container:{},func:{},callback:null,draw:function(){var t=!1
 "function"==typeof VisualJS.chart&&(VisualJS.tooltip(),VisualJS.show&&VisualJS.chart(),window.onresize=function(){VisualJS.canvas()},t=!0),null!==VisualJS.callback&&VisualJS.callback.call({id:VisualJS.id,chart:t})},tooltip:function(){var t=document
 if(!t.getElementById(VisualJS.setup.tooltipid)){var e=t.createElement("div")
 e.id=VisualJS.setup.tooltipid,e.style.display="none",t.body.appendChild(e)}},getsize:function(t){var e=VisualJS.setup,a=e.html,i=a.heading,l=a.footer,s=window,n=document,r=n.documentElement,o=n.getElementsByTagName("body")[0],u=n.getElementById(t),d=u.getElementsByTagName(i)[0].clientHeight,c=u.getElementsByTagName(l)[0].clientHeight,p=s.innerHeight||r.clientHeight||o.clientHeight
 "undefined"!=typeof p&&"undefined"!=typeof d&&"undefined"!=typeof c&&(null===VisualJS.fixed?(VisualJS.bwidth=s.innerWidth||r.clientWidth||o.clientWidth,VisualJS.width=VisualJS.bwidth-e.padding.w,VisualJS.height=p-e.padding.h-d-c):(VisualJS.bwidth=r.clientWidth||o.clientWidth,VisualJS.width=VisualJS.fixed[0]-e.padding.w,VisualJS.height=VisualJS.fixed[1]-e.padding.h-d-c)),VisualJS.visualsize=VisualJS.width<VisualJS.normal?e.mini:e.normal},atext:function(t){return String(t).replace(/&amp;/g,"&")},getHeading:function(t){if(VisualJS.autoheading===!1)return t.title
-var e=[],a=function(t,a){"string"==typeof t&&(a===!0&&(t='<span class="'+VisualJS.setup.nowrapclass+'">'+t+"</span>"),e.push(t))}
+var e=[],a=function(t,a){"string"==typeof t&&""!==t&&(a===!0&&(t='<span class="'+VisualJS.setup.nowrapclass+'">'+t+"</span>"),e.push(t))}
 if(null!==t.time&&"object"==typeof t.time)var i=VisualJS.tformat(t.time[0]),l=VisualJS.tformat(t.time[t.time.length-1]),s=i+"&ndash;"+l
 else var s=VisualJS.tformat(t.time)
-return a(t.title,!1),a(t.geo,!0),null!==s&&a(s,!0),VisualJS.atext(e.join(". "))},addJS:function(t,e){return e&&t.exists.call()?!1:(VisualJS.scripts.push(t.js),!0)},showTooltip:function(t,e,a){var i=document.getElementById(VisualJS.setup.tooltipid),l=VisualJS.bwidth-VisualJS.setup.margin,s={}
+return a(t.title,!1),a(t.geo,!0),a(s,!0),VisualJS.atext(e.join(". "))},addJS:function(t,e){return e&&t.exists.call()?!1:(VisualJS.scripts.push(t.js),!0)},showTooltip:function(t,e,a){var i=document.getElementById(VisualJS.setup.tooltipid),l=VisualJS.bwidth-VisualJS.setup.margin,s={}
 i.innerHTML=t,i.style.display="block"
 var n=i.clientWidth/2
 s.x=e-n,s.y=a-i.clientHeight-5,e+n>l?s.x-=e+n-l:s.x<VisualJS.setup.margin&&(s.x+=VisualJS.setup.margin-s.x),s.y<VisualJS.setup.margin&&(s.y+=1.75*i.clientHeight),i.style.left=s.x+"px",i.style.top=s.y+"px"},format:function(t){if("undefined"==typeof t||null===t)return VisualJS.setup.i18n.text.na[VisualJS.lang]

@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.7.6",
+	version: "0.7.7",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -109,7 +109,7 @@ var VisualJS={
 		var 
 			t=[],
 			add=function(s, nw){ 
-				if(typeof s==="string"){ 
+				if(typeof s==="string" && s!==""){ 
 					if(nw===true){
 						s='<span class="'+VisualJS.setup.nowrapclass+'">' + s + "</span>";
 					}
@@ -129,9 +129,8 @@ var VisualJS={
 
 		add(o.title, false);
 		add(o.geo, true);
-		if(time!==null) {
-			add(time, true);
-		}
+		add(time, true);
+
 		return  VisualJS.atext(t.join(". "));
 	},
 
