@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.7.7",
+	version: "0.7.8",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -46,9 +46,11 @@ var VisualJS={
 		if(typeof VisualJS.chart==="function"){ //can be undefined if "cmap" && old browser
 			VisualJS.tooltip();
 			VisualJS.show && VisualJS.chart();
-			window.onresize=function(){
-				VisualJS.canvas();
-			};
+			if(typeof window.onorientationchange!=="undefined"){
+				window.onorientationchange=VisualJS.canvas;
+			}else{
+				window.onresize=VisualJS.canvas;
+			}
 			chart=true;
 		}
 		if(VisualJS.callback!==null){
@@ -371,7 +373,11 @@ var VisualJS={
 		div.insertBefore(separator, span);
 
 		resize();
-		window.onresize=resize;
+		if(typeof window.onorientationchange!=="undefined"){
+			window.onorientationchange=resize;
+		}else{
+			window.onresize=resize;
+		}
 	},
 
 	//if o is array, then loop
