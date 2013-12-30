@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.7.8",
+	version: "0.7.9",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -79,19 +79,28 @@ var VisualJS={
 			e=d.documentElement,
 			g=d.getElementsByTagName("body")[0],
 			vis=d.getElementById(id),
-			h=vis.getElementsByTagName(headingElement)[0].clientHeight,
-			f=vis.getElementsByTagName(footerElement)[0].clientHeight,
-			bheight=w.innerHeight || e.clientHeight || g.clientHeight
+			head=vis.getElementsByTagName(headingElement)[0].clientHeight,
+			foot=vis.getElementsByTagName(footerElement)[0].clientHeight,
+			bheight=w.innerHeight || e.clientHeight || g.clientHeight,
+			headfoot=0 //To compensate absence of head or foot (dicrease height padding [default is vsetup.padding.h])
 		;
-		if(typeof bheight!=="undefined" && typeof h!=="undefined" && typeof f!=="undefined"){
+
+		if( !head ){
+			headfoot+=11;
+		}
+		if( !foot ){
+			headfoot+=11;
+		}
+
+		if(typeof bheight!=="undefined" && typeof head!=="undefined" && typeof foot!=="undefined"){
 			if(VisualJS.fixed===null){ //Normal case: full page for visualization (embedded via iframe)
 				VisualJS.bwidth=w.innerWidth || e.clientWidth || g.clientWidth;
 				VisualJS.width=VisualJS.bwidth-vsetup.padding.w;
-				VisualJS.height=bheight-vsetup.padding.h-h-f;
+				VisualJS.height=bheight-vsetup.padding.h-head-foot+headfoot;
 			}else{ //Embed visualization on a page via script
 				VisualJS.bwidth=e.clientWidth || g.clientWidth;
 				VisualJS.width=VisualJS.fixed[0]-vsetup.padding.w;
-				VisualJS.height=VisualJS.fixed[1]-vsetup.padding.h-h-f;
+				VisualJS.height=VisualJS.fixed[1]-vsetup.padding.h-head-foot+headfoot;
 			}
 		}
 
