@@ -1,6 +1,6 @@
 /*
 Visual
-Copyright (c) 2013 Institut d'Estadistica de Catalunya (Idescat)
+Copyright (c) 2014 Institut d'Estadistica de Catalunya (Idescat)
 http://www.idescat.cat (https://github.com/idescat/visual)
 
 Permission is hereby granted, free of charge, to any person obtaining
@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.7.9",
+	version: "0.7.10",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -341,13 +341,11 @@ var VisualJS={
 			resize=function(){
 				VisualJS.getsize(id);
 				var 
-					height=VisualJS.height+(vsetup.margin*2),
-					width=VisualJS.width+(vsetup.margin),
-					rule="iframe{ float: left; width: "+Math.floor((width-sepw)/2)+"px; height:"+height+"px; }" //Let's round it down instead of letting browsers use their own criterion
+					height=VisualJS.height+((typeof o.footer==="string" && o.footer!=="") ? 14 : 0),
+					width=VisualJS.width+vsetup.margin,
+					rule="iframe{ float: left; width: "+Math.floor(((width-sepw)/2)-vsetup.margin)+"px; height:"+height+"px; }" //Let's round it down instead of letting browsers use their own criterion
 				;
-				div.style.height=height+"px";
-				div.style.width=width+"px"; 
-				if (style.styleSheet){ //IE
+				if(style.styleSheet){ //IE
 					style.styleSheet.cssText=rule;
 				}else{
 					style.innerHTML=rule;
@@ -361,7 +359,6 @@ var VisualJS={
 		par.style.clear="both";
 		div.appendChild(h1);
 		div.appendChild(par);
-
 		d.getElementsByTagName("head")[0].appendChild(style);
 		separator.style.width=sepw+"px";
 		if("styleFloat" in separator.style) { //IE
@@ -380,7 +377,6 @@ var VisualJS={
 			VisualJS.iframe(o.load[i], css[i]);
 		}	
 		div.insertBefore(separator, span);
-
 		resize();
 		if(typeof window.onorientationchange!=="undefined"){
 			window.onorientationchange=resize;
