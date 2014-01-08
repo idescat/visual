@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013 Institut d'Estadistica de Catalunya (Idescat)
+Copyright (c) 2014 Institut d'Estadistica de Catalunya (Idescat)
 http://www.idescat.cat (https://github.com/idescat/visual)
 
 Permission is hereby granted, free of charge, to any person obtaining
@@ -367,5 +367,5 @@ VisualJS.setup={ //v.0.7.0
 		h: 45
 	},
 	//VisualJS.compare separator width
-	separator: 4
+	separator: 0
 };
