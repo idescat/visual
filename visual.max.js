@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.7.10",
+	version: "0.8.0",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -578,7 +578,7 @@ var VisualJS={
 									;
 									return quantize(value);
 								};
-								legend=VisualJS.func.legend;							
+								legend=VisualJS.func.legend;
 							}else{ 
 								colorClass=function(g, v, p){
 									return (v.get(p[map.id])!=="") ? "" : prefix+(num-1);
@@ -589,7 +589,7 @@ var VisualJS={
 							};
 						}
 
-						for (var i=0, odata=o.data, len=odata.length; i<len; i++){
+						for (var i=0, odata=o.data, nobs=odata.length; i<nobs; i++){
 							var r=odata[i];
 							if(r.hasOwnProperty("val")){
 								if(r.val!==null){ //Remove regions with val: null
@@ -604,6 +604,11 @@ var VisualJS={
 						val.sort(function(a, b) {
 							return a-b;
 						});
+
+						var 
+							minval=val[0],
+							maxval=val[nobs-1]
+						;
 
 						if(
 							Object.prototype.toString.call(o.filter)==="[object Array]" && 
@@ -648,16 +653,23 @@ var VisualJS={
 							.on("mouseout", function(){return tooltip.style("display", "none");})
 						;
 						if(VisualJS.legend && typeof map.legend==="object") { //If legend specified (array), draw it
-							legend(
-								id,
-								VisualJS.tooltipText(id, null, sup),
-								VisualJS.tooltipText(id, null, inf),
-								colors[colors.length-1],
-								colors[0],
+							legend( //new params since 0.8.0
+								[
+									VisualJS.tooltipText(id, null, inf),
+									VisualJS.tooltipText(id, null, sup)
+								],
+								[
+									colors[colors.length-1], //lighter color
+									colors[0] //darker color
+								],
 								vis,
 								tooltip,
 								map.area,
-								map.legend
+								map.legend,
+								[
+									inf<minval || VisualJS.format(inf)===VisualJS.format(minval),
+									sup>maxval || VisualJS.format(sup)===VisualJS.format(maxval)
+								]
 							);
 						}
 					};
