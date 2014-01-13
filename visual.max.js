@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.8.0",
+	version: "0.8.1",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -240,7 +240,7 @@ var VisualJS={
 
 	tooltipText: function(id, l, v) {
 		var
-			lab=" "+VisualJS.container[id].unit.label,
+			lab=(typeof v==="number") ? " "+VisualJS.container[id].unit.label : "",
 			si=(typeof v==="number") ? VisualJS.container[id].unit.symbol : "",
 			va=VisualJS.format(v),
 			t=(va!==	VisualJS.setup.i18n.text.na[VisualJS.lang]) ?
@@ -415,7 +415,7 @@ var VisualJS={
 		if(typeof o.fixed==="object"){
 			VisualJS.fixed=o.fixed;
 		}
-		if(typeof o.unit==="object"){
+		if(typeof o.unit==="object" && o.unit!==null){
 			VisualJS.container[VisualJS.id]={
 				unit: {
 					label: (typeof o.unit.label==="string") ? o.unit.label : scanvas.unit.label,
