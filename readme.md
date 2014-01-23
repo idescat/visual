@@ -177,7 +177,7 @@ Array of numbers or array of arrays. Required. If *by* has not been specified, t
 Array of strings. See the *data* property.
 
 #### range
-Array of numbers (minimun, maximum). The first element cannot be greater than 0 and must be lower than the second. This array sets the range of values of the y-axis.
+Array of numbers (minimun, maximum). The first element will be ignored (it is always zero) and must be lower than the second. This array sets the range of values of the y-axis.
 
 ### *rank* properties
 
