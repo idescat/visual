@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.8.1",
+	version: "0.8.2",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -408,7 +408,21 @@ var VisualJS={
 			scanvas=vsetup.canvas,
 			headingElement=html.heading,
 			footerElement=html.footer,
-			ie8=VisualJS.old||vsetup.func.old("ie9") //Means: less than IE9
+			ie8=VisualJS.old||vsetup.func.old("ie9"), //Means: less than IE9
+			isRange=function(r){
+				if (
+						typeof r!=="undefined" &&
+						Object.prototype.toString.call(r)==="[object Array]" && 
+						r.length===2 && 
+						typeof r[0]==="number" && 
+						typeof r[1]==="number" &&
+						r[0]<r[1]
+					){
+					return true;
+				}else{
+					return false;
+				}
+			}
 		;
 
 		VisualJS.id=(typeof o.id==="string") ? o.id : vsetup.id;
@@ -610,13 +624,7 @@ var VisualJS={
 							maxval=val[nobs-1]
 						;
 
-						if(
-							Object.prototype.toString.call(o.filter)==="[object Array]" && 
-							o.filter.length===2 && 
-							typeof o.filter[0]==="number" && 
-							typeof o.filter[1]==="number" &&
-							o.filter[0]<o.filter[1]
-						){
+						if( isRange(o.filter) ){
 							inf=o.filter[0];
 							sup=o.filter[1];
 						}else{
@@ -960,6 +968,10 @@ var VisualJS={
 							setup.yaxis.tickFormatter=function(val) {
 								return VisualJS.format(val);
 							}
+							if( isRange(o.range) ){
+								//setup.yaxis.min is not set because must be zero always
+								setup.yaxis.max=o.range[1]; //we don't check if max provided is greater than actual max
+							}								
 							$.plot(
 								canvas,
 								[series],
@@ -978,6 +990,12 @@ var VisualJS={
 								xticks=[],
 								digcrit="01" //first month
 							;
+
+							if( isRange(o.range) ){
+								setup.yaxis.min=o.range[0]; //we don't check if min provided is lower than actual min
+								setup.yaxis.max=o.range[1]; //we don't check if max provided is greater than actual max
+							}								
+
 							switch(VisualJS.ticks[0][1].length){ //Assuming all time periods follow the same pattern
 								case 4: //Annual time series (4 digits)
 									// Magic rule: Only one year of every two must be displayed if width (mini) is small in comparison with # of ticks
