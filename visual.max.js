@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.8.2",
+	version: "0.8.3",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -969,7 +969,7 @@ var VisualJS={
 								return VisualJS.format(val);
 							}
 							if( isRange(o.range) ){
-								//setup.yaxis.min is not set because must be zero always
+								setup.yaxis.min=o.range[0]; //we don't check if min provided is lower than actual min
 								setup.yaxis.max=o.range[1]; //we don't check if max provided is greater than actual max
 							}								
 							$.plot(
