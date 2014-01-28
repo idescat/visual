@@ -23,7 +23,7 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-var VisualJS={version:"0.8.4",show:!0,old:!1,fixed:null,width:500,bwidth:500,height:500,normal:500,scripts:[],ticks:[],map:{},container:{},func:{},callback:null,draw:function(){var t=!1
+var VisualJS={version:"0.8.5",show:!0,old:!1,fixed:null,width:500,bwidth:500,height:500,normal:500,scripts:[],ticks:[],map:{},container:{},func:{},callback:null,draw:function(){var t=!1
 "function"==typeof VisualJS.chart&&(VisualJS.tooltip(),VisualJS.show&&VisualJS.chart(),"undefined"!=typeof window.onorientationchange?window.onorientationchange=VisualJS.canvas:window.onresize=VisualJS.canvas,t=!0),null!==VisualJS.callback&&VisualJS.callback.call({id:VisualJS.id,chart:t})},tooltip:function(){var t=document
 if(!t.getElementById(VisualJS.setup.tooltipid)){var e=t.createElement("div")
 e.id=VisualJS.setup.tooltipid,e.style.display="none",t.body.appendChild(e)}},getsize:function(t){var e=VisualJS.setup,a=e.html,i=a.heading,l=a.footer,s=window,n=document,r=n.documentElement,o=n.getElementsByTagName("body")[0],u=n.getElementById(t),d=u.getElementsByTagName(i)[0].clientHeight,c=u.getElementsByTagName(l)[0].clientHeight,p=s.innerHeight||r.clientHeight||o.clientHeight,f=0
@@ -105,7 +105,7 @@ VisualJS.showTooltip(VisualJS.tooltipText(a,c?d+" ("+c+")":d,g),s.pageX,s.pageY)
 var a={colors:e.colors.series,series:{stack:V,bars:{show:x,barWidth:.7,align:"center",fill:.9},lines:{show:m},points:{show:b,radius:1}},legend:{show:y},grid:{borderWidth:VisualJS.grid.width,hoverable:!0,clickable:!1,mouseActiveRadius:10},xaxis:{show:VisualJS.axis.x},yaxis:{show:VisualJS.axis.y}}
 VisualJS.canvas=function(){$(o).html("<"+l+"></"+l+"><"+s+"></"+s+">"),$(o+" "+l).html(v),$(o+" "+s).html(VisualJS.atext(t.footer||"")),VisualJS.getsize(VisualJS.id),$(o+" "+l).after('<div class="'+e.canvasclass+" "+VisualJS.visualsize+'" style="width: '+VisualJS.width+"px; height: "+VisualJS.height+'px;"></div>')
 var i=f.length
-switch(t.type){case"pyram":a.series.pyramid={show:!0,barWidth:1},a.yaxis.show=VisualJS.height/p[0].data.length>11?f.slice(0):0,a.xaxis.max=1.02*J,a.xaxis.tickFormatter=function(t){return VisualJS.format(t)},$.plot(u,p,a)
+switch(t.type){case"pyram":a.series.pyramid={show:!0,barWidth:1},a.yaxis.show=VisualJS.height/p[0].data.length>11?VisualJS.axis.y:!1,a.xaxis.max=1.02*J,a.xaxis.tickFormatter=function(t){return VisualJS.format(t)},$.plot(u,p,a)
 break
 case"rank":a.series.bars.horizontal=!0,a.yaxis.ticks=VisualJS.height/i>11?f.slice(0):0,a.xaxis.max=1.02*t.data[0][1],a.xaxis.tickFormatter=function(t){return VisualJS.format(t)},a.yaxis.autoscaleMargin=0,a.series.bars.barWidth=.5,$.plot(u,[p],a)
 break
