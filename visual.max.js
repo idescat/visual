@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.8.3",
+	version: "0.8.4",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -768,6 +768,7 @@ var VisualJS={
 							for(var i=0, len=b.length; i<len; i++){
 								series[0].data[i]=[ b[i] , d[0].val[i] ];
 								series[1].data[i]=[ b[i] , d[1].val[i] ];
+								// ticks[i]=b[i]; ticks are not used
 							}
 						},
 						shlegend=true,
@@ -937,7 +938,9 @@ var VisualJS={
 					switch(o.type){
 						case "pyram":
 							setup.series.pyramid={show: true, barWidth: 1};
-							setup.xaxis.max=max*(1.02); //Increase area by 2% of the longest bar
+							//ticks are undefined for pyramid: we remove the Y-axis if too many categories. Instead of ticklen, series[0].data.length is used.
+							setup.yaxis.show=( (VisualJS.height/series[0].data.length) > 11) ? ticks.slice(0) : 0; //If too many categories and not enough height, remove y-labels
+							setup.xaxis.max=max*(1.02); //Increase area by 2% of the longest bar aqi
 							setup.xaxis.tickFormatter=function(val) {
 								return VisualJS.format(val);
 							}
