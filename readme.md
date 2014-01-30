@@ -24,7 +24,7 @@
 
 # Test
 
-Download the [full source and tests](https://github.com/idescat/visual/archive/master.zip) and try the examples in the [test folder](https://github.com/idescat/visual/tree/master/test).
+Download the [full source and tests](https://github.com/idescat/visual/archive/master.zip) and then start your browser and try the examples in the [test folder](https://github.com/idescat/visual/tree/master/test) or play with the [Visual Viewer](https://github.com/idescat/visual/tree/master/viewer/index.html).
 
 # Configuration
 
