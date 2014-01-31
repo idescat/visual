@@ -14,7 +14,8 @@ var
 	custom={
 		bar: {
 			time: year,
-			data: [ ["A", 7329], ["B", 30231], ["C", 6485] ]
+			data: [ ["A", 7329], ["B", 30231], ["C", 6485] ],
+			by: ""
 		},
 		rank: {
 			time: year,
