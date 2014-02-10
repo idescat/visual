@@ -556,7 +556,7 @@ Examples:  [adv-01.html](https://github.com/idescat/visual/blob/master/test/adv-
 In [simple mode](simple-mode), this function is used to embed visualizations. It accepts two arguments: a [visual object](#options) and a string (a CSS file address or CSS rules).
 
 ```js
-VisualJS.chart( {...} , "http://mydomain/path/iframe.css" );
+VisualJS.iframe( {...} , "http://mydomain/path/iframe.css" );
 ```
 
 Example: [simple.html](https://github.com/idescat/visual/blob/master/test/simple.html).
