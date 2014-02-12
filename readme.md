@@ -177,7 +177,7 @@ Array of numbers or array of arrays. Required. If *by* has not been specified, t
 Array of strings. See the *data* property.
 
 #### range
-Array of numbers (minimun, maximum). The first element must be lower than the second. This array sets the range of values of the y-axis.
+Array of numbers (minimun, maximum). The first element must be lower than the second. This array sets the range of the y-axis.
 
 ### *rank* properties
 
@@ -246,6 +246,9 @@ String. Time period.
 ####  data
 Array of arrays. Required. The first array contains as many elements as categories. Each element is an array of two elements: a string (label) and a number (value).
 
+#### range
+Array of numbers (minimun, maximum). The first element must be lower than the second. This array sets the range of the x-axis.
+
 ### *tsbar* properties
 
 Stacked/non-stacked time series (vertical bar chart).
@@ -297,7 +300,7 @@ Array of objects. Required. The array contains as many elements as series. Each 
 Boolean. Default: *false*. When bars are not stacked, only three series are allowed.
 
 #### range
-Array of numbers (minimun, maximum). The first element must be lower than the second. This array sets the range of values of the y-axis.
+Array of numbers (minimun, maximum). The first element must be lower than the second. This array sets the range of the y-axis.
 
 ### *tsline* properties
 
@@ -346,7 +349,7 @@ Array of strings. Required. Time periods.
 Array of objects. Required. The array contains as many elements as series. Each element is an object with two properties: *label* (string) and *val* (array of values).
 
 #### range
-Array of numbers (minimun, maximum). The first element must be lower than the second. This array sets the range of values of the y-axis.
+Array of numbers (minimun, maximum). The first element must be lower than the second. This array sets the range of the y-axis.
 
 ### *pyram* properties
 
@@ -398,6 +401,9 @@ Array of objects. Required. The array contains two elements: one for each sex. E
 
 #### by
 Array of strings. Required. Each element is an age label.
+
+#### range
+Array of numbers (minimun, maximum). The first element must be lower than the second and it will be ignored if it is different than zero (this is the only possible value when type is "pyram"). This array sets the range of the x-axis.
 
 ### *cmap* properties
 
