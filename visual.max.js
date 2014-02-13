@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.8.6",
+	version: "0.8.7",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -255,8 +255,7 @@ var VisualJS={
 		var
 			vsetup=VisualJS.setup,
 			clas=(typeof o.clas==="string") ? o.clas : vsetup.clas,
-			html="<html><head>",
-			old=vsetup.func.old("ie9"),
+			html='<!DOCTYPE html>\n<!--[if lt IE 7]><html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->\n<!--[if IE 7]><html class="lt-ie9 lt-ie8"> <![endif]-->\n<!--[if IE 8]><html class="lt-ie9"> <![endif]-->\n<!--[if gt IE 8]><!--> <html> <!--<![endif]-->\n<head>',
 			create=function(){
 				var 
 					d=document,
@@ -301,7 +300,7 @@ var VisualJS={
 		html+= '<script type="text/javascript" src="'+ VisualJS.setup.main.visual +'"><\/script>';
 		html+= '<script type="text/javascript" src="'+ VisualJS.setup.main.setup +'"><\/script>';
 		html+= '<script type="text/javascript" src="'+ VisualJS.setup.main.lazy +'"><\/script>';
-		html+= '<\/head><body><div id="'+ o.id +'" class="'+ clas +'"><\/div><script>window.setTimeout(function(){VisualJS.old='+ old +'; visual('+ JSON.stringify(o) +');},1);<\/script><\/body><\/html>';
+		html+= '<\/head><body><div id="'+ o.id +'" class="'+ clas +'"><\/div><script>window.setTimeout(function(){visual('+ JSON.stringify(o) +');},1);<\/script><\/body><\/html>';
 		content(create(), html);
 	},
 
