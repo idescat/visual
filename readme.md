@@ -243,7 +243,7 @@ String. Time period.
 Array of arrays. Required. The first array contains as many elements as categories. Each element is an array of two elements: a string (label) and a number (value).
 
 #### range
-Array of numbers (minimun, maximum). The first element must be lower than the second. This array sets the range of the x-axis.
+Number (multiplier) or array of numbers (minimun, maximum). By default, the multiplier is 1.02 (increase the x-axis by 2%). An array (where the first element must be lower than the second) can also be used to set the range of the x-axis.
 
 ### *tsbar* properties
 
@@ -399,7 +399,7 @@ Array of objects. Required. The array contains two elements: one for each sex. E
 Array of strings. Required. Each element is an age label.
 
 #### range
-Array of numbers (minimun, maximum). The first element must be lower than the second and it will be ignored if it is different than zero (this is the only possible value when type is "pyram"). This array sets the range of the x-axis.
+Number (multiplier) or array of numbers (minimun, maximum). By default, the multiplier is 1.02 (increase the x-axis by 2%). An array (where the first element must be lower than the second and it will be ignored if it is different than zero) can also be used to set the range of the x-axis.
 
 ### *cmap* properties
 
@@ -475,8 +475,11 @@ Object with at least one property: "label" (array of strings). Each element in t
 ####  by
 String. Required. Selects a certain map. Possible values ("mun", "com", "prov", etc.) are set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
 
-####  filter
+####  range
 Number or array. This determines the color assignation. When it is a number, it must be between 0 and 0.49. Default: 0.05, which means color assignation excludes values below the 5th percentile and above the 95th percentile. When it is an array, it defines a range: it has two and only two elements. The first (number) is a minimum and the second (number) is a maximum. Colors will be assigned between those values.
+
+####  filter
+Deprecated: see **range**.
 
 # Maps
 The following sample maps are provided:

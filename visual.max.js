@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.8.7",
+	version: "0.9.0",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -447,6 +447,22 @@ var VisualJS={
 		VisualJS.lang=o.lang || vsetup.i18n.lang;
 		VisualJS.callback=(typeof o.callback==="function") ? o.callback: VisualJS.callback;
 
+		//Backward compatibility (<0.9.0). filter is now deprecated and will be removed in next version
+		if(typeof o.filter!=="undefined"){
+			o.range=o.filter;
+		}
+
+		VisualJS.range=( typeof o.range==="number" || isRange(o.range) ) ? 
+			o.range 
+			: 
+			(
+				( scanvas.range.hasOwnProperty(o.type) && typeof scanvas.range[o.type]==="number" ) ?
+				scanvas.range[o.type]
+				:
+				null // Only possible if "bar", "tbar", tsline" as setup does not provide a default value (number)
+			)
+		;
+
 		if(typeof o.grid==="object"){
 			VisualJS.grid={
 				width: (typeof o.grid.width==="number") ? o.grid.width : scanvas.grid.width
@@ -536,8 +552,6 @@ var VisualJS={
 							legend=function(){},
 							colorClass,
 							groupLabel,
-							min=(typeof o.filter==="number") ? o.filter : scanvas.filter,
-							max=1-min,
 							inf,
 							sup,
 							hh=VisualJS.height/mheight,
@@ -623,12 +637,12 @@ var VisualJS={
 							maxval=val[nobs-1]
 						;
 
-						if( isRange(o.filter) ){
-							inf=o.filter[0];
-							sup=o.filter[1];
-						}else{
-							inf=d3.quantile(val, min);
-							sup=d3.quantile(val, max);
+						if( typeof VisualJS.range==="number" ){ //Number
+							inf=d3.quantile(val, VisualJS.range);
+							sup=d3.quantile(val, 1-VisualJS.range);
+						}else{ //isRange (can't be null)
+							inf=VisualJS.range[0];
+							sup=VisualJS.range[1];
 						}
 
 						vis.style("margin-left", left+"px");
@@ -939,7 +953,7 @@ var VisualJS={
 							setup.series.pyramid={show: true, barWidth: 1};
 							//ticks are undefined for pyramid: we remove the Y-axis if too many categories. Instead of ticklen, series[0].data.length is used.
 							setup.yaxis.show=( (VisualJS.height/series[0].data.length) > 11 ) ? VisualJS.axis.y : false; //If too many categories and not enough height, remove y-labels
-							setup.xaxis.max=( isRange(o.range) ) ? o.range[1] : max*(1.02); //min is ignored. If max is lower than actual max it will be discarded (but increase of 2% won't be applied). Otherwise: Increase area by 2% of the longest bar
+							setup.xaxis.max=(typeof VisualJS.range==="number") ? max*VisualJS.range : VisualJS.range[1]; //isRange (can't be null). min is ignored. If max is lower than actual max it will be discarded (but increase in VisualJS.range won't be applied). Otherwise: Increase area using VisualJS.range in the longest bar
 							setup.xaxis.tickFormatter=function(val) {
 								return VisualJS.format(val);
 							}
@@ -952,11 +966,11 @@ var VisualJS={
 						case "rank":
 							setup.series.bars.horizontal=true;
 							setup.yaxis.ticks=( (VisualJS.height/ticklen) > 11) ? ticks.slice(0) : 0; //If too many categories and not enough height, remove y-labels
-							if( isRange(o.range) ){
-								setup.xaxis.min=o.range[0]; //we don't check if min provided is lower than actual min
-								setup.xaxis.max=o.range[1]; //we don't check if max provided is greater than actual max
-							}else{
-								setup.xaxis.max=o.data[0][1]*(1.02); //Increase area by 2% of the longest bar
+							if(typeof VisualJS.range==="number"){
+								setup.xaxis.max=o.data[0][1]*VisualJS.range;
+							}else{ //isRange (can't be null)
+								setup.xaxis.min=VisualJS.range[0]; //we don't check if min provided is lower than actual min
+								setup.xaxis.max=VisualJS.range[1]; //we don't check if max provided is greater than actual max
 							}
 							setup.xaxis.tickFormatter=function(val) {
 								return VisualJS.format(val);
@@ -975,9 +989,9 @@ var VisualJS={
 							setup.yaxis.tickFormatter=function(val) {
 								return VisualJS.format(val);
 							}
-							if( isRange(o.range) ){
-								setup.yaxis.min=o.range[0]; //we don't check if min provided is lower than actual min
-								setup.yaxis.max=o.range[1]; //we don't check if max provided is greater than actual max
+							if(typeof VisualJS.range!=="number" && VisualJS.range!==null){ //isRange
+								setup.yaxis.min=VisualJS.range[0]; //we don't check if min provided is lower than actual min
+								setup.yaxis.max=VisualJS.range[1]; //we don't check if max provided is greater than actual max
 							}								
 							$.plot(
 								canvas,
@@ -998,10 +1012,10 @@ var VisualJS={
 								digcrit="01" //first month
 							;
 
-							if( isRange(o.range) ){
-								setup.yaxis.min=o.range[0]; //we don't check if min provided is lower than actual min
-								setup.yaxis.max=o.range[1]; //we don't check if max provided is greater than actual max
-							}								
+							if(typeof VisualJS.range!=="number" && VisualJS.range!==null){ //isRange
+								setup.yaxis.min=VisualJS.range[0]; //we don't check if min provided is lower than actual min
+								setup.yaxis.max=VisualJS.range[1]; //we don't check if max provided is greater than actual max
+							}
 
 							switch(VisualJS.ticks[0][1].length){ //Assuming all time periods follow the same pattern
 								case 4: //Annual time series (4 digits)

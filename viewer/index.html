@@ -51,10 +51,9 @@
 					<legend>Layout</legend>
 					<label class="tsbar tsline pyram cmap"><input type="checkbox" name="legend" checked="checked" /> legend</label>
 					<label class="tsbar"><input type="checkbox" name="stacked" />stacked</label>
-					<label class="tsbar tsline bar rank pyram"> value range <input class="range" type="text" name="rangemin" value="" /> &ndash; <input class="range" type="text" name="rangemax" value="" /></label>
+					<label class="tsbar tsline bar pyram rank cmap">range <input type="text" name="range" value="" /></label>
 					<label class="tsbar tsline bar pyram rank"><input type="checkbox" name="x" checked="checked" /> x-axis</label>
 					<label class="tsbar tsline bar pyram rank"><input type="checkbox" name="y" checked="checked" /> y-axis</label>
-					<label class="cmap">filter <input type="text" name="filter" value="0.05" /></label>
 					<label class="tsbar tsline bar pyram rank right">grid width <input type="number" name="width" value="0" /></label>
 				</fieldset>
 
@@ -134,7 +133,7 @@
 				var 
 					f=input[i],
 					//FF does not support "number" returns type "text".
-					type=(f.name==="dec" || f.name==="width") ? "number" : ( (f.name==="rangemin" || f.name==="rangemax") ? "anynumber" : f.type)
+					type=(f.name==="dec" || f.name==="width") ? "number" : f.type
 				;
 
 				switch(type){
@@ -142,17 +141,17 @@
 						try{
 							params[f.name]=JSON.parse( f.value.replace( /'/g, '"' ) );
 							if(typeof params[f.name]!=="object"){ //time can be an array or a string: when a string parse() can convert to number if possible, but we don't want that
-								params[f.name]=(f.name!=="filter") ? String(params[f.name]) : params[f.name];
+								params[f.name]=(f.name!=="range") ? String(params[f.name]) : params[f.name];
 							}
 						}catch(e){
-							//Real text (or number: rangemin, rangemax)
+							//Real text (or number: rangemin, rangemax [not used anymore])
 							params[f.name]=( f.value!=="" ) ? f.value : null;
 						}
 						break;
 					case "number": //positive integer
 						params[f.name]=toPosInt( f.value );
 						break;
-					case "anynumber":
+					case "anynumber": //not used anymore
 						params[f.name]=(f.value!=="") ? Number(f.value) : null;
 						break;
 					case "checkbox":
@@ -186,6 +185,9 @@
 			}
 			$("#visual+iframe").remove();
 
+			$("input[name=range]").attr("title",  title.range[params["type"]])
+
+
 			VisualJS.iframe(
 				{
 					id: "visual",
@@ -203,8 +205,7 @@
 					stacked: params["stacked"],
 					grid: { width: params["width"] },
 					axis: { x: params["x"], y: params["y"] },
-					filter: params["filter"],
-					range: [ params["rangemin"], params["rangemax"] ],
+					range: params["range"],
 					grouped: params["grouped"] || {},
 
 					type: params["type"],
@@ -223,9 +224,6 @@
 			}
 
 			//Composed properties
-			if(params["rangemin"]!==null && params["rangemax"]!==null){
-				code.push('range: ['+params["rangemin"]+','+params["rangemax"]+'],');
-			}
 			if(params["width"]!==VisualJS.setup.canvas.grid.width){
 				code.push('grid: {width: '+params["width"]+'},');
 			}

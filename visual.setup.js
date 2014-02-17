@@ -22,11 +22,11 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-VisualJS.setup={ //v.0.7.0
+VisualJS.setup={ //v.0.9.0
 	//Colors for maps and series
 	colors: {
 		map: {
-			max: 100,
+			max: 100, //If not enough colors, legend is deceiving and it's better to remove it
 			base: "#09111a"
 		},
 		series: ["#2b527b", "#a52a2a", "#008000", "#ffbf00"]	
@@ -48,7 +48,18 @@ VisualJS.setup={ //v.0.7.0
 		},
 		dec: null, //Show only needed decimals (remove ending zeros) unless (recommended) valid dec has been specified by user
 		autoheading: true,
-		filter: 0.05 //Used in color assignation in maps
+
+		filter: 0.05, //Deprecated. Now in range.cmap. It'll be removed in next version
+		//Arrays are not accepted here. "bar", "tsline" and "tsbar" currently don't accept a number.
+
+		range: {
+			//Quantile. No filtering: 0
+			cmap: 0.05, //Used in color assignation in maps
+
+			//Multiplier. No filtering: 1
+			rank: 1.02, //Increase area horizontally by 2% of the longest bar
+			pyram: 1.02 //Increase area horizontally by 2% of the longest bar
+		}
 	},
 
 	//Internationalization options

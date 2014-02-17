@@ -4,12 +4,23 @@ var
 	defaults={
 		autoheading: VisualJS.setup.canvas.autoheading,
 		legend: VisualJS.setup.canvas.legend,
-		filter: VisualJS.setup.canvas.filter,
 		dec: VisualJS.setup.canvas.dec,
 		stacked: false
 	},
 
-	simple=["title", "geo", "footer", "dec", "autoheading", "legend", "stacked", "filter", "grouped", "type", "by", "time", "data"],
+	title={
+		range: {
+			"rank": "[min, max] or multiplier (default, "+VisualJS.setup.canvas.range.rank+"; cancel with 1)",
+			"pyram": "[0, max] or multiplier (default, "+VisualJS.setup.canvas.range.pyram+"; cancel with 1)",
+			"cmap":  "[min, max] or quantile (default, "+VisualJS.setup.canvas.range.cmap+"; cancel with 0)",
+			
+			"bar":  "[min, max]",
+			"tsline":  "[min, max]",
+			"tsbar":  "[min, max]"
+		}
+	},
+
+	simple=["title", "geo", "footer", "dec", "autoheading", "legend", "stacked", "range", "grouped", "type", "by", "time", "data"],
 
 	custom={
 		bar: {
