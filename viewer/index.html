@@ -176,6 +176,10 @@
 
 			if(last!==params["type"]){
 				addCustom(params["type"]);
+
+				$("input[name=range]").attr("title",  title.range[params["type"]]).val("");
+				params["range"]="";
+
 				last=params["type"];
 			}
 
@@ -184,9 +188,6 @@
 				params["grouped"]=jsonify( $( "input[name=grouped]" ) );
 			}
 			$("#visual+iframe").remove();
-
-			$("input[name=range]").attr("title",  title.range[params["type"]])
-
 
 			VisualJS.iframe(
 				{
