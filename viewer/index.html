@@ -98,7 +98,7 @@
 					}
 				}else{
 					s=s.replace(/({|}|,|\[|\])/g, "$1\n")
-					html+='<textarea title="data" name="data">'+s+'</textarea>';
+					html+='<textarea title="data" name="data" spellcheck="false" lang="">'+s+'</textarea>';
 				}
 				params[j]=custom[i][j];
 			}
