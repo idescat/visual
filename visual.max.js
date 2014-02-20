@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.9.0",
+	version: "0.9.1",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -446,12 +446,6 @@ var VisualJS={
 		VisualJS.legend=(typeof o.legend==="boolean") ? o.legend: scanvas.legend;
 		VisualJS.lang=o.lang || vsetup.i18n.lang;
 		VisualJS.callback=(typeof o.callback==="function") ? o.callback: VisualJS.callback;
-
-		//Backward compatibility (<0.9.0). filter is now deprecated and will be removed in next version
-		if(typeof o.filter!=="undefined"){
-			o.range=o.filter;
-		}
-
 		VisualJS.range=( typeof o.range==="number" || isRange(o.range) ) ? 
 			o.range 
 			: 
@@ -817,12 +811,15 @@ var VisualJS={
 					var 
 						transform=function(d,t,b){
 							if(typeof b!=="object" || b===null){  //Without "by": simplified call
-								series=d;
+								//was simply series=d
+								for(var i=0, len=d.length; i<len; i++){
+									series[i]=[ '<span style="padding: 0 2.5em">'+d[i][0]+'</span>' , d[i][1] ]; //Temporary solution to avoid x-axis label overlapping
+								}
 							}else{
 								//An array without "label" and "val"
 								if(typeof d[0]==="number"){
 									for(var i=0, len=b.length; i<len; i++){
-										series[i]=[ b[i] , d[i] ];
+										series[i]=[ '<span style="padding: 0 2.5em">'+b[i]+'</span>' , d[i] ]; //Temporary solution to avoid x-axis label overlapping
 									}
 								}
 								//Pending: An array with "label" and "val" for multiple bars per category...
@@ -916,7 +913,7 @@ var VisualJS={
 								show: bars,
 								barWidth: 0.7,
 								align: "center",
-								fill: 0.9 
+								fill: 0.9
 							},
 							lines: {
 								show: lines
