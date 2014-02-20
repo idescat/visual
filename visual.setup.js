@@ -49,9 +49,7 @@ VisualJS.setup={ //v.0.9.0
 		dec: null, //Show only needed decimals (remove ending zeros) unless (recommended) valid dec has been specified by user
 		autoheading: true,
 
-		filter: 0.05, //Deprecated. Now in range.cmap. It'll be removed in next version
 		//Arrays are not accepted here. "bar", "tsline" and "tsbar" currently don't accept a number.
-
 		range: {
 			//Quantile. No filtering: 0
 			cmap: 0.05, //Used in color assignation in maps
@@ -169,199 +167,199 @@ VisualJS.setup={ //v.0.9.0
 	map: {
 		mun: {
 			js: "../maps/cat2013mun.js",
-			exists: function(){ return typeof VisualJS.map.mun!=="undefined" && VisualJS.map.mun.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.mun!=="undefined"; }
 		},
 		com: {
 			js: "../maps/cat2013com.js",
-			exists: function(){ return typeof VisualJS.map.com!=="undefined" && VisualJS.map.com.id==="COMARCA"; }
+			exists: function(){ return typeof VisualJS.map.com!=="undefined"; }
 		},
 		prov: {
 			js: "../maps/cat2013prov.js",
-			exists: function(){ return typeof VisualJS.map.prov!=="undefined" && VisualJS.map.prov.id==="PROVINCIA"; }
+			exists: function(){ return typeof VisualJS.map.prov!=="undefined"; }
 		},
 		usastates: {
 			js: "../maps/usa2013states.js",
-			exists: function(){ return typeof VisualJS.map.usastates!=="undefined" && VisualJS.map.usastates.id==="STATE"; }
+			exists: function(){ return typeof VisualJS.map.usastates!=="undefined"; }
 		},
 		com01: {
 			js: "../maps/com012013mun.js",
-			exists: function(){ return typeof VisualJS.map.com01!=="undefined" && VisualJS.map.com01.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com01!=="undefined"; }
 		},
 		com02: {
 			js: "../maps/com022013mun.js",
-			exists: function(){ return typeof VisualJS.map.com02!=="undefined" && VisualJS.map.com02.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com02!=="undefined"; }
 		},
 		com03: {
 			js: "../maps/com032013mun.js",
-			exists: function(){ return typeof VisualJS.map.com03!=="undefined" && VisualJS.map.com03.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com03!=="undefined"; }
 		},
 		com04: {
 			js: "../maps/com042013mun.js",
-			exists: function(){ return typeof VisualJS.map.com04!=="undefined" && VisualJS.map.com04.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com04!=="undefined"; }
 		},
 		com05: {
 			js: "../maps/com052013mun.js",
-			exists: function(){ return typeof VisualJS.map.com05!=="undefined" && VisualJS.map.com05.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com05!=="undefined"; }
 		},
 		com06: {
 			js: "../maps/com062013mun.js",
-			exists: function(){ return typeof VisualJS.map.com06!=="undefined" && VisualJS.map.com06.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com06!=="undefined"; }
 		},
 		com07: {
 			js: "../maps/com072013mun.js",
-			exists: function(){ return typeof VisualJS.map.com07!=="undefined" && VisualJS.map.com07.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com07!=="undefined"; }
 		},
 		com08: {
 			js: "../maps/com082013mun.js",
-			exists: function(){ return typeof VisualJS.map.com08!=="undefined" && VisualJS.map.com08.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com08!=="undefined"; }
 		},
 		com09: {
 			js: "../maps/com092013mun.js",
-			exists: function(){ return typeof VisualJS.map.com09!=="undefined" && VisualJS.map.com09.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com09!=="undefined"; }
 		},
 		com10: {
 			js: "../maps/com102013mun.js",
-			exists: function(){ return typeof VisualJS.map.com10!=="undefined" && VisualJS.map.com10.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com10!=="undefined"; }
 		},
 		com11: {
 			js: "../maps/com112013mun.js",
-			exists: function(){ return typeof VisualJS.map.com11!=="undefined" && VisualJS.map.com11.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com11!=="undefined"; }
 		},
 		com12: {
 			js: "../maps/com122013mun.js",
-			exists: function(){ return typeof VisualJS.map.com12!=="undefined" && VisualJS.map.com12.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com12!=="undefined"; }
 		},
 		com13: {
 			js: "../maps/com132013mun.js",
-			exists: function(){ return typeof VisualJS.map.com13!=="undefined" && VisualJS.map.com13.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com13!=="undefined"; }
 		},
 		com14: {
 			js: "../maps/com142013mun.js",
-			exists: function(){ return typeof VisualJS.map.com14!=="undefined" && VisualJS.map.com14.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com14!=="undefined"; }
 		},
 		com15: {
 			js: "../maps/com152013mun.js",
-			exists: function(){ return typeof VisualJS.map.com15!=="undefined" && VisualJS.map.com15.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com15!=="undefined"; }
 		},
 		com16: {
 			js: "../maps/com162013mun.js",
-			exists: function(){ return typeof VisualJS.map.com16!=="undefined" && VisualJS.map.com16.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com16!=="undefined"; }
 		},
 		com17: {
 			js: "../maps/com172013mun.js",
-			exists: function(){ return typeof VisualJS.map.com17!=="undefined" && VisualJS.map.com17.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com17!=="undefined"; }
 		},
 		com18: {
 			js: "../maps/com182013mun.js",
-			exists: function(){ return typeof VisualJS.map.com18!=="undefined" && VisualJS.map.com18.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com18!=="undefined"; }
 		},
 		com19: {
 			js: "../maps/com192013mun.js",
-			exists: function(){ return typeof VisualJS.map.com19!=="undefined" && VisualJS.map.com19.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com19!=="undefined"; }
 		},		
 		com20: {
 			js: "../maps/com202013mun.js",
-			exists: function(){ return typeof VisualJS.map.com20!=="undefined" && VisualJS.map.com20.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com20!=="undefined"; }
 		},
 		com21: {
 			js: "../maps/com212013mun.js",
-			exists: function(){ return typeof VisualJS.map.com21!=="undefined" && VisualJS.map.com21.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com21!=="undefined"; }
 		},
 		com22: {
 			js: "../maps/com222013mun.js",
-			exists: function(){ return typeof VisualJS.map.com22!=="undefined" && VisualJS.map.com22.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com22!=="undefined"; }
 		},
 		com23: {
 			js: "../maps/com232013mun.js",
-			exists: function(){ return typeof VisualJS.map.com23!=="undefined" && VisualJS.map.com23.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com23!=="undefined"; }
 		},
 		com24: {
 			js: "../maps/com242013mun.js",
-			exists: function(){ return typeof VisualJS.map.com24!=="undefined" && VisualJS.map.com24.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com24!=="undefined"; }
 		},
 		com25: {
 			js: "../maps/com252013mun.js",
-			exists: function(){ return typeof VisualJS.map.com25!=="undefined" && VisualJS.map.com25.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com25!=="undefined"; }
 		},
 		com26: {
 			js: "../maps/com262013mun.js",
-			exists: function(){ return typeof VisualJS.map.com26!=="undefined" && VisualJS.map.com26.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com26!=="undefined"; }
 		},
 		com27: {
 			js: "../maps/com272013mun.js",
-			exists: function(){ return typeof VisualJS.map.com27!=="undefined" && VisualJS.map.com27.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com27!=="undefined"; }
 		},
 		com28: {
 			js: "../maps/com282013mun.js",
-			exists: function(){ return typeof VisualJS.map.com28!=="undefined" && VisualJS.map.com28.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com28!=="undefined"; }
 		},
 		com29: {
 			js: "../maps/com292013mun.js",
-			exists: function(){ return typeof VisualJS.map.com29!=="undefined" && VisualJS.map.com29.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com29!=="undefined"; }
 		},
 		com30: {
 			js: "../maps/com302013mun.js",
-			exists: function(){ return typeof VisualJS.map.com30!=="undefined" && VisualJS.map.com30.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com30!=="undefined"; }
 		},
 		com31: {
 			js: "../maps/com312013mun.js",
-			exists: function(){ return typeof VisualJS.map.com31!=="undefined" && VisualJS.map.com31.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com31!=="undefined"; }
 		},
 		com32: {
 			js: "../maps/com322013mun.js",
-			exists: function(){ return typeof VisualJS.map.com32!=="undefined" && VisualJS.map.com32.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com32!=="undefined"; }
 		},
 		com33: {
 			js: "../maps/com332013mun.js",
-			exists: function(){ return typeof VisualJS.map.com33!=="undefined" && VisualJS.map.com33.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com33!=="undefined"; }
 		},
 		com34: {
 			js: "../maps/com342013mun.js",
-			exists: function(){ return typeof VisualJS.map.com34!=="undefined" && VisualJS.map.com34.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com34!=="undefined"; }
 		},
 		com35: {
 			js: "../maps/com352013mun.js",
-			exists: function(){ return typeof VisualJS.map.com35!=="undefined" && VisualJS.map.com35.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com35!=="undefined"; }
 		},
 		com36: {
 			js: "../maps/com362013mun.js",
-			exists: function(){ return typeof VisualJS.map.com36!=="undefined" && VisualJS.map.com36.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com36!=="undefined"; }
 		},
 		com37: {
 			js: "../maps/com372013mun.js",
-			exists: function(){ return typeof VisualJS.map.com37!=="undefined" && VisualJS.map.com37.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com37!=="undefined"; }
 		},
 		com38: {
 			js: "../maps/com382013mun.js",
-			exists: function(){ return typeof VisualJS.map.com38!=="undefined" && VisualJS.map.com38.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com38!=="undefined"; }
 		},
 		com39: {
 			js: "../maps/com392013mun.js",
-			exists: function(){ return typeof VisualJS.map.com39!=="undefined" && VisualJS.map.com39.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com39!=="undefined"; }
 		},
 		com40: {
 			js: "../maps/com402013mun.js",
-			exists: function(){ return typeof VisualJS.map.com40!=="undefined" && VisualJS.map.com40.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com40!=="undefined"; }
 		},
 		com41: {
 			js: "../maps/com412013mun.js",
-			exists: function(){ return typeof VisualJS.map.com41!=="undefined" && VisualJS.map.com41.id==="MUNICIPI"; }
+			exists: function(){ return typeof VisualJS.map.com41!=="undefined"; }
 		},
 		prov08: {
 			js: "../maps/prov082013mun.js",
-			exists: function(){ return typeof VisualJS.map.prov08!=="undefined" && VisualJS.map.prov08.id==="PROVINCIA"; }
+			exists: function(){ return typeof VisualJS.map.prov08!=="undefined"; }
 		},
 		prov17: {
 			js: "../maps/prov172013mun.js",
-			exists: function(){ return typeof VisualJS.map.prov17!=="undefined" && VisualJS.map.prov17.id==="PROVINCIA"; }
+			exists: function(){ return typeof VisualJS.map.prov17!=="undefined"; }
 		},
 		prov25: {
 			js: "../maps/prov252013mun.js",
-			exists: function(){ return typeof VisualJS.map.prov25!=="undefined" && VisualJS.map.prov25.id==="PROVINCIA"; }
+			exists: function(){ return typeof VisualJS.map.prov25!=="undefined"; }
 		},
 		prov43: {
 			js: "../maps/prov432013mun.js",
-			exists: function(){ return typeof VisualJS.map.prov43!=="undefined" && VisualJS.map.prov43.id==="PROVINCIA"; }
+			exists: function(){ return typeof VisualJS.map.prov43!=="undefined"; }
 		}		
 		
 	},
