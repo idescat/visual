@@ -50,7 +50,7 @@ If you are embedding more than one visualization in the page, LazyLoad will only
 
 # Options
 
-**Visual** is executed by passing a visual object to the *visual* function.
+**Visual** is executed by passing a visual object, or an array of visual objects, to the *visual* function.
 
 ```js
 visual( {...} )
@@ -477,9 +477,6 @@ String. Required. Selects a certain map. Possible values ("mun", "com", "prov", 
 
 ####  range
 Number or array. This determines the color assignation. When it is a number, it must be between 0 and 0.49. Default: 0.05, which means color assignation excludes values below the 5th percentile and above the 95th percentile. When it is an array, it defines a range: it has two and only two elements. The first (number) is a minimum and the second (number) is a maximum. Colors will be assigned between those values.
-
-####  filter
-Deprecated: see **range**.
 
 # Maps
 The following sample maps are provided:
