@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.9.1",
+	version: "0.9.2",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -459,7 +459,10 @@ var VisualJS={
 
 		if(typeof o.grid==="object"){
 			VisualJS.grid={
-				width: (typeof o.grid.width==="number") ? o.grid.width : scanvas.grid.width
+				width: (typeof o.grid.width==="number") ? o.grid.width : scanvas.grid.width,
+				shadow:  (typeof o.grid.shadow==="number") ? o.grid.shadow : (typeof scanvas.grid.shadow==="number" ? scanvas.grid.shadow : 4), //It will be replaced in next release by: shadow:  (typeof o.grid.shadow==="number") ? o.grid.shadow : scanvas.grid.shadow
+				line:  (typeof o.grid.line==="number") ? o.grid.line : (typeof scanvas.grid.line==="number" ? scanvas.grid.line : 2), //It will be replaced in next release by: line:  (typeof o.grid.line==="number") ? o.grid.line : scanvas.grid.line
+				point:  (typeof o.grid.point==="number") ? o.grid.point : (typeof scanvas.grid.point==="number" ? scanvas.grid.point : 1)  //It will be replaced in next release by: point:  (typeof o.grid.point==="number") ? o.grid.point : scanvas.grid.point
 			};
 		}else{
 			VisualJS.grid=scanvas.grid;
@@ -749,7 +752,7 @@ var VisualJS={
 									data: series[i].data,
 									label: series[i].label,
 									bars: fbars(series[i]),
-									shadowSize: 4
+									shadowSize: VisualJS.grid.shadow
 								}
 							);
 						}
@@ -916,11 +919,12 @@ var VisualJS={
 								fill: 0.9
 							},
 							lines: {
-								show: lines
+								show: lines,
+								lineWidth: VisualJS.grid.line
 							},
 							points: {
 								show: points,
-								radius: 1
+								radius: VisualJS.grid.point
 							}
 						},
 						legend: {

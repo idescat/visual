@@ -90,7 +90,7 @@ Boolean. This determines whether the heading is built by composition from "title
 Boolean. This determines whether the chart legend should be shown. Default (*true*) is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
 
 #### grid
-Object with a single property: *width* (number). Default width (*0*) is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
+Object with the following properties: *width* (number: grid border width), *line* (number: line width), *shadow* (number: line shadow width) and *point* (number: point radius). Default width (*0*), line (*2*), shadow (*4*) and point (*1*) are set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
 
 #### axis
 Object with two properties: *x* (boolean) and *y* (boolean).  These determine whether the axes should be shown. Default (*true*) is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).

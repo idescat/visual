@@ -22,12 +22,15 @@ h1 a:visited {
 	padding: 30px;
 	background-color: #f6f6f6;
 }
-label {
-	margin-right: 0.5em;
-}
 .right {
 	display: inline-block;
 	float: right;
+}
+label {
+	margin-right: 0.5em;
+}
+.right label {
+	margin-right: 0.2em;
 }
 #version {
 	color: #999;
@@ -53,6 +56,10 @@ input {
 input[type=number] {
 	width: 3em;
 }
+.right input[type=number] {
+	width: 30px;
+}
+
 input[type=text] {
 	width: 188px;
 }

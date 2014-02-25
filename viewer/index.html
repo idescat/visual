@@ -54,7 +54,13 @@
 					<label class="tsbar tsline bar pyram rank"><input type="checkbox" name="y" checked="checked" /> y-axis</label>
 					<label class="tsbar tsline pyram cmap"><input type="checkbox" name="legend" checked="checked" /> legend</label>
 					<label class="tsbar"><input type="checkbox" name="stacked" />stacked</label>
-					<label class="tsbar tsline bar pyram rank right">grid width <input type="number" name="width" value="0" /></label>
+
+					<div class="right">
+						<label class="tsbar tsline bar pyram rank right" title="border">B <input type="number" name="width" value="0" /></label>
+						<label class="tsline" title="line">L <input type="number" name="line" value="2" /></label>
+						<label class="tsline" title="point">P <input type="number" name="point" value="1" /></label>
+						<label class="tsline" title="shadow">S <input type="number" name="shadow" value="4" /></label>
+					</div>
 				</fieldset>
 
 				<fieldset id="data">
@@ -133,7 +139,7 @@
 				var 
 					f=input[i],
 					//FF does not support "number" returns type "text".
-					type=(f.name==="dec" || f.name==="width") ? "number" : f.type
+					type=(f.name==="dec" || f.name==="width" || f.name==="shadow" || f.name==="line" || f.name==="point") ? "number" : f.type
 				;
 
 				switch(type){
@@ -204,7 +210,7 @@
 
 					legend: params["legend"],
 					stacked: params["stacked"],
-					grid: { width: params["width"] },
+					grid: { width: params["width"], shadow: params["shadow"], line: params["line"], point: params["point"] },
 					axis: { x: params["x"], y: params["y"] },
 					range: params["range"],
 					grouped: params["grouped"] || {},
@@ -225,8 +231,8 @@
 			}
 
 			//Composed properties
-			if(params["width"]!==VisualJS.setup.canvas.grid.width){
-				code.push('grid: {width: '+params["width"]+'},');
+			if(params["width"]!==VisualJS.setup.canvas.grid.width || params["shadow"]!==VisualJS.setup.canvas.grid.shadow || params["line"]!==VisualJS.setup.canvas.grid.line || params["point"]!==VisualJS.setup.canvas.grid.point){
+				code.push('grid: {width: '+params["width"]+', line: '+params["line"]+', shadow: '+params["shadow"]+', point: '+params["point"]+'},');
 			}
 			if(params["x"]!==VisualJS.setup.canvas.axis.x || params["y"]!==VisualJS.setup.canvas.axis.y){
 				code.push('axis: {x: '+params["x"]+', y: '+params["y"]+'},');
