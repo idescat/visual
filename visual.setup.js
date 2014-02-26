@@ -22,7 +22,7 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-VisualJS.setup={ //v.0.9.2
+VisualJS.setup={ //v.0.9.3
 	//Colors for maps and series
 	colors: {
 		map: {
@@ -40,7 +40,7 @@ VisualJS.setup={ //v.0.9.2
 		},
 		legend: true,
 		grid: {
-			width: 0, //grid border width
+			border: 0, //grid border width
 			shadow: 4, //line shadow width
 			line: 2, //line width
 			point: 1 //point radius
