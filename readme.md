@@ -4,7 +4,7 @@
 * [Test](#test)
 * [Configuration](#configuration)
 * [Installation](#installation)
-* [Options](#options)
+* [The Visual object](#the-visual-object)
 * [Maps](#maps)
 * [Public functions](#public-functions)
 * [Dependencies](#dependencies)
@@ -40,7 +40,7 @@ In webpage mode, the visualization is the only content on an html5 page. Use the
 
 ### Simple mode
 
-In simple mode, the visualization is embedded in a page using the [VisualJS.iframe](#visualjsiframe) function. Use the [simple template](https://github.com/idescat/visual/blob/master/templates/simple.html) to build your page. To embed the visualization, include the visual.js and visual.setup.js files and use a script tag with a unique ID and invoke [VisualJS.iframe](#visualjsiframe) passing a visual object (with the same ID as the script tag) and a CSS file (or CSS rules) ([example](https://github.com/idescat/visual/blob/master/test/simple.html)).
+In simple mode, the visualization is embedded in a page using the [VisualJS.iframe](#visualjsiframe) function. Use the [simple template](https://github.com/idescat/visual/blob/master/templates/simple.html) to build your page. To embed the visualization, include the visual.js and visual.setup.js files and use a script tag with a unique ID and invoke [VisualJS.iframe](#visualjsiframe) passing a [visual object](#the-visual-object) (with the same ID as the script tag) and a CSS file (or CSS rules) ([example](https://github.com/idescat/visual/blob/master/test/simple.html)).
 
 ### Manual mode
 
@@ -48,7 +48,7 @@ In manual mode, the visualization is directly embedded in a page. Use the [manua
 
 If you are embedding more than one visualization in the page, LazyLoad will only include the javascripts needed for the first visualization in the **visual** function. Instead, include all the needed javascripts manually. Do not include LazyLoad. You will also need to specify an *id* and its size (in the *fixed* property: *[width, height]*) for each visualization.
 
-# Options
+# The Visual object
 
 **Visual** is executed by passing a visual object, or an array of visual objects, to the *visual* function.
 
@@ -119,6 +119,8 @@ Array. In [simple mode](#simple-mode) and [manual mode](#manual-mode), this is t
 Function. This function will be called after the chart has been drawn. The *this* keyword will point to an object with two properties: "id" (the chart's id: string) and "chart" (a boolean indicating whether the chart is drawable or not: if false, [VisualJS.chart](#visualjschart) would not be defined).
 
 Examples:  [adv-01.html](https://github.com/idescat/visual/blob/master/test/adv-01.html), [adv-02.html](https://github.com/idescat/visual/blob/master/test/adv-02.html), [adv-03.html](https://github.com/idescat/visual/blob/master/test/adv-03.html).
+
+This property will be ignored if it is included in a visual object passed to [VisualJS.iframe](#visualjsiframe).
 
 #### show
 Boolean. This determines whether the chart should be shown. When *false*, all the necessary files will be included but the chart will not be inserted: you will need to use a callback function that executes [VisualJS.chart](#visualjschart) at some point. Default is *true*.
@@ -533,7 +535,7 @@ Once your map has been added to [visual.setup.js](https://github.com/idescat/vis
 
 ## VisualJS.load
 
-This is the main function. It loads the data and, if the property **show** is *true* (default), draws the chart using [VisualJS.chart](#visualjschart). It only accepts one argument: a [visual object](#options).
+This is the main function. It loads the data and, if the property **show** is *true* (default), draws the chart using [VisualJS.chart](#visualjschart). It only accepts one argument: a [visual object](#the-visual-object) or an array of visual objects.
 
 ```js
 VisualJS.load( {...} ); //Same as: visual( {...} );
@@ -555,7 +557,7 @@ Examples:  [adv-01.html](https://github.com/idescat/visual/blob/master/test/adv-
 
 ## VisualJS.iframe
 
-In [simple mode](simple-mode), this function is used to embed visualizations. It accepts two arguments: a [visual object](#options) and a string (a CSS file address or CSS rules).
+In [simple mode](simple-mode), this function is used to embed visualizations. It accepts two arguments: a [visual object](#the-visual-object) and a string (a CSS file address or CSS rules). If the visual object contains a [callback](#callback) property, it will be ignored.
 
 ```js
 VisualJS.iframe( {...} , "http://mydomain/path/iframe.css" );
@@ -574,7 +576,7 @@ String. Text of title.
 String. Text of footer.
 
 ### load
-Array of two [visual objects](#options) (required).
+Array of two [visual objects](#the-visual-object) (required).
 
 ### css
 String or array of two strings. The strings can be CSS file addresses or CSS rules. When two strings are provided, the first style is used in the left chart and the second one is used in the right chart.
