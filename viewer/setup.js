@@ -2,6 +2,7 @@ var
 	year=new Date().getFullYear().toString(),
 
 	defaults={
+		lang: VisualJS.setup.i18n.lang,
 		autoheading: VisualJS.setup.canvas.autoheading,
 		legend: VisualJS.setup.canvas.legend,
 		dec: VisualJS.setup.canvas.dec,
@@ -20,7 +21,7 @@ var
 		}
 	},
 
-	simple=["title", "geo", "footer", "dec", "autoheading", "legend", "stacked", "range", "grouped", "type", "by", "time", "data"],
+	simple=["lang", "title", "geo", "footer", "dec", "autoheading", "legend", "stacked", "range", "grouped", "type", "by", "time", "data"],
 
 	custom={
 		bar: {

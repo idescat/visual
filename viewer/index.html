@@ -44,7 +44,16 @@
 						<option value="tsline">tsline</option>
 						<option value="cmap">cmap</option>
 					</select>
-					<span id="version" class="right"></span>
+
+					<span id="version"></span>
+					
+					<label class="right">lang
+						<select name="lang">
+							<option value="en">en</option>
+							<option value="ca">ca</option>
+							<option value="es">es</option>
+						</select>
+					</label>
 				</fieldset>
 
 				<fieldset id="layout">
@@ -56,7 +65,7 @@
 					<label class="tsbar"><input type="checkbox" name="stacked" />stacked</label>
 
 					<div class="right">
-						<label class="tsbar tsline bar pyram rank right" title="border">B <input type="number" name="width" value="0" /></label>
+						<label class="tsbar tsline bar pyram rank" title="border">B <input type="number" name="width" value="0" /></label>
 						<label class="tsline" title="line">L <input type="number" name="line" value="2" /></label>
 						<label class="tsline" title="point">P <input type="number" name="point" value="1" /></label>
 						<label class="tsline" title="shadow">S <input type="number" name="shadow" value="4" /></label>
@@ -126,6 +135,8 @@
 		function update(){
 			var input=$( "input" );
 			params["type"]=$( "select[name=type]" ).val();
+			params["lang"]=$( "select[name=lang]" ).val();
+
 			if(opened){
 				leg.html( params["type"]+" &uarr;" );
 			}else{
@@ -199,6 +210,7 @@
 				{
 					id: "visual",
 					fixed: [700,565],
+					lang: params["lang"],
 
 					title: params["title"],
 					geo: params["geo"],

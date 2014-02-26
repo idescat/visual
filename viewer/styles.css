@@ -35,7 +35,7 @@ label {
 #version {
 	color: #999;
 	text-shadow: 1px 1px 1px #fcfcfc;
-	margin: 0 0.5em;
+	margin: 0 0.5em 0 34%;
 }
 iframe {
 	width: 700px;
