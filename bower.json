@@ -1,6 +1,6 @@
 {
 	"name": "visual",
-	"version": "0.9.3",
+	"version": "0.9.4",
 	"main": ["visual.css", "visual.js", "visual.setup.js", "./lib/*", "./maps/*"],
 	"ignore": [
 		"**/.*"

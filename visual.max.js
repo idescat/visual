@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.9.3",
+	version: "0.9.4",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -34,7 +34,7 @@ var VisualJS={
 	normal: 500, //If less than this value, apply mini style; otherwise, normal style (see setup)
 
 	scripts: [],
-	ticks: [],
+
 	map: {},
 	container: {}, //To allow multiple direct embeddings, particular features of every container are saved here
 	func: {}, //Space for external functions
@@ -732,6 +732,7 @@ var VisualJS={
 						}
 					}
 					transform=function(d,t){ // Local in load(), not ts().
+						VisualJS.ticks=[];
 						for(var i=0, len=t.length; i<len; i++){
 							ticks.push([i,t[i]]);
 							VisualJS.ticks.push([i,t[i]]); //keep original ticks
