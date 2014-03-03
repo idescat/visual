@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.9.4",
+	version: "0.9.5",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -130,12 +130,12 @@ var VisualJS={
 		;
 		if(o.time!==null && typeof o.time==="object"){
 			var 
-				start=VisualJS.tformat(o.time[0]),
-				end=VisualJS.tformat(o.time[o.time.length-1]),
+				start=VisualJS.tformat(o.time[0],VisualJS.id),
+				end=VisualJS.tformat(o.time[o.time.length-1],VisualJS.id),
 				time=start+"&ndash;"+end
 			;
 		}else{
-			var time=VisualJS.tformat(o.time);
+			var time=VisualJS.tformat(o.time,VisualJS.id);
 		}
 
 		add(o.title, false);
@@ -184,27 +184,27 @@ var VisualJS={
 		tt.style.top=pos.y+"px";
 	},
 
-	format: function(n){
+	format: function(n,id){
 		if(typeof n==="undefined" || n===null){
-			return VisualJS.setup.i18n.text.na[VisualJS.lang];
+			return VisualJS.setup.i18n.text.na[VisualJS.container[id].lang];
 		}
 		if(typeof n==="number"){
 			var 
-				s=n.toFixed(VisualJS.container[VisualJS.id].dec),
+				s=n.toFixed(VisualJS.container[id].dec),
 				rgx=/(\d+)(\d{3})/,
 				x=s.split("."),
 				x1=x[0],
-				x2=(x.length>1) ? VisualJS.setup.i18n.text.dec[VisualJS.lang] + x[1] : ""
+				x2=(x.length>1) ? VisualJS.setup.i18n.text.dec[VisualJS.container[id].lang] + x[1] : ""
 			;
 			while(rgx.test(x1)){
-				x1=x1.replace(rgx, "$1" + VisualJS.setup.i18n.text.k[VisualJS.lang] + "$2");
+				x1=x1.replace(rgx, "$1" + VisualJS.setup.i18n.text.k[VisualJS.container[id].lang] + "$2");
 			}
 			return x1+x2;
 		}
 		return "";
 	},	
 
-	tformat: function(t){
+	tformat: function(t,id){
 		if(!t){//undefined, null, "", 0
 			return null;
 		}
@@ -227,7 +227,7 @@ var VisualJS={
 		if(typeof label==="undefined"){
 			return t;
 		}
-		var text=label[VisualJS.lang];
+		var text=label[VisualJS.container[id].lang];
 		if(typeof text==="undefined"){
 			return t;
 		}
@@ -242,8 +242,8 @@ var VisualJS={
 		var
 			lab=(typeof v==="number") ? " "+VisualJS.container[id].unit.label : "",
 			si=(typeof v==="number") ? VisualJS.container[id].unit.symbol : "",
-			va=VisualJS.format(v),
-			t=(va!==	VisualJS.setup.i18n.text.na[VisualJS.lang]) ?
+			va=VisualJS.format(v,id),
+			t=(va!==	VisualJS.setup.i18n.text.na[VisualJS.container[id].lang]) ?
 				( (VisualJS.container[id].unit.position==="end") ? va+lab+" "+si : si+va+lab )
 				: // Value not available
 				va
@@ -445,6 +445,7 @@ var VisualJS={
 		VisualJS.autoheading=(typeof o.autoheading==="boolean") ? o.autoheading : scanvas.autoheading;
 		VisualJS.legend=(typeof o.legend==="boolean") ? o.legend: scanvas.legend;
 		VisualJS.lang=o.lang || vsetup.i18n.lang;
+		VisualJS.container[VisualJS.id].lang=o.lang || vsetup.i18n.lang;
 		VisualJS.callback=(typeof o.callback==="function") ? o.callback: VisualJS.callback;
 		VisualJS.range=( typeof o.range==="number" || isRange(o.range) ) ? 
 			o.range 
@@ -483,7 +484,7 @@ var VisualJS={
 
 		if(o.type==="cmap"){
 			if(ie8){
-				document.getElementById(VisualJS.id).innerHTML="<p>"+vsetup.i18n.text.oldbrowser[VisualJS.lang]+"</p>";
+				document.getElementById(VisualJS.id).innerHTML="<p>"+vsetup.i18n.text.oldbrowser[VisualJS.container[VisualJS.id].lang]+"</p>";
 			}else{
 				if(typeof o.by!=="string"){
 					return;
@@ -685,8 +686,8 @@ var VisualJS={
 								map.area,
 								map.legend,
 								[
-									inf<minval || VisualJS.format(inf)===VisualJS.format(minval),
-									sup>maxval || VisualJS.format(sup)===VisualJS.format(maxval)
+									inf<minval || VisualJS.format(inf,id)===VisualJS.format(minval,id),
+									sup>maxval || VisualJS.format(sup,id)===VisualJS.format(maxval,id)
 								]
 							);
 						}
@@ -943,13 +944,16 @@ var VisualJS={
 				;
 
 				VisualJS.canvas=function(){
+					var 
+						id=VisualJS.id,
+						ticklen=ticks.length
+					;
 					$(selector).html("<"+headingElement+"></"+headingElement+"><"+footerElement+"></"+footerElement+">");
 					$(selector+" "+headingElement).html(heading);
 					$(selector+" "+footerElement).html(VisualJS.atext(o.footer || ""));
-					VisualJS.getsize(VisualJS.id);
+					VisualJS.getsize(id);
 					$(selector+" "+headingElement).after('<div class="'+vsetup.canvasclass+' '+VisualJS.visualsize+'" style="width: '+VisualJS.width+'px; height: '+VisualJS.height+'px;"></div>');
 
-					var ticklen=ticks.length;
 					switch(o.type){
 						case "pyram":
 							setup.series.pyramid={show: true, barWidth: 1};
@@ -957,7 +961,7 @@ var VisualJS={
 							setup.yaxis.show=( (VisualJS.height/series[0].data.length) > 11 ) ? VisualJS.axis.y : false; //If too many categories and not enough height, remove y-labels
 							setup.xaxis.max=(typeof VisualJS.range==="number") ? max*VisualJS.range : VisualJS.range[1]; //isRange (can't be null). min is ignored. If max is lower than actual max it will be discarded (but increase in VisualJS.range won't be applied). Otherwise: Increase area using VisualJS.range in the longest bar
 							setup.xaxis.tickFormatter=function(val) {
-								return VisualJS.format(val);
+								return VisualJS.format(val,id);
 							}
 							$.plot(
 								canvas,
@@ -975,7 +979,7 @@ var VisualJS={
 								setup.xaxis.max=VisualJS.range[1]; //we don't check if max provided is greater than actual max
 							}
 							setup.xaxis.tickFormatter=function(val) {
-								return VisualJS.format(val);
+								return VisualJS.format(val,id);
 							}
 							setup.yaxis.autoscaleMargin=0;
 							setup.series.bars.barWidth=0.5;
@@ -989,7 +993,7 @@ var VisualJS={
 							setup.xaxis.mode="categories";
 							setup.xaxis.tickLength=0;
 							setup.yaxis.tickFormatter=function(val) {
-								return VisualJS.format(val);
+								return VisualJS.format(val,id);
 							}
 							if(typeof VisualJS.range!=="number" && VisualJS.range!==null){ //isRange
 								setup.yaxis.min=VisualJS.range[0]; //we don't check if min provided is lower than actual min
@@ -1006,7 +1010,7 @@ var VisualJS={
 							setup.grid.markings=[ { color: "#999", lineWidth: 0.5, yaxis: { from: 0, to: 0 } }]; //Zero line in tsline
 						case "tsbar":
 							setup.yaxis.tickFormatter=function(val) {
-								return VisualJS.format(val);
+								return VisualJS.format(val,id);
 							}
 							var 
 								ratio=VisualJS.width/ticklen,
@@ -1047,13 +1051,13 @@ var VisualJS={
 												:
 												[ VisualJS.ticks[i][0], VisualJS.ticks[i][1].slice(0,4) ]
 											//Formatting time
-											ticks[i][1]=VisualJS.tformat(VisualJS.ticks[i][1]);
+											ticks[i][1]=VisualJS.tformat(VisualJS.ticks[i][1],VisualJS.id);
 										}
 										setup.xaxis.ticks=xticks;
 									}else{
 										for(var i=0; i<ticklen; i++){
 											//Formatting time
-											ticks[i][1]=VisualJS.tformat(VisualJS.ticks[i][1]);
+											ticks[i][1]=VisualJS.tformat(VisualJS.ticks[i][1],VisualJS.id);
 										}
 										setup.xaxis.ticks=ticks;
 									}
