@@ -29,7 +29,7 @@ VisualJS.setup={ //v.0.9.3
 			max: 100, //If not enough colors, legend is deceiving and it's better to remove it
 			base: "#09111a"
 		},
-		series: ["#2b527b", "#a52a2a", "#008000", "#ffbf00"]	
+		series: ["#2b527b", "#a52a2a", "#008000", "#ffbf00", "#5959ff", "#ff5959", "#9acd32", "#af8d26"]
 	},
 	//Default options (They can be dynamically modified thru visual().)
 	canvas: {
