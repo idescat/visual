@@ -54,6 +54,10 @@ body {
 .visual .flot-tick-label span {
 	display: block;
 }
+/* Avoid x-axis label overlapping in bar charts using styles (since 0.9.6) */
+.visual .flot-tick-label.tickLabel span {
+	padding: 0 2.5em;
+}
 
 /* SVG */
 .visual .VisualJSarea {
