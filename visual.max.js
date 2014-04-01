@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.9.6",
+	version: "0.9.7",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -37,6 +37,7 @@ var VisualJS={
 
 	map: {},
 	container: {}, //To allow multiple direct embeddings, particular features of every container are saved here
+	public: {}, //To expose Visual-generated content to the outside world
 	func: {}, //Space for external functions
 	callback: null, //Or specify a default callback function when the user hasn't specified one
 
@@ -56,6 +57,7 @@ var VisualJS={
 		if(VisualJS.callback!==null){
 			VisualJS.callback.call( {id: VisualJS.id, chart: chart} );
 		}
+		VisualJS.public[VisualJS.id].chart=chart;
 	},
 
 	tooltip: function(){
@@ -497,6 +499,7 @@ var VisualJS={
 				///////// CHART
 				VisualJS.chart=function(){
 					var 
+						heading=VisualJS.getHeading(o),
 						map=VisualJS.map[o.by],
 						mwidth=map.area[0],
 						mheight=map.area[1],
@@ -537,7 +540,7 @@ var VisualJS={
 
 					VisualJS.canvas=function(){
 						visual.html("<"+headingElement+"></"+headingElement+"><"+footerElement+"></"+footerElement+">");
-						d3.select(selector+" "+headingElement).html(VisualJS.getHeading(o));
+						d3.select(selector+" "+headingElement).html(heading);
 						d3.select(selector+" "+footerElement).html(VisualJS.atext(o.footer || ""));
 						VisualJS.getsize(VisualJS.id);
 
@@ -672,7 +675,7 @@ var VisualJS={
 							.on("mouseout", function(){return tooltip.style("display", "none");})
 						;
 						if(VisualJS.legend && typeof map.legend==="object") { //If legend specified (array), draw it
-							legend( //new params since 0.8.0
+							var legobj=legend( //new params since 0.8.0
 								[
 									VisualJS.tooltipText(id, null, inf),
 									VisualJS.tooltipText(id, null, sup)
@@ -691,6 +694,7 @@ var VisualJS={
 								]
 							);
 						}
+						VisualJS.public[VisualJS.id]={heading: heading, legend: legobj};
 					};
 					VisualJS.canvas();
 				}
@@ -818,13 +822,17 @@ var VisualJS={
 							if(typeof b!=="object" || b===null){  //Without "by": simplified call
 								//was simply series=d
 								for(var i=0, len=d.length; i<len; i++){
-									series[i]=[ '<span>'+d[i][0]+'</span>' , d[i][1] ]; //Temporary solution to avoid x-axis label overlapping
+									if(d[i][1]!==null){
+										series.push([ '<span>'+d[i][0]+'</span>' , d[i][1] ]); //span: temporary solution to avoid x-axis label overlapping
+									}
 								}
 							}else{
 								//An array without "label" and "val"
 								if(typeof d[0]==="number"){
 									for(var i=0, len=b.length; i<len; i++){
-										series[i]=[ '<span">'+b[i]+'</span>' , d[i] ]; //Temporary solution to avoid x-axis label overlapping
+										if(d[i]!==null){
+											series.push([ '<span">'+b[i]+'</span>' , d[i] ]); //span: temporary solution to avoid x-axis label overlapping
+										}
 									}
 								}
 								//Pending: An array with "label" and "val" for multiple bars per category...
@@ -1072,7 +1080,8 @@ var VisualJS={
 								setup
 							);
 					}
-					$(canvas).UseTooltip(VisualJS.id);	
+					$(canvas).UseTooltip(VisualJS.id);
+					VisualJS.public[VisualJS.id]={heading: heading};
 				}
 				VisualJS.canvas();
 			}
