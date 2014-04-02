@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.9.7",
+	version: "0.9.8",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -242,11 +242,11 @@ var VisualJS={
 
 	tooltipText: function(id, l, v) {
 		var
-			lab=(typeof v==="number") ? " "+VisualJS.container[id].unit.label : "",
+			lab=(typeof v==="number" && VisualJS.container[id].unit.label!=="") ? " "+VisualJS.container[id].unit.label : "",
 			si=(typeof v==="number") ? VisualJS.container[id].unit.symbol : "",
 			va=VisualJS.format(v,id),
-			t=(va!==	VisualJS.setup.i18n.text.na[VisualJS.container[id].lang]) ?
-				( (VisualJS.container[id].unit.position==="end") ? va+lab+" "+si : si+va+lab )
+			t=(va!==VisualJS.setup.i18n.text.na[VisualJS.container[id].lang]) ?
+				( (VisualJS.container[id].unit.position==="end") ? va+lab+(si!==""?" "+si:si) : si+va+lab )
 				: // Value not available
 				va
 		;
@@ -427,6 +427,8 @@ var VisualJS={
 		;
 
 		VisualJS.id=(typeof o.id==="string") ? o.id : vsetup.id;
+		VisualJS.public[VisualJS.id]={ chart: null, heading: null, legend: null };
+
 		if(typeof o.fixed==="object"){
 			VisualJS.fixed=o.fixed;
 		}
@@ -674,27 +676,46 @@ var VisualJS={
 							})
 							.on("mouseout", function(){return tooltip.style("display", "none");})
 						;
-						if(VisualJS.legend && typeof map.legend==="object") { //If legend specified (array), draw it
-							var legobj=legend( //new params since 0.8.0
-								[
+
+						if( typeof minval!=="undefined" ){ //No grouped nor highlighted-area map
+							var 
+								infsup=[
 									VisualJS.tooltipText(id, null, inf),
 									VisualJS.tooltipText(id, null, sup)
 								],
-								[
+								lightdark=[
 									colors[colors.length-1], //lighter color
 									colors[0] //darker color
 								],
-								vis,
-								tooltip,
-								map.area,
-								map.legend,
-								[
+								strict=[
 									inf<minval || VisualJS.format(inf,id)===VisualJS.format(minval,id),
 									sup>maxval || VisualJS.format(sup,id)===VisualJS.format(maxval,id)
 								]
-							);
+							;
+
+							VisualJS.public[VisualJS.id].legend={ 
+								color: lightdark,
+								text: infsup,
+								symbol: [
+									(strict[0] ? "==" :  "<="),
+									(strict[1] ? "==" :  ">=")
+								]
+							};
+
+							if(VisualJS.legend && typeof map.legend==="object") { //If map.legend specified (area array), draw it
+								legend( //new params since 0.8.0
+									infsup,
+									lightdark,
+									vis,
+									tooltip,
+									map.area,
+									map.legend,
+									strict
+								);
+							}
 						}
-						VisualJS.public[VisualJS.id]={heading: heading, legend: legobj};
+
+						VisualJS.public[VisualJS.id].heading=heading;
 					};
 					VisualJS.canvas();
 				}
@@ -1081,7 +1102,7 @@ var VisualJS={
 							);
 					}
 					$(canvas).UseTooltip(VisualJS.id);
-					VisualJS.public[VisualJS.id]={heading: heading};
+					VisualJS.public[VisualJS.id].heading=heading;
 				}
 				VisualJS.canvas();
 			}
