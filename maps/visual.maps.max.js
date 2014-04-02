@@ -1,5 +1,5 @@
 /*
-colors, legend (0.9.7)
+colors, legend (0.8.0)
 Copyright (c) 2014 Institut d'Estadistica de Catalunya (Idescat)
 http://www.idescat.cat (https://github.com/idescat/visual)
 
@@ -132,22 +132,14 @@ VisualJS.func.legend=function(infsup, lightdark, vis, tooltip, area, pos, strict
 		y=pos[1], //legend position
 		hwmin=Math.min(vis.attr("width"), vis.attr("height")),
 		leg=vis.append("svg:g").attr("class", VisualJS.setup.legendclass),
-		color=[
-			"rgb(" + lightdark[0].r + "," + lightdark[0].g + "," + lightdark[0].b + ")",
-			"rgb(" + lightdark[1].r + "," + lightdark[1].g + "," + lightdark[1].b + ")"
-		],
-		text=[
-			(strict[0] ? "" :  "\u2264 ") + infsup[0],
-			(strict[1] ? "" :  "\u2265 ") + infsup[1]
-		],
 		info=[ // Colors and values in the legend
 			{  //less than
-				color: "fill:"+color[0]+"; ", 
-				text: text[0]
+				color: "fill:rgb(" + lightdark[0].r + "," + lightdark[0].g + "," + lightdark[0].b + "); ", 
+				text: (strict[0] ? "" :  "\u2264 ") + infsup[0]
 			},
 			{	//greater than
-				color: "fill:"+color[1], 
-				text: text[1]
+				color: "fill:rgb(" + lightdark[1].r + "," + lightdark[1].g + "," + lightdark[1].b + ")", 
+				text: (strict[1] ? "" :  "\u2265 ") + infsup[1]
 			},
 		],
 		getBB=function(html){ // returns width/height of the text (Bounding Box)
@@ -168,7 +160,7 @@ VisualJS.func.legend=function(infsup, lightdark, vis, tooltip, area, pos, strict
 		yIni=(y / maph) * vis.attr("height"),
 		posY=yIni
 	;
-
+	
 	if(hwmin>minLimit){  //Show legend
 		//squares
 		leg.selectAll("rect")
@@ -201,10 +193,5 @@ VisualJS.func.legend=function(infsup, lightdark, vis, tooltip, area, pos, strict
 				})
 				.on("mouseout", function(){tooltip.style("display", "none");})	 
 		}
-	} //case 3: no legend
-
-	return {
-		color: color,
-		text: text
-	};
+	} //case 3: no legend	
 };
