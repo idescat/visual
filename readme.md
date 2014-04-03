@@ -116,9 +116,9 @@ String. In [simple mode](#simple-mode) and [manual mode](#manual-mode), this is 
 Array. In [simple mode](#simple-mode) and [manual mode](#manual-mode), this is the *[width, height]* in pixels of the visualization container.
 
 #### callback
-Function. This function will be called after the chart has been drawn. The *this* keyword will point to an object with two properties: "id" (the chart's id: string) and "chart" (a boolean indicating whether the chart is drawable or not: if false, [VisualJS.chart](#visualjschart) would not be defined).
+Function. This function will be called after the chart has been drawn. The *this* keyword will point to an object with the following properties: "id" (the chart's id: string), "chart" (a boolean indicating whether the chart is drawable or not: if false, [VisualJS.chart](#visualjschart) would not be defined), "heading" (the text of the heading) and "legend" (an object with legend information when the chart type is "cmap").
 
-Examples:  [adv-01.html](https://github.com/idescat/visual/blob/master/test/adv-01.html), [adv-02.html](https://github.com/idescat/visual/blob/master/test/adv-02.html), [adv-03.html](https://github.com/idescat/visual/blob/master/test/adv-03.html).
+Examples:  [adv-01.html](https://github.com/idescat/visual/blob/master/test/adv-01.html), [adv-02.html](https://github.com/idescat/visual/blob/master/test/adv-02.html), [adv-03.html](https://github.com/idescat/visual/blob/master/test/adv-03.html), [adv-05.html](https://github.com/idescat/visual/blob/master/test/adv-05.html).
 
 This property will be ignored if it is included in a visual object passed to [VisualJS.iframe](#visualjsiframe).
 
