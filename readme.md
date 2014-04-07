@@ -116,11 +116,15 @@ String. In [simple mode](#simple-mode) and [manual mode](#manual-mode), this is 
 Array. In [simple mode](#simple-mode) and [manual mode](#manual-mode), this is the *[width, height]* in pixels of the visualization container.
 
 #### callback
-Function. This function will be called after the chart has been drawn. The *this* keyword will point to an object with the following properties: "id" (the chart's id: string), "chart" (a boolean indicating whether the chart is drawable or not: if false, [VisualJS.chart](#visualjschart) would not be defined), "heading" (the text of the heading) and "legend" (an object with legend information when the chart type is "cmap").
+Function. This function will be called after the chart has been drawn. The *this* keyword will point to an object with the following properties: "id" (the chart's id: string), "chart" (a boolean indicating whether the chart is drawable or not: if false, [VisualJS.chart](#visualjschart) would not be defined), "heading" (the HTML of the heading) and "legend" (an object with legend information).
+
+The "legend" object is null unless the chart type is "cmap", [data](#data-6) includes a *val* property and [grouped](#grouped) is not specified. In this case, colors are automatically assigned to map areas.
+
+When "legend" is not null, it has three properties (three arrays of size two): "color", "text" and "symbol". The first element in each array exposes information about the lighter color and the second element about the darker one. The elements of the "color" array are objects with three properties (numbers): "r", "g" and "b" (RGB color). The elements of the "text" array are strings (value plus unit information the lighter/darker color has been assigned to). The elements of the "symbol" array are three possible strings: "<=", "==" or ">=" (the comparison operators associated with the "text" elements). See example [adv-05.html](https://github.com/idescat/visual/blob/master/test/adv-05.html).
+
+The *callback* property will be ignored if it is included in a visual object passed to [VisualJS.iframe](#visualjsiframe).
 
 Examples:  [adv-01.html](https://github.com/idescat/visual/blob/master/test/adv-01.html), [adv-02.html](https://github.com/idescat/visual/blob/master/test/adv-02.html), [adv-03.html](https://github.com/idescat/visual/blob/master/test/adv-03.html), [adv-05.html](https://github.com/idescat/visual/blob/master/test/adv-05.html).
-
-This property will be ignored if it is included in a visual object passed to [VisualJS.iframe](#visualjsiframe).
 
 #### show
 Boolean. This determines whether the chart should be shown. When *false*, all the necessary files will be included but the chart will not be inserted: you will need to use a callback function that executes [VisualJS.chart](#visualjschart) at some point. Default is *true*.
@@ -478,7 +482,7 @@ Object with at least one property: "label" (array of strings). Each element in t
 String. Required. Selects a certain map. Possible values ("mun", "com", "prov", etc.) are set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
 
 ####  range
-Number or array. This determines the color assignation. When it is a number, it must be between 0 and 0.49. Default: 0.05, which means color assignation excludes values below the 5th percentile and above the 95th percentile. When it is an array, it defines a range: it has two and only two elements. The first (number) is a minimum and the second (number) is a maximum. Colors will be assigned between those values.
+Number or array. This determines the color assignment. When it is a number, it must be between 0 and 0.49. Default: 0.05, which means color assignment excludes values below the 5th percentile and above the 95th percentile. When it is an array, it defines a range: it has two and only two elements. The first (number) is a minimum and the second (number) is a maximum. Colors will be assigned between those values.
 
 # Maps
 The following sample maps are provided:
