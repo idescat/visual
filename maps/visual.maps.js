@@ -1,5 +1,5 @@
-/*
-colors, legend (0.8.0)
+﻿/*
+colors, legend (0.8.0) (Must be UTF8+BOM for IE)
 Copyright (c) 2014 Institut d'Estadistica de Catalunya (Idescat)
 http://www.idescat.cat (https://github.com/idescat/visual)
 
