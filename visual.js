@@ -22,7 +22,7 @@ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-var VisualJS={version:"0.9.9",show:!0,old:!1,fixed:null,width:500,bwidth:500,height:500,normal:500,scripts:[],map:{},container:{},"public":{},func:{},callback:null,draw:function(){var e=!1
+var VisualJS={version:"0.9.10",show:!0,old:!1,fixed:null,width:500,bwidth:500,height:500,normal:500,scripts:[],map:{},container:{},"public":{},func:{},callback:null,draw:function(){var e=!1
 "function"==typeof VisualJS.chart&&(VisualJS.tooltip(),VisualJS.show&&VisualJS.chart(),"undefined"!=typeof window.onorientationchange?window.onorientationchange=VisualJS.canvas:window.onresize=VisualJS.canvas,e=!0),null!==VisualJS.callback&&VisualJS.callback.call({id:VisualJS.id,chart:e,heading:VisualJS.public[VisualJS.id].heading,legend:VisualJS.public[VisualJS.id].legend})},tooltip:function(){var e=document
 if(!e.getElementById(VisualJS.setup.tooltipid)){var a=e.createElement("div")
 a.id=VisualJS.setup.tooltipid,a.style.display="none",e.body.appendChild(a)}},getsize:function(e){var a=VisualJS.setup,i=a.html,t=i.heading,l=i.footer,n=window,s=document,r=s.documentElement,o=s.getElementsByTagName("body")[0],u=s.getElementById(e),d=u.getElementsByTagName(t)[0].clientHeight,c=u.getElementsByTagName(l)[0].clientHeight,p=n.innerHeight||r.clientHeight||o.clientHeight,f=0
@@ -61,51 +61,58 @@ VisualJS.id="string"==typeof e.id?e.id:a.id,VisualJS.public[VisualJS.id]={headin
 var o="#"+VisualJS.id,u=o+" ."+a.canvasclass
 if("cmap"===e.type)if(s)document.getElementById(VisualJS.id).innerHTML="<p>"+a.i18n.text.oldbrowser[VisualJS.container[VisualJS.id].lang]+"</p>"
 else{if("string"!=typeof e.by)return
-VisualJS.addJS(a.lib.maps,!0),VisualJS.addJS(a.lib.d3,!0),VisualJS.addJS(a.map[e.by],!0),VisualJS.chart=function(){var i=VisualJS.getHeading(e),t=VisualJS.map[e.by],s=t.area[0],r=t.area[1],u="object"==typeof e.grouped&&"object"==typeof e.grouped.label&&e.grouped.label.length>0&&e.data[0].hasOwnProperty("group"),d=e.data[0].hasOwnProperty("val"),c=u?e.grouped.label.length:d?a.colors.map.max:1,p=a.colorclassprefix,f=VisualJS.func.colors(a.colors.map.base,c,"fill",p,u&&"object"==typeof e.grouped.color&&e.grouped.color.length===e.grouped.label.length?e.grouped.color:[],VisualJS.id),g=d3.select(o),S=d3.geo[t.projection](),J="object"==typeof t.center&&"function"==typeof S.center?S.center(t.center):S,V=J.scale(t.scale).translate([s/2,r/2]),h=d3.geo.path().projection(V),y=d3.select("#"+a.tooltipid)
+VisualJS.addJS(a.lib.maps,!0),VisualJS.addJS(a.lib.d3,!0),VisualJS.addJS(a.map[e.by],!0),VisualJS.chart=function(){var i=VisualJS.getHeading(e),t=VisualJS.map[e.by],s=t.area[0],r=t.area[1],u="object"==typeof e.grouped&&"object"==typeof e.grouped.label&&e.grouped.label.length>0&&e.data[0].hasOwnProperty("group"),d=e.data[0].hasOwnProperty("val"),c=u?e.grouped.label.length:d?a.colors.map.max:1,p=a.colorclassprefix,f=VisualJS.func.colors(a.colors.map.base,c,"fill",p,u&&"object"==typeof e.grouped.color&&e.grouped.color.length===e.grouped.label.length?e.grouped.color:[],VisualJS.id),g=d3.select(o),S=d3.geo[t.projection](),J="object"==typeof t.center&&"function"==typeof S.center?S.center(t.center):S,h=J.scale(t.scale).translate([s/2,r/2]),V=d3.geo.path().projection(h),y=d3.select("#"+a.tooltipid)
 VisualJS.canvas=function(){g.html("<"+l+"></"+l+"><"+n+"></"+n+">"),d3.select(o+" "+l).html(i),d3.select(o+" "+n).html(VisualJS.atext(e.footer||"")),VisualJS.getsize(VisualJS.id)
-var S,J,V,m,b,x=VisualJS.id,v=d3.map(),w=[],k=function(){},j=function(){},E=VisualJS.height/r,T=VisualJS.width/s,H=Math.min(Math.round(s*E),VisualJS.width),I=Math.min(Math.round(r*T),VisualJS.height),M=Math.floor((VisualJS.width-H)/2),W=Math.floor((VisualJS.height-I)/2),z=T>E?E:T,B=g.insert("svg:svg",n).attr("width",H).attr("height",I)
-u?(S=d3.map(),k=function(e,a){e.set(a.id,a.group)},J=function(e,a,i){return p+(e.get(i[t.id])-1)},V=function(a,i){var l=e.grouped.label[a.get(i[t.id])-1],n=i[t.label]
+var S,J,h,m,b,x=VisualJS.id,v=d3.map(),w=[],k=function(){},j=function(){},E=VisualJS.height/r,T=VisualJS.width/s,H=Math.min(Math.round(s*E),VisualJS.width),I=Math.min(Math.round(r*T),VisualJS.height),M=Math.floor((VisualJS.width-H)/2),W=Math.floor((VisualJS.height-I)/2),z=T>E?E:T,B=g.insert("svg:svg",n).attr("width",H).attr("height",I)
+u?(S=d3.map(),k=function(e,a){e.set(a.id,a.group)},J=function(e,a,i){return p+(e.get(i[t.id])-1)},h=function(a,i){var l=e.grouped.label[a.get(i[t.id])-1],n=i[t.label]
 return"undefined"!=typeof l&&(n+=" <em>"+l+"</em>"),n}):(d?(J=function(e,a,i,l,n){var s=a.get(i[t.id])
 if(l===n)return"undefined"!=typeof s?p+(c/2).toFixed(0):null
 var r=d3.scale.quantize().domain([l,n]).range(d3.range(c).map(function(e){return p+e}))
-return r(s)},j=VisualJS.func.legend):J=function(e,a,i){return""!==a.get(i[t.id])?"":p+(c-1)},V=function(e,a){return a[t.label]})
+return r(s)},j=VisualJS.func.legend):J=function(e,a,i){return""!==a.get(i[t.id])?"":p+(c-1)},h=function(e,a){return a[t.label]})
 for(var $=0,q=e.data,L=q.length;L>$;$++){var O=q[$]
 O.hasOwnProperty("val")?null!==O.val&&(v.set(O.id,O.val),w.push(O.val)):v.set(O.id,""),k(S,O)}w.sort(function(e,a){return e-a})
 var F=w[0],A=w[L-1]
-if("number"==typeof VisualJS.range?(m=d3.quantile(w,VisualJS.range),b=d3.quantile(w,1-VisualJS.range)):(m=VisualJS.range[0],b=VisualJS.range[1]),B.style("margin-left",M+"px"),B.style("margin-top",W+"px"),B.style("margin-bottom",W+"px"),B.append("svg:g").attr("class",a.areaclass).attr("transform","scale("+z+")").selectAll("path").data(t.features).enter().append("svg:path").attr("class",function(e){return J(S,v,e.properties,m,b)}).attr("d",h).on("mousemove",function(e){(d||u||"undefined"!=typeof v.get(e.properties[t.id]))&&VisualJS.showTooltip(VisualJS.tooltipText(x,V(S,e.properties),v.get(e.properties[t.id])),d3.event.pageX,d3.event.pageY)}).on("mouseout",function(){return y.style("display","none")}),"undefined"!=typeof F){var N=[VisualJS.tooltipText(x,null,m),VisualJS.tooltipText(x,null,b)],C=[f[f.length-1],f[0]],P=[F>m||VisualJS.format(m,x)===VisualJS.format(F,x),b>A||VisualJS.format(b,x)===VisualJS.format(A,x)]
+if("number"==typeof VisualJS.range?(m=d3.quantile(w,VisualJS.range),b=d3.quantile(w,1-VisualJS.range)):(m=VisualJS.range[0],b=VisualJS.range[1]),B.style("margin-left",M+"px"),B.style("margin-top",W+"px"),B.style("margin-bottom",W+"px"),B.append("svg:g").attr("class",a.areaclass).attr("transform","scale("+z+")").selectAll("path").data(t.features).enter().append("svg:path").attr("class",function(e){return J(S,v,e.properties,m,b)}).attr("d",V).on("mousemove",function(e){(d||u||"undefined"!=typeof v.get(e.properties[t.id]))&&VisualJS.showTooltip(VisualJS.tooltipText(x,h(S,e.properties),v.get(e.properties[t.id])),d3.event.pageX,d3.event.pageY)}).on("mouseout",function(){return y.style("display","none")}),"undefined"!=typeof F){var N=[VisualJS.tooltipText(x,null,m),VisualJS.tooltipText(x,null,b)],C=[f[f.length-1],f[0]],P=[F>m||VisualJS.format(m,x)===VisualJS.format(F,x),b>A||VisualJS.format(b,x)===VisualJS.format(A,x)]
 VisualJS.public[VisualJS.id].legend={color:C,text:N,symbol:[P[0]?"==":"<=",P[1]?"==":">="]},VisualJS.legend&&"object"==typeof t.legend&&j(N,C,B,y,t.area,t.legend,P)}VisualJS.public[VisualJS.id].heading=i},VisualJS.canvas()}}else{if(VisualJS.addJS(a.lib.jquery,!0)){var d=!1
 VisualJS.addJS(a.lib.jquery.flot,!1)}else if(VisualJS.addJS(a.lib.jquery.flot,!0))var d=!1
 else var d=!0
 s&&VisualJS.addJS(a.lib.excanvas,!0)
-var c=function(){},p=[],f=[],g=[],S=e.stacked||!1,J=function(){var i=function(){}
+var c=function(){},p=[],f=[],g=[],S=e.stacked||!1,J=function(){if(VisualJS.autoheading){var i=e.time.length,t=e.data.length
+if(null===e.data[0].val[0]){for(var l=0,n=!0,s=[];i>l;l++){for(var r=0;t>r;r++)n=n&&null===e.data[r].val[l]
+if(!n)break
+s.push(n)}for(var o=0,u=s.length;u>o;o++)if(s[o]){e.time.shift()
+for(var r=0;t>r;r++)e.data[r].val.shift()}i=e.time.length}if(null===e.data[0].val[i-1]){for(var l=i,n=!0,s=[];l--;){for(var r=0,t=e.data.length;t>r;r++)n=n&&null===e.data[r].val[l]
+if(!n)break
+s.push(n)}for(var o=s.length;o--;)if(s[o]){e.time.pop()
+for(var r=0;t>r;r++)e.data[r].val.pop()}}}var J=function(){}
 if(S)VisualJS.addJS(a.lib.jquery.flot.stack,d)
 else if("tsbar"===e.type){VisualJS.addJS(a.lib.jquery.flot.orderbars,d)
-var i=function(e){return e.bars}}return c=function(a,t){VisualJS.ticks=[]
-for(var l=0,n=t.length;n>l;l++)f.push([l,t[l]]),VisualJS.ticks.push([l,t[l]])
-for(var l=0,n=a.length;n>l;l++){for(var s=[],r=a[l].val,o=r.length,u=0;o>u;u++)s.push([u,r[u]])
-"tsbar"!==e.type||S||1===n?p.push({label:a[l].label,data:s}):p.push({label:a[l].label,data:s,bars:{show:!0,barWidth:.2,order:l+1,lineWidth:2}})}for(var l=0,d=p.length;d>l;l++)g.push({data:p[l].data,label:p[l].label,bars:i(p[l]),shadowSize:VisualJS.grid.shadow})
-h=d>1},VisualJS.getHeading(e)}
+var J=function(e){return e.bars}}return c=function(a,i){VisualJS.ticks=[]
+for(var t=0,l=i.length;l>t;t++)f.push([t,i[t]]),VisualJS.ticks.push([t,i[t]])
+for(var t=0,l=a.length;l>t;t++){for(var n=[],s=a[t].val,r=s.length,o=0;r>o;o++)n.push([o,s[o]])
+p.push("tsbar"!==e.type||S||1===l?{label:a[t].label,data:n}:{label:a[t].label,data:n,bars:{show:!0,barWidth:.2,order:t+1,lineWidth:2}})}for(var t=0,u=p.length;u>t;t++)g.push({data:p[t].data,label:p[t].label,bars:J(p[t]),shadowSize:VisualJS.grid.shadow})
+V=u>1},VisualJS.getHeading(e)}
 switch(e.type){case"pyram":VisualJS.addJS(a.lib.jquery.flot.pyramid,d),Array.max=function(e){return Math.max.apply(Math,e)}
-var V,c=function(e,a,i){V=Math.max(Array.max(e[0].val),Array.max(e[1].val)),p[0]={label:e[0].label,data:[],pyramid:{direction:"L"}},p[1]={label:e[1].label,data:[]}
-for(var t=0,l=i.length;l>t;t++)p[0].data[t]=[i[t],e[0].val[t]],p[1].data[t]=[i[t],e[1].val[t]]},h=!0,y=!1,S=!1,m=!1,b=!1,x=!1,v=VisualJS.getHeading(e)
+var h,c=function(e,a,i){h=Math.max(Array.max(e[0].val),Array.max(e[1].val)),p[0]={label:e[0].label,data:[],pyramid:{direction:"L"}},p[1]={label:e[1].label,data:[]}
+for(var t=0,l=i.length;l>t;t++)p[0].data[t]=[i[t],e[0].val[t]],p[1].data[t]=[i[t],e[1].val[t]]},V=!0,y=!1,S=!1,m=!1,b=!1,x=!1,v=VisualJS.getHeading(e)
 break
 case"rank":var w=[],c=function(e){for(var a=0,i=e.length;i>a;a++)f[a]=[a,e[i-a-1][0]],w[a]=[e[i-a-1][1],a]
-p={data:w}},h=!1,y=!1,m=!1,b=!1,x=!0,v=VisualJS.getHeading(e)
+p={data:w}},V=!1,y=!1,m=!1,b=!1,x=!0,v=VisualJS.getHeading(e)
 break
 case"bar":VisualJS.addJS(a.lib.jquery.flot.categories,d)
 var c=function(e,a,i){if("object"!=typeof i||null===i)for(var t=0,l=e.length;l>t;t++)null!==e[t][1]&&p.push(["<span>"+e[t][0]+"</span>",e[t][1]])
 else if("number"==typeof e[0])for(var t=0,l=i.length;l>t;t++)null!==e[t]&&p.push(['<span">'+i[t]+"</span>",e[t]])
-h=p.length>1},y=!0,m=!1,b=!1,x=!0,v=VisualJS.getHeading(e)
+V=p.length>1},y=!0,m=!1,b=!1,x=!0,v=VisualJS.getHeading(e)
 break
 case"tsline":var v=J(),y=null,m=!0,b=!0,x=!1
 break
 case"tsbar":var v=J(),y=!0,m=!1,b=!1,x=!0}VisualJS.chart=function(){c(e.data,e.time,e.by),$.fn.UseTooltip=function(i){var t=[]
 $(this).bind("plothover",function(l,n,s){if(s){if(t!=[s.seriesIndex,s.dataIndex]){t=[s.seriesIndex,s.dataIndex]
 var r=s.datapoint[0],o=s.datapoint[1],u="bar"!==e.type?s.series.label:p[r][0],d="rank"!==e.type?u:f[o][1],c="rank"!==e.type&&"bar"!==e.type?S||1===p.length?f[r][1]:"pyram"===e.type?p[n.x<0?0:1].data[s.dataIndex][0]:f[s.dataIndex][1]:!1,g="pyram"===e.type?Math.abs(r):"rank"!==e.type?"tsbar"!==e.type?o:S||1===p.length?p[s.seriesIndex].data[r][1]:o:r
-VisualJS.showTooltip(VisualJS.tooltipText(i,c?d+" ("+c+")":d,g),n.pageX,n.pageY)}}else $("#"+a.tooltipid).hide(),t=[]})},h=VisualJS.legend&&h
-var i={colors:a.colors.series,series:{stack:y,bars:{show:x,barWidth:.7,align:"center",fill:.9},lines:{show:m,lineWidth:VisualJS.grid.line},points:{show:b,radius:VisualJS.grid.point}},legend:{show:h},grid:{borderWidth:VisualJS.grid.border,hoverable:!0,clickable:!1,mouseActiveRadius:10},xaxis:{show:VisualJS.axis.x},yaxis:{show:VisualJS.axis.y}}
+VisualJS.showTooltip(VisualJS.tooltipText(i,c?d+" ("+c+")":d,g),n.pageX,n.pageY)}}else $("#"+a.tooltipid).hide(),t=[]})},V=VisualJS.legend&&V
+var i={colors:a.colors.series,series:{stack:y,bars:{show:x,barWidth:.7,align:"center",fill:.9},lines:{show:m,lineWidth:VisualJS.grid.line},points:{show:b,radius:VisualJS.grid.point}},legend:{show:V},grid:{borderWidth:VisualJS.grid.border,hoverable:!0,clickable:!1,mouseActiveRadius:10},xaxis:{show:VisualJS.axis.x},yaxis:{show:VisualJS.axis.y}}
 VisualJS.canvas=function(){var t=VisualJS.id,s=f.length
-switch($(o).html("<"+l+"></"+l+"><"+n+"></"+n+">"),$(o+" "+l).html(v),$(o+" "+n).html(VisualJS.atext(e.footer||"")),VisualJS.getsize(t),$(o+" "+l).after('<div class="'+a.canvasclass+" "+VisualJS.visualsize+'" style="width: '+VisualJS.width+"px; height: "+VisualJS.height+'px;"></div>'),e.type){case"pyram":i.series.pyramid={show:!0,barWidth:1},i.yaxis.show=VisualJS.height/p[0].data.length>11?VisualJS.axis.y:!1,i.xaxis.max="number"==typeof VisualJS.range?V*VisualJS.range:VisualJS.range[1],i.xaxis.tickFormatter=function(e){return VisualJS.format(e,t)},$.plot(u,p,i)
+switch($(o).html("<"+l+"></"+l+"><"+n+"></"+n+">"),$(o+" "+l).html(v),$(o+" "+n).html(VisualJS.atext(e.footer||"")),VisualJS.getsize(t),$(o+" "+l).after('<div class="'+a.canvasclass+" "+VisualJS.visualsize+'" style="width: '+VisualJS.width+"px; height: "+VisualJS.height+'px;"></div>'),e.type){case"pyram":i.series.pyramid={show:!0,barWidth:1},i.yaxis.show=VisualJS.height/p[0].data.length>11?VisualJS.axis.y:!1,i.xaxis.max="number"==typeof VisualJS.range?h*VisualJS.range:VisualJS.range[1],i.xaxis.tickFormatter=function(e){return VisualJS.format(e,t)},$.plot(u,p,i)
 break
 case"rank":i.series.bars.horizontal=!0,i.yaxis.ticks=VisualJS.height/s>11?f.slice(0):0,"number"==typeof VisualJS.range?i.xaxis.max=e.data[0][1]*VisualJS.range:(i.xaxis.min=VisualJS.range[0],i.xaxis.max=VisualJS.range[1]),i.xaxis.tickFormatter=function(e){return VisualJS.format(e,t)},i.yaxis.autoscaleMargin=0,i.series.bars.barWidth=.5,$.plot(u,[p],i)
 break

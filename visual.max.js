@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.9.9",
+	version: "0.9.10",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -748,6 +748,59 @@ var VisualJS={
 				opt=[],
 				stacked=o.stacked || false,
 				ts=function(){
+					//If autoheading, check for leading and trailing zeros
+					if(VisualJS.autoheading){
+						var 
+							tlen=o.time.length,
+							dlen=o.data.length
+						;
+
+						//trim leading nulls
+						if(o.data[0].val[0]===null){
+							for(var t=0, n=true, nuls=[]; t<tlen; t++){
+								for(var d=0; d<dlen; d++){
+									n=n && (o.data[d].val[t]===null);
+								}
+								if(!n){
+									break;
+								}
+								nuls.push(n);
+							}
+
+							for(var u=0, ulen=nuls.length; u<ulen; u++){
+								if(nuls[u]){
+									o.time.shift();
+									for(var d=0; d<dlen; d++){
+										o.data[d].val.shift();
+									}
+								}
+							}
+							tlen=o.time.length; //update
+						}
+
+						//trim trailing nulls (same routine in reverse order)
+						if(o.data[0].val[tlen-1]===null){
+							for(var t=tlen, n=true, nuls=[]; t--;){
+								for(var d=0, dlen=o.data.length; d<dlen; d++){
+									n=n && (o.data[d].val[t]===null);
+								}
+								if(!n){
+									break;
+								}
+								nuls.push(n);
+							}
+
+							for(var u=nuls.length; u--;){
+								if(nuls[u]){
+									o.time.pop();
+									for(var d=0; d<dlen; d++){
+										o.data[d].val.pop();
+									}
+								}
+							}
+						}
+					}
+
 					var fbars=function(){
 						return; //When stacked an undefined is expected in bars (null or false won't work)
 					}
