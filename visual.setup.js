@@ -128,7 +128,7 @@ VisualJS.setup={ //v.0.9.3
 	lib: {
 		d3: {
 			js: "../lib/d3.v3.js",
-			exists: function(){ return typeof d3==="object"; },
+			exists: function(){ return typeof d3==="object"; }
 		},
 		jquery: {
 			js: "../lib/jquery.1.8.3.js",
