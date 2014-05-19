@@ -112,7 +112,7 @@
 						html+='<input title="'+j+'" type="text" name="'+j+'" value="'+s+'" />';
 					}
 				}else{
-					s=s.replace(/({|}|,|\[|\])/g, "$1\n")
+					s=s.replace(/({|\[)/g, "$1\n").replace(/(}|\])/g, "\n$1").replace(/:/g, ": ").replace(/,(\[|\{)/g, ",\n$1").replace(/,/g, ", ");
 					html+='<textarea title="data" name="data" spellcheck="false" lang="">'+s+'</textarea>';
 				}
 				params[j]=custom[i][j];
