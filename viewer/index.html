@@ -128,8 +128,18 @@
 		}
 
 		function jsonify(v){
-			//Assumptions: no white space before ":" and no name conflict
-			return JSON.parse( v.val().replace(/id:/g, '"id":').replace(/val:/g, '"val":').replace(/group:/g, '"group":').replace(/label:/g, '"label":').replace(/color:/g, '"color":').replace(/\'/g, '"') );
+			//Assumptions: no white space before ":", no name conflict and use of ' or " is coherent in the whole field value
+			var 
+				val=v.val(),
+				sim=val.indexOf("'"),
+				dob=val.indexOf('"')
+			;
+
+			sim=(sim===-1) ? 999999999: sim;
+			dob=(dob===-1) ? 999999999: dob;
+			val=(sim<dob) ? val.replace(/"/g, '\\"') : val.replace(/'/g, "&#39;");
+
+			return JSON.parse( val.replace(/id:/g, '"id":').replace(/val:/g, '"val":').replace(/group:/g, '"group":').replace(/label:/g, '"label":').replace(/color:/g, '"color":').replace(/'/g, '"') );
 		}
 
 		function update(){
