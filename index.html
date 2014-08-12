@@ -307,8 +307,8 @@
 		}
 
 		function saveJSON() {
-		    if (!JSONs) return false;
-		    if (JSONs == lastJSONs) return false;
+			if (!JSONs) return false;
+			if (JSONs == lastJSONs) return false;
 
 			$("#save").unbind("click");
 
@@ -339,7 +339,7 @@
 			if(id===null){
 				window.alert("Save failed!");
 			}else{
-				$("#save").html('&lt;iframe src="iframe/?id='+id+'"&gt;&lt;/iframe&gt;');
+				$("#save").html('&lt;iframe src="http://idescat.github.io/visual/pages/?id='+id+'"&gt;&lt;/iframe&gt;');
 			}
 		}
 
