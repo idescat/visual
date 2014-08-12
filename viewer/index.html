@@ -13,7 +13,7 @@
 		<script src="../lib/jquery.1.8.3.js"></script>
 		<script src="setup.js"></script>
 	</head>
-	
+
 	<body>
 		<h1>Visual Viewer</h1>
 		<form id="inputs">
@@ -46,7 +46,7 @@
 					</select>
 
 					<span id="version"></span>
-					
+
 					<label class="right">lang
 						<select name="lang">
 							<option value="en">en</option>
@@ -93,7 +93,7 @@
 		</div>
 
 		<script>
-		var 
+		var
 			last=null,
 			opened=false,
 			params={grouped: null},
@@ -128,18 +128,12 @@
 		}
 
 		function jsonify(v){
-			//Assumptions: no white space before ":", no name conflict and use of ' or " is coherent in the whole field value
-			var 
-				val=v.val(),
-				sim=val.indexOf("'"),
-				dob=val.indexOf('"')
-			;
-
-			sim=(sim===-1) ? 999999999: sim;
-			dob=(dob===-1) ? 999999999: dob;
-			val=(sim<dob) ? val.replace(/"/g, '\\"') : val.replace(/'/g, "&#39;");
-
-			return JSON.parse( val.replace(/id:/g, '"id":').replace(/val:/g, '"val":').replace(/group:/g, '"group":').replace(/label:/g, '"label":').replace(/color:/g, '"color":').replace(/'/g, '"') );
+			var val=v.val();
+			try{
+				return JSON.parse( JSON.stringify( eval(val) ) );
+			}catch(e){
+				alert(e);
+			}
 		}
 
 		function update(){
@@ -157,7 +151,7 @@
 			$( "#layout label").not( "."+params["type"] ).hide();
 
 			for(var i=0, len=input.length; i<len; i++){
-				var 
+				var
 					f=input[i],
 					//FF does not support "number" returns type "text".
 					type=(f.name==="dec" || f.name==="border" || f.name==="shadow" || f.name==="line" || f.name==="point") ? "number" : f.type
@@ -184,8 +178,8 @@
 					case "checkbox":
 						params[f.name]=
 							(
-								(f.name!=="position") 
-								? 
+								(f.name!=="position")
+								?
 								f.checked
 								:
 								(
@@ -211,6 +205,7 @@
 			}
 
 			params["data"]=jsonify( $( "textarea[name=data]" ) );
+
 			if(params["grouped"]) {
 				params["grouped"]=jsonify( $( "input[name=grouped]" ) );
 			}
@@ -254,13 +249,13 @@
 
 			//Composed properties
 			if(params["border"]!==VisualJS.setup.canvas.grid.border || params["shadow"]!==VisualJS.setup.canvas.grid.shadow || params["line"]!==VisualJS.setup.canvas.grid.line || params["point"]!==VisualJS.setup.canvas.grid.point){
-				code.push('grid: {border: '+params["border"]+', line: '+params["line"]+', shadow: '+params["shadow"]+', point: '+params["point"]+'},');
+				code.push('"grid": {"border": '+params["border"]+', "line": '+params["line"]+', "shadow": '+params["shadow"]+', "point": '+params["point"]+'},');
 			}
 			if(params["x"]!==VisualJS.setup.canvas.axis.x || params["y"]!==VisualJS.setup.canvas.axis.y){
-				code.push('axis: {x: '+params["x"]+', y: '+params["y"]+'},');
+				code.push('"axis": {"x": '+params["x"]+', "y": '+params["y"]+'},');
 			}
 			if(params["label"]!==null || params["symbol"]!==null || params["position"]!==VisualJS.setup.canvas.unit.position){
-				code.push('unit: {'+
+				code.push('"unit": {'+
 					notnull("label", ", ")+
 					notnull("symbol", ", ")+
 					notnull("position", "")+
@@ -271,7 +266,7 @@
 		}
 
 		function notnull(key, comma){
-			return (params[key]!==null) ? key+': "'+params[key]+'"'+comma : '';
+			return (params[key]!==null) ? '"'+key+'": "'+params[key]+'"'+comma : '';
 		}
 
 		//code and params, globals
@@ -285,9 +280,9 @@
 			}
 
 			if(typeof params[key]==="number" || typeof params[key]==="boolean"){
-				code.push(key+': '+params[key]+',');
+				code.push('"'+key+'": '+params[key]+',');
 			}else{
-				code.push(key+': '+JSON.stringify(params[key])+',');
+				code.push('"'+key+'": '+JSON.stringify(params[key])+',');
 			}
 		}
 
@@ -310,7 +305,7 @@
 
 		update();
 		$( "#inputs" ).change(update);
-		
+
 		leg.click(function(){
 			if( opened ){
 				close(leg);
@@ -320,7 +315,7 @@
 		});
 
 		$( "#inputs strong" ).click(function() {
-			var 
+			var
 				h=$( "#inputs strong" ).html().substr(1),
 				up=String.fromCharCode(8593),
 				down=String.fromCharCode(8595),
