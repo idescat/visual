@@ -110,9 +110,7 @@
 			<div id="visual" class="visual"></div>
 		</div>
 
-		<div id="save">
-			<a>Save chart and get embed code</a>
-		</div>
+		<div id="save"></div>
 
 		<p><strong>Do not save unfinished charts.</strong> This page makes use of the GitHub API to store your charts. There&rsquo;s a rate limit of 60 anonymous API requests per-hour per-visitor. To avoid reaching this limit, this sofware tries to use the caching mechanisms available in modern browsers. If you cannot save your chart, please try later.</p>
 
@@ -292,6 +290,7 @@
 
 			try {
 				JSONs=JSON.stringify( JSON.parse( "{"+code.join("")+"}" ) );
+				$("#save").html("<a>Save chart and get embed code</a>");
 			    $("#save a").click(saveJSON);
 			}catch (e){
 				//Is not valid JSON;
@@ -338,13 +337,11 @@
 			opened=false;
 		}
 
-		//Based in Eric Mill's https://github.com/konklone/json/
+		//Based on Eric Mill's https://github.com/konklone/json/
 		function saveJSON() {
 			if (!JSONs || JSONs == lastJSONs){
 				return false;
 			}
-
-			$("#save a").unbind("click");
 
 			var gist={
 				description: "Idescat Visual",
