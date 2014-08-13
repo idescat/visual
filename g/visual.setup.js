@@ -122,7 +122,7 @@ VisualJS.setup={ //v.0.9.3
 	//Libraries: path and existence function
 	main: { //Do not use relative paths for main files in production: they'll be relative to the path where VisualJS.iframe is executed.
 		visual: "http://idescat.github.io/visual/visual.js",
-		setup: "http://idescat.github.io/visual/pages/visual.setup.js",
+		setup: "http://idescat.github.io/visual/g/visual.setup.js",
 		lazy: "http://idescat.github.io/visual/lib/lazyload.js"
 	},
 	lib: {

@@ -9,9 +9,42 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 		<link href="viewer/styles.css" rel="stylesheet" type="text/css" />
 		<script src="visual.js"></script>
-		<script src="pages/visual.setup.js"></script>
+		<script src="g/visual.setup.js"></script>
 		<script src="lib/jquery.1.8.3.js"></script>
 		<script src="viewer/setup.js"></script>
+
+		<script>
+			if(window.location.href!=="http://idescat.github.io/visual/"){
+///////////				window.location.href="http://idescat.github.io/visual/";
+			}
+		</script>
+		<style type="text/css">
+		#save {
+			margin-top: 1em;
+		}
+		#save p {
+			margin-bottom: 4px;
+		}
+		#save a {
+			display: inline-block;
+			border: 1px solid #ccc;
+			padding: 4px 6px;
+			text-decoration: none;
+			font-weight: bold;
+			cursor: pointer;
+		}
+		#save a:hover {
+			background-color: #2b527b;
+			color: #fff;
+		}
+		#save div {
+			border: 1px solid #ccc;
+			padding: 6px;
+			background-color: #f0f0f0;
+			font-family: monospace;
+			font-size: 110%;
+		}
+		</style>
 	</head>
 
 	<body>
@@ -83,7 +116,11 @@
 			<div id="visual" class="visual"></div>
 		</div>
 
-		<div id="save"></div>
+		<div id="save">
+			<a>Save chart and get embed code</a>
+		</div>
+
+		<p>This page makes use of the GitHub API to store your charts. There&rsquo;s a rate limit of 60 anonymous API requests per-hour per-visitor. To avoid reaching this limit, it tries to use the caching mechanisms available in modern browsers. If you cannot save your chart, try later.</p>
 
 		<script>
 		var
@@ -259,11 +296,10 @@
 
 			try {
 				JSONs=JSON.stringify( JSON.parse( "{"+code.join("")+"}" ) );
-				$("#save").text("Save chart and get code");
-			    $("#save").click(saveJSON);
+			    $("#save a").click(saveJSON);
 			}catch (e){
 				//Is not valid JSON;
-				$("#save").text("Can't save this chart because properties are not valid JSON!");
+				$("#save").text("You can't save this chart because properties are not valid JSON!");
 			}
 
 		}
@@ -306,11 +342,13 @@
 			opened=false;
 		}
 
+		//Based in Eric Mill's https://github.com/konklone/json/
 		function saveJSON() {
-			if (!JSONs) return false;
-			if (JSONs == lastJSONs) return false;
+			if (!JSONs || JSONs == lastJSONs){
+				return false;
+			}
 
-			$("#save").unbind("click");
+			$("#save a").unbind("click");
 
 			var gist={
 				description: "Idescat Visual",
@@ -337,9 +375,16 @@
 
 		function embedCode(id){
 			if(id===null){
-				window.alert("Save failed!");
+				window.alert("Save failed! Try later.");
 			}else{
-				$("#save").html('&lt;iframe src="http://idescat.github.io/visual/pages/?id='+id+'"&gt;&lt;/iframe&gt;');
+				$("#save").html('<p>Copy and paste this code in your page. Adapt height and width values to your needs.</p><div>&lt;iframe height="400" width="400" frameborder="0" scrolling="no" src="http://idescat.github.io/visual/g/?id='+id+'"&gt;&lt;/iframe&gt;</div>');
+
+				/* Emulate readonly="readonly" (iPad won't allow copying) 
+				$( "#save textarea" ).bind("keyup keydown cut", function(e){
+					e.preventDefault();
+					e.stopPropagation();
+					e.returnValue=false; //old IEs
+				});*/
 			}
 		}
 
