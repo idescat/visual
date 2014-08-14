@@ -249,20 +249,20 @@
 
 			//Composed properties
 			if(params["border"]!==VisualJS.setup.canvas.grid.border || params["shadow"]!==VisualJS.setup.canvas.grid.shadow || params["line"]!==VisualJS.setup.canvas.grid.line || params["point"]!==VisualJS.setup.canvas.grid.point){
-				code.push('"grid": {"border": '+params["border"]+', "line": '+params["line"]+', "shadow": '+params["shadow"]+', "point": '+params["point"]+'},');
+				code.push('"grid": {"border": '+params["border"]+', "line": '+params["line"]+', "shadow": '+params["shadow"]+', "point": '+params["point"]+'}');
 			}
 			if(params["x"]!==VisualJS.setup.canvas.axis.x || params["y"]!==VisualJS.setup.canvas.axis.y){
-				code.push('"axis": {"x": '+params["x"]+', "y": '+params["y"]+'},');
+				code.push('"axis": {"x": '+params["x"]+', "y": '+params["y"]+'}');
 			}
 			if(params["label"]!==null || params["symbol"]!==null || params["position"]!==VisualJS.setup.canvas.unit.position){
 				code.push('"unit": {'+
 					notnull("label", ", ")+
 					notnull("symbol", ", ")+
 					notnull("position", "")+
-					'}'); //last: no ending comma
+					'}');
 			}
 
-			$( "#code textarea" ).html( "visual({\n\t"+code.join("\n\t")+"\n});" );
+			$( "#code textarea" ).html( "visual({\n\t"+code.join(",\n\t")+"\n});" );
 		}
 
 		function notnull(key, comma){
@@ -280,9 +280,9 @@
 			}
 
 			if(typeof params[key]==="number" || typeof params[key]==="boolean"){
-				code.push('"'+key+'": '+params[key]+',');
+				code.push('"'+key+'": '+params[key]);
 			}else{
-				code.push('"'+key+'": '+JSON.stringify(params[key])+',');
+				code.push('"'+key+'": '+JSON.stringify(params[key]));
 			}
 		}
 
