@@ -291,7 +291,7 @@
 			try {
 				JSONs=JSON.stringify( JSON.parse( "{"+code.join("")+"}" ) );
 				$("#save").html("<a>Save chart and get embed code</a>");
-			    $("#save a").click(saveJSON);
+				$("#save a").click(saveJSON);
 			}catch (e){
 				//Is not valid JSON;
 				$("#save").text("You can't save this chart because properties are not valid JSON!");
@@ -339,9 +339,11 @@
 
 		//Based on Eric Mill's https://github.com/konklone/json/
 		function saveJSON() {
-			if (!JSONs || JSONs == lastJSONs){
+			if (!JSONs || JSONs==lastJSONs){
 				return false;
 			}
+
+			$("#save a").text("Saving...").css({"background-color": "#800", "color": "#fff"});
 
 			var gist={
 				description: "Idescat Visual",
