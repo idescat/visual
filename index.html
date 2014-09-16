@@ -153,13 +153,12 @@
 			return 0;
 		}
 
-		function jsonify(v){
+		function jsonify(v, isData){ //When object is not "data" is "grouped"
 			var val=v.val();
-			try{
-				return JSON.parse( JSON.stringify( eval(val) ) );
-			}catch(e){
-				alert(e);
-			}
+			return (isData) ? 
+					JSON.parse( JSON.stringify( eval(val) ) ) :
+					JSON.parse( val.replace(/label:/g, '"label":').replace(/color:/g, '"color":').replace(/\'/g, '"') )
+			;
 		}
 
 		function update(){
@@ -230,10 +229,10 @@
 				last=params["type"];
 			}
 
-			params["data"]=jsonify( $( "textarea[name=data]" ) );
+			params["data"]=jsonify( $( "textarea[name=data]" ), true );
 
 			if(params["grouped"]) {
-				params["grouped"]=jsonify( $( "input[name=grouped]" ) );
+				params["grouped"]=jsonify( $( "input[name=grouped]" ), false );
 			}
 			$("#visual+iframe").remove();
 
