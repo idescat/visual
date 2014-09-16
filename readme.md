@@ -1,5 +1,7 @@
 **Visual** is a Javascript library for data visualization developed by the **Statistical Institute of Catalonia ([Idescat](http://www.idescat.cat/en/))**. It is based on popular open source solutions. **Visual** offers a simple interface that encapsulates the complexity of these solutions for the most common chart types.
 
+**Not a web developer?** Don't worry: you can try Visual online by simply filling in fields in the [Visual Maker](http://idescat.github.io/visual/).
+
 * [Supported visualizations](#supported-visualizations)
 * [Test](#test)
 * [Configuration](#configuration)
@@ -24,7 +26,7 @@
 
 # Test
 
-Download the [full source and tests](https://github.com/idescat/visual/archive/master.zip) and then start your browser and try the examples in the [test folder](https://github.com/idescat/visual/tree/master/test) or play with the [Visual Viewer](https://github.com/idescat/visual/tree/master/viewer/index.html).
+Download the [full source and tests](https://github.com/idescat/visual/archive/master.zip) and then start your browser and try the examples in the [test folder](https://github.com/idescat/visual/tree/master/test). Or play with the [Visual Viewer](https://github.com/idescat/visual/tree/master/viewer/index.html) included in the package. Or build your own charts and store them online with the [Visual Maker](http://idescat.github.io/visual/).
 
 # Configuration
 
@@ -33,6 +35,8 @@ Edit [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setu
 # Installation
 
 **Visual** allows three running modes: **webpage** (recommended), **simple** and **manual**. See the examples in the [test folder](https://github.com/idescat/visual/tree/master/test).
+
+**Not ready to install?**  You can try Visual online: visit the [Visual Maker](http://idescat.github.io/visual/).
 
 ### Webpage mode
 
