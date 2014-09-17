@@ -127,12 +127,11 @@
 			return 0;
 		}
 
-		function jsonify(v, isData){ //When object is not "data" is "grouped"
-			var val=v.val();
-			return (isData) ? 
-					JSON.parse( JSON.stringify( eval(val) ) ) :
-					JSON.parse( val.replace(/label:/g, '"label":').replace(/color:/g, '"color":').replace(/\'/g, '"') )
-			;
+		//s is a string that represents a typeof object
+		//(object/array)
+		function jsonify(s){
+			var a=eval("["+s.val()+"]"); //eval knows how to deal with arrays but not with non-array objects
+			return JSON.parse( JSON.stringify( a[0] ) );
 		}
 
 		function update(){
@@ -203,10 +202,10 @@
 				last=params["type"];
 			}
 
-			params["data"]=jsonify( $( "textarea[name=data]" ), true );
+			params["data"]=jsonify( $( "textarea[name=data]" ) );
 
 			if(params["grouped"]) {
-				params["grouped"]=jsonify( $( "input[name=grouped]" ), false );
+				params["grouped"]=jsonify( $( "input[name=grouped]" ) );
 			}
 			$("#visual+iframe").remove();
 

@@ -114,7 +114,7 @@
 
 		<p><strong>Do not save unfinished charts.</strong> This page makes use of the GitHub API to store your charts. There&rsquo;s a rate limit of 60 anonymous API requests per-hour per-visitor. To avoid reaching this limit, this sofware tries to use the caching mechanisms available in modern browsers. If you cannot save your chart, please try later.</p>
 
-		<p>To build your chart (particularly, to fill the <em>time</em>, <em>data</em>, <em>by</em> or <em>grouped</em> fields), you might need to read the <a href="https://github.com/idescat/visual">documentation</a> or check the <a href="https://github.com/idescat/visual/tree/master/test">examples</a>.</p>
+		<p>To build your chart (particularly, to fill in the <em>time</em>, <em>data</em>, <em>by</em> or <em>grouped</em> fields), you might need to read the <a href="https://github.com/idescat/visual">documentation</a> or check the <a href="https://github.com/idescat/visual/tree/master/test">examples</a>.</p>
 
 		<script>
 		var
@@ -153,12 +153,11 @@
 			return 0;
 		}
 
-		function jsonify(v, isData){ //When object is not "data" is "grouped"
-			var val=v.val();
-			return (isData) ? 
-					JSON.parse( JSON.stringify( eval(val) ) ) :
-					JSON.parse( val.replace(/label:/g, '"label":').replace(/color:/g, '"color":').replace(/\'/g, '"') )
-			;
+		//s is a string that represents a typeof object
+		//(object/array)
+		function jsonify(s){
+			var a=eval("["+s.val()+"]"); //eval knows how to deal with arrays but not with non-array objects
+			return JSON.parse( JSON.stringify( a[0] ) );
 		}
 
 		function update(){
@@ -229,10 +228,10 @@
 				last=params["type"];
 			}
 
-			params["data"]=jsonify( $( "textarea[name=data]" ), true );
+			params["data"]=jsonify( $( "textarea[name=data]" ) );
 
 			if(params["grouped"]) {
-				params["grouped"]=jsonify( $( "input[name=grouped]" ), false );
+				params["grouped"]=jsonify( $( "input[name=grouped]" ) );
 			}
 			$("#visual+iframe").remove();
 
