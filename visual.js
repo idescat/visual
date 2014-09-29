@@ -22,111 +22,241 @@ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-var VisualJS={version:"0.9.10",show:!0,old:!1,fixed:null,width:500,bwidth:500,height:500,normal:500,scripts:[],map:{},container:{},"public":{},func:{},callback:null,draw:function(){var e=!1
-"function"==typeof VisualJS.chart&&(VisualJS.tooltip(),VisualJS.show&&VisualJS.chart(),"undefined"!=typeof window.onorientationchange?window.onorientationchange=VisualJS.canvas:window.onresize=VisualJS.canvas,e=!0),null!==VisualJS.callback&&VisualJS.callback.call({id:VisualJS.id,chart:e,heading:VisualJS.public[VisualJS.id].heading,legend:VisualJS.public[VisualJS.id].legend})},tooltip:function(){var e=document
-if(!e.getElementById(VisualJS.setup.tooltipid)){var a=e.createElement("div")
-a.id=VisualJS.setup.tooltipid,a.style.display="none",e.body.appendChild(a)}},getsize:function(e){var a=VisualJS.setup,i=a.html,t=i.heading,l=i.footer,n=window,s=document,r=s.documentElement,o=s.getElementsByTagName("body")[0],u=s.getElementById(e),d=u.getElementsByTagName(t)[0].clientHeight,c=u.getElementsByTagName(l)[0].clientHeight,p=n.innerHeight||r.clientHeight||o.clientHeight,f=0
-d||(f+=11),c||(f+=11),"undefined"!=typeof p&&"undefined"!=typeof d&&"undefined"!=typeof c&&(null===VisualJS.fixed?(VisualJS.bwidth=n.innerWidth||r.clientWidth||o.clientWidth,VisualJS.width=VisualJS.bwidth-a.padding.w,VisualJS.height=p-a.padding.h-d-c+f):(VisualJS.bwidth=r.clientWidth||o.clientWidth,VisualJS.width=VisualJS.fixed[0]-a.padding.w,VisualJS.height=VisualJS.fixed[1]-a.padding.h-d-c+f)),VisualJS.visualsize=VisualJS.width<VisualJS.normal?a.mini:a.normal},atext:function(e){return String(e).replace(/&amp;/g,"&")},getHeading:function(e){if(VisualJS.autoheading===!1)return e.title
-var a=[],i=function(e,i){"string"==typeof e&&""!==e&&(i===!0&&(e='<span class="'+VisualJS.setup.nowrapclass+'">'+e+"</span>"),a.push(e))}
-if(null!==e.time&&"object"==typeof e.time)var t=VisualJS.tformat(e.time[0],VisualJS.id),l=VisualJS.tformat(e.time[e.time.length-1],VisualJS.id),n=t+"&ndash;"+l
-else var n=VisualJS.tformat(e.time,VisualJS.id)
-return i(e.title,!1),i(e.geo,!0),i(n,!0),VisualJS.atext(a.join(". "))},addJS:function(e,a){return a&&e.exists.call()?!1:(VisualJS.scripts.push(e.js),!0)},showTooltip:function(e,a,i){var t=document.getElementById(VisualJS.setup.tooltipid),l=VisualJS.bwidth-VisualJS.setup.margin,n={}
-t.innerHTML=e,t.style.display="block"
-var s=t.clientWidth/2
-n.x=a-s,n.y=i-t.clientHeight-5,a+s>l?n.x-=a+s-l:n.x<VisualJS.setup.margin&&(n.x+=VisualJS.setup.margin-n.x),n.y<VisualJS.setup.margin&&(n.y+=1.75*t.clientHeight),t.style.left=n.x+"px",t.style.top=n.y+"px"},format:function(e,a){if("undefined"==typeof e||null===e)return VisualJS.setup.i18n.text.na[VisualJS.container[a].lang]
-if("number"==typeof e){for(var i=e.toFixed(VisualJS.container[a].dec),t=/(\d+)(\d{3})/,l=i.split("."),n=l[0],s=l.length>1?VisualJS.setup.i18n.text.dec[VisualJS.container[a].lang]+l[1]:"";t.test(n);)n=n.replace(t,"$1"+VisualJS.setup.i18n.text.k[VisualJS.container[a].lang]+"$2")
-return n+s}return""},tformat:function(e,a){if(!e)return null
+var VisualJS={version:"0.10.0",show:true,old:false,fixed:null,width:500,bwidth:500,height:500,normal:500,scripts:[],map:{},container:{},"public":{},func:{},callback:null,getSize:function(e){var t=VisualJS.setup,i=t.html,a=i.heading,n=i.footer,l=window,s=document,r=s.documentElement,o=s.getElementsByTagName("body")[0],u=s.getElementById(e),d=u.getElementsByTagName(a)[0].clientHeight,f=u.getElementsByTagName(n)[0].clientHeight,c=l.innerHeight||r.clientHeight||o.clientHeight,p=0
+if(!d)p+=11
+if(!f)p+=11
+if("undefined"!==typeof c&&"undefined"!==typeof d&&"undefined"!==typeof f)if(null===VisualJS.fixed){VisualJS.bwidth=l.innerWidth||r.clientWidth||o.clientWidth
+VisualJS.width=VisualJS.bwidth-t.padding.w
+VisualJS.height=c-t.padding.h-d-f+p}else{VisualJS.bwidth=r.clientWidth||o.clientWidth
+VisualJS.width=VisualJS.fixed[0]-t.padding.w
+VisualJS.height=VisualJS.fixed[1]-t.padding.h-d-f+p}VisualJS.visualsize=VisualJS.width<VisualJS.normal?t.mini:t.normal},iframe:function(e,t){var i=VisualJS.setup,a="string"===typeof e.clas?e.clas:i.clas,n='<!DOCTYPE html>\n<!--[if lt IE 7]><html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->\n<!--[if IE 7]><html class="lt-ie9 lt-ie8"> <![endif]-->\n<!--[if IE 8]><html class="lt-ie9"> <![endif]-->\n<!--[if gt IE 8]><!--> <html> <!--<![endif]-->\n<head>',l=function(){var t=document,i=t.createElement("iframe"),a=t.getElementById(e.id)
+i.frameBorder="0"
+i.scrolling="no"
+a.parentNode.insertBefore(i,a.nextSibling)
+return i},s=function(e,t){if("undefined"!==typeof e){var i
+if(e.contentDocument)i=e.contentDocument
+else if(e.contentWindow)i=e.contentWindow.document
+else if(window.frames[e.name])i=window.frames[e.name].document
+if(i){i.open()
+i.write(t)
+i.close()}}}
+if("string"===typeof t)if(t.indexOf("{")===-1)n+='<link href="'+t+'" rel="stylesheet" type="text/css"/>'
+else n+='<style type="text/css">'+t+"</style>"
+n+='<script type="text/javascript" src="'+VisualJS.setup.main.visual+'"></script>'
+n+='<script type="text/javascript" src="'+VisualJS.setup.main.setup+'"></script>'
+n+='<script type="text/javascript" src="'+VisualJS.setup.main.lazy+'"></script>'
+n+='</head><body><div id="'+e.id+'" class="'+a+'"></div><script>window.setTimeout(function(){visual('+JSON.stringify(e)+");},1);</script></body></html>"
+s(l(),n)},compare:function(e){var t=VisualJS.setup,i=VisualJS.setup.separator,a="string"===typeof e.id?e.id:t.id,n="[object Array]"===Object.prototype.toString.call(e.css)?0===e.css.length?["",""]:1===e.css.length?[e.css[0],e.css[0]]:e.css:[e.css,e.css],l=document,s=l.createElement(t.html.heading),r=l.createElement(t.html.footer),o=l.getElementById(a),u=l.createElement("div"),d=l.createElement("style"),f=function(){VisualJS.getSize(a)
+var n=VisualJS.height+("string"===typeof e.footer&&""!==e.footer?14:0),l=VisualJS.width+t.margin,s="iframe{ float: left; width: "+Math.floor((l-i)/2-t.margin)+"px; height:"+n+"px; }"
+if(d.styleSheet)d.styleSheet.cssText=s
+else d.innerHTML=s
+u.style.height=n+"px"}
+s.innerHTML="string"===typeof e.title?e.title:""
+r.innerHTML="string"===typeof e.footer?e.footer:""
+r.style.clear="both"
+o.appendChild(s)
+o.appendChild(r)
+l.getElementsByTagName("head")[0].appendChild(d)
+u.style.width=i+"px"
+if("styleFloat"in u.style)u.style.styleFloat="left"
+else u.style.cssFloat="left"
+for(var c=0;c<2;c++){var p=l.createElement("span")
+if("string"!==typeof e.load[c].id)e.load[c].id=t.compareids[c]
+p.id=e.load[c].id
+o.insertBefore(p,r)
+VisualJS.iframe(e.load[c],n[c])}o.insertBefore(u,p)
+f()
+if("undefined"!==typeof window.onorientationchange)window.onorientationchange=f
+else window.onresize=f},load:function(e){var t=function(e){var t=JSON.parse(e.data),i=VisualJS.container[t.id]
+if("send"===t.action)if(i){if("cmap"===i.type&&!i.data[0].hasOwnProperty("label")){var a=[]
+for(var n=VisualJS.map[i.by],l=n.features.length;l--;)a[n.features[l].properties[n.id]]=n.features[l].properties[n.label]
+for(var l=s.length,s=i.data;l--;)s[l].label=a[s[l].id]}e.source.postMessage(JSON.stringify(i),"*")}else window.alert("Requested chart does not exist.")}
+if("undefined"===typeof VisualJS.setup)window.alert("Visual: Setup not found (visual.setup.js)!")
+if("[object Array]"!==Object.prototype.toString.call(e))VisualJS.get(e)
+else for(var i=0,a=e.length;i<a;i++)VisualJS.get(e[i])
+if(VisualJS.container[VisualJS.id].listen)if(window.addEventListener)addEventListener("message",t,false)
+else attachEvent("onmessage",t)},get:function(e){var t=VisualJS.setup,i=t.html,a=t.canvas,n=i.heading,l=i.footer,s=VisualJS.old||t.func.old("ie9"),r=function(e){if("undefined"!==typeof e&&"[object Array]"===Object.prototype.toString.call(e)&&2===e.length&&"number"===typeof e[0]&&"number"===typeof e[1]&&e[0]<e[1])return true
+else return false},o=function(t,i){if("string"===typeof t){if(typeof e[t]!==i)e[t]=a[t]}else if(typeof e[t[0]][t[1]]!==i)e[t[0]][t[1]]=a[t[0]][t[1]]},u=[["dec","number"],["heading","boolean"],["legend","boolean"],["grid","object"],[["grid","border"],"number"],[["grid","shadow"],"number"],[["grid","line"],"number"],[["grid","point"],"number"],["axis","object"],[["axis","x"],"boolean"],[["axis","y"],"boolean"],["listen","boolean"]]
+VisualJS.id="string"===typeof e.id?e.id:t.id
+VisualJS.public[VisualJS.id]={heading:null,legend:null}
+if("object"===typeof e.fixed)VisualJS.fixed=e.fixed
+if("object"===typeof e.unit&&null!==e.unit){o(["unit","label"],"string")
+o(["unit","symbol"],"string")
+o(["unit","position"],"string")}else e.unit=a.unit
+e.show="boolean"===typeof e.show?e.show:VisualJS.show
+e.lang=e.lang||t.i18n.lang
+if("function"!==typeof e.callback)e.callback=VisualJS.callback
+if(!("number"===typeof e.range||r(e.range)))e.range=a.range.hasOwnProperty(e.type)&&"number"===typeof a.range[e.type]?a.range[e.type]:null
+for(var d in u)o(u[d][0],u[d][1])
+VisualJS.container[VisualJS.id]=e
+var f="#"+VisualJS.id,c=f+" ."+t.canvasclass,p=VisualJS.container[VisualJS.id],g=function(){if(false===p.autoheading)return p.title
+var e=[],t=function(t,i){if("string"===typeof t&&""!==t){if(true===i)t='<span class="'+VisualJS.setup.nowrapclass+'">'+t+"</span>"
+e.push(t)}}
+if(null!==p.time&&"object"===typeof p.time)var i=v(p.time[0],VisualJS.id),a=v(p.time[p.time.length-1],VisualJS.id),n=i+"&ndash;"+a
+else var n=v(p.time,VisualJS.id)
+t(p.title,false)
+t(p.geo,true)
+t(n,true)
+return y(e.join(". "))},h=function(){var e=false
+if("function"===typeof VisualJS.chart){V()
+p.show&&VisualJS.chart()
+if("undefined"!==typeof window.onorientationchange)window.onorientationchange=x
+else window.onresize=x
+e=true}if(null!==p.callback)p.callback.call({id:VisualJS.id,chart:e,heading:VisualJS.public[VisualJS.id].heading,legend:VisualJS.public[VisualJS.id].legend})},y=function(e){return String(e).replace(/&amp;/g,"&")},m=function(e,t){if(!t||!e.exists.call()){VisualJS.scripts.push(e.js)
+return true}return false},b=function(e,t,i){var a="number"===typeof i&&""!==VisualJS.container[e].unit.label?" "+VisualJS.container[e].unit.label:"",n="number"===typeof i?VisualJS.container[e].unit.symbol:"",l=S(i,e),s=l!==VisualJS.setup.i18n.text.na[VisualJS.container[e].lang]?"end"===VisualJS.container[e].unit.position?l+a+(""!==n?" "+n:n):n+l+a:l
+return t?"<strong>"+s+"</strong> "+t:s},S=function(e,t){if("undefined"===typeof e||null===e)return VisualJS.setup.i18n.text.na[VisualJS.container[t].lang]
+if("number"===typeof e){var i=e.toFixed(VisualJS.container[t].dec),a=/(\d+)(\d{3})/,n=i.split("."),l=n[0],s=n.length>1?VisualJS.setup.i18n.text.dec[VisualJS.container[t].lang]+n[1]:""
+while(a.test(l))l=l.replace(a,"$1"+VisualJS.setup.i18n.text.k[VisualJS.container[t].lang]+"$2")
+return l+s}return""},v=function(e,t){if(!e)return null
 if(isNaN(e))return e
 switch(e.length){case 5:var i="quarter"
 break
 case 6:var i="month"
 break
-default:return e}var t=VisualJS.setup.i18n.text[i]
-if("undefined"==typeof t)return e
-var l=t[VisualJS.container[a].lang]
-if("undefined"==typeof l)return e
-var n=l[e.slice(4)-1]
-return"undefined"==typeof n?e:n+" <span>"+e.slice(0,4)+"</span>"},tooltipText:function(e,a,i){var t="number"==typeof i&&""!==VisualJS.container[e].unit.label?" "+VisualJS.container[e].unit.label:"",l="number"==typeof i?VisualJS.container[e].unit.symbol:"",n=VisualJS.format(i,e),s=n!==VisualJS.setup.i18n.text.na[VisualJS.container[e].lang]?"end"===VisualJS.container[e].unit.position?n+t+(""!==l?" "+l:l):l+n+t:n
-return a?"<strong>"+s+"</strong> "+a:s},iframe:function(e,a){var i=VisualJS.setup,t="string"==typeof e.clas?e.clas:i.clas,l='<!DOCTYPE html>\n<!--[if lt IE 7]><html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->\n<!--[if IE 7]><html class="lt-ie9 lt-ie8"> <![endif]-->\n<!--[if IE 8]><html class="lt-ie9"> <![endif]-->\n<!--[if gt IE 8]><!--> <html> <!--<![endif]-->\n<head>',n=function(){var a=document,i=a.createElement("iframe"),t=a.getElementById(e.id)
-return i.frameBorder="0",i.scrolling="no",t.parentNode.insertBefore(i,t.nextSibling),i},s=function(e,a){if("undefined"!=typeof e){var i
-e.contentDocument?i=e.contentDocument:e.contentWindow?i=e.contentWindow.document:window.frames[e.name]&&(i=window.frames[e.name].document),i&&(i.open(),i.write(a),i.close())}}
-"string"==typeof a&&(l+=-1===a.indexOf("{")?'<link href="'+a+'" rel="stylesheet" type="text/css"/>':'<style type="text/css">'+a+"</style>"),l+='<script type="text/javascript" src="'+VisualJS.setup.main.visual+'"></script>',l+='<script type="text/javascript" src="'+VisualJS.setup.main.setup+'"></script>',l+='<script type="text/javascript" src="'+VisualJS.setup.main.lazy+'"></script>',l+='</head><body><div id="'+e.id+'" class="'+t+'"></div><script>window.setTimeout(function(){visual('+JSON.stringify(e)+");},1);</script></body></html>",s(n(),l)},compare:function(e){var a=VisualJS.setup,i=VisualJS.setup.separator,t="string"==typeof e.id?e.id:a.id,l="[object Array]"===Object.prototype.toString.call(e.css)?0===e.css.length?["",""]:1===e.css.length?[e.css[0],e.css[0]]:e.css:[e.css,e.css],n=document,s=n.createElement(a.html.heading),r=n.createElement(a.html.footer),o=n.getElementById(t),u=n.createElement("div"),d=n.createElement("style"),c=function(){VisualJS.getsize(t)
-var l=VisualJS.height+("string"==typeof e.footer&&""!==e.footer?14:0),n=VisualJS.width+a.margin,s="iframe{ float: left; width: "+Math.floor((n-i)/2-a.margin)+"px; height:"+l+"px; }"
-d.styleSheet?d.styleSheet.cssText=s:d.innerHTML=s,u.style.height=l+"px"}
-s.innerHTML="string"==typeof e.title?e.title:"",r.innerHTML="string"==typeof e.footer?e.footer:"",r.style.clear="both",o.appendChild(s),o.appendChild(r),n.getElementsByTagName("head")[0].appendChild(d),u.style.width=i+"px","styleFloat"in u.style?u.style.styleFloat="left":u.style.cssFloat="left"
-for(var p=0;2>p;p++){var f=n.createElement("span")
-"string"!=typeof e.load[p].id&&(e.load[p].id=a.compareids[p]),f.id=e.load[p].id,o.insertBefore(f,r),VisualJS.iframe(e.load[p],l[p])}o.insertBefore(u,f),c(),"undefined"!=typeof window.onorientationchange?window.onorientationchange=c:window.onresize=c},load:function(e){if("undefined"==typeof VisualJS.setup&&window.alert("Visual: Setup not found (visual.setup.js)!"),"[object Array]"!==Object.prototype.toString.call(e))VisualJS.get(e)
-else for(var a=0,i=e.length;i>a;a++)VisualJS.get(e[a])},get:function(e){var a=VisualJS.setup,i=a.html,t=a.canvas,l=i.heading,n=i.footer,s=VisualJS.old||a.func.old("ie9"),r=function(e){return"undefined"!=typeof e&&"[object Array]"===Object.prototype.toString.call(e)&&2===e.length&&"number"==typeof e[0]&&"number"==typeof e[1]&&e[0]<e[1]?!0:!1}
-VisualJS.id="string"==typeof e.id?e.id:a.id,VisualJS.public[VisualJS.id]={heading:null,legend:null},"object"==typeof e.fixed&&(VisualJS.fixed=e.fixed),VisualJS.container[VisualJS.id]="object"==typeof e.unit&&null!==e.unit?{unit:{label:"string"==typeof e.unit.label?e.unit.label:t.unit.label,symbol:"string"==typeof e.unit.symbol?e.unit.symbol:t.unit.symbol,position:"string"==typeof e.unit.position?e.unit.position:t.unit.position}}:{unit:t.unit},VisualJS.container[VisualJS.id].dec="number"==typeof e.dec?e.dec:t.dec,VisualJS.show="boolean"==typeof e.show?e.show:VisualJS.show,VisualJS.autoheading="boolean"==typeof e.autoheading?e.autoheading:t.autoheading,VisualJS.legend="boolean"==typeof e.legend?e.legend:t.legend,VisualJS.lang=e.lang||a.i18n.lang,VisualJS.container[VisualJS.id].lang=e.lang||a.i18n.lang,VisualJS.callback="function"==typeof e.callback?e.callback:VisualJS.callback,VisualJS.range="number"==typeof e.range||r(e.range)?e.range:t.range.hasOwnProperty(e.type)&&"number"==typeof t.range[e.type]?t.range[e.type]:null,VisualJS.grid="object"==typeof e.grid?{border:"number"==typeof e.grid.border?e.grid.border:t.grid.border,shadow:"number"==typeof e.grid.shadow?e.grid.shadow:t.grid.shadow,line:"number"==typeof e.grid.line?e.grid.line:t.grid.line,point:"number"==typeof e.grid.point?e.grid.point:t.grid.point}:t.grid,VisualJS.axis="object"==typeof e.axis?{x:"boolean"==typeof e.axis.x?e.axis.x:t.axis.x,y:"boolean"==typeof e.axis.y?e.axis.y:t.axis.y}:t.axis
-var o="#"+VisualJS.id,u=o+" ."+a.canvasclass
-if("cmap"===e.type)if(s)document.getElementById(VisualJS.id).innerHTML="<p>"+a.i18n.text.oldbrowser[VisualJS.container[VisualJS.id].lang]+"</p>"
-else{if("string"!=typeof e.by)return
-VisualJS.addJS(a.lib.maps,!0),VisualJS.addJS(a.lib.d3,!0),VisualJS.addJS(a.map[e.by],!0),VisualJS.chart=function(){var i=VisualJS.getHeading(e),t=VisualJS.map[e.by],s=t.area[0],r=t.area[1],u="object"==typeof e.grouped&&"object"==typeof e.grouped.label&&e.grouped.label.length>0&&e.data[0].hasOwnProperty("group"),d=e.data[0].hasOwnProperty("val"),c=u?e.grouped.label.length:d?a.colors.map.max:1,p=a.colorclassprefix,f=VisualJS.func.colors(a.colors.map.base,c,"fill",p,u&&"object"==typeof e.grouped.color&&e.grouped.color.length===e.grouped.label.length?e.grouped.color:[],VisualJS.id),g=d3.select(o),S=d3.geo[t.projection](),J="object"==typeof t.center&&"function"==typeof S.center?S.center(t.center):S,h=J.scale(t.scale).translate([s/2,r/2]),V=d3.geo.path().projection(h),y=d3.select("#"+a.tooltipid)
-VisualJS.canvas=function(){g.html("<"+l+"></"+l+"><"+n+"></"+n+">"),d3.select(o+" "+l).html(i),d3.select(o+" "+n).html(VisualJS.atext(e.footer||"")),VisualJS.getsize(VisualJS.id)
-var S,J,h,m,b,x=VisualJS.id,v=d3.map(),w=[],k=function(){},j=function(){},E=VisualJS.height/r,T=VisualJS.width/s,H=Math.min(Math.round(s*E),VisualJS.width),I=Math.min(Math.round(r*T),VisualJS.height),M=Math.floor((VisualJS.width-H)/2),W=Math.floor((VisualJS.height-I)/2),z=T>E?E:T,B=g.insert("svg:svg",n).attr("width",H).attr("height",I)
-u?(S=d3.map(),k=function(e,a){e.set(a.id,a.group)},J=function(e,a,i){return p+(e.get(i[t.id])-1)},h=function(a,i){var l=e.grouped.label[a.get(i[t.id])-1],n=i[t.label]
-return"undefined"!=typeof l&&(n+=" <em>"+l+"</em>"),n}):(d?(J=function(e,a,i,l,n){var s=a.get(i[t.id])
-if(l===n)return"undefined"!=typeof s?p+(c/2).toFixed(0):null
-var r=d3.scale.quantize().domain([l,n]).range(d3.range(c).map(function(e){return p+e}))
-return r(s)},j=VisualJS.func.legend):J=function(e,a,i){return""!==a.get(i[t.id])?"":p+(c-1)},h=function(e,a){return a[t.label]})
-for(var $=0,q=e.data,L=q.length;L>$;$++){var O=q[$]
-O.hasOwnProperty("val")?null!==O.val&&(v.set(O.id,O.val),w.push(O.val)):v.set(O.id,""),k(S,O)}w.sort(function(e,a){return e-a})
-var F=w[0],A=w[L-1]
-if("number"==typeof VisualJS.range?(m=d3.quantile(w,VisualJS.range),b=d3.quantile(w,1-VisualJS.range)):(m=VisualJS.range[0],b=VisualJS.range[1]),B.style("margin-left",M+"px"),B.style("margin-top",W+"px"),B.style("margin-bottom",W+"px"),B.append("svg:g").attr("class",a.areaclass).attr("transform","scale("+z+")").selectAll("path").data(t.features).enter().append("svg:path").attr("class",function(e){return J(S,v,e.properties,m,b)}).attr("d",V).on("mousemove",function(e){(d||u||"undefined"!=typeof v.get(e.properties[t.id]))&&VisualJS.showTooltip(VisualJS.tooltipText(x,h(S,e.properties),v.get(e.properties[t.id])),d3.event.pageX,d3.event.pageY)}).on("mouseout",function(){return y.style("display","none")}),"undefined"!=typeof F){var N=[VisualJS.tooltipText(x,null,m),VisualJS.tooltipText(x,null,b)],C=[f[f.length-1],f[0]],P=[F>m||VisualJS.format(m,x)===VisualJS.format(F,x),b>A||VisualJS.format(b,x)===VisualJS.format(A,x)]
-VisualJS.public[VisualJS.id].legend={color:C,text:N,symbol:[P[0]?"==":"<=",P[1]?"==":">="]},VisualJS.legend&&"object"==typeof t.legend&&j(N,C,B,y,t.area,t.legend,P)}VisualJS.public[VisualJS.id].heading=i},VisualJS.canvas()}}else{if(VisualJS.addJS(a.lib.jquery,!0)){var d=!1
-VisualJS.addJS(a.lib.jquery.flot,!1)}else if(VisualJS.addJS(a.lib.jquery.flot,!0))var d=!1
-else var d=!0
-s&&VisualJS.addJS(a.lib.excanvas,!0)
-var c=function(){},p=[],f=[],g=[],S=e.stacked||!1,J=function(){if(VisualJS.autoheading){var i=e.time.length,t=e.data.length
-if(null===e.data[0].val[0]){for(var l=0,n=!0,s=[];i>l;l++){for(var r=0;t>r;r++)n=n&&null===e.data[r].val[l]
-if(!n)break
-s.push(n)}for(var o=0,u=s.length;u>o;o++)if(s[o]){e.time.shift()
-for(var r=0;t>r;r++)e.data[r].val.shift()}i=e.time.length}if(null===e.data[0].val[i-1]){for(var l=i,n=!0,s=[];l--;){for(var r=0,t=e.data.length;t>r;r++)n=n&&null===e.data[r].val[l]
-if(!n)break
-s.push(n)}for(var o=s.length;o--;)if(s[o]){e.time.pop()
-for(var r=0;t>r;r++)e.data[r].val.pop()}}}var J=function(){}
-if(S)VisualJS.addJS(a.lib.jquery.flot.stack,d)
-else if("tsbar"===e.type){VisualJS.addJS(a.lib.jquery.flot.orderbars,d)
-var J=function(e){return e.bars}}return c=function(a,i){VisualJS.ticks=[]
-for(var t=0,l=i.length;l>t;t++)f.push([t,i[t]]),VisualJS.ticks.push([t,i[t]])
-for(var t=0,l=a.length;l>t;t++){for(var n=[],s=a[t].val,r=s.length,o=0;r>o;o++)n.push([o,s[o]])
-p.push("tsbar"!==e.type||S||1===l?{label:a[t].label,data:n}:{label:a[t].label,data:n,bars:{show:!0,barWidth:.2,order:t+1,lineWidth:2}})}for(var t=0,u=p.length;u>t;t++)g.push({data:p[t].data,label:p[t].label,bars:J(p[t]),shadowSize:VisualJS.grid.shadow})
-V=u>1},VisualJS.getHeading(e)}
-switch(e.type){case"pyram":VisualJS.addJS(a.lib.jquery.flot.pyramid,d),Array.max=function(e){return Math.max.apply(Math,e)}
-var h,c=function(e,a,i){h=Math.max(Array.max(e[0].val),Array.max(e[1].val)),p[0]={label:e[0].label,data:[],pyramid:{direction:"L"}},p[1]={label:e[1].label,data:[]}
-for(var t=0,l=i.length;l>t;t++)p[0].data[t]=[i[t],e[0].val[t]],p[1].data[t]=[i[t],e[1].val[t]]},V=!0,y=!1,S=!1,m=!1,b=!1,x=!1,v=VisualJS.getHeading(e)
+default:return e}var a=VisualJS.setup.i18n.text[i]
+if("undefined"===typeof a)return e
+var n=a[VisualJS.container[t].lang]
+if("undefined"===typeof n)return e
+var l=n[e.slice(4)-1]
+if("undefined"===typeof l)return e
+return l+" <span>"+e.slice(0,4)+"</span>"},J=function(e,t,i){var a=document.getElementById(VisualJS.setup.tooltipid),n=VisualJS.bwidth-VisualJS.setup.margin,l={}
+a.innerHTML=e
+a.style.display="block"
+var s=a.clientWidth/2
+l.x=t-s
+l.y=i-a.clientHeight-5
+if(t+s>n)l.x-=t+s-n
+else if(l.x<VisualJS.setup.margin)l.x+=VisualJS.setup.margin-l.x
+if(l.y<VisualJS.setup.margin)l.y+=1.75*a.clientHeight
+a.style.left=l.x+"px"
+a.style.top=l.y+"px"},V=function(){var e=document
+if(!e.getElementById(VisualJS.setup.tooltipid)){var t=e.createElement("div")
+t.id=VisualJS.setup.tooltipid
+t.style.display="none"
+e.body.appendChild(t)}},x
+if("cmap"===e.type)if(s)document.getElementById(VisualJS.id).innerHTML="<p>"+t.i18n.text.oldbrowser[p.lang]+"</p>"
+else{if("string"!==typeof e.by)return
+m(t.lib.maps,true)
+m(t.lib.d3,true)
+m(t.map[e.by],true)
+VisualJS.chart=function(){var i=g(),a=VisualJS.map[e.by],s=a.area[0],r=a.area[1],o="object"===typeof e.grouped&&"object"===typeof e.grouped.label&&e.grouped.label.length>0&&e.data[0].hasOwnProperty("group"),u=e.data[0].hasOwnProperty("val"),d=o?e.grouped.label.length:u?t.colors.map.max:1,c=t.colorclassprefix,h=VisualJS.func.colors(t.colors.map.base,d,"fill",c,o&&"object"===typeof e.grouped.color&&e.grouped.color.length===e.grouped.label.length?e.grouped.color:[],VisualJS.id),m=d3.select(f),v=d3.geo[a.projection](),V="object"===typeof a.center&&"function"===typeof v.center?v.center(a.center):v,w=V.scale(a.scale).translate([s/2,r/2]),k=d3.geo.path().projection(w),j=d3.select("#"+t.tooltipid)
+x=function(){m.html("<"+n+"></"+n+"><"+l+"></"+l+">")
+d3.select(f+" "+n).html(i)
+d3.select(f+" "+l).html(y(e.footer||""))
+VisualJS.getSize(VisualJS.id)
+var g=VisualJS.id,v=d3.map(),V=d3.map(),x=e.data[0].hasOwnProperty("label"),w=[],E,M=function(){},I=function(){},W,z,B,O,T=VisualJS.height/r,$=VisualJS.width/s,L=Math.min(Math.round(s*T),VisualJS.width),q=Math.min(Math.round(r*$),VisualJS.height),H=Math.floor((VisualJS.width-L)/2),N=Math.floor((VisualJS.height-q)/2),F=T<$?T:$,A=m.insert("svg:svg",l).attr("width",L).attr("height",q)
+if(o){E=d3.map()
+M=function(e,t){e.set(t.id,t.group)}
+z=function(e,t,i){return c+(e.get(i[a.id])-1)}
+W=function(t,i){var n=e.grouped.label[t.get(i[a.id])-1],l=x?V.get(i[a.id]):i[a.label]
+if("undefined"!==typeof n)l+=" <em>"+n+"</em>"
+return l}}else{if(u){z=function(e,t,i,n,l){var s=t.get(i[a.id])
+if(n===l)return"undefined"!==typeof s?c+(d/2).toFixed(0):null
+var r=d3.scale.quantize().domain([n,l]).range(d3.range(d).map(function(e){return c+e}))
+return r(s)}
+I=VisualJS.func.legend}else z=function(e,t,i){return""!==t.get(i[a.id])?"":c+(d-1)}
+W=function(e,t){return x?V.get(t[a.id]):t[a.label]}}for(var P=0,C=e.data,D=C.length;P<D;P++){var Y=C[P]
+if(Y.hasOwnProperty("val")){if(null!==Y.val){v.set(Y.id,Y.val)
+w.push(Y.val)}}else v.set(Y.id,"")
+if(x)V.set(Y.id,Y.label)
+M(E,Y)}w.sort(function(e,t){return e-t})
+var R=w[0],U=w[D-1]
+if("number"===typeof p.range){B=d3.quantile(w,p.range)
+O=d3.quantile(w,1-p.range)}else{B=p.range[0]
+O=p.range[1]}A.style("margin-left",H+"px")
+A.style("margin-top",N+"px")
+A.style("margin-bottom",N+"px")
+A.append("svg:g").attr("class",t.areaclass).attr("transform","scale("+F+")").selectAll("path").data(a.features).enter().append("svg:path").attr("class",function(e){return z(E,v,e.properties,B,O)}).attr("d",k).on("mousemove",function(e){if(u||o||"undefined"!==typeof v.get(e.properties[a.id]))J(b(g,W(E,e.properties),v.get(e.properties[a.id])),d3.event.pageX,d3.event.pageY)}).on("mouseout",function(){return j.style("display","none")})
+if("undefined"!==typeof R){var X=[b(g,null,B),b(g,null,O)],G=[h[h.length-1],h[0]],K=[B<R||S(B,g)===S(R,g),O>U||S(O,g)===S(U,g)]
+VisualJS.public[VisualJS.id].legend={color:G,text:X,symbol:[K[0]?"==":"<=",K[1]?"==":">="]}
+if(p.legend&&"object"===typeof a.legend)I(X,G,A,j,a.area,a.legend,K)}VisualJS.public[VisualJS.id].heading=i}
+x()}}else{if(m(t.lib.jquery,true)){var w=false
+m(t.lib.jquery.flot,false)}else if(m(t.lib.jquery.flot,true))var w=false
+else var w=true
+if(s)m(t.lib.excanvas,true)
+var k=function(){},j=[],E=[],M=[],I=e.stacked||false,W=function(){if(p.autoheading){var i=e.time.length,a=e.data.length
+if(null===e.data[0].val[0]){for(var n=0,l=true,s=[];n<i;n++){for(var r=0;r<a;r++)l=l&&null===e.data[r].val[n]
+if(!l)break
+s.push(l)}for(var o=0,u=s.length;o<u;o++)if(s[o]){e.time.shift()
+for(var r=0;r<a;r++)e.data[r].val.shift()}i=e.time.length}if(null===e.data[0].val[i-1]){for(var n=i,l=true,s=[];n--;){for(var r=0,a=e.data.length;r<a;r++)l=l&&null===e.data[r].val[n]
+if(!l)break
+s.push(l)}for(var o=s.length;o--;)if(s[o]){e.time.pop()
+for(var r=0;r<a;r++)e.data[r].val.pop()}}}var d=function(){return}
+if(I)m(t.lib.jquery.flot.stack,w)
+else if("tsbar"===e.type){m(t.lib.jquery.flot.orderbars,w)
+var d=function(e){return e.bars}}k=function(t,i){VisualJS.ticks=[]
+for(var a=0,n=i.length;a<n;a++){E.push([a,i[a]])
+VisualJS.ticks.push([a,i[a]])}for(var a=0,n=t.length;a<n;a++){for(var l=[],s=t[a].val,r=s.length,o=0;o<r;o++)l.push([o,s[o]])
+if("tsbar"!==e.type||I||1===n)j.push({label:t[a].label,data:l})
+else j.push({label:t[a].label,data:l,bars:{show:true,barWidth:.2,order:a+1,lineWidth:2}})}for(var a=0,u=j.length;a<u;a++)M.push({data:j[a].data,label:j[a].label,bars:d(j[a]),shadowSize:p.grid.shadow})
+B=u>1}
+return g()}
+switch(e.type){case"pyram":m(t.lib.jquery.flot.pyramid,w)
+Array.max=function(e){return Math.max.apply(Math,e)}
+var z,k=function(e,t,i){z=Math.max(Array.max(e[0].val),Array.max(e[1].val))
+j[0]={label:e[0].label,data:[],pyramid:{direction:"L"}}
+j[1]={label:e[1].label,data:[]}
+for(var a=0,n=i.length;a<n;a++){j[0].data[a]=[i[a],e[0].val[a]]
+j[1].data[a]=[i[a],e[1].val[a]]}},B=true,O=false,I=false,T=false,L=false,q=false,H=g()
 break
-case"rank":var w=[],c=function(e){for(var a=0,i=e.length;i>a;a++)f[a]=[a,e[i-a-1][0]],w[a]=[e[i-a-1][1],a]
-p={data:w}},V=!1,y=!1,m=!1,b=!1,x=!0,v=VisualJS.getHeading(e)
+case"rank":var N=[],k=function(e){for(var t=0,i=e.length;t<i;t++){E[t]=[t,e[i-t-1][0]]
+N[t]=[e[i-t-1][1],t]}j={data:N}},B=false,O=false,T=false,L=false,q=true,H=g()
 break
-case"bar":VisualJS.addJS(a.lib.jquery.flot.categories,d)
-var c=function(e,a,i){if("object"!=typeof i||null===i)for(var t=0,l=e.length;l>t;t++)null!==e[t][1]&&p.push(["<span>"+e[t][0]+"</span>",e[t][1]])
-else if("number"==typeof e[0])for(var t=0,l=i.length;l>t;t++)null!==e[t]&&p.push(['<span">'+i[t]+"</span>",e[t]])
-V=p.length>1},y=!0,m=!1,b=!1,x=!0,v=VisualJS.getHeading(e)
+case"bar":m(t.lib.jquery.flot.categories,w)
+var k=function(e,t,i){if("object"!==typeof i||null===i){for(var a=0,n=e.length;a<n;a++)if(null!==e[a][1])j.push(["<span>"+e[a][0]+"</span>",e[a][1]])}else if("number"===typeof e[0])for(var a=0,n=i.length;a<n;a++)if(null!==e[a])j.push(['<span">'+i[a]+"</span>",e[a]])
+B=j.length>1},O=true,T=false,L=false,q=true,H=g()
 break
-case"tsline":var v=J(),y=null,m=!0,b=!0,x=!1
+case"tsline":var H=W(),O=null,T=true,L=true,q=false
 break
-case"tsbar":var v=J(),y=!0,m=!1,b=!1,x=!0}VisualJS.chart=function(){c(e.data,e.time,e.by),$.fn.UseTooltip=function(i){var t=[]
-$(this).bind("plothover",function(l,n,s){if(s){if(t!=[s.seriesIndex,s.dataIndex]){t=[s.seriesIndex,s.dataIndex]
-var r=s.datapoint[0],o=s.datapoint[1],u="bar"!==e.type?s.series.label:p[r][0],d="rank"!==e.type?u:f[o][1],c="rank"!==e.type&&"bar"!==e.type?S||1===p.length?f[r][1]:"pyram"===e.type?p[n.x<0?0:1].data[s.dataIndex][0]:f[s.dataIndex][1]:!1,g="pyram"===e.type?Math.abs(r):"rank"!==e.type?"tsbar"!==e.type?o:S||1===p.length?p[s.seriesIndex].data[r][1]:o:r
-VisualJS.showTooltip(VisualJS.tooltipText(i,c?d+" ("+c+")":d,g),n.pageX,n.pageY)}}else $("#"+a.tooltipid).hide(),t=[]})},V=VisualJS.legend&&V
-var i={colors:a.colors.series,series:{stack:y,bars:{show:x,barWidth:.7,align:"center",fill:.9},lines:{show:m,lineWidth:VisualJS.grid.line},points:{show:b,radius:VisualJS.grid.point}},legend:{show:V},grid:{borderWidth:VisualJS.grid.border,hoverable:!0,clickable:!1,mouseActiveRadius:10},xaxis:{show:VisualJS.axis.x},yaxis:{show:VisualJS.axis.y}}
-VisualJS.canvas=function(){var t=VisualJS.id,s=f.length
-switch($(o).html("<"+l+"></"+l+"><"+n+"></"+n+">"),$(o+" "+l).html(v),$(o+" "+n).html(VisualJS.atext(e.footer||"")),VisualJS.getsize(t),$(o+" "+l).after('<div class="'+a.canvasclass+" "+VisualJS.visualsize+'" style="width: '+VisualJS.width+"px; height: "+VisualJS.height+'px;"></div>'),e.type){case"pyram":i.series.pyramid={show:!0,barWidth:1},i.yaxis.show=VisualJS.height/p[0].data.length>11?VisualJS.axis.y:!1,i.xaxis.max="number"==typeof VisualJS.range?h*VisualJS.range:VisualJS.range[1],i.xaxis.tickFormatter=function(e){return VisualJS.format(e,t)},$.plot(u,p,i)
+case"tsbar":var H=W(),O=true,T=false,L=false,q=true}VisualJS.chart=function(){k(e.data,e.time,e.by)
+$.fn.UseTooltip=function(i){var a=[]
+$(this).bind("plothover",function(n,l,s){if(s){if(a!=[s.seriesIndex,s.dataIndex]){a=[s.seriesIndex,s.dataIndex]
+var r=s.datapoint[0],o=s.datapoint[1],u="bar"!==e.type?s.series.label:j[r][0],d="rank"!==e.type?u:E[o][1],f="rank"!==e.type&&"bar"!==e.type?I||1===j.length?E[r][1]:"pyram"===e.type?j[l.x<0?0:1].data[s.dataIndex][0]:E[s.dataIndex][1]:false,c="pyram"===e.type?Math.abs(r):"rank"!==e.type?"tsbar"!==e.type?o:I||1===j.length?j[s.seriesIndex].data[r][1]:o:r
+J(b(i,f?d+" ("+f+")":d,c),l.pageX,l.pageY)}}else{$("#"+t.tooltipid).hide()
+a=[]}})}
+B=p.legend&&B
+var i={colors:t.colors.series,series:{stack:O,bars:{show:q,barWidth:.7,align:"center",fill:.9},lines:{show:T,lineWidth:p.grid.line},points:{show:L,radius:p.grid.point}},legend:{show:B},grid:{borderWidth:p.grid.border,hoverable:true,clickable:false,mouseActiveRadius:10},xaxis:{show:p.axis.x},yaxis:{show:p.axis.y}}
+x=function(){var a=VisualJS.id,s=E.length
+$(f).html("<"+n+"></"+n+"><"+l+"></"+l+">")
+$(f+" "+n).html(H)
+$(f+" "+l).html(y(e.footer||""))
+VisualJS.getSize(a)
+$(f+" "+n).after('<div class="'+t.canvasclass+" "+VisualJS.visualsize+'" style="width: '+VisualJS.width+"px; height: "+VisualJS.height+'px;"></div>')
+switch(e.type){case"pyram":i.series.pyramid={show:true,barWidth:1}
+i.yaxis.show=VisualJS.height/j[0].data.length>11?p.axis.y:false
+i.xaxis.max="number"===typeof p.range?z*p.range:p.range[1]
+i.xaxis.tickFormatter=function(e){return S(e,a)}
+$.plot(c,j,i)
 break
-case"rank":i.series.bars.horizontal=!0,i.yaxis.ticks=VisualJS.height/s>11?f.slice(0):0,"number"==typeof VisualJS.range?i.xaxis.max=e.data[0][1]*VisualJS.range:(i.xaxis.min=VisualJS.range[0],i.xaxis.max=VisualJS.range[1]),i.xaxis.tickFormatter=function(e){return VisualJS.format(e,t)},i.yaxis.autoscaleMargin=0,i.series.bars.barWidth=.5,$.plot(u,[p],i)
+case"rank":i.series.bars.horizontal=true
+i.yaxis.ticks=VisualJS.height/s>11?E.slice(0):0
+if("number"===typeof p.range)i.xaxis.max=e.data[0][1]*p.range
+else{i.xaxis.min=p.range[0]
+i.xaxis.max=p.range[1]}i.xaxis.tickFormatter=function(e){return S(e,a)}
+i.yaxis.autoscaleMargin=0
+i.series.bars.barWidth=.5
+$.plot(c,[j],i)
 break
-case"bar":i.xaxis.mode="categories",i.xaxis.tickLength=0,i.yaxis.tickFormatter=function(e){return VisualJS.format(e,t)},"number"!=typeof VisualJS.range&&null!==VisualJS.range&&(i.yaxis.min=VisualJS.range[0],i.yaxis.max=VisualJS.range[1]),$.plot(u,[p],i)
+case"bar":i.xaxis.mode="categories"
+i.xaxis.tickLength=0
+i.yaxis.tickFormatter=function(e){return S(e,a)}
+if("number"!==typeof p.range&&null!==p.range){i.yaxis.min=p.range[0]
+i.yaxis.max=p.range[1]}$.plot(c,[j],i)
 break
 case"tsline":i.grid.markings=[{color:"#999",lineWidth:.5,yaxis:{from:0,to:0}}]
-case"tsbar":i.yaxis.tickFormatter=function(e){return VisualJS.format(e,t)}
-var r=VisualJS.width/s,d=[],c="01"
-switch("number"!=typeof VisualJS.range&&null!==VisualJS.range&&(i.yaxis.min=VisualJS.range[0],i.yaxis.max=VisualJS.range[1]),VisualJS.ticks[0][1].length){case 4:if(30>r){for(var S=r>15?2:r>8?3:4,J=0;s>J;J++)d[J]=J%S?[f[J][0],""]:[f[J][0],f[J][1]]
-i.xaxis.ticks=d}else i.xaxis.ticks=f
+case"tsbar":i.yaxis.tickFormatter=function(e){return S(e,a)}
+var r=VisualJS.width/s,o=[],u="01"
+if("number"!==typeof p.range&&null!==p.range){i.yaxis.min=p.range[0]
+i.yaxis.max=p.range[1]}switch(VisualJS.ticks[0][1].length){case 4:if(r<30){var d=r>15?2:r>8?3:4
+for(var g=0;g<s;g++)o[g]=g%d?[E[g][0],""]:[E[g][0],E[g][1]]
+i.xaxis.ticks=o}else i.xaxis.ticks=E
 break
-case 5:c="1"
-case 6:if(35>r){for(var J=0;s>J;J++)d[J]=VisualJS.ticks[J][1].slice(4)!==c?[VisualJS.ticks[J][0],""]:[VisualJS.ticks[J][0],VisualJS.ticks[J][1].slice(0,4)],f[J][1]=VisualJS.tformat(VisualJS.ticks[J][1],VisualJS.id)
-i.xaxis.ticks=d}else{for(var J=0;s>J;J++)f[J][1]=VisualJS.tformat(VisualJS.ticks[J][1],VisualJS.id)
-i.xaxis.ticks=f}break
-default:i.xaxis.ticks=f}$.plot(u,g,i)}$(u).UseTooltip(VisualJS.id),VisualJS.public[VisualJS.id].heading=v},VisualJS.canvas()}}VisualJS.scripts.length&&"object"==typeof LazyLoad?LazyLoad.js(VisualJS.scripts,VisualJS.draw):VisualJS.draw()}}
-if("function"!=typeof visual)var visual=VisualJS.load
+case 5:u="1"
+case 6:if(r<35){for(var g=0;g<s;g++){o[g]=VisualJS.ticks[g][1].slice(4)!==u?[VisualJS.ticks[g][0],""]:[VisualJS.ticks[g][0],VisualJS.ticks[g][1].slice(0,4)]
+E[g][1]=v(VisualJS.ticks[g][1],VisualJS.id)}i.xaxis.ticks=o}else{for(var g=0;g<s;g++)E[g][1]=v(VisualJS.ticks[g][1],VisualJS.id)
+i.xaxis.ticks=E}break
+default:i.xaxis.ticks=E}$.plot(c,M,i)}$(c).UseTooltip(VisualJS.id)
+VisualJS.public[VisualJS.id].heading=H}
+x()}}if(VisualJS.scripts.length&&"object"===typeof LazyLoad)LazyLoad.js(VisualJS.scripts,h)
+else h()}}
+if("function"!==typeof visual)var visual=VisualJS.load

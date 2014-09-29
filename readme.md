@@ -6,7 +6,7 @@
 * [Test](#test)
 * [Configuration](#configuration)
 * [Installation](#installation)
-* [The Visual object](#the-visual-object)
+* [The Visual Object](#the-visual-object)
 * [Maps](#maps)
 * [Public functions](#public-functions)
 * [Dependencies](#dependencies)
@@ -44,7 +44,7 @@ In webpage mode, the visualization is the only content on an html5 page. Use the
 
 ### Simple mode
 
-In simple mode, the visualization is embedded in a page using the [VisualJS.iframe](#visualjsiframe) function. Use the [simple template](https://github.com/idescat/visual/blob/master/templates/simple.html) to build your page. To embed the visualization, include the visual.js and visual.setup.js files and use a script tag with a unique ID and invoke [VisualJS.iframe](#visualjsiframe) passing a [visual object](#the-visual-object) (with the same ID as the script tag) and a CSS file (or CSS rules) ([example](https://github.com/idescat/visual/blob/master/test/simple.html)).
+In simple mode, the visualization is embedded in a page using the [VisualJS.iframe](#visualjsiframe) function. Use the [simple template](https://github.com/idescat/visual/blob/master/templates/simple.html) to build your page. To embed the visualization, include the visual.js and visual.setup.js files and use a script tag with a unique *id* and invoke [VisualJS.iframe](#visualjsiframe) passing a [Visual Object](#the-visual-object) (with the same *id* as the script tag) and a CSS file (or CSS rules) ([example](https://github.com/idescat/visual/blob/master/test/simple.html)).
 
 ### Manual mode
 
@@ -52,9 +52,9 @@ In manual mode, the visualization is directly embedded in a page. Use the [manua
 
 If you are embedding more than one visualization in the page, LazyLoad will only include the javascripts needed for the first visualization in the **visual** function. Instead, include all the needed javascripts manually. Do not include LazyLoad. You will also need to specify an *id* and its size (in the *fixed* property: *[width, height]*) for each visualization.
 
-# The Visual object
+# The Visual Object
 
-**Visual** is executed by passing a visual object, or an array of visual objects, to the *visual* function.
+**Visual** is executed by passing a Visual Object, or an array of Visual Objects, to the *visual* function.
 
 ```js
 visual( {...} )
@@ -66,7 +66,7 @@ If you already have a defined *visual* function, you can run **Visual** like thi
 VisualJS.load( {...} )
 ```
 
-The visual object accepts the following properties:
+The Visual Object accepts the following properties:
 
 ### General properties
 
@@ -85,10 +85,10 @@ String. Geographical area.
 ####  time
 String (optional) or array of strings (required). Time period or periods.
 
-Visual will treat the following string time formats using the "quarter" and "month" properties in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js): "20131" (first quarter of 2013) and "201301" (January 2013). Any other time pattern will be displayed untreated.
+Visual will treat the following string time formats using the *quarter* and *month* properties in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js): "20131" (first quarter of 2013) and "201301" (January 2013). Any other time pattern will be displayed untreated.
 
 #### autoheading
-Boolean. This determines whether the heading is built by composition from "title", "geo" and "time". If *false*, only "title" will be used as a heading. Default (*true*) is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
+Boolean. This determines whether the heading is built by composition from *title*, *geo* and *time*. If *false*, only *title* will be used as a heading. Default (*true*) is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
 
 #### legend
 Boolean. This determines whether the chart legend should be shown. Default (*true*) is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
@@ -111,22 +111,22 @@ Number. Number of decimals in the data. This is used in the tooltip and map lege
 String ("bar", "rank", "tsbar", "tsline", "pyram", "cmap"). Required. Chart type. This determines the *data* and *time* formats and the specific properties available.
 
 #### data
-Array. Required. This includes the data values but also series labels and IDs. The format is determined by *type*.
+Array. Required. This includes the data values but also series labels and identifiers. The format is determined by *type*.
 
 #### id
-String. In [simple mode](#simple-mode) and [manual mode](#manual-mode), this is the ID of the HTML element where the visualization has to be embedded.
+String. In [simple mode](#simple-mode) and [manual mode](#manual-mode), this is the *id* of the HTML element where the visualization has to be embedded.
 
 #### fixed
 Array. In [simple mode](#simple-mode) and [manual mode](#manual-mode), this is the *[width, height]* in pixels of the visualization container.
 
 #### callback
-Function. This function will be called after the chart has been drawn. The *this* keyword will point to an object with the following properties: "id" (the chart's id: string), "chart" (a boolean indicating whether the chart is drawable or not: if false, [VisualJS.chart](#visualjschart) would not be defined), "heading" (the HTML of the heading) and "legend" (an object with legend information).
+Function. This function will be called after the chart has been drawn. The *this* keyword will point to an object with the following properties: *id* (the chart's identifier: string), *chart* (a boolean indicating whether the chart is drawable or not: if *false*, [VisualJS.chart](#visualjschart) would not be defined), *heading* (the HTML of the heading) and *legend* (an object with legend information).
 
-The "legend" object is null unless the chart type is "cmap", [data](#data-6) includes a *val* property and [grouped](#grouped) is not specified. In this case, colors are automatically assigned to map areas.
+The *legend* object is *null* unless the chart type is "cmap", [data](#data-6) includes a *val* property and [grouped](#grouped) is not specified. In this case, colors are automatically assigned to map regions.
 
-When "legend" is not null, it has three properties (three arrays of size two): "color", "text" and "symbol". The first element in each array exposes information about the lighter color and the second element about the darker one. The elements of the "color" array are objects with three properties (numbers): "r", "g" and "b" (RGB color). The elements of the "text" array are strings (value plus unit information the lighter/darker color has been assigned to). The elements of the "symbol" array are three possible strings: "<=", "==" or ">=" (the comparison operators associated with the "text" elements). See example [adv-05.html](https://github.com/idescat/visual/blob/master/test/adv-05.html).
+When *legend* is not *null*, it has three properties (three arrays of size two): *color*, *text* and *symbol*. The first element in each array exposes information about the lighter color and the second element about the darker one. The elements of the *color* array are objects with three properties (numbers): *r*, *g* and *b* (RGB color). The elements of the *text* array are strings (value plus unit information the lighter/darker color has been assigned to). The elements of the *symbol* array are three possible strings: "<=", "==" or ">=" (the comparison operators associated with the *text* elements). See example [adv-05.html](https://github.com/idescat/visual/blob/master/test/adv-05.html).
 
-The *callback* property will be ignored if it is included in a visual object passed to [VisualJS.iframe](#visualjsiframe).
+The *callback* property will be ignored if it is included in a Visual Object passed to [VisualJS.iframe](#visualjsiframe).
 
 Examples:  [adv-01.html](https://github.com/idescat/visual/blob/master/test/adv-01.html), [adv-02.html](https://github.com/idescat/visual/blob/master/test/adv-02.html), [adv-03.html](https://github.com/idescat/visual/blob/master/test/adv-03.html), [adv-05.html](https://github.com/idescat/visual/blob/master/test/adv-05.html).
 
@@ -144,6 +144,16 @@ VisualJS.load({
 	...
 });
 ```
+#### listen
+Boolean. When *true*, Visual will register a listener for events of type "message".  Default is *false*.
+
+Currently, Visual will only respond to messages that include a string that represents a JSON object with two properties: *action* and *id*. The only *action* currently supported is "send". The *id* must specify the [id](#id) of an existing [Visual Object](#the-visual-object).
+
+```js
+{ "action": "send", "id": "visual" }
+```
+
+The listener will post a message back to the source with a string representation of the requested Visual Object after validation.
 
 ### *bar* properties
 
@@ -413,7 +423,7 @@ Number (multiplier) or array of numbers (minimun, maximum). By default, the mult
 
 ### *cmap* properties
 
-Choropleth map
+Choropleth map.
 
 ```js
 visual({
@@ -477,10 +487,10 @@ Examples:  [cmap.html](https://github.com/idescat/visual/blob/master/test/cmap.h
 String. Time period.
 
 ####  data
-Array of objects. Required. The array contains as many elements as map areas. Each element is an object with at least one property: the area *id* (string). In this case, a map  will be created with the included areas highlighted. If *val* (number) is included, it will be used to automatically assign colors to areas, unless [grouped](#grouped) has been specified. In that case, the *group* property (counter starting with 1) is required and will be used to assign colors, but *val* can still be specified if needed.
+Array of objects. Required. The array contains as many elements as map regions. Each element is an object with at least one property: the region *id* (string). In this case, a map  will be created with the included regions highlighted. If *val* (number) is included, it will be used to automatically assign colors to regions, unless [grouped](#grouped) has been specified. In that case, the *group* property (counter starting with 1) is required and will be used to assign colors, but *val* can still be specified if needed. If *label* (string) is included, it will be used to name the map regions; otherwise, the [label in the map](#id-properties-id-label) will be used.
 
 ####  grouped
-Object with at least one property: "label" (array of strings). Each element in this array is a group label string (the first label will be attached to areas with a *group* property of 1 in **data**, and so on). A second property ("color", array of strings) can be provided to assign a custom color to each group. Colors must be specified as three two-digit hexadecimal numbers, starting with a # sign (for example, "#000000" means black).
+Object with at least one property: *label* (array of strings). Each element in this array is a group label string (the first label will be attached to regions with a *group* property of 1 in **data**, and so on). A second property (*color*, array of strings) can be provided to assign a custom color to each group. Colors must be specified as three two-digit hexadecimal numbers, starting with a # sign (for example, "#000000" means black).
 
 ####  by
 String. Required. Selects a certain map. Possible values ("mun", "com", "prov", etc.) are set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
@@ -503,39 +513,39 @@ A map is a UTF-8 Javascript file that adds a new property (the name of the map) 
 
 #### GeoJSON properties: features
 
-Geographic information must be provided in the [GeoJSON](http://geojson.org) format: it must be a feature collection object (a GeoJSON object with the type "FeatureCollection"). Simply copy the "features" property of the GeoJSON object into the Visual map object.
+Geographic information must be provided in the [GeoJSON](http://geojson.org) format: it must be a feature collection object (a GeoJSON object with the type "FeatureCollection"). Simply copy the *features* property of the GeoJSON object into the Visual map object.
 
 #### Projection properties: projection, scale, center
 
-"projection" (string) must be a valid [D3 geo projection](https://github.com/mbostock/d3/wiki/Geo-Projections) function name. "scale" is the projection scale (a number) and "center" is the projection center (a coordinate array).
+*projection* (string) must be a valid [D3 geo projection](https://github.com/mbostock/d3/wiki/Geo-Projections) function name. *scale* is the projection scale (a number) and *center* is the projection center (a coordinate array).
 
 	projection: "mercator",
 	scale: 9000,
 	center: [1.74, 41.7],
 
-If a projection does not support centering (for example, Albers USA), "center" is optional and, if present, will be ignored.
+If a projection does not support centering (for example, Albers USA), *center* is optional and, if present, will be ignored.
 
 Visual does not currently support rotation.
 
-#### ID properties: id, label
+#### Identification properties: id, label
 
-Use "id" and "label" to specify the properties in "features" that contain the regions' IDs and the regions' labels.
+Use *id* and *label* to specify the properties in *features* that contain the regions' identifiers and the regions' labels.
 
 	id: "STATE",
 	label: "NAME",
 
 #### Canvas properties: area, legend
 
-Use "area" to provide the size in pixels (width, height) of the canvas where your projection will be drawn. Use "legend" to specify the location in pixels (width, height) of the map legend in the canvas.
+Use *area* to provide the size in pixels (width, height) of the canvas where your projection will be drawn. Use *legend* to specify the location in pixels (width, height) of the map legend in the canvas.
 
 	area: [500, 500],
 	legend: [280, 345],
 
-These values will not determine the final size of your map (maps will scale to the available space): they are only important for determining the "scale" and "center" values.
+These values will not determine the final size of your map (maps will scale to the available space): they are only important for determining the *scale* and *center* values.
 
 ### Map setup
 
-Maps must be declared in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js). To include a new map, edit [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js) and create a new property with the name of the map inside VisualJS.setup.map. This name must match the name in VisualJS.map (in the Javascript map file) and will be used in the [by](#by-1) property. The value of this property must be an object with two properties: the address of the map ("js") and an existence function ("exists").
+Maps must be declared in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js). To include a new map, edit [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js) and create a new property with the name of the map inside VisualJS.setup.map. This name must match the name in VisualJS.map (in the Javascript map file) and will be used in the [by](#by-1) property. The value of this property must be an object with two properties: the address of the map (*js*) and an existence function (*exists*).
 
 Once your map has been added to [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js), use the [map maker](https://github.com/idescat/visual/tree/master/maps/maker/) to fine-tune it.
 
@@ -543,7 +553,7 @@ Once your map has been added to [visual.setup.js](https://github.com/idescat/vis
 
 ## VisualJS.load
 
-This is the main function. It loads the data and, if the property **show** is *true* (default), draws the chart using [VisualJS.chart](#visualjschart). It only accepts one argument: a [visual object](#the-visual-object) or an array of visual objects.
+This is the main function. It loads the data and, if the property **show** is *true* (default), draws the chart using [VisualJS.chart](#visualjschart). It only accepts one argument: a [Visual Object](#the-visual-object) or an array of Visual Objects.
 
 ```js
 VisualJS.load( {...} ); //Same as: visual( {...} );
@@ -565,7 +575,7 @@ Examples:  [adv-01.html](https://github.com/idescat/visual/blob/master/test/adv-
 
 ## VisualJS.iframe
 
-In [simple mode](simple-mode), this function is used to embed visualizations. It accepts two arguments: a [visual object](#the-visual-object) and a string (a CSS file address or CSS rules). If the visual object contains a [callback](#callback) property, it will be ignored.
+In [simple mode](simple-mode), this function is used to embed visualizations. It accepts two arguments: a [Visual Object](#the-visual-object) and a string (a CSS file address or CSS rules). If the Visual Object contains a [callback](#callback) property, it will be ignored.
 
 ```js
 VisualJS.iframe( {...} , "http://mydomain/path/iframe.css" );
@@ -584,7 +594,7 @@ String. Text of title.
 String. Text of footer.
 
 ### load
-Array of two [visual objects](#the-visual-object) (required).
+Array of two [Visual Objects](#the-visual-object) (required).
 
 ### css
 String or array of two strings. The strings can be CSS file addresses or CSS rules. When two strings are provided, the first style is used in the left chart and the second one is used in the right chart.

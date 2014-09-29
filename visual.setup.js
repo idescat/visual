@@ -22,7 +22,7 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-VisualJS.setup={ //v.0.9.3
+VisualJS.setup={ //v.0.10.0
 	//Colors for maps and series
 	colors: {
 		map: {
@@ -371,6 +371,9 @@ VisualJS.setup={ //v.0.9.3
 	func: {
 		old: function(ie) { return RegExp("(^|\\s)lt-"+ie+"(\\s|$)").test(document.documentElement.className); }
 	},
+
+	//Attach event listener? 0.10.*
+	listen: false, 
 
 	//Margins and paddings used in container
 	margin: 10,
