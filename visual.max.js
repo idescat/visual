@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.10.0",
+	version: "0.10.1",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -221,11 +221,9 @@ var VisualJS={
 	load: function (o) {
 		var
 			listener=function(event){
-				var 
-					message=JSON.parse(event.data),
-					vis=VisualJS.container[message.id]
-				;
+				var message=JSON.parse(event.data);
 				if(message.action==="send"){
+					var vis=VisualJS.container[message.id];
 					if(vis){
 						if(vis.type==="cmap" && !vis.data[0].hasOwnProperty("label")){
 							var	label=[]; // key: "id", val:"label"
@@ -233,7 +231,7 @@ var VisualJS={
 								label[m.features[i].properties[m.id]]=m.features[i].properties[m.label];
 							}
 							//add 'label' to data
-							for(var i=data.length,data=vis.data; i--;){					
+							for(var data=vis.data, i=data.length; i--;){					
 								data[i].label=label[data[i].id];
 							}
 						}
@@ -263,6 +261,7 @@ var VisualJS={
 			}else{
 			  attachEvent("onmessage", listener);
 			}		
+			
 		}
 		
 	},
@@ -290,52 +289,65 @@ var VisualJS={
 					return false;
 				}
 			},
-			validate=function(node, type){
+			validate=function(node, type, setup){
 				if(typeof node==="string"){
 					if(typeof o[node]!==type){
-						o[node]=scanvas[node];
+						o[node]=setup[node];
 					}
 				}else{ //node is an array
 					if(typeof o[node[0]][node[1]]!==type){
-						o[node[0]][node[1]]=scanvas[node[0]][node[1]];
+						o[node[0]][node[1]]=setup[node[0]][node[1]];
 					}
 				}
 			},
-			nodeType=[["dec","number"], ["heading","boolean"], ["legend","boolean"],["grid","object"], [["grid","border"],"number"],
-			[["grid","shadow"],"number"], [["grid","line"],"number"], [["grid","point"],"number"], ["axis","object"],
-			[["axis","x"],"boolean"] ,[["axis","y"],"boolean"], ["listen","boolean"] ]			
+			nts=
+			[ //[node, type, setup]
+				//VisualJS
+				["show","boolean",VisualJS], 
+				["callback","function",VisualJS], 
+				//vsetup
+				["id","string",vsetup],	
+				["listen","boolean",vsetup],
+				//scanvas
+				["dec","number",scanvas], 
+				["heading","boolean",scanvas], 
+				["legend","boolean",scanvas], 
+				["grid","object",scanvas], 
+				[["grid","border"],"number",scanvas], 
+				[["grid","shadow"],"number",scanvas], 
+				[["grid","line"],"number",scanvas], 
+				[["grid","point"],"number",scanvas], 
+				["axis","object",scanvas],
+				[["axis","x"],"boolean",scanvas], 
+				[["axis","y"],"boolean",scanvas]
+			]			
 		;
+		//validate all nodes
+		for(var i=0; i<nts.length; i++){
+			validate(nts[i][0], nts[i][1], nts[i][2]);
+		}		
 		
-		VisualJS.id=(typeof o.id==="string") ? o.id : vsetup.id;
+		VisualJS.id=o.id;
 		VisualJS.public[VisualJS.id]={ heading: null, legend: null };
 		if(typeof o.fixed==="object"){
 			VisualJS.fixed=o.fixed;
 		}
 		
 		if(typeof o.unit==="object" && o.unit!==null){
-			validate(["unit","label"],"string");
-			validate(["unit","symbol"],"string");
-			validate(["unit","position"],"string");
+			validate(["unit","label"],"string",scanvas);
+			validate(["unit","symbol"],"string",scanvas);
+			validate(["unit","position"],"string",scanvas);
 		}else{
 			o.unit=scanvas.unit;
 		}
 		
-		o.show=(typeof o.show==="boolean") ? o.show : VisualJS.show;
 		o.lang=o.lang || vsetup.i18n.lang;
-		if(typeof o.callback!=="function"){
-			o.callback=VisualJS.callback;
-		}
 		if( !(typeof o.range==="number" || isRange(o.range)) ){
 			o.range=( scanvas.range.hasOwnProperty(o.type) && typeof scanvas.range[o.type]==="number" ) ?
 				scanvas.range[o.type]
 				:
 				null // Only possible if "bar", "tbar", tsline" as setup does not provide a default value (number)
 			;		
-		}
-		
-		
-		for(var i in nodeType){
-			validate(nodeType[i][0], nodeType[i][1]);
 		}
 		
 		//add object o

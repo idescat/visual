@@ -22,7 +22,7 @@ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-var VisualJS={version:"0.10.0",show:true,old:false,fixed:null,width:500,bwidth:500,height:500,normal:500,scripts:[],map:{},container:{},"public":{},func:{},callback:null,getSize:function(e){var t=VisualJS.setup,i=t.html,a=i.heading,n=i.footer,l=window,s=document,r=s.documentElement,o=s.getElementsByTagName("body")[0],u=s.getElementById(e),d=u.getElementsByTagName(a)[0].clientHeight,f=u.getElementsByTagName(n)[0].clientHeight,c=l.innerHeight||r.clientHeight||o.clientHeight,p=0
+var VisualJS={version:"0.10.1",show:true,old:false,fixed:null,width:500,bwidth:500,height:500,normal:500,scripts:[],map:{},container:{},"public":{},func:{},callback:null,getSize:function(e){var t=VisualJS.setup,i=t.html,a=i.heading,n=i.footer,l=window,s=document,r=s.documentElement,o=s.getElementsByTagName("body")[0],u=s.getElementById(e),d=u.getElementsByTagName(a)[0].clientHeight,f=u.getElementsByTagName(n)[0].clientHeight,c=l.innerHeight||r.clientHeight||o.clientHeight,p=0
 if(!d)p+=11
 if(!f)p+=11
 if("undefined"!==typeof c&&"undefined"!==typeof d&&"undefined"!==typeof f)if(null===VisualJS.fixed){VisualJS.bwidth=l.innerWidth||r.clientWidth||o.clientWidth
@@ -67,27 +67,26 @@ o.insertBefore(p,r)
 VisualJS.iframe(e.load[c],n[c])}o.insertBefore(u,p)
 f()
 if("undefined"!==typeof window.onorientationchange)window.onorientationchange=f
-else window.onresize=f},load:function(e){var t=function(e){var t=JSON.parse(e.data),i=VisualJS.container[t.id]
-if("send"===t.action)if(i){if("cmap"===i.type&&!i.data[0].hasOwnProperty("label")){var a=[]
+else window.onresize=f},load:function(e){var t=function(e){var t=JSON.parse(e.data)
+if("send"===t.action){var i=VisualJS.container[t.id]
+if(i){if("cmap"===i.type&&!i.data[0].hasOwnProperty("label")){var a=[]
 for(var n=VisualJS.map[i.by],l=n.features.length;l--;)a[n.features[l].properties[n.id]]=n.features[l].properties[n.label]
-for(var l=s.length,s=i.data;l--;)s[l].label=a[s[l].id]}e.source.postMessage(JSON.stringify(i),"*")}else window.alert("Requested chart does not exist.")}
+for(var s=i.data,l=s.length;l--;)s[l].label=a[s[l].id]}e.source.postMessage(JSON.stringify(i),"*")}else window.alert("Requested chart does not exist.")}}
 if("undefined"===typeof VisualJS.setup)window.alert("Visual: Setup not found (visual.setup.js)!")
 if("[object Array]"!==Object.prototype.toString.call(e))VisualJS.get(e)
 else for(var i=0,a=e.length;i<a;i++)VisualJS.get(e[i])
 if(VisualJS.container[VisualJS.id].listen)if(window.addEventListener)addEventListener("message",t,false)
 else attachEvent("onmessage",t)},get:function(e){var t=VisualJS.setup,i=t.html,a=t.canvas,n=i.heading,l=i.footer,s=VisualJS.old||t.func.old("ie9"),r=function(e){if("undefined"!==typeof e&&"[object Array]"===Object.prototype.toString.call(e)&&2===e.length&&"number"===typeof e[0]&&"number"===typeof e[1]&&e[0]<e[1])return true
-else return false},o=function(t,i){if("string"===typeof t){if(typeof e[t]!==i)e[t]=a[t]}else if(typeof e[t[0]][t[1]]!==i)e[t[0]][t[1]]=a[t[0]][t[1]]},u=[["dec","number"],["heading","boolean"],["legend","boolean"],["grid","object"],[["grid","border"],"number"],[["grid","shadow"],"number"],[["grid","line"],"number"],[["grid","point"],"number"],["axis","object"],[["axis","x"],"boolean"],[["axis","y"],"boolean"],["listen","boolean"]]
-VisualJS.id="string"===typeof e.id?e.id:t.id
+else return false},o=function(t,i,a){if("string"===typeof t){if(typeof e[t]!==i)e[t]=a[t]}else if(typeof e[t[0]][t[1]]!==i)e[t[0]][t[1]]=a[t[0]][t[1]]},u=[["id","string",t],["listen","boolean",t],["show","boolean",VisualJS],["callback","function",VisualJS],["dec","number",a],["heading","boolean",a],["legend","boolean",a],["grid","object",a],[["grid","border"],"number",a],[["grid","shadow"],"number",a],[["grid","line"],"number",a],[["grid","point"],"number",a],["axis","object",a],[["axis","x"],"boolean",a],[["axis","y"],"boolean",a]]
+for(var d in u)o(u[d][0],u[d][1],u[d][2])
+VisualJS.id=e.id
 VisualJS.public[VisualJS.id]={heading:null,legend:null}
 if("object"===typeof e.fixed)VisualJS.fixed=e.fixed
-if("object"===typeof e.unit&&null!==e.unit){o(["unit","label"],"string")
-o(["unit","symbol"],"string")
-o(["unit","position"],"string")}else e.unit=a.unit
-e.show="boolean"===typeof e.show?e.show:VisualJS.show
+if("object"===typeof e.unit&&null!==e.unit){o(["unit","label"],"string",a)
+o(["unit","symbol"],"string",a)
+o(["unit","position"],"string",a)}else e.unit=a.unit
 e.lang=e.lang||t.i18n.lang
-if("function"!==typeof e.callback)e.callback=VisualJS.callback
 if(!("number"===typeof e.range||r(e.range)))e.range=a.range.hasOwnProperty(e.type)&&"number"===typeof a.range[e.type]?a.range[e.type]:null
-for(var d in u)o(u[d][0],u[d][1])
 VisualJS.container[VisualJS.id]=e
 var f="#"+VisualJS.id,c=f+" ."+t.canvasclass,p=VisualJS.container[VisualJS.id],g=function(){if(false===p.autoheading)return p.title
 var e=[],t=function(t,i){if("string"===typeof t&&""!==t){if(true===i)t='<span class="'+VisualJS.setup.nowrapclass+'">'+t+"</span>"
