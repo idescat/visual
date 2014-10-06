@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 var VisualJS={
-	version: "0.10.1",
+	version: "0.10.2",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -221,23 +221,47 @@ var VisualJS={
 	load: function (o) {
 		var
 			listener=function(event){
-				var message=JSON.parse(event.data);
-				if(message.action==="send"){
-					var vis=VisualJS.container[message.id];
-					if(vis){
-						if(vis.type==="cmap" && !vis.data[0].hasOwnProperty("label")){
-							var	label=[]; // key: "id", val:"label"
-							for(var m=VisualJS.map[vis.by], i=m.features.length; i--;){
-								label[m.features[i].properties[m.id]]=m.features[i].properties[m.label];
+				var 
+					message=JSON.parse(event.data),
+					post=function(obj){
+						event.source.postMessage(JSON.stringify(obj), "*");						
+					}
+				;
+				
+				if(typeof message.action==="undefined"){
+					post({
+						type: "error", 
+						data: [ {id: "400", label: "\"action\" is required."} ]
+					});
+				}else{
+					if(message.action==="send"){
+						var 
+							id=message.id || VisualJS.id,
+							vis=VisualJS.container[id] || VisualJS.container[id]
+						;
+						if(vis){
+							if(vis.type==="cmap" && !vis.data[0].hasOwnProperty("label")){
+								var	label=[]; // key: "id", val:"label"
+								for(var m=VisualJS.map[vis.by], i=m.features.length; i--;){
+									label[m.features[i].properties[m.id]]=m.features[i].properties[m.label];
+								}
+								//add 'label' to data
+								for(var data=vis.data, i=data.length; i--;){					
+									data[i].label=label[data[i].id];
+								}
 							}
-							//add 'label' to data
-							for(var data=vis.data, i=data.length; i--;){					
-								data[i].label=label[data[i].id];
-							}
+							post(vis);
+						}else{
+							post({
+								type: "error", 
+								data: [ {id: "404", label: "A visualisation with the specified \"id\" was not found"} ]
+							});
 						}
-						event.source.postMessage(JSON.stringify(vis), "*");
 					}else{
-						window.alert("Requested chart does not exist.");
+						post({
+							type: "error", 
+							data: [ {id: "400", label:"\"action\" value is not correct."} ]
+						});
 					}
 				}
 			}
