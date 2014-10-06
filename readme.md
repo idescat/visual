@@ -147,13 +147,15 @@ VisualJS.load({
 #### listen
 Boolean. When *true*, Visual will register a listener for events of type "message".  Default is *false*.
 
-Currently, Visual will only respond to messages that include a string that represents a JSON object with two properties: *action* and *id*. The only *action* currently supported is "send". The *id* must specify the [id](#id) of an existing [Visual Object](#the-visual-object).
+Currently, Visual will only respond to messages that include a string that represents a JSON object with two properties: *action* and *id*. The only *action* currently supported is "send". The *id* must specify the [id](#id) of an existing [Visual Object](#the-visual-object). If *id* is not specified, the last existing *id* will be used.
 
 ```js
 { "action": "send", "id": "visual" }
 ```
 
 The listener will post a message back to the source with a string representation of the requested Visual Object after validation.
+
+On error, the Visual Object will only contain the *type* property (value: "error") and the *data* property (array of size 1 because simultaneous error messages are not currently supported). The first element in *data* will be an object with only two properties: *id* (error type) and *label* (text in English). Error type "400" is used when *action* has not been specified or has an incorrect value.  Error type "404" is used when *id* does not identify an existing Visual Object.
 
 ### *bar* properties
 
