@@ -124,7 +124,8 @@
 			code=[],
 			leg=$( "#data legend" ),
 			lastJSONs,
-			JSONs
+			JSONs,
+			savebutton="<a>Save chart and get embed code</a>"
 		;
 
 		$( "#version" ).html( "Visual v. "+VisualJS.version );
@@ -288,7 +289,7 @@
 
 			try {
 				JSONs=JSON.stringify( JSON.parse( "{"+code.join(",")+"}" ) );
-				$("#save").html("<a>Save chart and get embed code</a>");
+				$("#save").html(savebutton);
 				$("#save a").click(saveJSON);
 			}catch (e){
 				//Is not valid JSON;
@@ -368,9 +369,10 @@
 
 		function embedCode(id){
 			if(id===null){
-				window.alert("Save failed! Try later.");
+				window.alert("Save failed! Try in an hour, please.");
+				$("#save a").text(savebutton).css({"background-color": "#fff", "color": "#000"});
 			}else{
-				$("#save").html('<p><strong>Copy and paste this code in your page.</strong> Adapt height and width values to your needs.</p><div>&lt;iframe height="400" width="400" frameborder="0" scrolling="no" src="http://idescat.github.io/visual/g/?id='+id+'"&gt;&lt;/iframe&gt;</div><p>Or try the<strong>responsive code</strong>.</p><div>&lt;div style="width:100%;margin:0 auto"&gt;&lt;div style="position:relative"&gt;&lt;img style="display:block;width:100%;height:auto" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" /&gt;&lt;iframe style="position:absolute;top:0;left:0;width:100%;height:100%" src="http://idescat.github.io/visual/g/?id='+id+'" frameborder="0" scrolling="no"&gt;&lt;/iframe&gt;&lt;/div&gt;&lt;/div&gt;</div>');
+				$("#save").html('<p><strong>Copy and paste this code in your page.</strong> Adapt height and width values to your needs.</p><div>&lt;iframe height="400" width="400" frameborder="0" scrolling="no" src="http://idescat.github.io/visual/g/?id='+id+'"&gt;&lt;/iframe&gt;</div><p>Or try the <strong>responsive code</strong>.</p><div>&lt;div style="width:100%;margin:0 auto"&gt;&lt;div style="position:relative"&gt;&lt;img style="display:block;width:100%;height:auto" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" /&gt;&lt;iframe style="position:absolute;top:0;left:0;width:100%;height:100%" src="http://idescat.github.io/visual/g/?id='+id+'" frameborder="0" scrolling="no"&gt;&lt;/iframe&gt;&lt;/div&gt;&lt;/div&gt;</div>');
 			}
 		}
 
