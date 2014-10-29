@@ -76,30 +76,54 @@
 		}
 
 		function getJSON(id) {
-			if( window.localStorage && localStorage.getItem("Visual"+id) ) {
-				var json=isVisual( localStorage.getItem("Visual"+id) );
+			var 
+				json,
+				vid="Visual"+id
+			;
+
+			if( window.localStorage && localStorage.getItem(vid) ) {
+				json=isVisual( localStorage.getItem(vid) );
 				visualize(json, id, null);
 			}else{
-				$.get('https://api.github.com/gists/' + id,
-				function(data, status, xhr) {
-					var json, src;
-					if(data.description==="Idescat Visual"){
-						var source=data.files["source.json"];
-						if(source.type==="application/json"){
-							src=source.content;
-							json=isVisual(src);
-						}
-					}
+				$.get(
+					"https://api.github.com/gists/" + id,
+					function(data) {
+						var 
+							src,
+							source,
+							d=data.data,
+							meta=data.meta,
+							quota=meta["X-RateLimit-Remaining"]
+						;
 
-					visualize(json, id, src);
-					log("Remaining this hour: " + xhr.getResponseHeader("X-RateLimit-Remaining"));
-				}).fail(function(xhr, status, errorThrown) {
-					msg("No saved information could be fetched for id="+id+"!");
-					log("Error fetching anonymous gist!");
-					log(xhr);
-					log(status);
-					log(errorThrown);
-				});
+						log("Remaining this hour: " + quota);
+
+						if(meta.status===403){ //Forbidden
+							//Do not show anything on screen
+							log("Exceeded rate limit? Try later.");
+							log(meta.status);
+							log(d.message);
+							return;
+						}
+
+						if(meta.status!==200){
+							msg("No saved information could be fetched for id="+id+"!");
+							log(meta.status);
+							log(d.message);
+							return;
+						}
+
+						if(d.description==="Idescat Visual"){
+							source=d.files["source.json"];
+							if(source.type==="application/json"){
+								src=source.content;
+								json=isVisual(src);
+							}
+						}
+						visualize(json, id, src);
+					},
+					"jsonp"
+				);
 			}
 		}
 
