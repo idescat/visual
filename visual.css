@@ -22,12 +22,12 @@ body {
 #VisualJSleft, #VisualJSright {
 	text-align: center;
 }
-
 #VisualJSTooltip {
 	display: none;
 	position: absolute;
 	border: 1px solid #ccc;
 	border-radius: 4px;
+	box-shadow:0 0 8px rgba(0,0,0,.2);
 	padding: 4px;
 	background-color: #f6f6f6;
 	opacity: 0.90;
@@ -63,14 +63,43 @@ body {
 .visual .VisualJSarea {
 	fill: #808080;
 	stroke: #000;
-	stroke-width: 0.05px;
+	stroke-width: .05px;
+	stroke-linejoin: round;
+	vector-effect: non-scaling-stroke;
 }
+.visual .VisualJSarea path:hover {
+	stroke: #000;
+	stroke-width: .5px;
+}
+.visual path.c80:hover,
+.visual path.c81:hover,
+.visual path.c82:hover,
+.visual path.c83:hover,
+.visual path.c84:hover,
+.visual path.c85:hover,
+.visual path.c86:hover,
+.visual path.c87:hover,
+.visual path.c88:hover,
+.visual path.c89:hover,
+.visual path.c90:hover,
+.visual path.c91:hover,
+.visual path.c92:hover,
+.visual path.c93:hover,
+.visual path.c94:hover,
+.visual path.c95:hover,
+.visual path.c96:hover,
+.visual path.c97:hover,
+.visual path.c98:hover,
+.visual path.c99:hover {
+	stroke: #fff;
+}
+
 .visual svg g.VisualJSlegend {
 	stroke: #808080;
 	stroke-width: 1px;
 }
 .visual svg g.VisualJSlegend text {
 	font-size: 11px;
-	fill: black;
+	fill: #000;
 	stroke: none;
 }
