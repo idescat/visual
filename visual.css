@@ -28,6 +28,7 @@ body {
 	position: absolute;
 	border: 1px solid #ccc;
 	border-radius: 4px;
+	box-shadow:0 0 8px rgba(0,0,0,.2);
 	padding: 4px;
 	background-color: #f6f6f6;
 	opacity: 0.90;
@@ -63,7 +64,13 @@ body {
 .visual .VisualJSarea {
 	fill: #808080;
 	stroke: #000;
-	stroke-width: 0.05px;
+	stroke-width: .05px;
+	stroke-linejoin: round;
+	vector-effect: non-scaling-stroke;
+}
+.visual .VisualJSarea path:hover {
+	stroke-width: 1px;
+	stroke: #ffa500;
 }
 .visual svg g.VisualJSlegend {
 	stroke: #808080;
@@ -71,6 +78,6 @@ body {
 }
 .visual svg g.VisualJSlegend text {
 	font-size: 11px;
-	fill: black;
+	fill: #000;
 	stroke: none;
 }
