@@ -363,8 +363,15 @@ VisualJS.setup={ //v.0.10.0
 		prov43: {
 			js: "../maps/prov432013mun.js",
 			exists: function(){ return typeof VisualJS.map.prov43!=="undefined"; }
-		}		
-		
+		},
+		spainnuts2: {
+			js: "../maps/spain2014nuts2.js",
+			exists: function(){ return typeof VisualJS.map.spainnuts2!=="undefined"; }
+		},
+		spainnuts3: {
+			js: "../maps/spain2014nuts3.js",
+			exists: function(){ return typeof VisualJS.map.spainnuts3!=="undefined"; }
+		}
 	},
 
 	//IE check
