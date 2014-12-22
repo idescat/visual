@@ -22,7 +22,7 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-VisualJS.setup={ //v.0.9.3
+VisualJS.setup={ //v.0.10.0
 	//Colors for maps and series
 	colors: {
 		map: {
@@ -363,14 +363,24 @@ VisualJS.setup={ //v.0.9.3
 		prov43: {
 			js: "http://idescat.github.io/visual/maps/prov432013mun.js",
 			exists: function(){ return typeof VisualJS.map.prov43!=="undefined"; }
+		},
+		spainnuts2: {
+			js: "../maps/spain2014nuts2.js",
+			exists: function(){ return typeof VisualJS.map.spainnuts2!=="undefined"; }
+		},
+		spainnuts3: {
+			js: "../maps/spain2014nuts3.js",
+			exists: function(){ return typeof VisualJS.map.spainnuts3!=="undefined"; }
 		}		
-		
 	},
 
 	//IE check
 	func: {
 		old: function(ie) { return RegExp("(^|\\s)lt-"+ie+"(\\s|$)").test(document.documentElement.className); }
 	},
+
+	//Attach event listener? 0.10.*
+	listen: false, 
 
 	//Margins and paddings used in container
 	margin: 10,
