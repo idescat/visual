@@ -371,6 +371,10 @@ VisualJS.setup={ //v.0.10.0
 		spainnuts3: {
 			js: "http://idescat.github.io/visual/maps/spain2014nuts3.js",
 			exists: function(){ return typeof VisualJS.map.spainnuts3!=="undefined"; }
+		},
+		norwaymun: {
+			js: "http://idescat.github.io/visual/maps/norway2013mun.js",
+			exists: function(){ return typeof VisualJS.map.norwaymun!=="undefined"; }
 		}		
 	},
 
