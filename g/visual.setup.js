@@ -121,47 +121,47 @@ VisualJS.setup={ //v.0.10.0
 
 	//Libraries: path and existence function
 	main: { //Do not use relative paths for main files in production: they'll be relative to the path where VisualJS.iframe is executed.
-		visual: "../visual.js",
-		setup: "../visual.setup.js",
-		lazy: "../lib/lazyload.js"
+		visual: "http://idescat.github.io/visual/visual.js",
+		setup: "http://idescat.github.io/visual/g/visual.setup.js",
+		lazy: "http://idescat.github.io/visual/lib/lazyload.js"
 	},
 	lib: {
 		d3: {
-			js: "../lib/d3.v3.js",
+			js: "http://idescat.github.io/visual/lib/d3.v3.js",
 			exists: function(){ return typeof d3==="object"; }
 		},
 		jquery: {
-			js: "../lib/jquery.1.8.3.js",
+			js: "http://idescat.github.io/visual/lib/jquery.1.8.3.js",
 			exists: function(){ return typeof jQuery==="function"; },
 
 			flot: {
-				js: "../lib/jquery.flot.js",
+				js: "http://idescat.github.io/visual/lib/jquery.flot.js",
 				exists: function(){ return typeof jQuery.plot==="function"; },
 
 				stack: {
-					js: "../lib/jquery.flot.stack.js",
-					exists: function(){ return typeof jQuery.plot.plugins==="object" && typeof jQuery.plot.plugins[0]==="object" && jQuery.plot.plugins[0].name==="stack";  }//De moment no s'utilitza simultàniament amb cap altre plugin de Flot per tant és el primer.
+					js: "http://idescat.github.io/visual/lib/jquery.flot.stack.js",
+					exists: function(){ return typeof jQuery.plot.plugins==="object" && typeof jQuery.plot.plugins[0]==="object" && jQuery.plot.plugins[0].name==="stack";  }//De moment no s'utilitza simult�niament amb cap altre plugin de Flot per tant �s el primer.
 				},
 				orderbars: {
-					js: "../lib/jquery.flot.orderbars.js",
-					exists: function(){ return typeof jQuery.plot.plugins==="object" && typeof jQuery.plot.plugins[0]==="object" && jQuery.plot.plugins[0].name==="orderBars"; }//De moment no s'utilitza simultàniament amb cap altre plugin de Flot per tant és el primer.
+					js: "http://idescat.github.io/visual/lib/jquery.flot.orderbars.js",
+					exists: function(){ return typeof jQuery.plot.plugins==="object" && typeof jQuery.plot.plugins[0]==="object" && jQuery.plot.plugins[0].name==="orderBars"; }//De moment no s'utilitza simult�niament amb cap altre plugin de Flot per tant �s el primer.
 				},
 				pyramid: {
-					js: "../lib/jquery.flot.pyramid.js",
+					js: "http://idescat.github.io/visual/lib/jquery.flot.pyramid.js",
 					exists: function(){ return typeof FlotPyramid==="object"; }
 				},
 				categories: {
-					js: "../lib/jquery.flot.categories.js",
-					exists: function(){ return typeof jQuery.plot.plugins==="object" && typeof jQuery.plot.plugins[0]==="object" && jQuery.plot.plugins[0].name==="categories"; } //De moment no s'utilitza simultàniament amb cap altre plugin de Flot per tant és el primer.
+					js: "http://idescat.github.io/visual/lib/jquery.flot.categories.js",
+					exists: function(){ return typeof jQuery.plot.plugins==="object" && typeof jQuery.plot.plugins[0]==="object" && jQuery.plot.plugins[0].name==="categories"; } //De moment no s'utilitza simult�niament amb cap altre plugin de Flot per tant �s el primer.
 				}
 			}
 		},
 		maps: {
-			js: "../maps/visual.maps.js",
+			js: "http://idescat.github.io/visual/maps/visual.maps.js",
 			exists: function(){ return typeof VisualJS.func.colors==="function" && typeof VisualJS.func.legend==="function";}
 		},
 		excanvas: {
-			js: "../lib/excanvas.js",
+			js: "http://idescat.github.io/visual/lib/excanvas.js",
 			exists: function(){ return typeof G_vmlCanvasManager!=="undefined"; }
 		}
 	},
@@ -169,209 +169,209 @@ VisualJS.setup={ //v.0.10.0
 	//Maps: path and existence function
 	map: {
 		mun: {
-			js: "../maps/cat2013mun.js",
+			js: "http://idescat.github.io/visual/maps/cat2013mun.js",
 			exists: function(){ return typeof VisualJS.map.mun!=="undefined"; }
 		},
 		com: {
-			js: "../maps/cat2013com.js",
+			js: "http://idescat.github.io/visual/maps/cat2013com.js",
 			exists: function(){ return typeof VisualJS.map.com!=="undefined"; }
 		},
 		prov: {
-			js: "../maps/cat2013prov.js",
+			js: "http://idescat.github.io/visual/maps/cat2013prov.js",
 			exists: function(){ return typeof VisualJS.map.prov!=="undefined"; }
 		},
 		usastates: {
-			js: "../maps/usa2013states.js",
+			js: "http://idescat.github.io/visual/maps/usa2013states.js",
 			exists: function(){ return typeof VisualJS.map.usastates!=="undefined"; }
 		},
 		com01: {
-			js: "../maps/com012013mun.js",
+			js: "http://idescat.github.io/visual/maps/com012013mun.js",
 			exists: function(){ return typeof VisualJS.map.com01!=="undefined"; }
 		},
 		com02: {
-			js: "../maps/com022013mun.js",
+			js: "http://idescat.github.io/visual/maps/com022013mun.js",
 			exists: function(){ return typeof VisualJS.map.com02!=="undefined"; }
 		},
 		com03: {
-			js: "../maps/com032013mun.js",
+			js: "http://idescat.github.io/visual/maps/com032013mun.js",
 			exists: function(){ return typeof VisualJS.map.com03!=="undefined"; }
 		},
 		com04: {
-			js: "../maps/com042013mun.js",
+			js: "http://idescat.github.io/visual/maps/com042013mun.js",
 			exists: function(){ return typeof VisualJS.map.com04!=="undefined"; }
 		},
 		com05: {
-			js: "../maps/com052013mun.js",
+			js: "http://idescat.github.io/visual/maps/com052013mun.js",
 			exists: function(){ return typeof VisualJS.map.com05!=="undefined"; }
 		},
 		com06: {
-			js: "../maps/com062013mun.js",
+			js: "http://idescat.github.io/visual/maps/com062013mun.js",
 			exists: function(){ return typeof VisualJS.map.com06!=="undefined"; }
 		},
 		com07: {
-			js: "../maps/com072013mun.js",
+			js: "http://idescat.github.io/visual/maps/com072013mun.js",
 			exists: function(){ return typeof VisualJS.map.com07!=="undefined"; }
 		},
 		com08: {
-			js: "../maps/com082013mun.js",
+			js: "http://idescat.github.io/visual/maps/com082013mun.js",
 			exists: function(){ return typeof VisualJS.map.com08!=="undefined"; }
 		},
 		com09: {
-			js: "../maps/com092013mun.js",
+			js: "http://idescat.github.io/visual/maps/com092013mun.js",
 			exists: function(){ return typeof VisualJS.map.com09!=="undefined"; }
 		},
 		com10: {
-			js: "../maps/com102013mun.js",
+			js: "http://idescat.github.io/visual/maps/com102013mun.js",
 			exists: function(){ return typeof VisualJS.map.com10!=="undefined"; }
 		},
 		com11: {
-			js: "../maps/com112013mun.js",
+			js: "http://idescat.github.io/visual/maps/com112013mun.js",
 			exists: function(){ return typeof VisualJS.map.com11!=="undefined"; }
 		},
 		com12: {
-			js: "../maps/com122013mun.js",
+			js: "http://idescat.github.io/visual/maps/com122013mun.js",
 			exists: function(){ return typeof VisualJS.map.com12!=="undefined"; }
 		},
 		com13: {
-			js: "../maps/com132013mun.js",
+			js: "http://idescat.github.io/visual/maps/com132013mun.js",
 			exists: function(){ return typeof VisualJS.map.com13!=="undefined"; }
 		},
 		com14: {
-			js: "../maps/com142013mun.js",
+			js: "http://idescat.github.io/visual/maps/com142013mun.js",
 			exists: function(){ return typeof VisualJS.map.com14!=="undefined"; }
 		},
 		com15: {
-			js: "../maps/com152013mun.js",
+			js: "http://idescat.github.io/visual/maps/com152013mun.js",
 			exists: function(){ return typeof VisualJS.map.com15!=="undefined"; }
 		},
 		com16: {
-			js: "../maps/com162013mun.js",
+			js: "http://idescat.github.io/visual/maps/com162013mun.js",
 			exists: function(){ return typeof VisualJS.map.com16!=="undefined"; }
 		},
 		com17: {
-			js: "../maps/com172013mun.js",
+			js: "http://idescat.github.io/visual/maps/com172013mun.js",
 			exists: function(){ return typeof VisualJS.map.com17!=="undefined"; }
 		},
 		com18: {
-			js: "../maps/com182013mun.js",
+			js: "http://idescat.github.io/visual/maps/com182013mun.js",
 			exists: function(){ return typeof VisualJS.map.com18!=="undefined"; }
 		},
 		com19: {
-			js: "../maps/com192013mun.js",
+			js: "http://idescat.github.io/visual/maps/com192013mun.js",
 			exists: function(){ return typeof VisualJS.map.com19!=="undefined"; }
 		},		
 		com20: {
-			js: "../maps/com202013mun.js",
+			js: "http://idescat.github.io/visual/maps/com202013mun.js",
 			exists: function(){ return typeof VisualJS.map.com20!=="undefined"; }
 		},
 		com21: {
-			js: "../maps/com212013mun.js",
+			js: "http://idescat.github.io/visual/maps/com212013mun.js",
 			exists: function(){ return typeof VisualJS.map.com21!=="undefined"; }
 		},
 		com22: {
-			js: "../maps/com222013mun.js",
+			js: "http://idescat.github.io/visual/maps/com222013mun.js",
 			exists: function(){ return typeof VisualJS.map.com22!=="undefined"; }
 		},
 		com23: {
-			js: "../maps/com232013mun.js",
+			js: "http://idescat.github.io/visual/maps/com232013mun.js",
 			exists: function(){ return typeof VisualJS.map.com23!=="undefined"; }
 		},
 		com24: {
-			js: "../maps/com242013mun.js",
+			js: "http://idescat.github.io/visual/maps/com242013mun.js",
 			exists: function(){ return typeof VisualJS.map.com24!=="undefined"; }
 		},
 		com25: {
-			js: "../maps/com252013mun.js",
+			js: "http://idescat.github.io/visual/maps/com252013mun.js",
 			exists: function(){ return typeof VisualJS.map.com25!=="undefined"; }
 		},
 		com26: {
-			js: "../maps/com262013mun.js",
+			js: "http://idescat.github.io/visual/maps/com262013mun.js",
 			exists: function(){ return typeof VisualJS.map.com26!=="undefined"; }
 		},
 		com27: {
-			js: "../maps/com272013mun.js",
+			js: "http://idescat.github.io/visual/maps/com272013mun.js",
 			exists: function(){ return typeof VisualJS.map.com27!=="undefined"; }
 		},
 		com28: {
-			js: "../maps/com282013mun.js",
+			js: "http://idescat.github.io/visual/maps/com282013mun.js",
 			exists: function(){ return typeof VisualJS.map.com28!=="undefined"; }
 		},
 		com29: {
-			js: "../maps/com292013mun.js",
+			js: "http://idescat.github.io/visual/maps/com292013mun.js",
 			exists: function(){ return typeof VisualJS.map.com29!=="undefined"; }
 		},
 		com30: {
-			js: "../maps/com302013mun.js",
+			js: "http://idescat.github.io/visual/maps/com302013mun.js",
 			exists: function(){ return typeof VisualJS.map.com30!=="undefined"; }
 		},
 		com31: {
-			js: "../maps/com312013mun.js",
+			js: "http://idescat.github.io/visual/maps/com312013mun.js",
 			exists: function(){ return typeof VisualJS.map.com31!=="undefined"; }
 		},
 		com32: {
-			js: "../maps/com322013mun.js",
+			js: "http://idescat.github.io/visual/maps/com322013mun.js",
 			exists: function(){ return typeof VisualJS.map.com32!=="undefined"; }
 		},
 		com33: {
-			js: "../maps/com332013mun.js",
+			js: "http://idescat.github.io/visual/maps/com332013mun.js",
 			exists: function(){ return typeof VisualJS.map.com33!=="undefined"; }
 		},
 		com34: {
-			js: "../maps/com342013mun.js",
+			js: "http://idescat.github.io/visual/maps/com342013mun.js",
 			exists: function(){ return typeof VisualJS.map.com34!=="undefined"; }
 		},
 		com35: {
-			js: "../maps/com352013mun.js",
+			js: "http://idescat.github.io/visual/maps/com352013mun.js",
 			exists: function(){ return typeof VisualJS.map.com35!=="undefined"; }
 		},
 		com36: {
-			js: "../maps/com362013mun.js",
+			js: "http://idescat.github.io/visual/maps/com362013mun.js",
 			exists: function(){ return typeof VisualJS.map.com36!=="undefined"; }
 		},
 		com37: {
-			js: "../maps/com372013mun.js",
+			js: "http://idescat.github.io/visual/maps/com372013mun.js",
 			exists: function(){ return typeof VisualJS.map.com37!=="undefined"; }
 		},
 		com38: {
-			js: "../maps/com382013mun.js",
+			js: "http://idescat.github.io/visual/maps/com382013mun.js",
 			exists: function(){ return typeof VisualJS.map.com38!=="undefined"; }
 		},
 		com39: {
-			js: "../maps/com392013mun.js",
+			js: "http://idescat.github.io/visual/maps/com392013mun.js",
 			exists: function(){ return typeof VisualJS.map.com39!=="undefined"; }
 		},
 		com40: {
-			js: "../maps/com402013mun.js",
+			js: "http://idescat.github.io/visual/maps/com402013mun.js",
 			exists: function(){ return typeof VisualJS.map.com40!=="undefined"; }
 		},
 		com41: {
-			js: "../maps/com412013mun.js",
+			js: "http://idescat.github.io/visual/maps/com412013mun.js",
 			exists: function(){ return typeof VisualJS.map.com41!=="undefined"; }
 		},
 		prov08: {
-			js: "../maps/prov082013mun.js",
+			js: "http://idescat.github.io/visual/maps/prov082013mun.js",
 			exists: function(){ return typeof VisualJS.map.prov08!=="undefined"; }
 		},
 		prov17: {
-			js: "../maps/prov172013mun.js",
+			js: "http://idescat.github.io/visual/maps/prov172013mun.js",
 			exists: function(){ return typeof VisualJS.map.prov17!=="undefined"; }
 		},
 		prov25: {
-			js: "../maps/prov252013mun.js",
+			js: "http://idescat.github.io/visual/maps/prov252013mun.js",
 			exists: function(){ return typeof VisualJS.map.prov25!=="undefined"; }
 		},
 		prov43: {
-			js: "../maps/prov432013mun.js",
+			js: "http://idescat.github.io/visual/maps/prov432013mun.js",
 			exists: function(){ return typeof VisualJS.map.prov43!=="undefined"; }
 		},
 		spainnuts2: {
-			js: "../maps/spain2014nuts2.js",
+			js: "http://idescat.github.io/visual/maps/spain2014nuts2.js",
 			exists: function(){ return typeof VisualJS.map.spainnuts2!=="undefined"; }
 		},
 		spainnuts3: {
-			js: "../maps/spain2014nuts3.js",
+			js: "http://idescat.github.io/visual/maps/spain2014nuts3.js",
 			exists: function(){ return typeof VisualJS.map.spainnuts3!=="undefined"; }
-		}
+		}		
 	},
 
 	//IE check
