@@ -140,11 +140,11 @@ VisualJS.setup={ //v.0.10.0
 
 				stack: {
 					js: "../lib/jquery.flot.stack.js",
-					exists: function(){ return typeof jQuery.plot.plugins==="object" && typeof jQuery.plot.plugins[0]==="object" && jQuery.plot.plugins[0].name==="stack";  }//De moment no s'utilitza simultàniament amb cap altre plugin de Flot per tant és el primer.
+					exists: function(){ return typeof jQuery.plot.plugins==="object" && typeof jQuery.plot.plugins[0]==="object" && jQuery.plot.plugins[0].name==="stack";  }
 				},
 				orderbars: {
 					js: "../lib/jquery.flot.orderbars.js",
-					exists: function(){ return typeof jQuery.plot.plugins==="object" && typeof jQuery.plot.plugins[0]==="object" && jQuery.plot.plugins[0].name==="orderBars"; }//De moment no s'utilitza simultàniament amb cap altre plugin de Flot per tant és el primer.
+					exists: function(){ return typeof jQuery.plot.plugins==="object" && typeof jQuery.plot.plugins[0]==="object" && jQuery.plot.plugins[0].name==="orderBars"; }
 				},
 				pyramid: {
 					js: "../lib/jquery.flot.pyramid.js",
@@ -152,7 +152,7 @@ VisualJS.setup={ //v.0.10.0
 				},
 				categories: {
 					js: "../lib/jquery.flot.categories.js",
-					exists: function(){ return typeof jQuery.plot.plugins==="object" && typeof jQuery.plot.plugins[0]==="object" && jQuery.plot.plugins[0].name==="categories"; } //De moment no s'utilitza simultàniament amb cap altre plugin de Flot per tant és el primer.
+					exists: function(){ return typeof jQuery.plot.plugins==="object" && typeof jQuery.plot.plugins[0]==="object" && jQuery.plot.plugins[0].name==="categories"; }
 				}
 			}
 		},
@@ -371,6 +371,10 @@ VisualJS.setup={ //v.0.10.0
 		spainnuts3: {
 			js: "../maps/spain2014nuts3.js",
 			exists: function(){ return typeof VisualJS.map.spainnuts3!=="undefined"; }
+		},
+		norwaymun: {
+			js: "../maps/norway2013mun.js",
+			exists: function(){ return typeof VisualJS.map.norwaymun!=="undefined"; }
 		}
 	},
 

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]><html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]><html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html> <!--<![endif]-->
+	<head>
+		<meta charset="iso-8859-1" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>Idescat Visual sample page</title>
+		<link href="../visual.css" rel="stylesheet" type="text/css" />
+		<script src="../lib/lazyload.js"></script>
+		<script src="../visual.js"></script>
+		<script src="../visual.setup.js"></script>
+	</head>
+	
+	<body>
+		<div id="visual" class="visual"></div>
+		<script>
+			visual(
+				{
+					title: "Unemployment rate by Autonomous Communities",
+					geo: "Spain",
+					time: "2014 Q3",
+					footer: 'Source: <a href="http://www.ine.es/jaxiT3/Tabla.htm?t=4247">INE</a>.',
+					legend: true,
+					unit: {symbol: "%"},
+					lang: "en",
+					dec: 2,
+					by: "spainnuts2",
+					type: "cmap",
+					range: 0,
+					data: [{ id: "01", val: 35.21 }, { id: "02", val: 18.36 }, { id: "03", val: 19.96 }, { id: "04", val: 15.94 }, { id: "05", val: 33.36 }, { id: "06", val: 19.04 }, { id: "07", val: 19.40 }, { id: "08", val: 28.49 }, { id: "09", val: 19.10 }, { id: "10", val: 25.54 }, { id: "11", val: 27.64 }, { id: "12", val: 20.25 }, { id: "13", val: 17.53 }, { id: "14", val: 26.25 }, { id: "15", val: 14.92 }, { id: "16", val: 15.21 }, { id: "17", val: 18.23 }, { id: "18", val: 31.95 }, { id: "19", val: 30.49 }]
+				}
+			);
+		</script>
+	</body>
+</html>
