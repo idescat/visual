@@ -22,9 +22,8 @@ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-
 var VisualJS={
-	version: "0.10.2",
+	version: "0.10.3",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -665,8 +664,11 @@ var VisualJS={
 							if(hasValues){
 								colorClass=function(g, v, p, inf, sup){
 									var value=v.get(p[map.id]);
+									if(typeof value==="undefined"){
+										return "";
+									}
 									if(inf===sup){ //No variation in the data: use centered color (quantize would return undefined)
-										return (typeof value!=="undefined") ? prefix + (num/2).toFixed(0) : null;
+										return prefix + (num/2).toFixed(0);
 									}
 									var 
 										quantize=d3.scale.quantize()
@@ -728,11 +730,22 @@ var VisualJS={
 							.data(map.features)
 							.enter().append("svg:path")
 							.attr("class", function(d) {
+								if(
+									d.properties[map.id]==="" || d.properties[map.label]==="" //Polygon is not relevant
+									|| 
+									(!hasValues && typeof valors.get(d.properties[map.id])==="undefined") //Don't hover non-highlighted areas
+								){
+									return prefix + "nohover";
+								}
 								return colorClass(groups, valors, d.properties, inf, sup);
 							})
 							.attr("d", path)
 							.on("mousemove", function(d){
-								if(hasValues || hasGroups || typeof valors.get(d.properties[map.id])!=="undefined"){
+								if(
+									d.properties[map.id]!=="" && d.properties[map.label]!=="" //Polygon is not relevant
+									&&
+									(hasValues || hasGroups || typeof valors.get(d.properties[map.id])!=="undefined")
+								){
 									showTooltip(
 										tooltipText(
 											id,
@@ -1242,7 +1255,4 @@ var VisualJS={
 if(typeof visual!=="function"){
 	//Create the visual alias
 	var visual=VisualJS.load;
-	
-		
-	
 } //If you already have a visual() function, use VisualJS.load({...});

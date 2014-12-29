@@ -69,8 +69,15 @@ body {
 	vector-effect: non-scaling-stroke;
 }
 .visual .VisualJSarea path:hover {
-	stroke-width: 1px;
 	stroke: #ffa500;
+	stroke-width: 1px;
+}
+.visual .VisualJSarea path.cnohover {
+	fill: #666;
+}
+.visual .VisualJSarea path.cnohover:hover {
+	stroke: #000;
+	stroke-width: .05px;
 }
 .visual svg g.VisualJSlegend {
 	stroke: #808080;

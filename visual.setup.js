@@ -111,7 +111,7 @@ VisualJS.setup={ //v.0.10.0
 	legendclass: "VisualJSlegend", //svg:g class (D3 maps)
 	normal: "VisualJSnormal", //visualitzation's normal size class
 	mini: "VisualJSmini", //visualitzation's small size class
-	colorclassprefix: "c", //prefix for color class in maps: c0, c1, c2...
+	colorclassprefix: "c", //prefix for color class in maps: cnohover, c0, c1, c2...
 
 	//Markup created by visual
 	html: {
