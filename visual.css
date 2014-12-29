@@ -93,7 +93,13 @@ body {
 .visual path.c99:hover {
 	stroke: #fff;
 }
-
+.visual .VisualJSarea path.cnohover {
+	fill: #666;
+}
+.visual .VisualJSarea path.cnohover:hover {
+	stroke: #000;
+	stroke-width: .05px;
+}
 .visual svg g.VisualJSlegend {
 	stroke: #808080;
 	stroke-width: 1px;
