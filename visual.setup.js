@@ -122,7 +122,7 @@ VisualJS.setup={ //v.0.10.0
 	//Libraries: path and existence function
 	main: { //Do not use relative paths for main files in production: they'll be relative to the path where VisualJS.iframe is executed.
 		visual: "http://idescat.github.io/visual/visual.js",
-		setup: "http://idescat.github.io/visual/g/visual.setup.js",
+		setup: "http://idescat.github.io/visual/visual.setup.js",
 		lazy: "http://idescat.github.io/visual/lib/lazyload.js"
 	},
 	lib: {
@@ -140,11 +140,11 @@ VisualJS.setup={ //v.0.10.0
 
 				stack: {
 					js: "http://idescat.github.io/visual/lib/jquery.flot.stack.js",
-					exists: function(){ return typeof jQuery.plot.plugins==="object" && typeof jQuery.plot.plugins[0]==="object" && jQuery.plot.plugins[0].name==="stack";  }//De moment no s'utilitza simult?niament amb cap altre plugin de Flot per tant ?s el primer.
+					exists: function(){ return typeof jQuery.plot.plugins==="object" && typeof jQuery.plot.plugins[0]==="object" && jQuery.plot.plugins[0].name==="stack";  }
 				},
 				orderbars: {
 					js: "http://idescat.github.io/visual/lib/jquery.flot.orderbars.js",
-					exists: function(){ return typeof jQuery.plot.plugins==="object" && typeof jQuery.plot.plugins[0]==="object" && jQuery.plot.plugins[0].name==="orderBars"; }//De moment no s'utilitza simult?niament amb cap altre plugin de Flot per tant ?s el primer.
+					exists: function(){ return typeof jQuery.plot.plugins==="object" && typeof jQuery.plot.plugins[0]==="object" && jQuery.plot.plugins[0].name==="orderBars"; }
 				},
 				pyramid: {
 					js: "http://idescat.github.io/visual/lib/jquery.flot.pyramid.js",
@@ -152,7 +152,7 @@ VisualJS.setup={ //v.0.10.0
 				},
 				categories: {
 					js: "http://idescat.github.io/visual/lib/jquery.flot.categories.js",
-					exists: function(){ return typeof jQuery.plot.plugins==="object" && typeof jQuery.plot.plugins[0]==="object" && jQuery.plot.plugins[0].name==="categories"; } //De moment no s'utilitza simult?niament amb cap altre plugin de Flot per tant ?s el primer.
+					exists: function(){ return typeof jQuery.plot.plugins==="object" && typeof jQuery.plot.plugins[0]==="object" && jQuery.plot.plugins[0].name==="categories"; }
 				}
 			}
 		},
