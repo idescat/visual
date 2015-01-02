@@ -1,0 +1,62 @@
+body {
+	background-color: #ccc;
+	font-family: Calibri, Lucida, sans-serif;
+	margin: 30px;
+}
+h1 {
+	text-align: center;
+}
+figure {
+	display: block;
+	height: 558px;
+	background-color: #fff;
+	border-radius: 8px 8px 8px 0;
+	box-shadow: 1px 1px 1px 1px #c0c0c0;
+	border: 0;
+	padding: 0;
+	margin: 0;
+}
+iframe {
+	height: 550px;
+	width: 650px;
+	border: 0;
+	padding: 0;
+	margin: 6px 0 0 0;
+}
+section { /* Extracontainer needed for Webkit bug http://codepen.io/badosa/pen/GgjbXL */
+	height: 580px;
+	width: 652px;
+	margin: 0 auto 1.5em auto;
+	padding: 0;
+}
+p {
+	margin: 0;
+	padding: 0;
+}
+a {
+	color: rgb(46,87,130);
+	font-weight: bold;
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
+figure+p>a {
+	display: inline-block;
+	background-color: #fff;
+	border-radius: 0 0 8px 8px;
+	box-shadow: 1px 1px 1px #c0c0c0;
+	margin-top: -1px;
+	padding: 8px;
+}
+figure+p>a:hover {
+	color: #000;
+	text-decoration: none;
+}
+.clearfix:after { 
+	content: "."; 
+	visibility: hidden; 
+	display: block; 
+	height: 0; 
+	clear: both;
+}
