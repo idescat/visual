@@ -24,10 +24,12 @@ iframe {
 	margin: 6px 0 0 0;
 }
 section { /* Extracontainer needed for Webkit bug http://codepen.io/badosa/pen/GgjbXL */
-	height: 580px;
 	width: 652px;
 	margin: 0 auto 1.5em auto;
 	padding: 0;
+}
+div section {
+	height: 580px;
 }
 p {
 	margin: 0;
@@ -41,7 +43,7 @@ a {
 a:hover {
 	text-decoration: underline;
 }
-figure+p>a {
+div a {
 	display: inline-block;
 	background-color: #fff;
 	border-radius: 0 0 8px 8px;
@@ -49,7 +51,7 @@ figure+p>a {
 	margin-top: -1px;
 	padding: 8px;
 }
-figure+p>a:hover {
+div a:hover {
 	color: #000;
 	text-decoration: none;
 }
