@@ -25,7 +25,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 /*global d3, LazyLoad*/
 var VisualJS={
-	version: "0.10.5",
+	version: "0.10.6",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -824,6 +824,7 @@ var VisualJS={
 				series=[],
 				ticks=[],
 				opt=[],
+				max,
 				stacked=o.stacked || false,
 				ts=function(){
 					//If autoheading, check for leading and trailing zeros
@@ -926,16 +927,15 @@ var VisualJS={
 				},
 				shlegend, stack, lines, points, bars, heading				
 			;
+
+			Array.max=function(a){
+				return Math.max.apply(Math, a);
+			};
 			
 			switch(o.type){
-				
 				case "pyram":
 					addJS( vsetup.lib.jquery.flot.pyramid, hasFlot ); //Check plugin only if we have Flot
 
-					Array.max=function(a){
-						return Math.max.apply(Math, a);
-					};
-					var max;
 					points=false;
 					bars=false;
 					heading=getHeading();					
@@ -961,12 +961,16 @@ var VisualJS={
 					bars=true;
 					heading=getHeading();
 					transform=function(d){
+						var values=[];
 						for(var i=0, len=d.length; i<len; i++){
 							//Include in reverse order
 							ticks[i]=[i,d[len-i-1][0]];
-							data[i]=[d[len-i-1][1],i];
+							var val=d[len-i-1][1];
+							values.push(val);
+							data[i]=[val,i];
 						}
 						series={data: data};
+						max=Array.max(values);
 					};					
 					shlegend=false; //Currently only one series allowed when rank (no series loop)
 					stack=false; //See previous line
@@ -1135,8 +1139,9 @@ var VisualJS={
 						case "rank":
 							setup.series.bars.horizontal=true;
 							setup.yaxis.ticks=( (VisualJS.height/ticklen) > 11) ? ticks.slice(0) : 0; //If too many categories and not enough height, remove y-labels
+
 							if(typeof container.range==="number"){
-								setup.xaxis.max=o.data[0][1]*container.range;
+								setup.xaxis.max=max*container.range;
 							}else{ //isRange (can't be null)
 								setup.xaxis.min=container.range[0]; //we don't check if min provided is lower than actual min
 								setup.xaxis.max=container.range[1]; //we don't check if max provided is greater than actual max
@@ -1253,4 +1258,4 @@ var VisualJS={
 if(typeof visual!=="function"){
 	//Create the visual alias
 	var visual=VisualJS.load;
-} //If you already have a visual() function, use VisualJS.load({...});
+} //If you already have a visual() function, use VisualJS.load({...})
