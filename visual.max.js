@@ -25,7 +25,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 /*global d3, LazyLoad*/
 var VisualJS={
-	version: "0.10.6",
+	version: "0.10.7",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -250,10 +250,10 @@ var VisualJS={
 								for(var m=VisualJS.map[vis.by], i=m.features.length; i--;){
 									label[m.features[i].properties[m.id]]=m.features[i].properties[m.label];
 								}
-								i=data.length;
+								
 								//add 'label' to data
-								for(var data=vis.data; i--;){					
-									data[i].label=label[data[i].id];
+								for(var data=vis.data, j=data.length; j--;){					
+									data[j].label=label[data[j].id];
 								}
 							}
 							post(vis);
@@ -1258,4 +1258,4 @@ var VisualJS={
 if(typeof visual!=="function"){
 	//Create the visual alias
 	var visual=VisualJS.load;
-} //If you already have a visual() function, use VisualJS.load({...})
+} //If you already have a visual() function, use VisualJS.load({...});
