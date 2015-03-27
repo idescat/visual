@@ -331,24 +331,33 @@
 
 			$("#save a").text("Saving...").css({"background-color": "#800", "color": "#fff"});
 
-			var gist={
-				description: "Idescat Visual",
-				public: true,
-				files: {
-					"source.json": { "content": JSONs }
-				}
-			};
+			var 
+				gist={
+					description: "Idescat Visual",
+					public: true,
+					files: {
+						"source.json": { "content": JSONs }
+					}
+				},
+				cors=jQuery.support.cors
+			;
 
-			$.post(
-				'https://api.github.com/gists',
-				JSON.stringify(gist)
-			).done(function(data, status, xhr) {
-				log("Remaining this hour: " + xhr.getResponseHeader("X-RateLimit-Remaining"));
-				lastJSONs=JSONs;
-				embedCode( data.id );
-			}).fail(function(xhr, status, errorThrown) {
-				log(xhr);
-				embedCode( null );
+			$.ajax({
+				type: "POST", 
+				url: "https://api.github.com/gists",
+				data: JSON.stringify(gist),
+				dataType: (cors) ? "json": "jsonp",
+				success: function(data, status, xhr){
+					log("Remaining this hour: " + 
+						((cors) ? xhr.getResponseHeader("X-RateLimit-Remaining") : data.meta["X-RateLimit-Remaining"])
+					);
+					lastJSONs=JSONs;
+					embedCode( data.id );
+				},
+				error: function(xhr, status, errorThrown) {
+					log(xhr);
+					embedCode( null );
+				}
 			});
 
 			return false;
