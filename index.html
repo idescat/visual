@@ -97,314 +97,315 @@
 
 		<script>
 
-		var
-			maps=VisualJS.setup.map,
-			last=null,
-			opened=false,
-			params={grouped: null},
-			code=[],
-			leg=$( "#data legend" ),
-			lastJSONs,
-			JSONs,
-			savebutton="<a>Save chart and get embed code</a>",
-			maptable=""
-		;
-
-		$( "#version" ).html( "Visual v. "+VisualJS.version );
-
-		for(var m in maps){
-			maptable+="<tr><th>"+m+"</th><td>"+maps[m].label+"</td></tr>";
-		}
-		$( "tbody" ).html( maptable );
-
-		function addCustom(i){
-			var html="";
-			for(var j in custom[i]){
-				var s=JSON.stringify(custom[i][j]).replace(/"/g, "'").replace(/^'/, "").replace(/'$/, "");
-				if(j!=="data"){
-					if(custom[i][j]!==null){
-						html+='<input title="'+j+'" type="text" name="'+j+'" value="'+s+'" />';
-					}
-				}else{
-					s=s.replace(/({|\[)/g, "$1\n").replace(/(}|\])/g, "\n$1").replace(/:/g, ": ").replace(/,(\[|\{)/g, ",\n$1").replace(/,/g, ", ");
-					html+='<textarea title="data" name="data" spellcheck="false" lang="">'+s+'</textarea>';
-				}
-				params[j]=custom[i][j];
-			}
-			$( "#custom" ).html( html );
-		}
-
-		function toPosInt( v ){
-			if( /^([0-9]+)$/.test( v ) ){
-				return Number( v );
-			}
-			return 0;
-		}
-
-		//s is a string that represents a typeof object
-		//(object/array)
-		function jsonify(s){
-			var a=eval("["+s.val()+"]"); //eval knows how to deal with arrays but not with non-array objects
-			return JSON.parse( JSON.stringify( a[0] ) );
-		}
-
-		function update(){
-			var input=$( "input" );
-			params["type"]=$( "select[name=type]" ).val();
-			params["lang"]=$( "select[name=lang]" ).val();
-
-			if(opened){
-				leg.html( params["type"]+" &uarr;" );
-			}else{
-				leg.html( params["type"]+" &darr;" );
-			}
-
-			$( "#layout label."+params["type"] ).show();
-			$( "#layout label").not( "."+params["type"] ).hide();
-
-			for(var i=0, len=input.length; i<len; i++){
-				var
-					f=input[i],
-					//FF does not support "number" returns type "text".
-					type=(f.name==="dec" || f.name==="border" || f.name==="shadow" || f.name==="line" || f.name==="point") ? "number" : f.type
-				;
-
-				switch(type){
-					case "text":
-						try{
-							params[f.name]=JSON.parse( f.value.replace( /'/g, '"' ) );
-							if(typeof params[f.name]!=="object"){ //time can be an array or a string: when a string parse() can convert to number if possible, but we don't want that
-								params[f.name]=(f.name!=="range") ? String(params[f.name]) : params[f.name];
-							}
-						}catch(e){
-							//Real text (or number: rangemin, rangemax [not used anymore])
-							params[f.name]=( f.value!=="" ) ? f.value : null;
-						}
-						break;
-					case "number": //positive integer
-						params[f.name]=toPosInt( f.value );
-						break;
-					case "anynumber": //not used anymore
-						params[f.name]=(f.value!=="") ? Number(f.value) : null;
-						break;
-					case "checkbox":
-						params[f.name]=
-							(
-								(f.name!=="position")
-								?
-								f.checked
-								:
-								(
-									f.checked
-									?
-									"end"
-									:
-									"start"
-								)
-							)
-						;
-						break;
-				}
-			}
-
-			if(last!==params["type"]){
-				addCustom(params["type"]);
-
-				$("input[name=range]").attr("title",  title.range[params["type"]]).val("");
-				params["range"]="";
-
-				last=params["type"];
-			}
-
-			params["data"]=jsonify( $( "textarea[name=data]" ) );
-
-			if(params["grouped"]) {
-				params["grouped"]=jsonify( $( "input[name=grouped]" ) );
-			}
-			$("#visual+iframe").remove();
-
-			VisualJS.iframe(
-				{
-					id: "visual",
-					fixed: [700,565],
-					lang: params["lang"],
-
-					title: params["title"],
-					geo: params["geo"],
-					footer: params["footer"],
-					unit: {label: params["label"], symbol: params["symbol"], position: params["position"]},
-
-					dec: params["dec"],
-					autoheading: params["autoheading"],
-
-					legend: params["legend"],
-					stacked: params["stacked"],
-					grid: { border: params["border"], shadow: params["shadow"], line: params["line"], point: params["point"] },
-					axis: { x: params["x"], y: params["y"] },
-					range: params["range"],
-					grouped: params["grouped"] || {},
-
-					type: params["type"],
-					data: params["data"],
-					by: params["by"],
-					time: params["time"]
-				},
-				"http://idescat.github.io/visual/visual.css"
-			);
-
-			code=[];
-
-			//Simple properties
-			for(var i=0, len=simple.length; i<len; i++){
-				param(simple[i]);
-			}
-
-			//Composed properties
-			if(params["border"]!==VisualJS.setup.canvas.grid.border || params["shadow"]!==VisualJS.setup.canvas.grid.shadow || params["line"]!==VisualJS.setup.canvas.grid.line || params["point"]!==VisualJS.setup.canvas.grid.point){
-				code.push('"grid": {"border": '+params["border"]+', "line": '+params["line"]+', "shadow": '+params["shadow"]+', "point": '+params["point"]+'}');
-			}
-			if(params["x"]!==VisualJS.setup.canvas.axis.x || params["y"]!==VisualJS.setup.canvas.axis.y){
-				code.push('"axis": {"x": '+params["x"]+', "y": '+params["y"]+'}');
-			}
-			if(params["label"]!==null || params["symbol"]!==null || params["position"]!==VisualJS.setup.canvas.unit.position){
-				code.push('"unit": {'+
-					notnull("label", ", ")+
-					notnull("symbol", ", ")+
-					notnull("position", "")+
-					'}');
-			}
-
-			try {
-				JSONs=JSON.stringify( JSON.parse( "{"+code.join(",")+"}" ) );
-				$("#save").html(savebutton);
-				$("#save a").click(saveJSON);
-			}catch (e){
-				//Is not valid JSON;
-				$("#save").text("You cannot save this chart because properties are not valid JSON!");
-			}
-
-		}
-
-		function notnull(key, comma){
-			return (params[key]!==null) ? '"'+key+'": "'+params[key]+'"'+comma : '';
-		}
-
-		//code and params, globals
-		function param(key){
-			if(typeof params[key]==="undefined" || params[key]===null || params[key]===""){
-				return;
-			}
-
-			if(typeof defaults[key]!=="undefined" && defaults[key]===params[key]){
-				return;
-			}
-
-			if(typeof params[key]==="number" || typeof params[key]==="boolean"){
-				code.push('"'+key+'": '+params[key]);
-			}else{
-				code.push('"'+key+'": '+JSON.stringify(params[key]));
-			}
-		}
-
-		function open(e){
-			e.html( params["type"]+" &uarr;" );
-			var c=$( "#custom" );
-			c.animate({height: "toggle"}, 100, function() {
-				c.show();
-			});
-			opened=true;
-		}
-		function close(e){
-			e.html( params["type"]+" &darr;" );
-			var c=$( "#custom" );
-			c.animate({height: "toggle"}, 100, function() {
-				c.hide();
-			});
-			opened=false;
-		}
-
-		//Based on Eric Mill's https://github.com/konklone/json/
-		function saveJSON() {
-			if (!JSONs || JSONs==lastJSONs){
-				return false;
-			}
-
-			$("#save a").text("Saving...").css({"background-color": "#800", "color": "#fff"});
-
-			var 
-				gist={
-					description: "Idescat Visual",
-					public: true,
-					files: {
-						"source.json": { "content": JSONs }
-					}
-				},
-				cors=jQuery.support.cors
-			;
-
-			$.ajax({
-				type: "POST", 
-				url: "https://api.github.com/gists",
-				data: JSON.stringify(gist),
-				dataType: (cors) ? "json": "jsonp",
-				success: function(data, status, xhr){
-					log("Remaining this hour: " + 
-						((cors) ? xhr.getResponseHeader("X-RateLimit-Remaining") : data.meta["X-RateLimit-Remaining"])
-					);
-					lastJSONs=JSONs;
-					embedCode( data.id );
-				},
-				error: function(xhr, status, errorThrown) {
-					log(xhr);
-					embedCode( null );
-				}
-			});
-
-			return false;
-		}
-
-		function embedCode(id){
-			if(id===null){
-				window.alert("Save failed! Try in an hour, please.");
-				$("#save a").text(savebutton).css({"background-color": "#fff", "color": "#000"});
-			}else{
-				$("#save").html('<p><strong>Copy and paste this code in your page.</strong> Adapt height and width values to your needs.</p><div>&lt;iframe height="400" width="400" frameborder="0" scrolling="no" src="http://idescat.github.io/visual/g/?id='+id+'"&gt;&lt;/iframe&gt;</div><p>Or try the <strong>responsive code</strong>.</p><div>&lt;div style="width:100%;margin:0 auto"&gt;&lt;div style="position:relative"&gt;&lt;img style="display:block;width:100%;height:auto" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" /&gt;&lt;iframe style="position:absolute;top:0;left:0;width:100%;height:100%" src="http://idescat.github.io/visual/g/?id='+id+'" frameborder="0" scrolling="no"&gt;&lt;/iframe&gt;&lt;/div&gt;&lt;/div&gt;</div>');
-			}
-		}
-
-		function log(s){
-			window.console && console.log(s);
-		}
-
-		update();
-		$( "#inputs" ).change(update);
-
-		leg.click(function(){
-			if( opened ){
-				close(leg);
-			}else{
-				open(leg);
-			}
-		});
-
-		$( "#inputs strong" ).click(function() {
-			var
-				h=$( "#inputs strong" ).html().substr(1),
-				up=String.fromCharCode(8593),
-				down=String.fromCharCode(8595),
-				c=( $( "#inputs strong" ).html().substr(0,1)===up ) ? down : up
-			;
-			$( "#inputs div" ).toggle(0, function() {
-				$( "#inputs strong" ).html(c+h);
-			});
-		});
-
 		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 		ga('create', 'UA-26838309-1', 'auto');
 		ga('send', 'pageview');
+
+		if(jQuery.support.cors){
+			var
+				maps=VisualJS.setup.map,
+				last=null,
+				opened=false,
+				params={grouped: null},
+				code=[],
+				leg=$( "#data legend" ),
+				lastJSONs,
+				JSONs,
+				savebutton="<a>Save chart and get embed code</a>",
+				maptable=""
+			;
+
+			$( "#version" ).html( "Visual v. "+VisualJS.version );
+
+			for(var m in maps){
+				maptable+="<tr><th>"+m+"</th><td>"+maps[m].label+"</td></tr>";
+			}
+			$( "tbody" ).html( maptable );
+
+			function addCustom(i){
+				var html="";
+				for(var j in custom[i]){
+					var s=JSON.stringify(custom[i][j]).replace(/"/g, "'").replace(/^'/, "").replace(/'$/, "");
+					if(j!=="data"){
+						if(custom[i][j]!==null){
+							html+='<input title="'+j+'" type="text" name="'+j+'" value="'+s+'" />';
+						}
+					}else{
+						s=s.replace(/({|\[)/g, "$1\n").replace(/(}|\])/g, "\n$1").replace(/:/g, ": ").replace(/,(\[|\{)/g, ",\n$1").replace(/,/g, ", ");
+						html+='<textarea title="data" name="data" spellcheck="false" lang="">'+s+'</textarea>';
+					}
+					params[j]=custom[i][j];
+				}
+				$( "#custom" ).html( html );
+			}
+
+			function toPosInt( v ){
+				if( /^([0-9]+)$/.test( v ) ){
+					return Number( v );
+				}
+				return 0;
+			}
+
+			//s is a string that represents a typeof object
+			//(object/array)
+			function jsonify(s){
+				var a=eval("["+s.val()+"]"); //eval knows how to deal with arrays but not with non-array objects
+				return JSON.parse( JSON.stringify( a[0] ) );
+			}
+
+			function update(){
+				var input=$( "input" );
+				params["type"]=$( "select[name=type]" ).val();
+				params["lang"]=$( "select[name=lang]" ).val();
+
+				if(opened){
+					leg.html( params["type"]+" &uarr;" );
+				}else{
+					leg.html( params["type"]+" &darr;" );
+				}
+
+				$( "#layout label."+params["type"] ).show();
+				$( "#layout label").not( "."+params["type"] ).hide();
+
+				for(var i=0, len=input.length; i<len; i++){
+					var
+						f=input[i],
+						//FF does not support "number" returns type "text".
+						type=(f.name==="dec" || f.name==="border" || f.name==="shadow" || f.name==="line" || f.name==="point") ? "number" : f.type
+					;
+
+					switch(type){
+						case "text":
+							try{
+								params[f.name]=JSON.parse( f.value.replace( /'/g, '"' ) );
+								if(typeof params[f.name]!=="object"){ //time can be an array or a string: when a string parse() can convert to number if possible, but we don't want that
+									params[f.name]=(f.name!=="range") ? String(params[f.name]) : params[f.name];
+								}
+							}catch(e){
+								//Real text (or number: rangemin, rangemax [not used anymore])
+								params[f.name]=( f.value!=="" ) ? f.value : null;
+							}
+							break;
+						case "number": //positive integer
+							params[f.name]=toPosInt( f.value );
+							break;
+						case "anynumber": //not used anymore
+							params[f.name]=(f.value!=="") ? Number(f.value) : null;
+							break;
+						case "checkbox":
+							params[f.name]=
+								(
+									(f.name!=="position")
+									?
+									f.checked
+									:
+									(
+										f.checked
+										?
+										"end"
+										:
+										"start"
+									)
+								)
+							;
+							break;
+					}
+				}
+
+				if(last!==params["type"]){
+					addCustom(params["type"]);
+
+					$("input[name=range]").attr("title",  title.range[params["type"]]).val("");
+					params["range"]="";
+
+					last=params["type"];
+				}
+
+				params["data"]=jsonify( $( "textarea[name=data]" ) );
+
+				if(params["grouped"]) {
+					params["grouped"]=jsonify( $( "input[name=grouped]" ) );
+				}
+				$("#visual+iframe").remove();
+
+				VisualJS.iframe(
+					{
+						id: "visual",
+						fixed: [700,565],
+						lang: params["lang"],
+
+						title: params["title"],
+						geo: params["geo"],
+						footer: params["footer"],
+						unit: {label: params["label"], symbol: params["symbol"], position: params["position"]},
+
+						dec: params["dec"],
+						autoheading: params["autoheading"],
+
+						legend: params["legend"],
+						stacked: params["stacked"],
+						grid: { border: params["border"], shadow: params["shadow"], line: params["line"], point: params["point"] },
+						axis: { x: params["x"], y: params["y"] },
+						range: params["range"],
+						grouped: params["grouped"] || {},
+
+						type: params["type"],
+						data: params["data"],
+						by: params["by"],
+						time: params["time"]
+					},
+					"http://idescat.github.io/visual/visual.css"
+				);
+
+				code=[];
+
+				//Simple properties
+				for(var i=0, len=simple.length; i<len; i++){
+					param(simple[i]);
+				}
+
+				//Composed properties
+				if(params["border"]!==VisualJS.setup.canvas.grid.border || params["shadow"]!==VisualJS.setup.canvas.grid.shadow || params["line"]!==VisualJS.setup.canvas.grid.line || params["point"]!==VisualJS.setup.canvas.grid.point){
+					code.push('"grid": {"border": '+params["border"]+', "line": '+params["line"]+', "shadow": '+params["shadow"]+', "point": '+params["point"]+'}');
+				}
+				if(params["x"]!==VisualJS.setup.canvas.axis.x || params["y"]!==VisualJS.setup.canvas.axis.y){
+					code.push('"axis": {"x": '+params["x"]+', "y": '+params["y"]+'}');
+				}
+				if(params["label"]!==null || params["symbol"]!==null || params["position"]!==VisualJS.setup.canvas.unit.position){
+					code.push('"unit": {'+
+						notnull("label", ", ")+
+						notnull("symbol", ", ")+
+						notnull("position", "")+
+						'}');
+				}
+
+				try {
+					JSONs=JSON.stringify( JSON.parse( "{"+code.join(",")+"}" ) );
+					$("#save").html(savebutton);
+					$("#save a").click(saveJSON);
+				}catch (e){
+					//Is not valid JSON;
+					$("#save").text("You cannot save this chart because properties are not valid JSON!");
+				}
+
+			}
+
+			function notnull(key, comma){
+				return (params[key]!==null) ? '"'+key+'": "'+params[key]+'"'+comma : '';
+			}
+
+			//code and params, globals
+			function param(key){
+				if(typeof params[key]==="undefined" || params[key]===null || params[key]===""){
+					return;
+				}
+
+				if(typeof defaults[key]!=="undefined" && defaults[key]===params[key]){
+					return;
+				}
+
+				if(typeof params[key]==="number" || typeof params[key]==="boolean"){
+					code.push('"'+key+'": '+params[key]);
+				}else{
+					code.push('"'+key+'": '+JSON.stringify(params[key]));
+				}
+			}
+
+			function open(e){
+				e.html( params["type"]+" &uarr;" );
+				var c=$( "#custom" );
+				c.animate({height: "toggle"}, 100, function() {
+					c.show();
+				});
+				opened=true;
+			}
+			function close(e){
+				e.html( params["type"]+" &darr;" );
+				var c=$( "#custom" );
+				c.animate({height: "toggle"}, 100, function() {
+					c.hide();
+				});
+				opened=false;
+			}
+
+			//Based on Eric Mill's https://github.com/konklone/json/
+			function saveJSON() {
+				if (!JSONs || JSONs==lastJSONs){
+					return false;
+				}
+
+				$("#save a").text("Saving...").css({"background-color": "#800", "color": "#fff"});
+
+				var 
+					gist={
+						description: "Idescat Visual",
+						public: true,
+						files: {
+							"source.json": { "content": JSONs }
+						}
+					}
+				;
+
+				$.ajax({
+					type: "POST", 
+					url: "https://api.github.com/gists",
+					data: JSON.stringify(gist),
+					dataType: "json",
+					success: function(data, status, xhr){
+						log("Remaining this hour: " + xhr.getResponseHeader("X-RateLimit-Remaining"));
+						lastJSONs=JSONs;
+						embedCode( data.id );
+					},
+					error: function(xhr, status, errorThrown) {
+						log(xhr);
+						embedCode( null );
+					}
+				});
+
+				return false;
+			}
+
+			function embedCode(id){
+				if(id===null){
+					window.alert("Save failed! Try in an hour, please.");
+					$("#save a").text(savebutton).css({"background-color": "#fff", "color": "#000"});
+				}else{
+					$("#save").html('<p><strong>Copy and paste this code in your page.</strong> Adapt height and width values to your needs.</p><div>&lt;iframe height="400" width="400" frameborder="0" scrolling="no" src="http://idescat.github.io/visual/g/?id='+id+'"&gt;&lt;/iframe&gt;</div><p>Or try the <strong>responsive code</strong>.</p><div>&lt;div style="width:100%;margin:0 auto"&gt;&lt;div style="position:relative"&gt;&lt;img style="display:block;width:100%;height:auto" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" /&gt;&lt;iframe style="position:absolute;top:0;left:0;width:100%;height:100%" src="http://idescat.github.io/visual/g/?id='+id+'" frameborder="0" scrolling="no"&gt;&lt;/iframe&gt;&lt;/div&gt;&lt;/div&gt;</div>');
+				}
+			}
+
+			function log(s){
+				window.console && console.log(s);
+			}
+
+			update();
+			$( "#inputs" ).change(update);
+
+			leg.click(function(){
+				if( opened ){
+					close(leg);
+				}else{
+					open(leg);
+				}
+			});
+
+			$( "#inputs strong" ).click(function() {
+				var
+					h=$( "#inputs strong" ).html().substr(1),
+					up=String.fromCharCode(8593),
+					down=String.fromCharCode(8595),
+					c=( $( "#inputs strong" ).html().substr(0,1)===up ) ? down : up
+				;
+				$( "#inputs div" ).toggle(0, function() {
+					$( "#inputs strong" ).html(c+h);
+				});
+			});
+		}else{
+			$("body").html('<p><strong>Your browser is too old and does not support Cross-Origin Resource Sharing (CORS).</strong> Visual Maker requires a modern browser to be able to save your charts.</p><p>To use Visual Maker, please, visit this page using a different browser.</p>');
+		}
 		</script>
 	</body>
 </html>
