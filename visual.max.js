@@ -25,7 +25,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 /*global d3, LazyLoad*/
 var VisualJS={
-	version: "0.10.7",
+	version: "0.10.8",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -1183,6 +1183,7 @@ var VisualJS={
 							var 
 								ratio=VisualJS.width/ticklen,
 								xticks=[],
+								freq,
 								digcrit="01" //first month
 							;
 
@@ -1195,7 +1196,7 @@ var VisualJS={
 								case 4: //Annual time series (4 digits)
 									// Magic rule: Only one year of every two must be displayed if width (mini) is small in comparison with # of ticks
 									if(ratio<30){
-										var freq=(ratio>15) ? 2 : ((ratio>8) ? 3 : 4); //if very small, only paint 1 of 3 ticks
+										freq=(ratio>15) ? 2 : ((ratio>8) ? 3 : 4); //if very small, only paint 1 of 3 ticks
 										for(i=0; i<ticklen; i++){
 											xticks[i]=(i % freq) ? 
 												[ ticks[i][0], "" ]
@@ -1230,6 +1231,23 @@ var VisualJS={
 										setup.xaxis.ticks=ticks;
 									}
 								break;
+								case 7: //year intervals: 2014/15 (7 digits)
+									// Magic rule: Only one year of every two must be displayed if width (mini) is small in comparison with # of ticks
+									if(ratio<55){
+										freq=(ratio>20) ? 2 : ((ratio>10) ? 3 : 4); //if very small, only paint 1 of 3 ticks
+										for(i=0; i<ticklen; i++){
+											xticks[i]=(i % freq) ? 
+												[ ticks[i][0], "" ]
+												:
+												[ ticks[i][0], ticks[i][1] ]
+											;
+										}
+										setup.xaxis.ticks=xticks;
+									}else{
+										setup.xaxis.ticks=ticks;
+									}
+								break;
+
 								default: //leave ticks alone
 									setup.xaxis.ticks=ticks;
 							}
