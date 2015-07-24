@@ -241,6 +241,10 @@ VisualJS.setup={ //v.0.10.0
 			js: "http://idescat.github.io/visual/maps/cat2013com.js",
 			exists: function(){ return typeof VisualJS.map.com!=="undefined"; }
 		},
+		com2015: {
+			js: "http://idescat.github.io/visual/maps/cat2015com.js",
+			exists: function(){ return typeof VisualJS.map.com2015!=="undefined"; }
+		},
 		prov: {
 			js: "http://idescat.github.io/visual/maps/cat2013prov.js",
 			exists: function(){ return typeof VisualJS.map.prov!=="undefined"; }
