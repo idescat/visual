@@ -384,6 +384,10 @@ VisualJS.setup={ //v.0.10.0
 			js: "../maps/prov432013mun.js",
 			exists: function(){ return typeof VisualJS.map.prov43!=="undefined"; }
 		},
+		at: {
+			js: "../maps/cat2014at.js",
+			exists: function(){ return typeof VisualJS.map.at!=="undefined"; }
+		},
 		spainnuts2: {
 			js: "../maps/spain2014nuts2.js",
 			exists: function(){ return typeof VisualJS.map.spainnuts2!=="undefined"; }
