@@ -452,6 +452,11 @@ VisualJS.setup={ //v.0.10.0
 			label: "Catalonia. El Moianès: municipalities",
 			js: "http://idescat.github.io/visual/maps/com422015mun.js",
 			exists: function(){ return typeof VisualJS.map.com422015!=="undefined"; }
+		},
+		at: {
+			label: "Catalonia. Regions of the Territorial Plan",
+			js: "http://idescat.github.io/visual/maps/cat2014at.js",
+			exists: function(){ return typeof VisualJS.map.at!=="undefined"; }
 		}
 	},
 
