@@ -258,6 +258,11 @@ VisualJS.setup={ //v.0.10.0
 			js: "http://idescat.github.io/visual/maps/com062013mun.js",
 			exists: function(){ return typeof VisualJS.map.com06!=="undefined"; }
 		},
+		com072015: {
+			label: "Catalonia. El Bages: municipalities",
+			js: "http://idescat.github.io/visual/maps/com072015mun.js",
+			exists: function(){ return typeof VisualJS.map.com072015!=="undefined"; }
+		},
 		com07: {
 			label: "Catalonia. El Bages: municipalities (before 2015)",
 			js: "http://idescat.github.io/visual/maps/com072013mun.js",
@@ -342,6 +347,11 @@ VisualJS.setup={ //v.0.10.0
 			label: "Catalonia. La Noguera: municipalities",
 			js: "http://idescat.github.io/visual/maps/com232013mun.js",
 			exists: function(){ return typeof VisualJS.map.com23!=="undefined"; }
+		},
+		com242015: {
+			label: "Catalonia. Osona: municipalities",
+			js: "http://idescat.github.io/visual/maps/com242015mun.js",
+			exists: function(){ return typeof VisualJS.map.com242015!=="undefined"; }
 		},
 		com24: {
 			label: "Catalonia. Osona: municipalities (before 2015)",
@@ -428,10 +438,20 @@ VisualJS.setup={ //v.0.10.0
 			js: "http://idescat.github.io/visual/maps/com402013mun.js",
 			exists: function(){ return typeof VisualJS.map.com40!=="undefined"; }
 		},
+		com412015: {
+			label: "Catalonia. El Vallès Oriental: municipalities",
+			js: "http://idescat.github.io/visual/maps/com412015mun.js",
+			exists: function(){ return typeof VisualJS.map.com412015!=="undefined"; }
+		},
 		com41: {
 			label: "Catalonia. El Vallès Oriental: municipalities (before 2015)",
 			js: "http://idescat.github.io/visual/maps/com412013mun.js",
 			exists: function(){ return typeof VisualJS.map.com41!=="undefined"; }
+		},
+		com422015: {
+			label: "Catalonia. El Moianès: municipalities",
+			js: "http://idescat.github.io/visual/maps/com422015mun.js",
+			exists: function(){ return typeof VisualJS.map.com422015!=="undefined"; }
 		}
 	},
 
