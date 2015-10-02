@@ -399,6 +399,10 @@ VisualJS.setup={ //v.0.10.0
 		norwaymun: {
 			js: "../maps/norway2013mun.js",
 			exists: function(){ return typeof VisualJS.map.norwaymun!=="undefined"; }
+		},
+		eu28: {
+			js: "../maps/eu28.js",
+			exists: function(){ return typeof VisualJS.map.eu28!=="undefined"; }
 		}
 	},
 

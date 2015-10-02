@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]><html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]><html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html> <!--<![endif]-->
+	<head>
+		<meta charset="iso-8859-1" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<title>Idescat Visual sample page</title>
+		<link href="../visual.css" rel="stylesheet" type="text/css" />
+		<script src="../lazyvisual.js"></script>
+		<script src="../visual.setup.js"></script>
+	</head>
+	
+	<body>
+		<div id="visual" class="visual"></div>
+		<script>
+			visual(
+				{
+					title: "CMAP example", 
+					geo: "European Union (28)", 
+					time: "2003",
+					footer: "The source goes here.", 
+					unit: {symbol: "%"},
+					legend: false,
+					dec: 1, //Number of decimal positions of the data.
+					by: "eu28", //Required if type: "cmap". Area unit of the data and map.
+					type: "cmap",
+					data : [{id: 'AT', val: 4.8}, {id: 'BE', val: 8.2}, {id: 'BG', val: 13.7}, {id: 'CY', val: 4.1}, {id: 'CZ', val: 7.8}, {id: 'DE', val: 9.7}, {id: 'DK', val: 5.4}, {id: 'EE', val: 10.3}, {id: 'EL', val: 9.7}, {id: 'ES', val: 11.5}, {id: 'FI', val: 9}, {id: 'FR', val: 8.5}, {id: 'HR', val: 14.2}, {id: 'HU', val: 5.8}, {id: 'IE', val: 4.6}, {id: 'IS', val: 3.3}, {id: 'IT', val: 8.4}, {id: 'LT', val: 12.4}, {id: 'LU', val: 3.8}, {id: 'LV', val: 11.6}, {id: 'MT', val: 7.7}, {id: 'NL', val: 4.8}, {id: 'PL', val: 19.8}, {id: 'PT', val: 7.4}, {id: 'RO', val: 7.7}, {id: 'SE', val: 6.6}, {id: 'SI', val: 6.7}, {id: 'SK', val: 17.7}, {id: 'UK', val: 5}]
+				}
+			);
+		</script>
+	</body>
+</html>
