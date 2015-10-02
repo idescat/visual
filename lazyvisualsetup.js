@@ -233,6 +233,11 @@ VisualJS.setup={ //v.0.10.0
 
 	//Maps: path and existence function
 	map: {
+		eu28: {
+			label: "European Union: 28 member countries",
+			js: "http://idescat.github.io/visual/maps/eu28.js",
+			exists: function(){ return typeof VisualJS.map.eu28!=="undefined"; }
+		},
 		usastates: {
 			label: "USA: states",
 			js: "http://idescat.github.io/visual/maps/usa2013states.js",
