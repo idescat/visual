@@ -1,6 +1,6 @@
 /*
 Visual
-Copyright (c) 2014 Institut d'Estadistica de Catalunya (Idescat)
+Copyright (c) 2016 Institut d'Estadistica de Catalunya (Idescat)
 http://www.idescat.cat (https://github.com/idescat/visual)
 
 Permission is hereby granted, free of charge, to any person obtaining
@@ -25,7 +25,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 /*global d3, LazyLoad*/
 var VisualJS={
-	version: "0.10.8",
+	version: "0.11.0",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -215,11 +215,8 @@ var VisualJS={
 		}	
 		div.insertBefore(separator, span);
 		resize();
-		if(typeof window.onorientationchange!=="undefined"){
-			window.onorientationchange=resize;
-		}else{
-			window.onresize=resize;
-		}
+
+		window.addEventListener("resize", resize, false);
 	},
 
 	//if o is array, then loop
@@ -424,11 +421,8 @@ var VisualJS={
 				if(typeof VisualJS.chart==="function"){ //can be undefined if "cmap" && old browser
 					tooltip();
 					container.show && VisualJS.chart();
-					if(typeof window.onorientationchange!=="undefined"){
-						window.onorientationchange=canvas;
-					}else{
-						window.onresize=canvas;
-					}
+
+					window.addEventListener("resize", canvas, false);
 					chart=true;
 				}
 				if(container.callback!==null){
