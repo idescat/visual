@@ -25,7 +25,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 /*global d3, LazyLoad*/
 var VisualJS={
-	version: "0.11.0",
+	version: "0.11.1",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -216,7 +216,13 @@ var VisualJS={
 		div.insertBefore(separator, span);
 		resize();
 
-		window.addEventListener("resize", resize, false);
+		if(window.addEventListener){
+			window.addEventListener('resize', resize, false); 
+		}else if(window.attachEvent){
+			window.attachEvent('onresize', resize);
+		}else{
+			window.onresize=resize; //Warning: it will destroy any other attachment
+		}
 	},
 
 	//if o is array, then loop
@@ -284,9 +290,9 @@ var VisualJS={
 		
 		if(VisualJS.container[VisualJS.id].listen){
 			if(window.addEventListener){
-				addEventListener("message", listener, false);
+				window.addEventListener("message", listener, false);
 			}else{
-				document.attachEvent("onmessage", listener);
+				window.attachEvent("onmessage", listener);
 			}		
 		}
 		
@@ -422,7 +428,14 @@ var VisualJS={
 					tooltip();
 					container.show && VisualJS.chart();
 
-					window.addEventListener("resize", canvas, false);
+					if(window.addEventListener){
+						window.addEventListener('resize', canvas, false); 
+					}else if(window.attachEvent){
+						window.attachEvent('onresize', canvas);
+					}else{
+						window.onresize=canvas; //Warning: it will destroy any other attachment
+					}
+
 					chart=true;
 				}
 				if(container.callback!==null){
