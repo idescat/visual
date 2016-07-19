@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2014 Institut d'Estadistica de Catalunya (Idescat)
+Copyright (c) 2016 Institut d'Estadistica de Catalunya (Idescat)
 http://www.idescat.cat (https://github.com/idescat/visual)
 
 Permission is hereby granted, free of charge, to any person obtaining
@@ -22,7 +22,7 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-VisualJS.setup={ //v.0.10.0
+VisualJS.setup={ //v.0.11.2
 	//Colors for maps and series
 	colors: {
 		map: {
@@ -39,6 +39,7 @@ VisualJS.setup={ //v.0.10.0
 			position: "end"
 		},
 		legend: true,
+		position: "ne", //legend position: "ne", "nw", "se" or "sw"
 		grid: {
 			border: 0, //grid border width
 			shadow: 4, //line shadow width
