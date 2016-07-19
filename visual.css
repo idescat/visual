@@ -114,3 +114,12 @@ body {
 	fill: #000;
 	stroke: none;
 }
+
+@media (max-width: 600px) {
+	.visual h1 {
+		font-size: 12px;
+	}
+	.visual p {
+		font-size: 10px;
+	}
+}
