@@ -25,7 +25,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 /*global d3, LazyLoad*/
 var VisualJS={
-	version: "0.11.1",
+	version: "0.11.2",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -1101,7 +1101,8 @@ var VisualJS={
 							}
 						},
 						legend: {
-							show: shlegend
+							show: shlegend,
+							position: scanvas.position || "ne"
 						},
 						grid: {
 							borderWidth: container.grid.border,

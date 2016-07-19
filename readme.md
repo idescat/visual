@@ -93,6 +93,8 @@ Boolean. This determines whether the heading is built by composition from *title
 #### legend
 Boolean. This determines whether the chart legend should be shown. Default (*true*) is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
 
+The position of the legend in Cartesian charts is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js) (canvas *position* property). The position of the legend in maps is particular to each map and is set in the [canvas properties of the Visual map object](#canvas-properties-area-legend).
+
 #### grid
 Object with the following properties: *border* (number: grid border width), *line* (number: line width), *shadow* (number: line shadow width) and *point* (number: point radius). Default border (*0*), line (*2*), shadow (*4*) and point (*1*) are set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
 
