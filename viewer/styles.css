@@ -151,6 +151,11 @@ legend {
 	font-size: 110%;
 }
 
+p, #save {
+	font-size: 14px;
+	line-height: 1.4;
+}
+
 table {
 	width: 100%;
 	border-collapse: collapse;
@@ -171,7 +176,7 @@ caption, th, td {
 caption {
 	font-weight: bold;
 	padding-bottom: 2px;
-	font-size: 110%;
+	font-size: 14px;
 }
 th, td {
 	font-weight: normal;
@@ -186,6 +191,12 @@ thead th, thead td {
 	border-bottom: 1px #ccc solid;
 	font-weight: normal;
 }
+.maps thead th {
+	font-weight: bold;
+}
 .maps tr:hover th, .maps tr:hover td {
 	background-color: #eee;
+}
+.maps caption, .maps tr * {
+	padding: 6px 0;
 }
