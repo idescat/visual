@@ -21,17 +21,17 @@
 			<div>
 				<fieldset>
 					<legend>Header and Footer</legend>
-					<input title="Title (optional)" type="text" name="title" value="{Title}" />
-					<input title="Geographic area (optional)" type="text" name="geo" value="{Geographic area}" />
-					<input title="Footer (optional)" type="text" name="footer" value="{Footer.}" />
+					<input title="Title (optional)" type="text" name="title" value="[Title]" />
+					<input title="Geographic area (optional)" type="text" name="geo" value="[Geographic area]" />
+					<input title="String or ['line1', 'line2',...] (optional)' type="text" name="footer" value="[Footer.]" />
 					<label class="right"><input type="checkbox" name="autoheading" checked="checked" /> autoheading</label>
 				</fieldset>
-				<fieldset>
+				<fieldset id="units">
 					<legend>Units</legend>
-					<label>decimals <input title="Number of decimals" type="number" name="dec" value="0" /></label>
-					<input title="Unit label (optional)" type="text" name="label" value="{label}" />
-					<input title="Unit symbol (optional)" type="text" name="symbol" value="{symbol}" />
-					<label title="Symbol position" class="right"><input type="checkbox" name="position" checked="checked" /> end</label>
+					<label>decimals <input title="Number of decimals" type="text" name="dec" value="0" style="width:10%;"/></label>
+					<input title="Unit label or {'x': 'x-label', 'y': 'y-label'} (optional)" type="text" name="label" value="[label]" />
+					<input title="Unit symbol or {'x': 'x-symbol', 'y': 'y-symbol'} (optional)" type="text" name="symbol" value="[symbol]" />
+					<select title="Symbol position" name="position" class="right"></select>
 				</fieldset>
 
 				<fieldset>
@@ -39,9 +39,11 @@
 					<select name="type">
 						<option value="bar">bar</option>
 						<option value="rank">rank</option>
+						<option value="pie">pie</option>
 						<option value="pyram">pyram</option>
 						<option value="tsbar">tsbar</option>
 						<option value="tsline">tsline</option>
+						<option value="xy">xy</option>
 						<option value="cmap">cmap</option>
 					</select>
 
@@ -58,17 +60,50 @@
 
 				<fieldset id="layout">
 					<legend>Layout</legend>
-					<label class="tsbar tsline bar pyram rank cmap">range <input type="text" name="range" value="" /></label>
-					<label class="tsbar tsline bar pyram rank"><input type="checkbox" name="x" checked="checked" /> x-axis</label>
-					<label class="tsbar tsline bar pyram rank"><input type="checkbox" name="y" checked="checked" /> y-axis</label>
-					<label class="tsbar tsline pyram cmap"><input type="checkbox" name="legend" checked="checked" /> legend</label>
-					<label class="tsbar"><input type="checkbox" name="stacked" />stacked</label>
+					<label class="tsbar tsline bar pyram rank cmap xy">range <input type="text" name="range" value="" /></label>
 
 					<div class="right">
-						<label class="tsbar tsline bar pyram rank" title="border">B <input type="number" name="border" value="0" /></label>
-						<label class="tsline" title="line">L <input type="number" name="line" value="2" /></label>
-						<label class="tsline" title="point">P <input type="number" name="point" value="1" /></label>
-						<label class="tsline" title="shadow">S <input type="number" name="shadow" value="4" /></label>
+						<table class="tsbar tsline bar pyram rank xy">
+						<tbody>
+							<tr>
+								<th></th>
+								<th>labels</th>
+								<th>ticks</th>
+							</tr>
+							<tr>
+								<td>
+									<label class="tsbar tsline bar pyram rank xy"><input type="checkbox" name="x" checked="checked" /> x</label>
+								</td>
+								<td>
+									<input type="checkbox" name="xlabels" checked="checked" />
+								</td>
+								<td>
+									<input type="checkbox" name="xticks" checked="checked" />
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label class="tsbar tsline bar pyram rank xy"><input type="checkbox" name="y" checked="checked" /> y</label>
+								</td>
+								<td>
+									<input type="checkbox" name="ylabels" checked="checked" />
+								</td>
+								<td>
+									<input type="checkbox" name="yticks" checked="checked" />
+								</td>
+							</tr>
+						</tbody>
+						</table>
+					</div>
+
+					<label class="tsbar tsline pyram cmap xy pie"><input type="checkbox" name="legend" checked="checked" /> legend</label>
+					<label class="tsbar"><input type="checkbox" name="stacked" />stacked</label>
+
+					<div class="left">
+						<label class="tsbar tsline bar pyram rank xy" title="border">Border <input type="number" name="border" value="0" /></label>
+						<label class="tsline" title="line">Line <input type="number" name="line" value="2" /></label>
+						<label class="tsline xy" title="point">Point <input type="number" name="point" value="1" /></label>
+						<label class="tsline" title="shadow">Shadow <input type="number" name="shadow" value="4" /></label>
 					</div>
 				</fieldset>
 
@@ -92,7 +127,7 @@
 		<table>
 			<caption>Available maps</caption>
 			<thead><th>Map ID</th><th>Description</th></thead>
-			<tbody></tbody>
+			<tbody class="maps"></tbody>
 		</table>
 
 		<script>
@@ -123,7 +158,7 @@
 			for(var m in maps){
 				maptable+="<tr><th>"+m+"</th><td>"+maps[m].label+"</td></tr>";
 			}
-			$( "tbody" ).html( maptable );
+			$( "tbody.maps" ).html( maptable );
 
 			function addCustom(i){
 				var html="";
@@ -157,7 +192,7 @@
 			}
 
 			function update(){
-				var input=$( "input" );
+				var input=$( "input" ), aux;
 				params["type"]=$( "select[name=type]" ).val();
 				params["lang"]=$( "select[name=lang]" ).val();
 
@@ -167,22 +202,61 @@
 					leg.html( params["type"]+" &darr;" );
 				}
 
-				$( "#layout label."+params["type"] ).show();
+				$( "#layout ."+params["type"] ).show();
+				$( "#position label").hide();
+				$( "#position label."+params["type"] ).show();
+				$( "#position label.all").show();
 				$( "#layout label").not( "."+params["type"] ).hide();
+				$( "#layout table").not( "."+params["type"] ).hide();
 
+				//Canviar textos
+				if(last!==params["type"]){
+					if(params["type"] === "xy"){
+						$("#units input").each(function(i,el){
+							$(el).val(title.units.xy[i]);
+						});
+						$( "select[name=position]" ).html(
+							'<option value="start,start">start, start</option>'+
+							'<option value="start,end">start, end</option>'+
+							'<option value="end,start">end, start</option>'+
+							'<option value="end,end" selected>end, end</option>'
+						);
+					}else{
+						$("#units input").each(function(i,el){
+							$(el).val(title.units.default[i]);
+						});
+						$( "select[name=position]" ).html(
+							'<option value="start">start</option>'+
+							'<option value="end" selected>end</option>'
+						);
+					}
+				}
+				//Agafar selects
+				if(params["type"] === "xy"){
+					aux = $( "select[name=position]" ).val().split(",");
+					params["position"]={
+						x: aux[0],
+						y: aux[1]
+					};
+				}else{
+					params["position"]=	$( "select[name=position]" ).val();
+				}
 				for(var i=0, len=input.length; i<len; i++){
 					var
 						f=input[i],
 						//FF does not support "number" returns type "text".
-						type=(f.name==="dec" || f.name==="border" || f.name==="shadow" || f.name==="line" || f.name==="point") ? "number" : f.type
+						type=(f.name==="border" || f.name==="shadow" || f.name==="line" || f.name==="point") ? "number" : f.type
 					;
 
 					switch(type){
 						case "text":
 							try{
-								params[f.name]=JSON.parse( f.value.replace( /'/g, '"' ) );
+								params[f.name]=JSON.parse(f.value.replace(/'/g,"\"").replace(/(['"])?([a-z0-9A-Z_]+)(['"])?:/g, '"$2": '));
 								if(typeof params[f.name]!=="object"){ //time can be an array or a string: when a string parse() can convert to number if possible, but we don't want that
-									params[f.name]=(f.name!=="range") ? String(params[f.name]) : params[f.name];
+									if(f.name==="dec")
+										params[f.name]=toPosInt( f.value );
+									else
+										params[f.name]=(f.name!=="range") ? String(params[f.name]) : params[f.name];
 								}
 							}catch(e){
 								//Real text (or number: rangemin, rangemax [not used anymore])
@@ -196,21 +270,7 @@
 							params[f.name]=(f.value!=="") ? Number(f.value) : null;
 							break;
 						case "checkbox":
-							params[f.name]=
-								(
-									(f.name!=="position")
-									?
-									f.checked
-									:
-									(
-										f.checked
-										?
-										"end"
-										:
-										"start"
-									)
-								)
-							;
+							params[f.name]=	f.checked;
 							break;
 					}
 				}
@@ -232,31 +292,40 @@
 				$("#visual+iframe").remove();
 
 				VisualJS.iframe(
-					{
-						id: "visual",
-						fixed: [700,565],
-						lang: params["lang"],
+						{
+								id: "visual",
+								fixed: [700,565],
+								lang: params["lang"],
 
-						title: params["title"],
-						geo: params["geo"],
-						footer: params["footer"],
-						unit: {label: params["label"], symbol: params["symbol"], position: params["position"]},
+								title: params["title"],
+								geo: params["geo"],
+								footer: params["footer"],
+								unit: {label: params["label"], symbol: params["symbol"], position: params["position"]},
 
-						dec: params["dec"],
-						autoheading: params["autoheading"],
+								dec: params["dec"],
+								autoheading: params["autoheading"],
 
-						legend: params["legend"],
-						stacked: params["stacked"],
-						grid: { border: params["border"], shadow: params["shadow"], line: params["line"], point: params["point"] },
-						axis: { x: params["x"], y: params["y"] },
-						range: params["range"],
-						grouped: params["grouped"] || {},
+								legend: params["legend"],
+								stacked: params["stacked"],
+								grid: { border: params["border"], shadow: params["shadow"], line: params["line"], point: params["point"] },
+								axis: {
+									x: params["x"], y: params["y"],
+									ticks: {
+										x: params["xticks"], y: params["yticks"]
+									},
+									labels: {
+										x: params["xlabels"], y: params["ylabels"]
+									}
+								},
+								range: params["range"],
+								grouped: params["grouped"] || {},
 
-						type: params["type"],
-						data: params["data"],
-						by: params["by"],
-						time: params["time"]
-					},
+								type: params["type"],
+								data: params["data"],
+								by: params["by"],
+								time: params["time"]
+						}
+					,
 					"//idescat.github.io/visual/visual.css"
 				);
 
@@ -339,7 +408,7 @@
 
 				$("#save a").text("Saving...").css({"background-color": "#800", "color": "#fff"});
 
-				var 
+				var
 					gist={
 						description: "Idescat Visual",
 						public: true,
@@ -350,7 +419,7 @@
 				;
 
 				$.ajax({
-					type: "POST", 
+					type: "POST",
 					url: "https://api.github.com/gists",
 					data: JSON.stringify(gist),
 					dataType: "json",

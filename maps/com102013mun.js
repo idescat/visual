@@ -2,9 +2,8 @@
 	area: [300, 440],
 
 	projection: "mercator",
-	scale: 44000,
-	center: [3.07, 41.95],
-	legend: [180, 347],
+	scale: 48000,
+	center: [3.061, 41.948],
 
 	id: "MUNICIPI", 
 	label: "NOM_MUNI",
