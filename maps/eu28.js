@@ -4,7 +4,7 @@ VisualJS.map.eu28={
 	projection: "mercator",
 	scale: 462,
 	center: [4.92,53.98],
-	legend: [30,15],
+
 
 	id: "id",
 	label: "label",

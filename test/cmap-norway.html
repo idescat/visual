@@ -4,26 +4,26 @@
 <!--[if IE 8]><html class="lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html> <!--<![endif]-->
 	<head>
-		<meta charset="iso-8859-1" />
+		<meta charset="utf8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<title>Idescat Visual sample page</title>
 		<link href="../visual.css" rel="stylesheet" type="text/css" />
 		<script src="../lazyvisual.js"></script>
 		<script src="../visual.setup.js"></script>
 	</head>
-	
+
 	<body>
 		<div id="visual" class="visual"></div>
 		<script>
 			visual(
 				{
+					lang: "en", //Default language is Catalan ("ca"). Set in visual.setup.js
 					title: "Population",
 					geo: "Norway",
 					time: "2014 Q3",
-					footer: 'Source: <a href="http://data.ssb.no/api/v0/dataset/1108?lang=en">Statistics Norway</a>.',
+					footer: 'Source: Statistics Norway.',
 					legend: false,
 					unit: {label: "people"},
-					lang: "en",
 					dec: 0,
 					by: "norwaymun",
 					type: "cmap",

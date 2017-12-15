@@ -4,29 +4,29 @@
 <!--[if IE 8]><html class="lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html> <!--<![endif]-->
 	<head>
-		<meta charset="iso-8859-1" />
+		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<title>Idescat Visual sample page</title>
 		<link href="../visual.css" rel="stylesheet" type="text/css" />
 		<script src="../lazyvisual.js"></script>
 		<script src="../visual.setup.js"></script>
 	</head>
-	
+
 	<body>
 		<div id="visual" class="visual"></div>
 		<script>
 			visual(
 				{
+					lang: "en", //Default language is Catalan ("ca"). Set in visual.setup.js
 					title: "BAR example",
-					geo: "Alt Camp",
 					time: "2012",
 					footer: "The source goes here.",
-					unit: {label: "persones"},
+					unit: {label: "people"},
 					dec: 0,
 					type: "bar",
-					data: [ ["0-14 anys", 7329], ["15-64 anys", 30231], ["65-84 anys", 6485], ["85 anys o més", 1254] ]
+					data : [["0-14", 7329], ["15-64", 30231], ["65-84", 6485], ["85+", 1254]]
 					/* Same as:
-						by: [ "0-14 anys", "15-64 anys", "65-84 anys", "85 anys o més" ],
+						by: [ "0-14", "15-64", "65-84", "85+" ],
 						data: [ 7329, 30231, 6485, 1254 ]
 					*/
 				}

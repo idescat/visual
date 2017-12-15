@@ -3,7 +3,7 @@ VisualJS.map.usastates={
 
 	projection: "albersUsa",
 	scale: 660,
-	legend: [290, 285],
+
 
 	id: "STATE",
 	label: "NAME",

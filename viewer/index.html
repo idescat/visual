@@ -6,9 +6,9 @@
 	<head>
 		<title>Visual Viewer</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<meta charset="utf-8" />
 		<link href="styles.css" rel="stylesheet" type="text/css" />
-		<script src="../visual.js"></script>
+		<script src="../visual.max.js"></script>
 		<script src="../visual.setup.js"></script>
 		<script src="../lib/jquery.1.8.3.js"></script>
 		<script src="setup.js"></script>
@@ -21,17 +21,17 @@
 			<div>
 				<fieldset>
 					<legend>Header and Footer</legend>
-					<input title="Title (optional)" type="text" name="title" value="{Title}" />
-					<input title="Geographic area (optional)" type="text" name="geo" value="{Geographic area}" />
-					<input title="Footer (optional)" type="text" name="footer" value="{Footer.}" />
+					<input title="Title (optional)" type="text" name="title" value="[Title]" />
+					<input title="Geographic area (optional)" type="text" name="geo" value="[Geographic area]" />
+					<input title="String or ['line1', 'line2',...] (optional)' type="text" name="footer" value="[Footer.]" />
 					<label class="right"><input type="checkbox" name="autoheading" checked="checked" /> autoheading</label>
 				</fieldset>
-				<fieldset>
+				<fieldset id="units">
 					<legend>Units</legend>
-					<label>decimals <input title="Number of decimals" type="number" name="dec" value="0" /></label>
-					<input title="Unit label (optional)" type="text" name="label" value="{label}" />
-					<input title="Unit symbol (optional)" type="text" name="symbol" value="{symbol}" />
-					<label title="Symbol position" class="right"><input type="checkbox" name="position" checked="checked" /> end</label>
+					<label>decimals <input title="Number of decimals" type="text" name="dec" value="0" style="width:10%;"/></label>
+					<input title="Unit label or {'x': 'x-label', 'y': 'y-label'} (optional)" type="text" name="label" value="[label]" />
+					<input title="Unit symbol or {'x': 'x-symbol', 'y': 'y-symbol'} (optional)" type="text" name="symbol" value="[symbol]" />
+					<select title="Symbol position" name="position" class="right"></select>
 				</fieldset>
 
 				<fieldset>
@@ -39,9 +39,11 @@
 					<select name="type">
 						<option value="bar">bar</option>
 						<option value="rank">rank</option>
+						<option value="pie">pie</option>
 						<option value="pyram">pyram</option>
 						<option value="tsbar">tsbar</option>
 						<option value="tsline">tsline</option>
+						<option value="xy">xy</option>
 						<option value="cmap">cmap</option>
 					</select>
 
@@ -58,17 +60,50 @@
 
 				<fieldset id="layout">
 					<legend>Layout</legend>
-					<label class="tsbar tsline bar pyram rank cmap">range <input type="text" name="range" value="" /></label>
-					<label class="tsbar tsline bar pyram rank"><input type="checkbox" name="x" checked="checked" /> x-axis</label>
-					<label class="tsbar tsline bar pyram rank"><input type="checkbox" name="y" checked="checked" /> y-axis</label>
-					<label class="tsbar tsline pyram cmap"><input type="checkbox" name="legend" checked="checked" /> legend</label>
-					<label class="tsbar"><input type="checkbox" name="stacked" />stacked</label>
+					<label class="tsbar tsline bar pyram rank cmap xy">range <input type="text" name="range" value="" /></label>
 
 					<div class="right">
-						<label class="tsbar tsline bar pyram rank" title="border">B <input type="number" name="border" value="0" /></label>
-						<label class="tsline" title="line">L <input type="number" name="line" value="2" /></label>
-						<label class="tsline" title="point">P <input type="number" name="point" value="1" /></label>
-						<label class="tsline" title="shadow">S <input type="number" name="shadow" value="4" /></label>
+						<table class="tsbar tsline bar pyram rank xy">
+						<tbody>
+							<tr>
+								<th></th>
+								<th>labels</th>
+								<th>ticks</th>
+							</tr>
+							<tr>
+								<td>
+									<label class="tsbar tsline bar pyram rank xy"><input type="checkbox" name="x" checked="checked" /> x</label>
+								</td>
+								<td>
+									<input type="checkbox" name="xlabels" checked="checked" />
+								</td>
+								<td>
+									<input type="checkbox" name="xticks" checked="checked" />
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label class="tsbar tsline bar pyram rank xy"><input type="checkbox" name="y" checked="checked" /> y</label>
+								</td>
+								<td>
+									<input type="checkbox" name="ylabels" checked="checked" />
+								</td>
+								<td>
+									<input type="checkbox" name="yticks" checked="checked" />
+								</td>
+							</tr>
+						</tbody>
+						</table>
+					</div>
+
+					<label class="tsbar tsline pyram cmap xy pie"><input type="checkbox" name="legend" checked="checked" /> legend</label>
+					<label class="tsbar"><input type="checkbox" name="stacked" />stacked</label>
+
+					<div class="left">
+						<label class="tsbar tsline bar pyram rank xy" title="border">Border <input type="number" name="border" value="0" /></label>
+						<label class="tsline" title="line">Line <input type="number" name="line" value="2" /></label>
+						<label class="tsline xy" title="point">Point <input type="number" name="point" value="1" /></label>
+						<label class="tsline" title="shadow">Shadow <input type="number" name="shadow" value="4" /></label>
 					</div>
 				</fieldset>
 
@@ -93,248 +128,296 @@
 		</div>
 
 		<script>
-		var
-			last=null,
-			opened=false,
-			params={grouped: null},
-			code=[],
-			leg=$( "#data legend" )
-		;
 
-		$( "#version" ).html( "Visual v. "+VisualJS.version );
-
-		function addCustom(i){
-			var html="";
-			for(var j in custom[i]){
-				var s=JSON.stringify(custom[i][j]).replace(/"/g, "'").replace(/^'/, "").replace(/'$/, "");
-				if(j!=="data"){
-					if(custom[i][j]!==null){
-						html+='<input title="'+j+'" type="text" name="'+j+'" value="'+s+'" />';
-					}
-				}else{
-					s=s.replace(/({|\[)/g, "$1\n").replace(/(}|\])/g, "\n$1").replace(/:/g, ": ").replace(/,(\[|\{)/g, ",\n$1").replace(/,/g, ", ");
-					html+='<textarea title="data" name="data" spellcheck="false" lang="">'+s+'</textarea>';
-				}
-				params[j]=custom[i][j];
-			}
-			$( "#custom" ).html( html );
-		}
-
-		function toPosInt( v ){
-			if( /^([0-9]+)$/.test( v ) ){
-				return Number( v );
-			}
-			return 0;
-		}
-
-		//s is a string that represents a typeof object
-		//(object/array)
-		function jsonify(s){
-			var a=eval("["+s.val()+"]"); //eval knows how to deal with arrays but not with non-array objects
-			return JSON.parse( JSON.stringify( a[0] ) );
-		}
-
-		function update(){
-			var input=$( "input" );
-			params["type"]=$( "select[name=type]" ).val();
-			params["lang"]=$( "select[name=lang]" ).val();
-
-			if(opened){
-				leg.html( params["type"]+" &uarr;" );
-			}else{
-				leg.html( params["type"]+" &darr;" );
-			}
-
-			$( "#layout label."+params["type"] ).show();
-			$( "#layout label").not( "."+params["type"] ).hide();
-
-			for(var i=0, len=input.length; i<len; i++){
-				var
-					f=input[i],
-					//FF does not support "number" returns type "text".
-					type=(f.name==="dec" || f.name==="border" || f.name==="shadow" || f.name==="line" || f.name==="point") ? "number" : f.type
-				;
-
-				switch(type){
-					case "text":
-						try{
-							params[f.name]=JSON.parse( f.value.replace( /'/g, '"' ) );
-							if(typeof params[f.name]!=="object"){ //time can be an array or a string: when a string parse() can convert to number if possible, but we don't want that
-								params[f.name]=(f.name!=="range") ? String(params[f.name]) : params[f.name];
-							}
-						}catch(e){
-							//Real text (or number: rangemin, rangemax [not used anymore])
-							params[f.name]=( f.value!=="" ) ? f.value : null;
-						}
-						break;
-					case "number": //positive integer
-						params[f.name]=toPosInt( f.value );
-						break;
-					case "anynumber": //not used anymore
-						params[f.name]=(f.value!=="") ? Number(f.value) : null;
-						break;
-					case "checkbox":
-						params[f.name]=
-							(
-								(f.name!=="position")
-								?
-								f.checked
-								:
-								(
-									f.checked
-									?
-									"end"
-									:
-									"start"
-								)
-							)
-						;
-						break;
-				}
-			}
-
-			if(last!==params["type"]){
-				addCustom(params["type"]);
-
-				$("input[name=range]").attr("title",  title.range[params["type"]]).val("");
-				params["range"]="";
-
-				last=params["type"];
-			}
-
-			params["data"]=jsonify( $( "textarea[name=data]" ) );
-
-			if(params["grouped"]) {
-				params["grouped"]=jsonify( $( "input[name=grouped]" ) );
-			}
-			$("#visual+iframe").remove();
-
-			VisualJS.iframe(
-				{
-					id: "visual",
-					fixed: [700,565],
-					lang: params["lang"],
-
-					title: params["title"],
-					geo: params["geo"],
-					footer: params["footer"],
-					unit: {label: params["label"], symbol: params["symbol"], position: params["position"]},
-
-					dec: params["dec"],
-					autoheading: params["autoheading"],
-
-					legend: params["legend"],
-					stacked: params["stacked"],
-					grid: { border: params["border"], shadow: params["shadow"], line: params["line"], point: params["point"] },
-					axis: { x: params["x"], y: params["y"] },
-					range: params["range"],
-					grouped: params["grouped"] || {},
-
-					type: params["type"],
-					data: params["data"],
-					by: params["by"],
-					time: params["time"]
-				},
-				"../visual.css"
-			);
-
-			code=[];
-
-			//Simple properties
-			for(var i=0, len=simple.length; i<len; i++){
-				param(simple[i]);
-			}
-
-			//Composed properties
-			if(params["border"]!==VisualJS.setup.canvas.grid.border || params["shadow"]!==VisualJS.setup.canvas.grid.shadow || params["line"]!==VisualJS.setup.canvas.grid.line || params["point"]!==VisualJS.setup.canvas.grid.point){
-				code.push('"grid": {"border": '+params["border"]+', "line": '+params["line"]+', "shadow": '+params["shadow"]+', "point": '+params["point"]+'}');
-			}
-			if(params["x"]!==VisualJS.setup.canvas.axis.x || params["y"]!==VisualJS.setup.canvas.axis.y){
-				code.push('"axis": {"x": '+params["x"]+', "y": '+params["y"]+'}');
-			}
-			if(params["label"]!==null || params["symbol"]!==null || params["position"]!==VisualJS.setup.canvas.unit.position){
-				code.push('"unit": {'+
-					notnull("label", ", ")+
-					notnull("symbol", ", ")+
-					notnull("position", "")+
-					'}');
-			}
-
-			$( "#code textarea" ).html( "visual({\n\t"+code.join(",\n\t")+"\n});" );
-		}
-
-		function notnull(key, comma){
-			return (params[key]!==null) ? '"'+key+'": "'+params[key]+'"'+comma : '';
-		}
-
-		//code and params, globals
-		function param(key){
-			if(typeof params[key]==="undefined" || params[key]===null || params[key]===""){
-				return;
-			}
-
-			if(typeof defaults[key]!=="undefined" && defaults[key]===params[key]){
-				return;
-			}
-
-			if(typeof params[key]==="number" || typeof params[key]==="boolean"){
-				code.push('"'+key+'": '+params[key]);
-			}else{
-				code.push('"'+key+'": '+JSON.stringify(params[key]));
-			}
-		}
-
-		function open(e){
-			e.html( params["type"]+" &uarr;" );
-			var c=$( "#custom" );
-			c.animate({height: "toggle"}, 100, function() {
-				c.show();
-			});
-			opened=true;
-		}
-		function close(e){
-			e.html( params["type"]+" &darr;" );
-			var c=$( "#custom" );
-			c.animate({height: "toggle"}, 100, function() {
-				c.hide();
-			});
-			opened=false;
-		}
-
-		update();
-		$( "#inputs" ).change(update);
-
-		leg.click(function(){
-			if( opened ){
-				close(leg);
-			}else{
-				open(leg);
-			}
-		});
-
-		$( "#inputs strong" ).click(function() {
 			var
-				h=$( "#inputs strong" ).html().substr(1),
-				up=String.fromCharCode(8593),
-				down=String.fromCharCode(8595),
-				c=( $( "#inputs strong" ).html().substr(0,1)===up ) ? down : up
+				last=null,
+				opened=false,
+				params={grouped: null},
+				code=[],
+				leg=$( "#data legend" )
 			;
-			$( "#inputs div" ).toggle(0, function() {
-				$( "#inputs strong" ).html(c+h);
+
+			$( "#version" ).html( "Visual v. "+VisualJS.version );
+
+			function addCustom(i){
+				var html="";
+				for(var j in custom[i]){
+					var s=JSON.stringify(custom[i][j]).replace(/"/g, "'").replace(/^'/, "").replace(/'$/, "");
+					if(j!=="data"){
+						if(custom[i][j]!==null){
+							html+='<input title="'+j+'" type="text" name="'+j+'" value="'+s+'" />';
+						}
+					}else{
+						s=s.replace(/({|\[)/g, "$1\n").replace(/(}|\])/g, "\n$1").replace(/:/g, ": ").replace(/,(\[|\{)/g, ",\n$1").replace(/,/g, ", ");
+						html+='<textarea title="data" name="data" spellcheck="false" lang="">'+s+'</textarea>';
+					}
+					params[j]=custom[i][j];
+				}
+				$( "#custom" ).html( html );
+			}
+
+			function toPosInt( v ){
+				if( /^([0-9]+)$/.test( v ) ){
+					return Number( v );
+				}
+				return 0;
+			}
+
+			//s is a string that represents a typeof object
+			//(object/array)
+			function jsonify(s){
+				var a=eval("["+s.val()+"]"); //eval knows how to deal with arrays but not with non-array objects
+				return JSON.parse( JSON.stringify( a[0] ) );
+			}
+
+			function update(){
+				var input=$( "input" ), aux;
+				params["type"]=$( "select[name=type]" ).val();
+				params["lang"]=$( "select[name=lang]" ).val();
+
+				if(opened){
+					leg.html( params["type"]+" &uarr;" );
+				}else{
+					leg.html( params["type"]+" &darr;" );
+				}
+
+				$( "#layout ."+params["type"] ).show();
+				$( "#position label").hide();
+				$( "#position label."+params["type"] ).show();
+				$( "#position label.all").show();
+				$( "#layout label").not( "."+params["type"] ).hide();
+				$( "#layout table").not( "."+params["type"] ).hide();
+
+				//Canviar textos
+				if(last!==params["type"]){
+					if(params["type"] === "xy"){
+						$("#units input").each(function(i,el){
+							$(el).val(title.units.xy[i]);
+						});
+						$( "select[name=position]" ).html(
+							'<option value="start,start">start, start</option>'+
+							'<option value="start,end">start, end</option>'+
+							'<option value="end,start">end, start</option>'+
+							'<option value="end,end" selected>end, end</option>'
+						);
+					}else{
+						$("#units input").each(function(i,el){
+							$(el).val(title.units.default[i]);
+						});
+						$( "select[name=position]" ).html(
+							'<option value="start">start</option>'+
+							'<option value="end" selected>end</option>'
+						);
+					}
+				}
+				//Agafar selects
+				if(params["type"] === "xy"){
+					aux = $( "select[name=position]" ).val().split(",");
+					params["position"]={
+						x: aux[0],
+						y: aux[1]
+					};
+				}else{
+					params["position"]=	$( "select[name=position]" ).val();
+				}
+				for(var i=0, len=input.length; i<len; i++){
+					var
+						f=input[i],
+						//FF does not support "number" returns type "text".
+						type=(f.name==="border" || f.name==="shadow" || f.name==="line" || f.name==="point") ? "number" : f.type
+					;
+
+					switch(type){
+						case "text":
+							try{
+								params[f.name]=JSON.parse(f.value.replace(/'/g,"\"").replace(/(['"])?([a-z0-9A-Z_]+)(['"])?:/g, '"$2": '));
+								if(typeof params[f.name]!=="object"){ //time can be an array or a string: when a string parse() can convert to number if possible, but we don't want that
+									if(f.name==="dec")
+										params[f.name]=toPosInt( f.value );
+									else
+									params[f.name]=(f.name!=="range") ? String(params[f.name]) : params[f.name];
+								}
+							}catch(e){
+								//Real text (or number: rangemin, rangemax [not used anymore])
+								params[f.name]=( f.value!=="" ) ? f.value : null;
+							}
+							break;
+						case "number": //positive integer
+							params[f.name]=toPosInt( f.value );
+							break;
+						case "anynumber": //not used anymore
+							params[f.name]=(f.value!=="") ? Number(f.value) : null;
+							break;
+						case "checkbox":
+							params[f.name]=	f.checked;
+							break;
+					}
+				}
+
+				if(last!==params["type"]){
+					addCustom(params["type"]);
+
+					$("input[name=range]").attr("title",  title.range[params["type"]]).val("");
+					params["range"]="";
+
+					last=params["type"];
+				}
+
+				params["data"]=jsonify( $( "textarea[name=data]" ) );
+
+				if(params["grouped"]) {
+					params["grouped"]=jsonify( $( "input[name=grouped]" ) );
+				}
+				$("#visual+iframe").remove();
+
+				VisualJS.iframe(
+						{
+								id: "visual",
+								fixed: [700,565],
+								lang: params["lang"],
+
+								title: params["title"],
+								geo: params["geo"],
+								footer: params["footer"],
+								unit: {label: params["label"], symbol: params["symbol"], position: params["position"]},
+
+								dec: params["dec"],
+								autoheading: params["autoheading"],
+
+								legend: params["legend"],
+								stacked: params["stacked"],
+								grid: { border: params["border"], shadow: params["shadow"], line: params["line"], point: params["point"] },
+								axis: {
+									x: params["x"], y: params["y"],
+									ticks: {
+										x: params["xticks"], y: params["yticks"]
+									},
+									labels: {
+										x: params["xlabels"], y: params["ylabels"]
+									}
+								},
+								range: params["range"],
+								grouped: params["grouped"] || {},
+
+								type: params["type"],
+								data: params["data"],
+								by: params["by"],
+								time: params["time"]
+						}
+					,
+					"../visual.css"
+				);
+
+				code=[];
+
+				//Simple properties
+				for(var i=0, len=simple.length; i<len; i++){
+					param(simple[i]);
+					if(simple[i]==="legend"){
+						code.push(
+							"\"axis\": {"+
+								"\"x\": "+params["x"]+", \"y\": "+params["y"]+","+
+								"\"ticks\": {"+
+									"\"x\": "+params["xticks"]+", \"y\": "+params["yticks"]+""+
+								"},"+
+								"\"labels\": {"+
+									"\"x\": "+params["xlabels"]+", \"y\": "+params["ylabels"]+""+
+								"}"+
+							"}"
+						);
+					}
+				}
+
+				//Composed properties
+				if(params["border"]!==VisualJS.setup.canvas.grid.border || params["shadow"]!==VisualJS.setup.canvas.grid.shadow || params["line"]!==VisualJS.setup.canvas.grid.line || params["point"]!==VisualJS.setup.canvas.grid.point){
+					code.push('"grid": {"border": '+params["border"]+', "line": '+params["line"]+', "shadow": '+params["shadow"]+', "point": '+params["point"]+'}');
+				}
+				if(params["x"]!==VisualJS.setup.canvas.axis.x || params["y"]!==VisualJS.setup.canvas.axis.y){
+					code.push('"axis": {"x": '+params["x"]+', "y": '+params["y"]+'}');
+				}
+				if(params["label"]!==null || params["symbol"]!==null || params["position"]!==VisualJS.setup.canvas.unit.position){
+					code.push('"unit": {'+
+						notnull("label", ",")+
+						notnull("symbol", ",")+
+						notnull("position", "")+
+						'}');
+				}
+
+				$( "#code textarea" ).html( "visual({\n\t"+code.join(",\n\t")+"\n});" );
+
+			}
+
+			function notnull(key, comma){
+				return (params[key]!==null) ? '"'+key+'": '+((typeof params[key] !== "string") ? JSON.stringify(params[key]) : '"'+params[key]+'"')+comma : '';
+			}
+
+			//code and params, globals
+			function param(key){
+				if(typeof params[key]==="undefined" || params[key]===null || params[key]===""){
+					return;
+				}
+
+				if(typeof defaults[key]!=="undefined" && defaults[key]===params[key]){
+					return;
+				}
+
+				if(typeof params[key]==="number" || typeof params[key]==="boolean"){
+					code.push('"'+key+'": '+params[key]);
+				}else{
+					code.push('"'+key+'": '+JSON.stringify(params[key]));
+				}
+			}
+
+			function open(e){
+				e.html( params["type"]+" &uarr;" );
+				var c=$( "#custom" );
+				c.animate({height: "toggle"}, 100, function() {
+					c.show();
+				});
+				opened=true;
+			}
+			function close(e){
+				e.html( params["type"]+" &darr;" );
+				var c=$( "#custom" );
+				c.animate({height: "toggle"}, 100, function() {
+					c.hide();
+				});
+				opened=false;
+			}
+
+			update();
+			$( "#inputs" ).change(update);
+
+			leg.click(function(){
+				if( opened ){
+					close(leg);
+				}else{
+					open(leg);
+				}
 			});
-		});
 
-		$( "#code textarea" ).click(function(){
-			this.select();
-		});
+			$( "#inputs strong" ).click(function() {
+				var
+					h=$( "#inputs strong" ).html().substr(1),
+					up=String.fromCharCode(8593),
+					down=String.fromCharCode(8595),
+					c=( $( "#inputs strong" ).html().substr(0,1)===up ) ? down : up
+				;
+				$( "#inputs div" ).toggle(0, function() {
+					$( "#inputs strong" ).html(c+h);
+				});
+			});
 
-		/* Emulate readonly="readonly" (iPad won't allow copying) */
-		$( "#code textarea" ).bind("keyup keydown cut", function(e){
-			e.preventDefault();
-			e.stopPropagation();
-			e.returnValue=false; //old IEs
-		});
+			$( "#code textarea" ).click(function(){
+				this.select();
+			});
 
+			/* Emulate readonly="readonly" (iPad won't allow copying) */
+			$( "#code textarea" ).bind("keyup keydown cut", function(e){
+				e.preventDefault();
+				e.stopPropagation();
+				e.returnValue=false; //old IEs
+			});
 		</script>
 	</body>
 </html>

@@ -1,10 +1,9 @@
-﻿VisualJS.map.com08={
-	area: [500, 500],
+VisualJS.map.com08={
+	area: [373, 498],
 
 	projection: "mercator",
-	scale: 50000,
-	center: [1, 41.14],
-	legend: [250, 385],
+	scale: 50800,
+	center: [0.984, 41.145],
 
 	id: "MUNICIPI", 
 	label: "NOM_MUNI",

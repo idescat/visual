@@ -1,6 +1,6 @@
 /*
-colors, legend (0.8.0)
-Copyright (c) 2014 Institut d'Estadistica de Catalunya (Idescat)
+colors, legend, groupLegend (1.0.0)
+Copyright (c) 2017 Institut d'Estadistica de Catalunya (Idescat)
 http://www.idescat.cat (https://github.com/idescat/visual)
 
 Permission is hereby granted, free of charge, to any person obtaining
@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 VisualJS.func.colors=function(cHexa, rang, atribut, clas, custcolors, id){
-	var 
+	var
 		d=document,
 		HueToRgb=function (m1, m2, hue) {
 			var v;
@@ -37,7 +37,7 @@ VisualJS.func.colors=function(cHexa, rang, atribut, clas, custcolors, id){
 			return 255 * v;
 		},
 		hsl2rgb=function (hsl) {
-			var 
+			var
 				h=hsl.h,
 				s=hsl.s/100,
 				l=hsl.l/100,
@@ -61,13 +61,13 @@ VisualJS.func.colors=function(cHexa, rang, atribut, clas, custcolors, id){
 		hex2rgb=function (c){
 			c=c.replace("#","");
 			return {
-				r: hex2Dec(c.substr(0,2)), 
-				g: hex2Dec(c.substr(2,2)), 
+				r: hex2Dec(c.substr(0,2)),
+				g: hex2Dec(c.substr(2,2)),
 				b: hex2Dec(c.substr(4,2))
 			};
 		},
 		rgb2hsl=function (rgb){
-			var 
+			var
 				r=rgb.r/255,
 				g=rgb.g/255,
 				b=rgb.b/255,
@@ -96,10 +96,10 @@ VisualJS.func.colors=function(cHexa, rang, atribut, clas, custcolors, id){
 
 	stylesheet.setAttribute("type", "text/css");
 	d.getElementsByTagName("head")[0].appendChild(stylesheet);
-	var 
+	var
 		incr=(97-hsl.l)/--rang,
 		len=(typeof custcolors==="undefined") ? 0 : custcolors.length,
-		rules="", 
+		rules="",
 		rgb
 	;
 	id=(typeof id==="undefined") ? "" : "#"+id;
@@ -119,79 +119,239 @@ VisualJS.func.colors=function(cHexa, rang, atribut, clas, custcolors, id){
 	return colors;
 };
 
-VisualJS.func.legend=function(infsup, lightdark, vis, tooltip, area, pos, strict) { //Requires visual v. 0.8.0
-	var 
-		mapw=area[0],
-		maph=area[1],
+VisualJS.func.legend=function(infsup, colors, vis, tooltip, height, strict, lab) { //Requires Visual v. 1.0.0
+	var
 		showValLimit=250, // height/width less than this value -> don't show text legend
-		minLimit=170, // height/width less than this value -> don't show legend
-		size=15, //square size (15x15)
-		offsetY=4, //space between squares
-		offsetX=5, //space between square and text
-		x=pos[0], //legend position
-		y=pos[1], //legend position
+		minLimit = 170,
+		size=30, //square size (15x15)
+		ratio=1/4,
+		bb = d3.select(".VisualJSfooter")[0][0].getClientRects()[0],
+		width,
+		margin= 12,
+		x,y,hor,
 		hwmin=Math.min(vis.attr("width"), vis.attr("height")),
 		leg=vis.append("svg:g").attr("class", VisualJS.setup.legendclass),
-		info=[ // Colors and values in the legend
-			{  //less than
-				color: "fill:rgb(" + lightdark[0].r + "," + lightdark[0].g + "," + lightdark[0].b + "); ", 
-				text: (strict[0] ? "" :  "\u2264 ") + infsup[0]
-			},
+		defs,
+		info=[ // Values in the legend
 			{	//greater than
-				color: "fill:rgb(" + lightdark[1].r + "," + lightdark[1].g + "," + lightdark[1].b + ")", 
 				text: (strict[1] ? "" :  "\u2265 ") + infsup[1]
 			},
-		],
-		getBB=function(html){ // returns width/height of the text (Bounding Box)
-			var 
-				d=document,
-				s=d.createElement("span")
-			;
-			s.style.whiteSpace="nowrap";
-			s.style.visibility="hidden";
-			s.innerHTML=html;
-			d.body.appendChild(s);
-			var bb=s.getBoundingClientRect();
-			s.parentNode.removeChild(s);
-			return bb;	
-		}, 
-		bbHigherVal=getBB(info[0].text),		
-		xIni=(x / mapw) * vis.attr("width"),
-		yIni=(y / maph) * vis.attr("height"),
-		posY=yIni
+			{  //less than
+				text: (strict[0] ? "" :  "\u2264 ") + infsup[0]
+			},
+		]
 	;
-	
+
 	if(hwmin>minLimit){  //Show legend
-		//squares
-		leg.selectAll("rect")
+		//color gradient
+		defs = leg.append("defs")
+			.append("linearGradient")
+			.attr("id","legendGradient")
+			.attr("x1","100%")
+			.attr("y1","0%")
+			.attr("x2","0%")
+			.attr("y2","0%")
+		;
+		defs
+			.selectAll("stop")
+			.data(colors)
+			.enter()
+			.append("stop")
+			.attr("offset", function(d,i){
+				var len = colors.length;
+				return String(Math.round((100*i/(len-1))))+"%";
+			})
+			.attr("stop-color",function(d){
+				return "rgb(" + d.r + "," + d.g + "," + d.b + ")";
+			})
+		;
+		//Unit text
+		bb = d3.select("svg")[0][0].getBBox();
+		width = bb.width;
+		height = bb.height;
+		leg.selectAll(".values")
 			.data(info)
 			.enter()
-			.append("svg:rect")
-			.attr("x", xIni)
-			.attr("y", function(){posY+=size+offsetY; return posY;})
-			.attr("width", size)
-			.attr("height", size)
-			.attr("style", function(d){return d.color})
+			.append("svg:text")
+			.attr("class","values")
+			.attr("x",function(d,i){
+				if(i === 0)
+					return bb.width - margin/8;
+				else
+					return margin/8;
+			}) //Horizontal space of 5px between square and text
+			.attr("y", bb.height + (1+1.5)*margin)
+			.attr("width", width)
+			.attr("text-anchor",function(d,i){
+				if(i === 0)
+					return "end";
+			})
+			.text(function(d){return d.text;})
 		;
-		if(hwmin>showValLimit){ //case 1: show values
-			//Align text to square horizontally
-			posY=yIni+(size/2)+(bbHigherVal.height/4); 
-			//text
-			leg.selectAll("text")
-				.data(info)
-				.enter()
-				.append("svg:text")
-				.attr("x",xIni+size+offsetX) //Horizontal space of 5px between square and text
-				.attr("y",function(){posY+=size+offsetY; return posY;}) 
-				.text(function(d){return d.text;})
-			;								
-		}else{ //case 2: show tooltip
-			// Attach tooltip
-			leg.selectAll("rect")
-				.on("mousemove", function(d){
-					VisualJS.showTooltip(d.text, d3.event.pageX, d3.event.pageY);
-				})
-				.on("mouseout", function(){tooltip.style("display", "none");})	 
+		//squares
+		bb = d3.select("text")[0][0].getBBox();
+		leg.append("svg:rect")
+			.attr("x", 0)
+			.attr("y", bb.y + bb.height + margin/4 )
+			.attr("width", width)
+			.attr("height", bb.height)
+			.attr("fill", "url(#legendGradient)");
+
+		//lines
+		bb = d3.select("svg>g>rect")[0][0].getBBox();
+		hor = function (d,i){
+				if(i === 0)
+					return width;
+		};
+		leg.selectAll(".line")
+			.data([1,2])
+			.enter()
+			.append("line")
+			.classed("line",true)
+			.attr("x1", hor)
+			.attr("x2", hor)
+			.attr("y1", bb.y - margin/2 )
+			.attr("y2", bb.y)
+		//Align text to square horizontally
+		//text
+		leg.append("svg:text")
+			.attr("x", 0)
+			.attr("y", bb.y + bb.height + margin/4 )
+			.attr("alignment-baseline","hanging")
+			.text(lab)
+		;
+		bb = vis.select(".VisualJSlegend")[0][0].getBBox();
+		vis.attr("viewBox", "0 0 "+Math.round(bb.width)+" "+Math.round(bb.y+bb.height));
+	}
+};
+
+VisualJS.func.groupLegend=function(infsup, vis, tooltip, height, strict, o, scanvas, colorOrder) {
+	var
+		showValLimit=250, // height/width less than this value -> don't show text legend
+		size=15, //square size (15x15)
+		margin = 12,
+		minLimit = 170,
+		hwmin=Math.min(vis.attr("width"), vis.attr("height")),
+		el = d3.select("."+VisualJS.setup.legendclass),
+		bb = d3.select("#visual.visual>svg")[0][0].getBBox(),
+		rect = d3.select("#visual.visual>h1")[0][0].getClientRects()[0],
+		pos = {
+			top: bb.y,
+			left: rect.left,
+			width: rect.width,
+			height: VisualJS.height,
+		},
+		leg,
+		info = [],
+		aux,
+		table,
+		icon = {
+			data: ["&times;","&plus;"],
+			state: false,
+		},
+		i
+	;
+
+	if(typeof colorOrder !== "undefined" && colorOrder === false){
+		for( i=o.grouped.label.length-1; i>=0; i--){
+			info.push(
+				{  //less than
+					color : ( o.grouped.color[i].r ? "rgb("+o.grouped.color[i].r+","+o.grouped.color[i].g+","+o.grouped.color[i].b+")":
+					o.grouped.color[i]),
+					text : o.grouped.label[i]
+				}
+			);
 		}
-	} //case 3: no legend	
+	}else{
+		for( i=0; i<o.grouped.label.length; i++){
+			aux = o.grouped.color.length - 1 - i;
+			info.push(
+				{  //less than
+					color : ( o.grouped.color[aux].r ? "rgb("+o.grouped.color[aux].r+","+o.grouped.color[aux].g+","+o.grouped.color[aux].b+")":
+					o.grouped.color[aux]),
+					text : o.grouped.label[i]
+				}
+			);
+		}
+	}
+
+	if(hwmin>minLimit){  //Show legend
+		leg = d3.select("#visual.visual");
+		//get position
+		if(scanvas.position[0] === "s"){
+			y = "bottom";
+			pos.y = 6;
+		}
+		else{
+			aux =
+			Number(getComputedStyle(d3.select("#visual.visual")[0][0]).getPropertyValue("margin-bottom").replace("px",""));
+			y = "top";
+			pos.y = rect.top + rect.height + aux;
+		}
+		if(scanvas.position[1] === "w"){
+			x = "left";
+			pos.x = pos.left;
+		}
+		else{
+			x = "right";
+			pos.x = pos.left;
+		}
+		//draw legend
+		table = leg.append("div").classed(VisualJS.setup.legendclass,true)
+			.attr("style", "position:absolute;"+y+":"+pos.y+"px; "+x+":"+pos.x+"px; display: inline-block;");
+		//draw legend
+		aux = table
+			.append("table")
+			.selectAll(".category")
+			.data(info).enter()
+			.append("tr").attr("class","category");
+		aux
+			.append("td").attr("class","legendColorBox")
+			.append("div").attr("style","border:1px solid #ccc; padding:1px")
+			.append("div").attr("style",function(d){return "width 4px; border: 5px solid "+d.color+"; overflow:hidden";});
+		aux
+			.append("td").attr("class","legendLabel")
+			.text(function(d){return d.text;});
+
+		//Now that it have size, move it to adjust
+		if(y === "bottom" && el){
+			el = d3.select(".VisualJSfooter")[0][0];
+			rect = el.getClientRects()[0];
+			aux =
+			Number(getComputedStyle(d3.select("#visual.visual")[0][0]).getPropertyValue("margin-bottom").replace("px",""));
+			table
+				.style(y, aux + rect.height + margin + "px")
+		}
+		leg.selectAll("#visual.visual>svg").on("mousemove",function(d,i){
+			var
+				el = leg.select("."+VisualJS.setup.legendclass),
+				categories = el[0][0].getClientRects()[0],
+				margin = 12
+			;
+			if(
+				(
+					(
+						d3.event.pageX > categories.left - margin &&
+						d3.event.pageX < categories.left + categories.width + margin
+					)
+				)&&
+				(
+					(
+						d3.event.pageY < categories.top + categories.height + margin &&
+						d3.event.pageY > categories.top - margin
+					)
+				)
+			){
+				el.style("visibility", "hidden");
+			}
+			else{
+				el.style("visibility", "initial");
+			}
+		});
+		leg.selectAll("#visual.visual>svg").on("mouseout",function(d,i){
+				leg.select("."+VisualJS.setup.legendclass)
+				.style("visibility", "initial");
+		});
+
+	}
 };

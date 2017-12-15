@@ -17,12 +17,24 @@
 		<script>
 			visual(
 				{
-					title : "CMAP highlighted example (single area)",
-					geo : "Catalonia",
-					time : "2012",
-					type : "cmap",
-					by : "com",
-					data : [{id: "11"}]
+					lang: "en", //Default language is Catalan ("ca"). Set in visual.setup.js
+					title: "BAR example. No axes labels",
+					time: "2012",
+					footer: "The source goes here.",
+					unit: {label: "people"},
+					dec: 0,
+					axis: {
+						labels: {
+							x: false,
+							y: false
+						}
+					},
+					type: "bar",
+					data : [["0-14", 7329], ["15-64", 30231], ["65-84", 6485], ["85+", 1254]]
+					/* Same as:
+						by: [ "0-14", "15-64", "65-84", "85+" ],
+						data: [ 7329, 30231, 6485, 1254 ]
+					*/
 				}
 			);
 		</script>

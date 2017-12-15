@@ -6,11 +6,11 @@ body {
 	margin: 0;
 	padding: 0;
 	background-color: #fff;
-	overflow: hidden;
 }
 
 .visual {
 	margin: 10px;
+	overflow: hidden;
 }
 .visual, #VisualJSTooltip {
 	font-family: Verdana,Arial,Helvetica,sans-serif;
@@ -19,11 +19,24 @@ body {
 }
 .visual h1 {
 	font-size: 13px;
+	margin-top:0;
+	margin-bottom: 0.67em;
 }
 .visual p {
-	font-size: 11px;
-	margin: 10px 0 0 0;
+    font-size: 11px;
+    margin: 10px 0 0 0;
 }
+
+.VisualJSfooter p {
+	font-size: 11px;
+	margin-top: 10px;
+}
+
+.VisualJSfooter p+p{
+	font-size: 11px;
+	margin:5px 0;
+}
+
 #VisualJSleft, #VisualJSright {
 	text-align: center;
 }
@@ -48,6 +61,21 @@ body {
 	font-style: normal;
 	margin-top: 4px;
 }
+
+#VisualJSTooltip div{
+	margin-bottom: 4px;
+}
+
+.VisualJSlegend button{
+    background: none!important;
+    color: inherit;
+    border: none;
+    padding: 0!important;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit!important;
+}
+
 
 .visual .VisualJSnw {
 	white-space: nowrap;
@@ -88,10 +116,33 @@ body {
 	stroke: #808080;
 	stroke-width: 1px;
 }
+
+.visual svg g.VisualJSlegend line,
+.visual svg g.VisualJSlegend rect {
+	stroke: #000;
+	stroke-width: 0.5px;
+}
 .visual svg g.VisualJSlegend text {
 	font-size: 11px;
 	fill: #000;
 	stroke: none;
+}
+
+.visual .VisualJSlegend {
+	border: 1px solid #ccc;
+	max-width: 25%;
+}
+
+.visual .VisualJSlegend table {
+	opacity: 0.85;
+	background-color: #fff;
+	font-size: smaller;
+	padding: 4px;
+	border: none;
+}
+
+.visual .VisualJSlegend table .legendColorBox {
+	vertical-align: top;
 }
 
 @media (max-width: 600px) {
@@ -100,5 +151,9 @@ body {
 	}
 	.visual p {
 		font-size: 10px;
+	}
+
+	.visual .VisualJSlegend {
+		max-width: 150px;
 	}
 }

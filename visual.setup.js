@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2016 Institut d'Estadistica de Catalunya (Idescat)
+Copyright (c) 2017 Institut d'Estadistica de Catalunya (Idescat)
 http://www.idescat.cat (https://github.com/idescat/visual)
 
 Permission is hereby granted, free of charge, to any person obtaining
@@ -22,7 +22,9 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-VisualJS.setup={ //v.0.11.2
+/*global VisualJS */
+
+VisualJS.setup={ //v.1.0.0
 	//Colors for maps and series
 	colors: {
 		map: {
@@ -34,7 +36,7 @@ VisualJS.setup={ //v.0.11.2
 	//Default options (They can be dynamically modified thru visual().)
 	canvas: {
 		unit : {
-			label: "", 
+			label: "",
 			symbol: "",
 			position: "end"
 		},
@@ -48,13 +50,19 @@ VisualJS.setup={ //v.0.11.2
 		},
 		axis: { //show axes?
 			x: true,
-			y: true
+			y: true,
+			ticks: {
+				x: true,
+				y: true
+			},
+			labels: {
+				x: true,
+				y: true
+			}
 		},
 		dec: null, //Show only needed decimals (remove ending zeros) unless (recommended) valid dec has been specified by user
 		autoheading: true,
-
-		//Arrays are not accepted here. "bar", "tsline" and "tsbar" currently don't accept a number.
-		range: {
+		range: { //Arrays are not accepted here. "bar", "tsline" and "tsbar" currently don't accept a number.
 			//Quantile. No filtering: 0
 			cmap: 0.05, //Used in color assignation in maps
 
@@ -88,7 +96,7 @@ VisualJS.setup={ //v.0.11.2
 				es:  ["I", "II", "III", "IV"],
 				en:  ["Q1", "Q2", "Q3", "Q4"]
 			},
-			na: { //text in tooltip when value is not available 
+			na: { //text in tooltip when value is not available
 				ca: "Valor no disponible",
 				es: "Valor no disponible",
 				en:  "Value not available"
@@ -110,6 +118,7 @@ VisualJS.setup={ //v.0.11.2
 	canvasclass: "VisualJScanvas", //canvas container (Flot)
 	areaclass: "VisualJSarea", //svg:g class (D3 maps)
 	legendclass: "VisualJSlegend", //svg:g class (D3 maps)
+	footerclass: "VisualJSfooter", //Footer class of the container
 	normal: "VisualJSnormal", //visualitzation's normal size class
 	mini: "VisualJSmini", //visualitzation's small size class
 	colorclassprefix: "c", //prefix for color class in maps: cnohover, c0, c1, c2...
@@ -154,6 +163,14 @@ VisualJS.setup={ //v.0.11.2
 				categories: {
 					js: "../lib/jquery.flot.categories.js",
 					exists: function(){ return typeof jQuery.plot.plugins==="object" && typeof jQuery.plot.plugins[0]==="object" && jQuery.plot.plugins[0].name==="categories"; }
+				},
+				pie: {
+					js: "../lib/jquery.flot.pie.js",
+					exists: function(){ return typeof jQuery.plot.plugins==="object" && typeof jQuery.plot.plugins[0]==="object" && jQuery.plot.plugins[0].name==="pie"; }
+				},
+				axisLabels: {
+					js: "../lib/jquery.flot.axislabels.js",
+					exists: function(){ return typeof jQuery.plot.plugins==="object" && typeof jQuery.plot.plugins[0]==="object" && jQuery.plot.plugins.map(function(e){return e.name}).indexOf("axisLabels") !== -1 ; }
 				}
 			}
 		},
@@ -264,7 +281,7 @@ VisualJS.setup={ //v.0.11.2
 		com19: {
 			js: "../maps/com192013mun.js",
 			exists: function(){ return typeof VisualJS.map.com19!=="undefined"; }
-		},		
+		},
 		com20: {
 			js: "../maps/com202013mun.js",
 			exists: function(){ return typeof VisualJS.map.com20!=="undefined"; }
@@ -413,13 +430,13 @@ VisualJS.setup={ //v.0.11.2
 	},
 
 	//Attach event listener? 0.10.*
-	listen: false, 
+	listen: false,
 
 	//Margins and paddings used in container
 	margin: 10,
 	padding: {
 		w: 30,
-		h: 45
+		h: 39
 	},
 	//VisualJS.compare separator width
 	separator: 0

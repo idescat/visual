@@ -4,27 +4,33 @@
 <!--[if IE 8]><html class="lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html> <!--<![endif]-->
 	<head>
-		<meta charset="iso-8859-1" />
+		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<title>Idescat Visual sample page</title>
 		<link href="../visual.css" rel="stylesheet" type="text/css" />
 		<script src="../lazyvisual.js"></script>
 		<script src="../visual.setup.js"></script>
 	</head>
-		
+
 	<body>
 		<div id="visual" class="visual"></div>
 		<script>
 			visual(
 				{
+					lang: "en", //Default language is Catalan ("ca"). Set in visual.setup.js
 					title: "RANK example (40 data)",
 					geo: "Catalonia",
 					time: "2009",
-					footer: "The source goes here.",
-					unit: {label: "milers €"}, //Use 'position: "start"' to move the symbol text
+					unit: {symbol: "K"},
 					dec: 0,
+					axis: {
+						ticks: {
+							y: false,
+							x: true
+						}
+					},
 					type: "rank",
-					data: [ ["Val d'Aran", 20300], ["Pallars Jussà", 19300], ["Ripollès", 19100], ["Urgell", 18900], ["Conca de Barberà", 18800], ["Gironès", 18700], ["Pallars Sobirà", 18700], ["Alta Ribagorça", 18600], ["Cerdanya", 18600], ["Garrotxa", 18600], ["Pla de l'Estany", 18600], ["Barcelonès", 18300], ["Priorat", 18300], ["Ribera d'Ebre", 18200], ["Segrià ", 18100], ["Garrigues", 18000], ["Baix Empordà", 17700], ["Maresme", 17700], ["Alt Camp", 17600], ["Noguera", 17600], ["Tarragonès", 17600], ["Terra Alta", 17600], ["Segarra", 17400], ["Alt Empordà", 17300], ["Baix Penedès", 17300], ["Solsonès", 17300], ["Vallès Occidental", 17300], ["Berguedà", 17200], ["Baix Camp", 17100], ["Pla d'Urgell", 17100], ["Montsià", 17000], ["Alt Penedès", 16900], ["Bages", 16900], ["Baix Ebre", 16900], ["Garraf", 16900], ["Alt Urgell", 16600], ["Selva", 16300], ["Osona", 16200], ["Vallès Oriental", 16200], ["Baix Llobregat", 16000], ["Anoia", 15800] ]
+					data: [ ["Val d'Aran", 20300], ["Pallars JussÃ ", 19300], ["RipollÃ¨s", 19100], ["Urgell", 18900], ["Conca de BarberÃ ", 18800], ["GironÃ¨s", 18700], ["Pallars SobirÃ ", 18700], ["Alta RibagorÃ§a", 18600], ["Cerdanya", 18600], ["Garrotxa", 18600], ["Pla de l'Estany", 18600], ["BarcelonÃ¨s", 18300], ["Priorat", 18300], ["Ribera d'Ebre", 18200], ["SegriÃ Â ", 18100], ["Garrigues", 18000], ["Baix EmpordÃ ", 17700], ["Maresme", 17700], ["Alt Camp", 17600], ["Noguera", 17600], ["TarragonÃ¨s", 17600], ["Terra Alta", 17600], ["Segarra", 17400], ["Alt EmpordÃ ", 17300], ["Baix PenedÃ¨s", 17300], ["SolsonÃ¨s", 17300], ["VallÃ¨s Occidental", 17300], ["BerguedÃ ", 17200], ["Baix Camp", 17100], ["Pla d'Urgell", 17100], ["MontsiÃ ", 17000], ["Alt PenedÃ¨s", 16900], ["Bages", 16900], ["Baix Ebre", 16900], ["Garraf", 16900], ["Alt Urgell", 16600], ["Selva", 16300], ["Osona", 16200], ["VallÃ¨s Oriental", 16200], ["Baix Llobregat", 16000], ["Anoia", 15800] ]
 				}
 			);
 		</script>

@@ -4,24 +4,24 @@
 <!--[if IE 8]><html class="lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html> <!--<![endif]-->
 	<head>
-		<meta charset="iso-8859-1" />
+		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<title>Idescat Visual sample page</title>
 		<link href="../visual.css" rel="stylesheet" type="text/css" />
 		<script src="../lazyvisual.js"></script>
 		<script src="../visual.setup.js"></script>
 	</head>
-	
+
 	<body>
 		<div id="visual" class="visual"></div>
 		<script>
 			visual(
 				{
+					lang: "en", //Default language is Catalan ("ca"). Set in visual.setup.js
 					title: "CMAP example (default outlier filter: 0.05)",
 					geo: "Catalonia",
 					time: "2012",
-					footer: "The source goes here.",
-					unit: {symbol: "‰"},
+					unit: {symbol: "â€°"},
 					dec: 1, //Number of decimal positions of the data.
 					by: "mun", //Required if type: "cmap". Area unit of the data and map.
 					type: "cmap",

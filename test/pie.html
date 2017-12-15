@@ -10,6 +10,7 @@
 		<link href="../visual.css" rel="stylesheet" type="text/css" />
 		<script src="../lazyvisual.js"></script>
 		<script src="../visual.setup.js"></script>
+
 	</head>
 
 	<body>
@@ -17,12 +18,19 @@
 		<script>
 			visual(
 				{
-					title : "CMAP highlighted example (single area)",
-					geo : "Catalonia",
-					time : "2012",
-					type : "cmap",
-					by : "com",
-					data : [{id: "11"}]
+					lang: "en", //Default language is Catalan ("ca"). Set in visual.setup.js
+					title: "PIE example",
+					footer: [
+						"The source goes here.",
+						"A note could go here."
+					],
+					dec: 0,
+					type: "pie",
+					data: [ ["Men", 7329], ["Women", 30231] ]
+					/* Same as:
+						by: [ "Men", "Woman" ],
+						data: [ 7329, 30231 ]
+					*/
 				}
 			);
 		</script>

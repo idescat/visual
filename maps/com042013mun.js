@@ -1,10 +1,9 @@
-﻿VisualJS.map.com04={
-	area: [360, 500],
+VisualJS.map.com04={
+	area: [355, 500],
 
 	projection: "mercator",
-	scale: 33000,
-	center: [1.4, 42.24],
-	legend: [180, 400],
+	scale: 34600,
+	center: [1.41, 42.245],
 
 	id: "MUNICIPI", 
 	label: "NOM_MUNI",

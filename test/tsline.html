@@ -18,23 +18,11 @@
 			visual(
 				{
 					lang: "en", //Default language is Catalan ("ca"). Set in visual.setup.js
-					title: "TSLINE (range, no points, no y-ticks, no shadow, thick line) example",
+					title: "TSLINE example",
 					geo: "Catalonia",
 					time: ["1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012"], //Array? It's a time series
 					unit: {label: "M", symbol: "€", position: "start"}, //Remove 'position: "start"' to move the symbol after the label
 					dec: 1,
-					range: [null, null], //Same as [0, null] because there are no negative values in the series
-					axis: {
-						ticks: {
-							x: true,
-							y: false
-						}
-					},
-					grid: {
-						point: 0,
-						shadow: 0,
-						line: 5
-					},
 					type: "tsline",
 					data: [
 						{ label: "Exports", val: [ 27147.8, 27890.6, 33796.5, 36694.5, 37275.9, 37648.5, 39485.1, 42703.4, 47218.8, 49679.8, 50515.7, 41461.7, 48871.6, 54999.9, 58321.7 ] },

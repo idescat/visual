@@ -1,10 +1,9 @@
 ﻿VisualJS.map.prov25={
-	area: [500, 400],
+	area: [350, 400],
 
 	projection: "mercator",
-	scale: 9900,
-	center: [1.30, 42.1],
-	legend: [350, 250],
+	scale: 10500,
+	center: [1.03, 42.07],
 
 	id: "MUNICIPI", 
 	label: "NOM_MUNI",

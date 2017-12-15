@@ -4,30 +4,29 @@
 <!--[if IE 8]><html class="lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html> <!--<![endif]-->
 	<head>
-		<meta charset="iso-8859-1" />
+		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<title>Idescat Visual sample page</title>
 		<link href="../visual.css" rel="stylesheet" type="text/css" />
 		<script src="../lazyvisual.js"></script>
 		<script src="../visual.setup.js"></script>
 	</head>
-	
+
 	<body>
 		<div id="visual" class="visual"></div>
 		<script>
 			visual(
 				{
+					lang: "en", //Default language is Catalan ("ca"). Set in visual.setup.js
 					title: "Unemployment rate by Provinces",
 					geo: "Spain",
 					time: "2014 Q3",
-					footer: 'Source: <a href="http://www.ine.es/jaxiT3/Tabla.htm?t=3996">INE</a>.',
-					legend: true,
+					footer: 'Source: INE.',
 					unit: {symbol: "%"},
-					lang: "en",
 					dec: 2,
+					range: 0,
 					by: "spainnuts3",
 					type: "cmap",
-					range: 0,
 					data: [
 						{ id: '01', val: 16.32 },
 						{ id: '02', val: 29.03 },

@@ -4,7 +4,7 @@
 <!--[if IE 8]><html class="lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html> <!--<![endif]-->
 	<head>
-		<meta charset="iso-8859-1" />
+		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<title>Idescat Visual sample page</title>
 		<link href="../visual.css" rel="stylesheet" type="text/css" />
@@ -16,7 +16,7 @@
 		<div id="visual" class="visual"></div>
 		<script>
 			var
-				counties=["Alt Camp", "Alt Empordà", "Alt Penedès", "Alt Urgell", "Alta Ribagorça", "Anoia", "Bages", "Baix Camp", "Baix Ebre", "Baix Empordà", "Baix Llobregat", "Baix Penedès", "Barcelonès", "Berguedà", "Cerdanya", "Conca de Barberà", "Garraf", "Garrigues", "Garrotxa", "Gironès", "Maresme", "Montsià", "Noguera", "Osona", "Pallars Jussà", "Pallars Sobirà", "Pla d'Urgell", "Pla de l'Estany", "Priorat", "Ribera d'Ebre", "Ripollès", "Segarra", "Segrià", "Selva", "Solsonès", "Tarragonès", "Terra Alta", "Urgell", "Val d'Aran", "Vallès Occidental", "Vallès Oriental"],
+				counties=["Alt Camp", "Alt EmpordÃ ", "Alt PenedÃ¨s", "Alt Urgell", "Alta RibagorÃ§a", "Anoia", "Bages", "Baix Camp", "Baix Ebre", "Baix EmpordÃ ", "Baix Llobregat", "Baix PenedÃ¨s", "BarcelonÃ¨s", "BerguedÃ ", "Cerdanya", "Conca de BarberÃ ", "Garraf", "Garrigues", "Garrotxa", "GironÃ¨s", "Maresme", "MontsiÃ ", "Noguera", "Osona", "Pallars JussÃ ", "Pallars SobirÃ ", "Pla d'Urgell", "Pla de l'Estany", "Priorat", "Ribera d'Ebre", "RipollÃ¨s", "Segarra", "SegriÃ ", "Selva", "SolsonÃ¨s", "TarragonÃ¨s", "Terra Alta", "Urgell", "Val d'Aran", "VallÃ¨s Occidental", "VallÃ¨s Oriental"],
 				getPar=function(param) {
 					var searchString=window.location.search.substring(1);
 					var urls=searchString.split("&");
@@ -37,7 +37,7 @@
 			}else{
 				visual({
 						geo: geo,
-						unit: {symbol: "‰"},
+						unit: {symbol: "Â‰"},
 						dec: 1,
 						legend: false,
 						by: by,

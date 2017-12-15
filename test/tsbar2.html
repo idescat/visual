@@ -4,30 +4,29 @@
 <!--[if IE 8]><html class="lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html> <!--<![endif]-->
 	<head>
-		<meta charset="iso-8859-1" />
+		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<title>Idescat Visual sample page</title>
 		<link href="../visual.css" rel="stylesheet" type="text/css" />
 		<script src="../lazyvisual.js"></script>
 		<script src="../visual.setup.js"></script>
 	</head>
-	
+
 	<body>
 		<div id="visual" class="visual"></div>
 		<script>
 			visual(
 				{
-					title: "TSBAR stacked example",
+					lang: "en", //Default language is Catalan ("ca"). Set in visual.setup.js
+					title: "Stacked TSBAR example",
 					geo: "Catalonia",
 					time: ["1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012"], //Array? It's a time series
-					footer: "The source goes here.",
-					unit: {label: "persones"},
 					dec: 0,
 					type: "tsbar",
 					stacked: true,
 					data: [
-						{ label: "Homes", val: [ 3002684, 3035497, 3058628, 3115336, 3201029, 3309850, 3366329, 3468235, 3543706, 3578176, 3661028, 3713765, 3724515, 3732196, 3741628 ] },
-						{ label: "Dones", val: [ 3144926, 3173320, 3203371, 3246029, 3305411, 3394296, 3446990, 3526971, 3590991, 3632332, 3703050, 3761655, 3787866, 3807422,3829280 ] }
+						{ label: "Men", val: [ 3002684, 3035497, 3058628, 3115336, 3201029, 3309850, 3366329, 3468235, 3543706, 3578176, 3661028, 3713765, 3724515, 3732196, 3741628 ] },
+						{ label: "Women", val: [ 3144926, 3173320, 3203371, 3246029, 3305411, 3394296, 3446990, 3526971, 3590991, 3632332, 3703050, 3761655, 3787866, 3807422,3829280 ] }
 					]
 				}
 			);

@@ -4,7 +4,7 @@
 	projection: "mercator",
 	scale: 9000,
 	center: [1.74, 41.7],
-	legend: [280, 345],
+
 
 	id: "MUNICIPI", 
 	label: "NOM_MUNI",

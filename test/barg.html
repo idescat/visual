@@ -17,12 +17,21 @@
 		<script>
 			visual(
 				{
-					title : "CMAP highlighted example (single area)",
-					geo : "Catalonia",
-					time : "2012",
-					type : "cmap",
-					by : "com",
-					data : [{id: "11"}]
+					lang: "en", //Default language is Catalan ("ca"). Set in visual.setup.js
+				  title: "Grouped BAR example",
+			  	dec: 0,
+			  	type: "bar",
+			  	by: ["Category A", "Category B", "Category C"],
+			  	data: [
+						{
+					  	label: "Country 1",
+					  	val: [4717142,4320218,4307584]
+						},
+						{
+					  	label: "Country 2",
+					   	val: [1276520,591332,814370]
+						}
+				  ]
 				}
 			);
 		</script>
