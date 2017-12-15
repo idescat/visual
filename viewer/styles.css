@@ -152,7 +152,9 @@ legend {
 }
 
 table {
+	width: 100%;
 	border-collapse: collapse;
+	border-spacing: 0;
 }
 #layout th, #layout td {
 	border: 1px solid #eee;
@@ -180,7 +182,10 @@ thead th, thead td {
 	border-color: #999;
 	border-style: solid;
 }
-
+.maps th, .maps td {
+	border-bottom: 1px #ccc solid;
+	font-weight: normal;
+}
 .maps tr:hover th, .maps tr:hover td {
 	background-color: #eee;
 }
