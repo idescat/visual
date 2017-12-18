@@ -26,7 +26,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 /*global d3, LazyLoad*/
 
 var VisualJS={
-	version: "1.0.0",
+	version: "1.0.1",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -69,11 +69,13 @@ var VisualJS={
 			},
 			outerHeight=function(el) {
 				if(el){
-				var h=el.offsetHeight;
-				var style=computedStyle(el);
+					var
+						h=el.offsetHeight,
+						style=computedStyle(el)
+					;
 
-				h += parseFloat(computedStyle(el,"marginTop")) + parseFloat(computedStyle(el,"marginBottom"));
-				return h;
+					h += Math.round(parseFloat(computedStyle(el,"marginTop")) + parseFloat(computedStyle(el,"marginBottom")));
+					return h;
 				}else{
 					return 0;
 				}
@@ -81,18 +83,19 @@ var VisualJS={
 			head=outerHeight(getNode(headingElement)),
 			foot= outerHeight(getNode(footerElement)),
 			bheight=w.innerHeight || e.clientHeight || g.clientHeight,
-			margin=parseFloat(computedStyle(vis,"marginTop"))+parseFloat(computedStyle(vis,"marginBottom"))
+			margin=Math.round(parseFloat(computedStyle(vis,"marginTop")) + parseFloat(computedStyle(vis,"marginBottom"))),
+			extrapadding=10
 		;
 
 		if(typeof bheight!=="undefined" && typeof head!=="undefined" && typeof foot!=="undefined"){
 			if(VisualJS.fixed===null){ //Normal case: full page for visualization (embedded via iframe)
 				VisualJS.bwidth=w.innerWidth || e.clientWidth || g.clientWidth;
 				VisualJS.width=VisualJS.bwidth-vsetup.padding.w;
-				VisualJS.height=Math.floor(bheight-head-foot-margin);
+				VisualJS.height=Math.floor(bheight-head-foot-margin-extrapadding);
 			}else{ //Embed visualization on a page via script
 				VisualJS.bwidth=e.clientWidth || g.clientWidth;
 				VisualJS.width=VisualJS.fixed[0]-vsetup.padding.w;
-				VisualJS.height=Math.floor(VisualJS.fixed[1]-head-foot-margin);
+				VisualJS.height=Math.floor(VisualJS.fixed[1]-head-foot-margin-extrapadding);
 			}
 		}
 
@@ -584,7 +587,7 @@ var VisualJS={
 				[["axis","labels", "y"], "boolean",scanvas],
 				[["axis","ticks", "x"], "boolean",scanvas],
 				[["axis","ticks", "y"], "boolean",scanvas]
-			]	
+			]
 			;
 		//Normalize input
 		//per ser compatibles amb setups antics
