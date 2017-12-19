@@ -26,7 +26,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 /*global d3, LazyLoad*/
 
 var VisualJS={
-	version: "1.0.1",
+	version: "1.0.2",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -650,7 +650,7 @@ var VisualJS={
 			container=VisualJS.container[VisualJS.id],
 			getHeading=function(){
 				if(container.autoheading===false){
-					return container.title;
+					return container.title || ""; //1.0.2
 				}
 
 				var
