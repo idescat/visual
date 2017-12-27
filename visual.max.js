@@ -26,7 +26,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 /*global d3, LazyLoad*/
 
 var VisualJS={
-	version: "1.0.2",
+	version: "1.0.3",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -443,18 +443,26 @@ var VisualJS={
 					type=getDataType(),
 					el
 				;
-				//Format nou a format antic si cal
+				//From new format to old when required
 				for(var property in obj){
 					if(obj.hasOwnProperty(property)){
 						el=obj[property];
-						if(o.type === "xy" || o.type === "bubbles"){}
+						if(o.type === "xy"){}
 						else if(o.type === "rank" || o.type === "pyram"){
-							if(typeof el.x !== "undefined")
+							if(el && typeof el.x !== "undefined")
 								obj[property]=el.x;
+							else if(typeof el === "string")
+								obj[property]=el;
+							else
+								obj[property]="";
 						}
 						else{
-							if(typeof el.y !== "undefined")
+							if(el && typeof el.y !== "undefined")
 								obj[property]=el.y;
+							else if(typeof el === "string")
+								obj[property]=el;
+							else
+								obj[property]="";
 						}
 					}
 				}
@@ -467,11 +475,11 @@ var VisualJS={
 					type=getDataType(),
 					aux=[]
 				;
-				//Format nou a format antic si cal
+				//From new format to old when required
 				if(typeof obj === "object" && obj !== null && !Array.isArray(obj) &&
 					(type === "array" || type === "object")
 				){
-					if(o.type === "xy" || o.type === "bubbles"){}
+					if(o.type === "xy"){}
 					else if(o.type === "rank" || o.type === "pyram"){
 						obj=obj.x;
 					}
@@ -480,12 +488,12 @@ var VisualJS={
 					}
 				}
 
-				//cas null null format antic
+				//null null case, old format
 				if(
 					Array.isArray(obj) && obj.length === 2 &&
 					obj[0] === null && obj[1] === null
 				){
-					//mirem si es del tipus null null
+					//Check if null null
 					if(o.data){
 						if(type === "object"){
 							o.data.forEach(function(el){
@@ -501,7 +509,7 @@ var VisualJS={
 						}
 					}
 				}
-				//cas null null format nou
+				//null null case, new format
 				else if(typeof obj === "object" && !Array.isArray(obj) && obj !== null &&
 						((Array.isArray(obj.x) && obj.x[0] === null && obj.x[1] === null)||(Array.isArray(obj.y) && obj.y[0] === null && obj.y[1] === null))){
 						aux={ x : [], y : [] };
@@ -547,7 +555,7 @@ var VisualJS={
 							}
 						}
 					}
-					//correccions de rang en el format nou
+					//Range corrections for the new format
 					else if( (type === "xy" || type === "xyz" || type === "points")){
 						if(typeof obj === "number" || Array.isArray(obj)){
 							obj={
@@ -590,7 +598,7 @@ var VisualJS={
 			]
 			;
 		//Normalize input
-		//per ser compatibles amb setups antics
+		//Compatibility with setup < 1.*
 		if(typeof scanvas.axis.labels === "undefined"){
 			scanvas.axis.labels={ x: true, y: true };
 		}
@@ -616,17 +624,14 @@ var VisualJS={
 			o.unit=scanvas.unit;
 		}
 
-		//Convertim el rang
+		//range conversion
 		o.range=correctRange(o.range);
 		o.lang=o.lang || vsetup.i18n.lang;
 		if( !(typeof o.range==="number" || isRange(o.range)) ){
-			//Rang 2D
+			//Range 2D
 			if(typeof o.range === "object" &&  o.range !== null && !Array.isArray(o.range)){
-				//no fem res
 			}
 			else{
-			//if es valid
-			//else
 			o.range= ( typeof o.range === "number" || (Array.isArray(o.range) && o.range.length === 2) ) ?
 				o.range :
 				(
@@ -638,7 +643,7 @@ var VisualJS={
 			;
 			}
 		}
-		//Convertim unit
+		//Correct unit when needed
 		o.unit=correctUnit(o.unit);
 
 		//add object o
@@ -1485,68 +1490,63 @@ var VisualJS={
 					var previousPoint=[];
 
 					$(this).bind("plothover", function (event, pos, item) {
-						var x, y, itemlab, label, tick, val, unitPosition, pre={}, post={}, el;
+						var x, y, itemlab, label, tick, val, unitPosition, pre={}, post={}, el, csymbol, clabel;
 						if (item) {
 							if (previousPoint!=[item.seriesIndex, item.dataIndex]) {
 								previousPoint=[item.seriesIndex, item.dataIndex];
-								if(o.type === "xy" || o.type === "bubbles"){
+								if(o.type==="xy"){
 									unitPosition={
-										x : (typeof VisualJS.container[id].unit.position.x !== "undefined" && VisualJS.container[id].unit.position.x === "start") ? true : false,
-										y : (typeof VisualJS.container[id].unit.position.y !== "undefined" && VisualJS.container[id].unit.position.y === "start") ? true : false,
-										z : (typeof VisualJS.container[id].unit.position.z !== "undefined" && VisualJS.container[id].unit.position.z === "start") ? true : false,
+										x : (typeof VisualJS.container[id].unit.position.x!=="undefined" && VisualJS.container[id].unit.position.x==="start") ? true : false,
+										y : (typeof VisualJS.container[id].unit.position.y!=="undefined" && VisualJS.container[id].unit.position.y==="start") ? true : false,
+										z : (typeof VisualJS.container[id].unit.position.z!=="undefined" && VisualJS.container[id].unit.position.z==="start") ? true : false,
 									};
 									for(var property in unitPosition){
 										el=unitPosition[property];
 										if(unitPosition.hasOwnProperty(property)){
+											csymbol=VisualJS.container[id].unit.symbol && typeof VisualJS.container[id].unit.symbol[property]==="string" ? VisualJS.container[id].unit.symbol[property] : "";
+											clabel=VisualJS.container[id].unit.label && typeof VisualJS.container[id].unit.label[property]==="string" ? VisualJS.container[id].unit.label[property] : "";
 											if(el){
-												pre[property]=safeGet(VisualJS.container[id].unit.symbol[property]);
-												post[property]=safeGet(VisualJS.container[id].unit.label[property]);
-												post[property]=(post[property] !== "") ? " "+post[property] : "";
+												pre[property]=csymbol;
+												post[property]=clabel;
+												post[property]=(post[property] !== "") ? " " + post[property] : "";
 											}else{
 												pre[property]="";
-												post[property]=" "+safeGet(VisualJS.container[id].unit.label[property])+" "+safeGet(VisualJS.container[id].unit.symbol[property]);
-												post[property]=(post[property] !== "") ? " "+post[property] : "";
+												post[property]=" " + clabel + " " + csymbol;
+												post[property]=(post[property]!=="") ? " " + post[property] : "";
 											}
 										}
 									}
-									val =
-													"<div>"+
-													"<strong>"+pre.x+format(item.datapoint[0],id,"x")+post.x+"</strong> "+
-													(typeof setup.xaxis.axisLabel != "undefined" ? setup.xaxis.axisLabel : "x")+
-													"</div>"+
-													"<div>"+
-													"<strong>"+pre.y+format(item.datapoint[1],id,"y")+post.y+"</strong> "+
-													(typeof setup.yaxis.axisLabel != "undefined" ? setup.yaxis.axisLabel : "y")+
-													"</div>";
-									if( o.type === "bubbles" ){
-										val+=
-													"<div>"+
-													"<strong>"+pre.z+format(item.series.data[item.dataIndex][2],id,"z")+post.z+"</strong> "+
-													(typeof vsetup.canvas.axis.labelsText.z != "undefined" ? vsetup.canvas.axis.labelsText.z : "z")+
-													"</div>";
-									}
+									val=
+										"<div>"+
+											"<strong>"+pre.x+format(item.datapoint[0],id,"x")+post.x+"</strong> "+
+											(typeof setup.xaxis.axisLabel != "undefined" ? setup.xaxis.axisLabel : "x")+
+										"</div>"+
+										"<div>"+
+											"<strong>"+pre.y+format(item.datapoint[1],id,"y")+post.y+"</strong> "+
+											(typeof setup.yaxis.axisLabel != "undefined" ? setup.yaxis.axisLabel : "y")+
+										"</div>"
+									;
 									val+=
-													( Array.isArray(series[item.seriesIndex].by) && typeof series[item.seriesIndex].by[item.dataIndex] === "string" && series[item.seriesIndex].by[item.dataIndex] !== "" ?
-															series[item.seriesIndex].by[item.dataIndex]+
-															( typeof series[item.seriesIndex].label === "string" && series[item.seriesIndex].label !== "" ?
-																	" ("+series[item.seriesIndex].label+")" :
-																	""
-															)
-															:
-															""
-													);
-										showTooltip(
-											val,
-											pos.pageX, //item.pageX
-											pos.pageY  //item.pageY
-										);
+										( Array.isArray(series[item.seriesIndex].by) && typeof series[item.seriesIndex].by[item.dataIndex] === "string" && series[item.seriesIndex].by[item.dataIndex] !== "" ?
+												series[item.seriesIndex].by[item.dataIndex]+
+												( typeof series[item.seriesIndex].label === "string" && series[item.seriesIndex].label !== "" ?
+														" ("+series[item.seriesIndex].label+")" :
+														""
+												)
+												:
+												""
+										)
+									;
 
-								}
-								else{
+									showTooltip(
+										val,
+										pos.pageX, //item.pageX
+										pos.pageY  //item.pageY
+									);
+								}else{
 									x=item.datapoint[0];
 									y=item.datapoint[1];
 									itemlab=(o.type === "bar")  ? (series.length > 1 ? series[x][0] : series[0][x][0]) : item.series.label;
-									//itemlab=(o.type!=="bar") ? item.series.label : series[x][0],
 									label=(o.type!=="rank") ? itemlab : ticks[y][1];
 									tick=(o.type!=="rank" && o.type !== "pie" && !(o.type === "bar" && Boolean(o.by)) ) ?
 										(
@@ -1564,13 +1564,13 @@ var VisualJS={
 										(
 											(o.type!=="tsbar") ?
 													(
-														o.type === "pie" ?
-															y[0][1]:
+														o.type==="pie" ?
+															y[0][1]
+															:
 															y
 													)
 													:
 													(stacked || series.length===1) ? series[item.seriesIndex].data[x][1] : y
-
 										)
 										:
 										x
@@ -1585,8 +1585,7 @@ var VisualJS={
 											pos.pageX, //item.pageX
 											pos.pageY  //item.pageY
 										);
-									}
-									else{
+									}else{
 										showTooltip(
 											tooltipText(
 												id,
@@ -1687,8 +1686,8 @@ var VisualJS={
 						return tickFormatterGenerator(val, id, "y");
 					};
 
-					setup.xaxis.tickLength= (o.axis.ticks.x ? null : 0);
-					setup.yaxis.tickLength= (o.axis.ticks.y ? null : 0);
+					setup.xaxis.tickLength=(o.axis.ticks.x) ? null : 0;
+					setup.yaxis.tickLength=(o.axis.ticks.y) ? null : 0;
 
 					switch(o.type){
 						case "xy":
@@ -1702,8 +1701,7 @@ var VisualJS={
 										setup.xaxis.min=0;
 										setup.xaxis.max=o.range.x;
 									}
-								}
-								else{
+								}else{
 									setup.xaxis.min=null;
 									setup.xaxis.max=null;
 								}
@@ -1715,8 +1713,7 @@ var VisualJS={
 										setup.yaxis.min=0;
 										setup.yaxis.max=o.range.y;
 									}
-								}
-								else{
+								}else{
 									setup.yaxis.min=null;
 									setup.yaxis.max=null;
 								}
@@ -1740,7 +1737,7 @@ var VisualJS={
 								series,
 								setup
 							);
-							break;
+						break;
 						case "pyram":
 							setup.series.pyramid={show: true, barWidth: 1};
 							//ticks are undefined for pyramid: we remove the Y-axis if too many categories. Instead of ticklen, series[0].data.length is used.
@@ -1789,17 +1786,17 @@ var VisualJS={
 								series,
 								setup
 							);
-							break;
+						break;
 						case "bar":
 							setup.xaxis.tickLength=0;
 							if(o.by && o.by.length && typeof o.data[0] === "object"){
 								ticks=[];
-								//Creem la llegenda
+								//Create the legend
 								series=[];
 								for(i=0; i<o.by.length; i++){
 									series.push({label : o.by[i], data : []});
 								}
-								//Generem les barres, amb un espai en blanc entre grups
+								//Generate the bars, with a blank space between groups
 								offset=0;
 								for(i=0; i<o.data.length; i++){
 									if(o.data[i].val.length % 2 === 0){
@@ -1821,10 +1818,8 @@ var VisualJS={
 								}
 								setup.legend.show=true;
 								setup.bars={show : true};
-							}
-							else{
+							}else{
 								setup.xaxis.mode="categories";
-								//Nomes hi ha una, visual itera les series internament.Creem el vector
 								series=[series];
 
 								setup.yaxis.tickFormatter=function(val) {
@@ -1898,8 +1893,9 @@ var VisualJS={
 									}else{
 										setup.xaxis.ticks=ticks;
 									}
-									if(o.axis.labels.x === false)
+									if(o.axis.labels.x===false){
 										setup.xaxis.ticks=labelStrip(setup.xaxis.ticks);
+									}
 								break;
 								case 5: //quarterly (5 digits)
 									digcrit="1"; //first quarter
@@ -1923,8 +1919,9 @@ var VisualJS={
 										setup.xaxis.ticks=ticks;
 									}
 
-									if(o.axis.labels.x === false)
+									if(o.axis.labels.x===false){
 										setup.xaxis.ticks=labelStrip(setup.xaxis.ticks);
+									}
 								break;
 								case 7: //year intervals: 2014/15 (7 digits)
 									// Magic rule: Only one year of every two must be displayed if width (mini) is small in comparison with # of ticks
@@ -1942,17 +1939,17 @@ var VisualJS={
 										setup.xaxis.ticks=ticks;
 									}
 
-
-									if(o.axis.labels.x === false)
+									if(o.axis.labels.x===false){
 										setup.xaxis.ticks=labelStrip(setup.xaxis.ticks);
-
+									}
 								break;
 
 								default: //leave ticks alone
 									setup.xaxis.ticks=ticks;
 
-									if(o.axis.labels.x === false)
+									if(o.axis.labels.x===false){
 										setup.xaxis.ticks=labelStrip(setup.xaxis.ticks);
+									}
 							}
 
 							$.plot(
