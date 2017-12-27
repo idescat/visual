@@ -1325,30 +1325,30 @@ var VisualJS={
 					heading=getHeading();
 					transform=function(d,t,b){
 						var
-							grup2serie=function(grup){
+							group2series=function(group){
 								var
 									ret={
-										label: grup.label,
+										label: group.label,
 										data: [],
-										by: (Array.isArray(grup.by) && typeof grup.by[0] === "string") ? grup.by : null,
+										by: (Array.isArray(group.by) && typeof group.by[0] === "string") ? group.by : null,
 									},
 									i
 								;
-								if(typeof grup.x === "object" && typeof grup.y === "object"){
+								if(typeof group.x === "object" && typeof group.y === "object"){
 									//Convertir a punts
 									vsetup.canvas.axis.labelsText={
-										x: grup.x.label,
-										y: grup.y.label
+										x: group.x.label,
+										y: group.y.label
 									};
-									for(i=0;i<grup.x.val.length;i++){
-										ret.data.push([grup.x.val[i], grup.y.val[i]]);
+									for(i=0;i<group.x.val.length;i++){
+										ret.data.push([group.x.val[i], group.y.val[i]]);
 									}
-								}else if( grup.val && grup.val.length >=1 && grup.val[0].length == 2){
+								}else if(group.val && group.val.length >=1 && group.val[0].length == 2){
 									vsetup.canvas.axis.labelsText={
-										x: grup.x,
-										y: grup.y
+										x: group.x,
+										y: group.y
 									};
-									ret.data=grup.val;
+									ret.data=group.val;
 								}
 								return ret;
 							}
@@ -1358,7 +1358,7 @@ var VisualJS={
 						}
 						else if(Array.isArray(d) && typeof d[0] === "object" && !Array.isArray(d[0])){
 							for(var i=0; i<d.length; i++){
-								series.push(grup2serie(d[i]));
+								series.push(group2series(d[i]));
 							}
 						}
 					};
