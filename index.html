@@ -327,7 +327,7 @@
 								time: params["time"]
 						}
 					,
-					"//idescat.github.io/visual/visual.css"
+					"https://idescat.github.io/visual/visual.css"
 				);
 
 				code=[];
@@ -338,19 +338,16 @@
 				}
 
 				//Composed properties
-				if(params["border"]!==VisualJS.setup.canvas.grid.border || params["shadow"]!==VisualJS.setup.canvas.grid.shadow || params["line"]!==VisualJS.setup.canvas.grid.line || params["point"]!==VisualJS.setup.canvas.grid.point){
-					code.push('"grid": {"border": '+params["border"]+', "line": '+params["line"]+', "shadow": '+params["shadow"]+', "point": '+params["point"]+'}');
-				}
-				if(params["x"]!==VisualJS.setup.canvas.axis.x || params["y"]!==VisualJS.setup.canvas.axis.y){
-					code.push('"axis": {"x": '+params["x"]+', "y": '+params["y"]+'}');
-				}
-				if(params["label"]!==null || params["symbol"]!==null || params["position"]!==VisualJS.setup.canvas.unit.position){
-					code.push('"unit": {'+
-						notnull("label", ", ")+
-						notnull("symbol", ", ")+
-						notnull("position", "")+
-						'}');
-				}
+				code.push('"grid": {"border": '+params["border"]+', "line": '+params["line"]+', "shadow": '+params["shadow"]+', "point": '+params["point"]+'}');
+
+				code.push('"axis": {"x": '+params["x"]+', "y": '+params["y"]+', "ticks": { "x": '+params["xticks"]+', "y": '+params["yticks"]+'}, "labels": { "x": '+params["xlabels"]+', "y": '+params["ylabels"]+'}'+'}');
+
+				code.push('"unit": {'+
+					notnull("label", ", ")+
+					notnull("symbol", ", ")+
+					notnull("position", "")+
+					'}'
+				);
 
 				try {
 					JSONs=JSON.stringify( JSON.parse( "{"+code.join(",")+"}" ) );
@@ -364,7 +361,7 @@
 			}
 
 			function notnull(key, comma){
-				return (params[key]!==null) ? '"'+key+'": "'+params[key]+'"'+comma : '';
+				return (params[key]!==null) ? '"'+key+'": '+JSON.stringify(params[key])+comma : '';
 			}
 
 			//code and params, globals
