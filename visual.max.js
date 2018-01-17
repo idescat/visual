@@ -26,7 +26,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 /*global d3, LazyLoad*/
 
 var VisualJS={
-	version: "1.0.4",
+	version: "1.0.5",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -1317,6 +1317,7 @@ var VisualJS={
 			};
 
 			switch(o.type){
+
 				case "xy":
 					addJS( vsetup.lib.jquery.flot.axisLabels, hasFlot ); //Check plugin only if we have Flot
 					points=true;
@@ -1362,7 +1363,9 @@ var VisualJS={
 							}
 						}
 					};
-					break;
+					shlegend=true;
+				break;
+
 				case "pyram":
 					addJS( vsetup.lib.jquery.flot.pyramid, hasFlot ); //Check plugin only if we have Flot
 					points=false;
@@ -1383,6 +1386,7 @@ var VisualJS={
 					stacked=false; //if stacked was included when pyram, false it
 					lines=false;
 				break;
+
 				case "rank":
 					var data=[];
 					lines=false;
@@ -1403,7 +1407,8 @@ var VisualJS={
 					};
 					shlegend=false; //Currently only one series allowed when rank (no series loop)
 					stack=false; //See previous line
-					break;
+				break;
+
 				case "pie":
 					addJS( vsetup.lib.jquery.flot.pie, hasFlot ); //Check plugin only if we have Flot
 					pie=true;
@@ -1418,7 +1423,7 @@ var VisualJS={
 							len=d.length;
 							for(i=0; i<len; i++){
 								if(d[i][1]!==null){
-									series.push({ label:'<span>'+d[i][0]+'</span>' , data: d[i][1] }); //span: temporary solution to avoid x-axis label overlapping
+									series.push({ label: d[i][0], data: d[i][1] });
 								}
 							}
 						}else{
@@ -1427,15 +1432,15 @@ var VisualJS={
 								len=b.length;
 								for(i=0; i<len; i++){
 									if(d[i]!==null){
-										series.push({ label: '<span">'+b[i]+'</span>' , data: d[i] }); //span: temporary solution to avoid x-axis label overlapping
+										series.push({ label: b[i], data: d[i] });
 									}
 								}
 							}
-							//Pending: An array with "label" and "val" for multiple bars per category...
 						}
-						shlegend=(series.length>1);
 					};
-					break;
+					shlegend=true;
+				break;
+
 				case "bar":
 					addJS( vsetup.lib.jquery.flot.categories, hasFlot ); //Check plugin only if we have Flot
 					points=false;
@@ -1462,26 +1467,28 @@ var VisualJS={
 									}
 								}
 							}
-							//Pending: An array with "label" and "val" for multiple bars per category...
 						}
-						shlegend=(series.length>1);
 					};
+					shlegend=true;
 					stack=true;
-					break;
+				break;
+
 				case "tsline":
 					heading=ts();
 					stack=null;
 					points=true;
 					bars=false;
 					lines=true;
-					break;
+				break;
+
 				case "tsbar":
 					heading=ts();
 					stack=true;
 					points=false;
 					bars=true;
 					lines=false;
-					break;
+				break;
+
 			}
 
 			VisualJS.chart=function(){
@@ -1546,9 +1553,10 @@ var VisualJS={
 								}else{
 									x=item.datapoint[0];
 									y=item.datapoint[1];
-									itemlab=(o.type === "bar")  ? (series.length > 1 ? series[x][0] : series[0][x][0]) : item.series.label;
+
+									itemlab=(o.type==="bar" && !Boolean(o.data[0].val))  ? (series.length > 1 ? series[x][0] : series[0][x][0]) : item.series.label;
 									label=(o.type!=="rank") ? itemlab : ticks[y][1];
-									tick=(o.type!=="rank" && o.type !== "pie" && !(o.type === "bar" && Boolean(o.by)) ) ?
+									tick=( (o.type!=="rank" && o.type!=="pie" && o.type!=="bar") || ( o.type === "bar" && Boolean(o.data[0].val) ) ) ?
 										(
 											(stacked || series.length===1) ?
 												(Array.isArray(ticks) && ticks.length > 0 ? ticks[x][1] : false)
@@ -1605,7 +1613,6 @@ var VisualJS={
 					});
 				};
 
-				shlegend=container.legend && shlegend;
 				var setup={
 						colors: vsetup.colors.series,
 						series: {
@@ -1634,7 +1641,7 @@ var VisualJS={
 							},
 						},
 						legend: {
-							show: shlegend,
+							show: container.legend && shlegend,
 							position: scanvas.position || "ne"
 						},
 						grid: {
@@ -1690,6 +1697,7 @@ var VisualJS={
 					setup.yaxis.tickLength=(o.axis.ticks.y) ? null : 0;
 
 					switch(o.type){
+
 						case "xy":
 							//rang 2D
 							if(o.range){
@@ -1738,6 +1746,7 @@ var VisualJS={
 								setup
 							);
 						break;
+
 						case "pyram":
 							setup.series.pyramid={show: true, barWidth: 1};
 							//ticks are undefined for pyramid: we remove the Y-axis if too many categories. Instead of ticklen, series[0].data.length is used.
@@ -1753,6 +1762,7 @@ var VisualJS={
 								setup
 							);
 						break;
+
 						case "rank":
 							//bug plugin flot
 							//setup.yaxis.tickLength=0;
@@ -1780,6 +1790,7 @@ var VisualJS={
 								setup
 							);
 						break;
+
 						case "pie":
 							$.plot(
 								canvasSel,
@@ -1787,6 +1798,7 @@ var VisualJS={
 								setup
 							);
 						break;
+
 						case "bar":
 							setup.xaxis.tickLength=0;
 							if(o.by && o.by.length && typeof o.data[0] === "object"){
@@ -1816,8 +1828,7 @@ var VisualJS={
 								if(o.axis.labels.x === false){
 									setup.xaxis.ticks=labelStrip(setup.xaxis.ticks);
 								}
-								setup.legend.show=true;
-								setup.bars={show : true};
+								setup.bars={show: true};
 							}else{
 								setup.xaxis.mode="categories";
 								series=[series];
@@ -1838,7 +1849,7 @@ var VisualJS={
 								series,
 								setup
 							);
-							if(o.axis.labels.x === false || o.axis.labels.y === false){
+							if(o.axis.labels.x===false || o.axis.labels.y===false){
 								aux="<style>";
 								if(o.axis.labels.x === false){
 									aux += canvasSel+" .flot-x-axis .flot-tick-label{"+
@@ -1854,6 +1865,7 @@ var VisualJS={
 								$(canvasSel).append(aux);
 							}
 						break;
+
 						//Time series
 						case "tsline":
 							setup.grid.markings=[ { color: "#999", lineWidth: 0.5, yaxis: { from: 0, to: 0 } }]; //Zero line in tsline
