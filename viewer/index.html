@@ -96,7 +96,7 @@
 						</table>
 					</div>
 
-					<label class="tsbar tsline pyram cmap xy pie"><input type="checkbox" name="legend" checked="checked" /> legend</label>
+					<label class="bar tsbar tsline pyram cmap xy pie"><input type="checkbox" name="legend" checked="checked" /> legend</label>
 					<label class="tsbar"><input type="checkbox" name="stacked" />stacked</label>
 
 					<div class="left">
@@ -142,16 +142,20 @@
 			function addCustom(i){
 				var html="";
 				for(var j in custom[i]){
-					var s=JSON.stringify(custom[i][j]).replace(/"/g, "'").replace(/^'/, "").replace(/'$/, "");
-					if(j!=="data"){
-						if(custom[i][j]!==null){
-							html+='<input title="'+j+'" type="text" name="'+j+'" value="'+s+'" />';
+					if(custom[i][j]!==null){
+						var s=JSON.stringify(custom[i][j]).replace(/"/g, "'").replace(/^'/, "").replace(/'$/, "");
+						if(j!=="data"){
+							if(custom[i][j]!==null){
+								html+='<input title="'+j+'" type="text" name="'+j+'" value="'+s+'" />';
+							}
+						}else{
+							s=s.replace(/({|\[)/g, "$1\n").replace(/(}|\])/g, "\n$1").replace(/:/g, ": ").replace(/,(\[|\{)/g, ",\n$1").replace(/,/g, ", ");
+							html+='<textarea title="data" name="data" spellcheck="false" lang="">'+s+'</textarea>';
 						}
+						params[j]=custom[i][j];
 					}else{
-						s=s.replace(/({|\[)/g, "$1\n").replace(/(}|\])/g, "\n$1").replace(/:/g, ": ").replace(/,(\[|\{)/g, ",\n$1").replace(/,/g, ", ");
-						html+='<textarea title="data" name="data" spellcheck="false" lang="">'+s+'</textarea>';
+						params[j]=null;
 					}
-					params[j]=custom[i][j];
 				}
 				$( "#custom" ).html( html );
 			}
@@ -166,12 +170,16 @@
 			//s is a string that represents a typeof object
 			//(object/array)
 			function jsonify(s){
+				if(typeof s.val()==="undefined"){
+					return null;
+				}
 				var a=eval("["+s.val()+"]"); //eval knows how to deal with arrays but not with non-array objects
 				return JSON.parse( JSON.stringify( a[0] ) );
 			}
 
 			function update(){
 				var input=$( "input" ), aux;
+
 				params["type"]=$( "select[name=type]" ).val();
 				params["lang"]=$( "select[name=lang]" ).val();
 
@@ -220,6 +228,7 @@
 				}else{
 					params["position"]=	$( "select[name=position]" ).val();
 				}
+
 				for(var i=0, len=input.length; i<len; i++){
 					var
 						f=input[i],
@@ -231,11 +240,12 @@
 						case "text":
 							try{
 								params[f.name]=JSON.parse(f.value.replace(/'/g,"\"").replace(/(['"])?([a-z0-9A-Z_]+)(['"])?:/g, '"$2": '));
+
 								if(typeof params[f.name]!=="object"){ //time can be an array or a string: when a string parse() can convert to number if possible, but we don't want that
 									if(f.name==="dec")
 										params[f.name]=toPosInt( f.value );
 									else
-									params[f.name]=(f.name!=="range") ? String(params[f.name]) : params[f.name];
+										params[f.name]=(f.name!=="range") ? String(params[f.name]) : params[f.name];
 								}
 							}catch(e){
 								//Real text (or number: rangemin, rangemax [not used anymore])
@@ -249,7 +259,7 @@
 							params[f.name]=(f.value!=="") ? Number(f.value) : null;
 							break;
 						case "checkbox":
-							params[f.name]=	f.checked;
+							params[f.name]=f.checked;
 							break;
 					}
 				}
@@ -268,6 +278,11 @@
 				if(params["grouped"]) {
 					params["grouped"]=jsonify( $( "input[name=grouped]" ) );
 				}
+
+				if(params["by"] && params["by"][0]==="["){
+					params["by"]=jsonify( $( "input[name=by]" ) );
+				}
+
 				$("#visual+iframe").remove();
 
 				VisualJS.iframe(
@@ -344,7 +359,6 @@
 				}
 
 				$( "#code textarea" ).html( "visual({\n\t"+code.join(",\n\t")+"\n});" );
-
 			}
 
 			function notnull(key, comma){
