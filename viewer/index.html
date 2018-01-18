@@ -196,7 +196,7 @@
 				$( "#layout label").not( "."+params["type"] ).hide();
 				$( "#layout table").not( "."+params["type"] ).hide();
 
-				//Canviar textos
+				//Set position selects
 				if(last!==params["type"]){
 					if(params["type"] === "xy"){
 						$("#units input").each(function(i,el){
@@ -218,7 +218,7 @@
 						);
 					}
 				}
-				//Agafar selects
+				//Get position select value
 				if(params["type"] === "xy"){
 					aux = $( "select[name=position]" ).val().split(",");
 					params["position"]={
