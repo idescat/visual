@@ -283,6 +283,10 @@
 					params["by"]=jsonify( $( "input[name=by]" ) );
 				}
 
+				if(params["time"] && params["time"][0]==="["){
+					params["time"]=jsonify( $( "input[name=time]" ) );
+				}
+
 				$("#visual+iframe").remove();
 
 				VisualJS.iframe(
