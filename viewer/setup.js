@@ -49,6 +49,7 @@ var
 			by: null
 		},
 		xy: {
+			time: "1998&ndash;2016",
 			data: [
 				{
 					label: "Some country",
