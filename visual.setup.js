@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 /*global VisualJS */
 
-VisualJS.setup={ //v.1.0.0
+VisualJS.setup = { //v.1.0.0
 	//Colors for maps and series
 	colors: {
 		map: {
@@ -35,7 +35,7 @@ VisualJS.setup={ //v.1.0.0
 	},
 	//Default options (They can be dynamically modified thru visual().)
 	canvas: {
-		unit : {
+		unit: {
 			label: "",
 			symbol: "",
 			position: "end"
@@ -79,32 +79,38 @@ VisualJS.setup={ //v.1.0.0
 			dec: { //decimal separator
 				ca: ",",
 				es: ",",
-				en:  "."
+				en: ".",
+				fr: ","
 			},
 			k: { //thousands separator
 				ca: ".",
 				es: ".",
-				en:  ","
+				en: ",",
+				fr: " "
 			},
 			month: { //Month axis labels
 				ca: ["Gen", "Feb", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Des"],
-				es:  ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
-				en:  ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+				es: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+				en: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+				fr: ["Jan", "Fev", "Mar", "Avr", "Mai", "Jun", "Jul", "Aou", "Sep", "Oct", "Nov", "Dec"]
 			},
 			quarter: { //Quarter axis labels
 				ca: ["I", "II", "III", "IV"],
-				es:  ["I", "II", "III", "IV"],
-				en:  ["Q1", "Q2", "Q3", "Q4"]
+				es: ["I", "II", "III", "IV"],
+				en: ["Q1", "Q2", "Q3", "Q4"],
+				fr: ["Q1", "Q2", "Q3", "Q4"]
 			},
 			na: { //text in tooltip when value is not available
 				ca: "Valor no disponible",
 				es: "Valor no disponible",
-				en:  "Value not available"
+				en: "Value not available",
+				fr: "Valeur non disponible"
 			},
 			oldbrowser: { //Warning message when IE<9 (maps)
 				ca: "Per visualitzar el mapa cal un navegador m&eacute;s modern.",
 				es: "Para visualizar el mapa es preciso un navegador m&aacute;s moderno.",
-				en:  "To view the map you must use a modern browser."
+				en: "To view the map you must use a modern browser.",
+				fr: "Veuillez utiliser un navigateur moderne pour visualiser la carte."
 			}
 		}
 	},
@@ -138,49 +144,73 @@ VisualJS.setup={ //v.1.0.0
 	lib: {
 		d3: {
 			js: "../lib/d3.v3.js",
-			exists: function(){ return typeof d3==="object"; }
+			exists: function () {
+				return typeof d3 === "object";
+			}
 		},
 		jquery: {
 			js: "../lib/jquery.1.8.3.js",
-			exists: function(){ return typeof jQuery==="function"; },
+			exists: function () {
+				return typeof jQuery === "function";
+			},
 
 			flot: {
 				js: "../lib/jquery.flot.js",
-				exists: function(){ return typeof jQuery.plot==="function"; },
+				exists: function () {
+					return typeof jQuery.plot === "function";
+				},
 
 				stack: {
 					js: "../lib/jquery.flot.stack.js",
-					exists: function(){ return typeof jQuery.plot.plugins==="object" && typeof jQuery.plot.plugins[0]==="object" && jQuery.plot.plugins[0].name==="stack";  }
+					exists: function () {
+						return typeof jQuery.plot.plugins === "object" && typeof jQuery.plot.plugins[0] === "object" && jQuery.plot.plugins[0].name === "stack";
+					}
 				},
 				orderbars: {
 					js: "../lib/jquery.flot.orderbars.js",
-					exists: function(){ return typeof jQuery.plot.plugins==="object" && typeof jQuery.plot.plugins[0]==="object" && jQuery.plot.plugins[0].name==="orderBars"; }
+					exists: function () {
+						return typeof jQuery.plot.plugins === "object" && typeof jQuery.plot.plugins[0] === "object" && jQuery.plot.plugins[0].name === "orderBars";
+					}
 				},
 				pyramid: {
 					js: "../lib/jquery.flot.pyramid.js",
-					exists: function(){ return typeof FlotPyramid==="object"; }
+					exists: function () {
+						return typeof FlotPyramid === "object";
+					}
 				},
 				categories: {
 					js: "../lib/jquery.flot.categories.js",
-					exists: function(){ return typeof jQuery.plot.plugins==="object" && typeof jQuery.plot.plugins[0]==="object" && jQuery.plot.plugins[0].name==="categories"; }
+					exists: function () {
+						return typeof jQuery.plot.plugins === "object" && typeof jQuery.plot.plugins[0] === "object" && jQuery.plot.plugins[0].name === "categories";
+					}
 				},
 				pie: {
 					js: "../lib/jquery.flot.pie.js",
-					exists: function(){ return typeof jQuery.plot.plugins==="object" && typeof jQuery.plot.plugins[0]==="object" && jQuery.plot.plugins[0].name==="pie"; }
+					exists: function () {
+						return typeof jQuery.plot.plugins === "object" && typeof jQuery.plot.plugins[0] === "object" && jQuery.plot.plugins[0].name === "pie";
+					}
 				},
 				axisLabels: {
 					js: "../lib/jquery.flot.axislabels.js",
-					exists: function(){ return typeof jQuery.plot.plugins==="object" && typeof jQuery.plot.plugins[0]==="object" && jQuery.plot.plugins.map(function(e){return e.name}).indexOf("axisLabels") !== -1 ; }
+					exists: function () {
+						return typeof jQuery.plot.plugins === "object" && typeof jQuery.plot.plugins[0] === "object" && jQuery.plot.plugins.map(function (e) {
+							return e.name
+						}).indexOf("axisLabels") !== -1;
+					}
 				}
 			}
 		},
 		maps: {
 			js: "../maps/visual.maps.js",
-			exists: function(){ return typeof VisualJS.func.colors==="function" && typeof VisualJS.func.legend==="function";}
+			exists: function () {
+				return typeof VisualJS.func.colors === "function" && typeof VisualJS.func.legend === "function";
+			}
 		},
 		excanvas: {
 			js: "../lib/excanvas.js",
-			exists: function(){ return typeof G_vmlCanvasManager!=="undefined"; }
+			exists: function () {
+				return typeof G_vmlCanvasManager !== "undefined";
+			}
 		}
 	},
 
@@ -188,245 +218,365 @@ VisualJS.setup={ //v.1.0.0
 	map: {
 		mun: {
 			js: "../maps/cat2013mun.js",
-			exists: function(){ return typeof VisualJS.map.mun!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.mun !== "undefined";
+			}
 		},
 		com: {
 			js: "../maps/cat2013com.js",
-			exists: function(){ return typeof VisualJS.map.com!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com !== "undefined";
+			}
 		},
 		com2015: {
 			js: "../maps/cat2015com.js",
-			exists: function(){ return typeof VisualJS.map.com2015!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com2015 !== "undefined";
+			}
 		},
 		prov: {
 			js: "../maps/cat2013prov.js",
-			exists: function(){ return typeof VisualJS.map.prov!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.prov !== "undefined";
+			}
 		},
 		usastates: {
 			js: "../maps/usa2013states.js",
-			exists: function(){ return typeof VisualJS.map.usastates!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.usastates !== "undefined";
+			}
 		},
 		com01: {
 			js: "../maps/com012013mun.js",
-			exists: function(){ return typeof VisualJS.map.com01!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com01 !== "undefined";
+			}
 		},
 		com02: {
 			js: "../maps/com022013mun.js",
-			exists: function(){ return typeof VisualJS.map.com02!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com02 !== "undefined";
+			}
 		},
 		com03: {
 			js: "../maps/com032013mun.js",
-			exists: function(){ return typeof VisualJS.map.com03!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com03 !== "undefined";
+			}
 		},
 		com04: {
 			js: "../maps/com042013mun.js",
-			exists: function(){ return typeof VisualJS.map.com04!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com04 !== "undefined";
+			}
 		},
 		com05: {
 			js: "../maps/com052013mun.js",
-			exists: function(){ return typeof VisualJS.map.com05!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com05 !== "undefined";
+			}
 		},
 		com06: {
 			js: "../maps/com062013mun.js",
-			exists: function(){ return typeof VisualJS.map.com06!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com06 !== "undefined";
+			}
 		},
 		com07: {
 			js: "../maps/com072013mun.js",
-			exists: function(){ return typeof VisualJS.map.com07!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com07 !== "undefined";
+			}
 		},
 		com08: {
 			js: "../maps/com082013mun.js",
-			exists: function(){ return typeof VisualJS.map.com08!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com08 !== "undefined";
+			}
 		},
 		com09: {
 			js: "../maps/com092013mun.js",
-			exists: function(){ return typeof VisualJS.map.com09!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com09 !== "undefined";
+			}
 		},
 		com10: {
 			js: "../maps/com102013mun.js",
-			exists: function(){ return typeof VisualJS.map.com10!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com10 !== "undefined";
+			}
 		},
 		com11: {
 			js: "../maps/com112013mun.js",
-			exists: function(){ return typeof VisualJS.map.com11!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com11 !== "undefined";
+			}
 		},
 		com12: {
 			js: "../maps/com122013mun.js",
-			exists: function(){ return typeof VisualJS.map.com12!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com12 !== "undefined";
+			}
 		},
 		com13: {
 			js: "../maps/com132013mun.js",
-			exists: function(){ return typeof VisualJS.map.com13!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com13 !== "undefined";
+			}
 		},
 		com14: {
 			js: "../maps/com142013mun.js",
-			exists: function(){ return typeof VisualJS.map.com14!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com14 !== "undefined";
+			}
 		},
 		com15: {
 			js: "../maps/com152013mun.js",
-			exists: function(){ return typeof VisualJS.map.com15!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com15 !== "undefined";
+			}
 		},
 		com16: {
 			js: "../maps/com162013mun.js",
-			exists: function(){ return typeof VisualJS.map.com16!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com16 !== "undefined";
+			}
 		},
 		com17: {
 			js: "../maps/com172013mun.js",
-			exists: function(){ return typeof VisualJS.map.com17!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com17 !== "undefined";
+			}
 		},
 		com18: {
 			js: "../maps/com182013mun.js",
-			exists: function(){ return typeof VisualJS.map.com18!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com18 !== "undefined";
+			}
 		},
 		com19: {
 			js: "../maps/com192013mun.js",
-			exists: function(){ return typeof VisualJS.map.com19!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com19 !== "undefined";
+			}
 		},
 		com20: {
 			js: "../maps/com202013mun.js",
-			exists: function(){ return typeof VisualJS.map.com20!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com20 !== "undefined";
+			}
 		},
 		com21: {
 			js: "../maps/com212013mun.js",
-			exists: function(){ return typeof VisualJS.map.com21!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com21 !== "undefined";
+			}
 		},
 		com22: {
 			js: "../maps/com222013mun.js",
-			exists: function(){ return typeof VisualJS.map.com22!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com22 !== "undefined";
+			}
 		},
 		com23: {
 			js: "../maps/com232013mun.js",
-			exists: function(){ return typeof VisualJS.map.com23!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com23 !== "undefined";
+			}
 		},
 		com24: {
 			js: "../maps/com242013mun.js",
-			exists: function(){ return typeof VisualJS.map.com24!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com24 !== "undefined";
+			}
 		},
 		com25: {
 			js: "../maps/com252013mun.js",
-			exists: function(){ return typeof VisualJS.map.com25!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com25 !== "undefined";
+			}
 		},
 		com26: {
 			js: "../maps/com262013mun.js",
-			exists: function(){ return typeof VisualJS.map.com26!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com26 !== "undefined";
+			}
 		},
 		com27: {
 			js: "../maps/com272013mun.js",
-			exists: function(){ return typeof VisualJS.map.com27!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com27 !== "undefined";
+			}
 		},
 		com28: {
 			js: "../maps/com282013mun.js",
-			exists: function(){ return typeof VisualJS.map.com28!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com28 !== "undefined";
+			}
 		},
 		com29: {
 			js: "../maps/com292013mun.js",
-			exists: function(){ return typeof VisualJS.map.com29!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com29 !== "undefined";
+			}
 		},
 		com30: {
 			js: "../maps/com302013mun.js",
-			exists: function(){ return typeof VisualJS.map.com30!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com30 !== "undefined";
+			}
 		},
 		com31: {
 			js: "../maps/com312013mun.js",
-			exists: function(){ return typeof VisualJS.map.com31!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com31 !== "undefined";
+			}
 		},
 		com32: {
 			js: "../maps/com322013mun.js",
-			exists: function(){ return typeof VisualJS.map.com32!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com32 !== "undefined";
+			}
 		},
 		com33: {
 			js: "../maps/com332013mun.js",
-			exists: function(){ return typeof VisualJS.map.com33!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com33 !== "undefined";
+			}
 		},
 		com34: {
 			js: "../maps/com342013mun.js",
-			exists: function(){ return typeof VisualJS.map.com34!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com34 !== "undefined";
+			}
 		},
 		com35: {
 			js: "../maps/com352013mun.js",
-			exists: function(){ return typeof VisualJS.map.com35!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com35 !== "undefined";
+			}
 		},
 		com36: {
 			js: "../maps/com362013mun.js",
-			exists: function(){ return typeof VisualJS.map.com36!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com36 !== "undefined";
+			}
 		},
 		com37: {
 			js: "../maps/com372013mun.js",
-			exists: function(){ return typeof VisualJS.map.com37!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com37 !== "undefined";
+			}
 		},
 		com38: {
 			js: "../maps/com382013mun.js",
-			exists: function(){ return typeof VisualJS.map.com38!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com38 !== "undefined";
+			}
 		},
 		com39: {
 			js: "../maps/com392013mun.js",
-			exists: function(){ return typeof VisualJS.map.com39!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com39 !== "undefined";
+			}
 		},
 		com40: {
 			js: "../maps/com402013mun.js",
-			exists: function(){ return typeof VisualJS.map.com40!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com40 !== "undefined";
+			}
 		},
 		com41: {
 			js: "../maps/com412013mun.js",
-			exists: function(){ return typeof VisualJS.map.com41!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com41 !== "undefined";
+			}
 		},
 		com072015: {
 			js: "../maps/com072015mun.js",
-			exists: function(){ return typeof VisualJS.map.com072015!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com072015 !== "undefined";
+			}
 		},
 		com242015: {
 			js: "../maps/com242015mun.js",
-			exists: function(){ return typeof VisualJS.map.com242015!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com242015 !== "undefined";
+			}
 		},
 		com412015: {
 			js: "../maps/com412015mun.js",
-			exists: function(){ return typeof VisualJS.map.com412015!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com412015 !== "undefined";
+			}
 		},
 		com422015: {
 			js: "../maps/com422015mun.js",
-			exists: function(){ return typeof VisualJS.map.com422015!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.com422015 !== "undefined";
+			}
 		},
 		prov08: {
 			js: "../maps/prov082013mun.js",
-			exists: function(){ return typeof VisualJS.map.prov08!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.prov08 !== "undefined";
+			}
 		},
 		prov17: {
 			js: "../maps/prov172013mun.js",
-			exists: function(){ return typeof VisualJS.map.prov17!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.prov17 !== "undefined";
+			}
 		},
 		prov25: {
 			js: "../maps/prov252013mun.js",
-			exists: function(){ return typeof VisualJS.map.prov25!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.prov25 !== "undefined";
+			}
 		},
 		prov43: {
 			js: "../maps/prov432013mun.js",
-			exists: function(){ return typeof VisualJS.map.prov43!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.prov43 !== "undefined";
+			}
 		},
 		at: {
 			js: "../maps/cat2014at.js",
-			exists: function(){ return typeof VisualJS.map.at!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.at !== "undefined";
+			}
 		},
 		spainnuts2: {
 			js: "../maps/spain2014nuts2.js",
-			exists: function(){ return typeof VisualJS.map.spainnuts2!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.spainnuts2 !== "undefined";
+			}
 		},
 		spainnuts3: {
 			js: "../maps/spain2014nuts3.js",
-			exists: function(){ return typeof VisualJS.map.spainnuts3!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.spainnuts3 !== "undefined";
+			}
 		},
 		norwaymun: {
 			js: "../maps/norway2013mun.js",
-			exists: function(){ return typeof VisualJS.map.norwaymun!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.norwaymun !== "undefined";
+			}
 		},
 		eu28: {
 			js: "../maps/eu28.js",
-			exists: function(){ return typeof VisualJS.map.eu28!=="undefined"; }
+			exists: function () {
+				return typeof VisualJS.map.eu28 !== "undefined";
+			}
 		}
 	},
 
 	//IE check
 	func: {
-		old: function(ie) { return RegExp("(^|\\s)lt-"+ie+"(\\s|$)").test(document.documentElement.className); }
+		old: function (ie) {
+			return RegExp("(^|\\s)lt-" + ie + "(\\s|$)").test(document.documentElement.className);
+		}
 	},
 
 	//Attach event listener? 0.10.*
