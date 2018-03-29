@@ -33,7 +33,7 @@ VisualJS.setup={//v.1.0.0
 	//Default options (They can be dynamically modified thru visual().)
 	canvas: {
 		unit : {
-			label: "", 
+			label: "",
 			symbol: "",
 			position: "end"
 		},
@@ -78,32 +78,38 @@ VisualJS.setup={//v.1.0.0
 			dec: { //decimal separator
 				ca: ",",
 				es: ",",
-				en:  "."
+				en: ".",
+				fr: ","
 			},
 			k: { //thousands separator
 				ca: ".",
 				es: ".",
-				en:  ","
+				en: ",",
+				fr: " "
 			},
 			month: { //Month axis labels
 				ca: ["Gen", "Feb", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Des"],
-				es:  ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
-				en:  ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+				es: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+				en: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+				fr: ["Jan", "Fev", "Mar", "Avr", "Mai", "Jun", "Jul", "Aou", "Sep", "Oct", "Nov", "Dec"]
 			},
 			quarter: { //Quarter axis labels
 				ca: ["I", "II", "III", "IV"],
-				es:  ["I", "II", "III", "IV"],
-				en:  ["Q1", "Q2", "Q3", "Q4"]
+				es: ["I", "II", "III", "IV"],
+				en: ["Q1", "Q2", "Q3", "Q4"],
+				fr: ["Q1", "Q2", "Q3", "Q4"]
 			},
-			na: { //text in tooltip when value is not available 
+			na: { //text in tooltip when value is not available
 				ca: "Valor no disponible",
 				es: "Valor no disponible",
-				en:  "Value not available"
+				en: "Value not available",
+				fr: "Valeur non disponible"
 			},
 			oldbrowser: { //Warning message when IE<9 (maps)
 				ca: "Per visualitzar el mapa cal un navegador m&eacute;s modern.",
 				es: "Para visualizar el mapa es preciso un navegador m&aacute;s moderno.",
-				en:  "To view the map you must use a modern browser."
+				en: "To view the map you must use a modern browser.",
+				fr: "Veuillez utiliser un navigateur moderne pour visualiser la carte."
 			}
 		}
 	},
@@ -117,7 +123,7 @@ VisualJS.setup={//v.1.0.0
 	canvasclass: "VisualJScanvas", //canvas container (Flot)
 	areaclass: "VisualJSarea", //svg:g class (D3 maps)
 	legendclass: "VisualJSlegend", //svg:g class (D3 maps)
-	footerclass: "VisualJSfooter", //Footer class of the container 
+	footerclass: "VisualJSfooter", //Footer class of the container
 	normal: "VisualJSnormal", //visualitzation's normal size class
 	mini: "VisualJSmini", //visualitzation's small size class
 	colorclassprefix: "c", //prefix for color class in maps: cnohover, c0, c1, c2...
@@ -349,7 +355,7 @@ VisualJS.setup={//v.1.0.0
 			label: "Catalonia. La Garrotxa: municipalities",
 			js: "https://idescat.github.io/visual/maps/com192013mun.js",
 			exists: function(){ return typeof VisualJS.map.com19!=="undefined"; }
-		},		
+		},
 		com20: {
 			label: "Catalonia. El Gironès: municipalities",
 			js: "https://idescat.github.io/visual/maps/com202013mun.js",
@@ -488,7 +494,7 @@ VisualJS.setup={//v.1.0.0
 	},
 
 	//Attach event listener? 0.10.*
-	listen: false, 
+	listen: false,
 
 	//Margins and paddings used in container
 	margin: 10,

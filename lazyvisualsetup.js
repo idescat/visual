@@ -142,32 +142,38 @@ VisualJS.setup={//v.1.0.0
 			dec: { //decimal separator
 				ca: ",",
 				es: ",",
-				en:  "."
+				en: ".",
+				fr: ","
 			},
 			k: { //thousands separator
 				ca: ".",
 				es: ".",
-				en:  ","
+				en: ",",
+				fr: " "
 			},
 			month: { //Month axis labels
 				ca: ["Gen", "Feb", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Des"],
-				es:  ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
-				en:  ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+				es: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+				en: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+				fr: ["Jan", "Fev", "Mar", "Avr", "Mai", "Jun", "Jul", "Aou", "Sep", "Oct", "Nov", "Dec"]
 			},
 			quarter: { //Quarter axis labels
 				ca: ["I", "II", "III", "IV"],
-				es:  ["I", "II", "III", "IV"],
-				en:  ["Q1", "Q2", "Q3", "Q4"]
+				es: ["I", "II", "III", "IV"],
+				en: ["Q1", "Q2", "Q3", "Q4"],
+				fr: ["Q1", "Q2", "Q3", "Q4"]
 			},
 			na: { //text in tooltip when value is not available
 				ca: "Valor no disponible",
 				es: "Valor no disponible",
-				en:  "Value not available"
+				en: "Value not available",
+				fr: "Valeur non disponible"
 			},
 			oldbrowser: { //Warning message when IE<9 (maps)
 				ca: "Per visualitzar el mapa cal un navegador m&eacute;s modern.",
 				es: "Para visualizar el mapa es preciso un navegador m&aacute;s moderno.",
-				en:  "To view the map you must use a modern browser."
+				en: "To view the map you must use a modern browser.",
+				fr: "Veuillez utiliser un navigateur moderne pour visualiser la carte."
 			}
 		}
 	},
