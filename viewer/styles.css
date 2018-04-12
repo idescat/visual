@@ -200,3 +200,38 @@ thead th, thead td {
 .maps caption, .maps tr * {
 	padding: 6px 0;
 }
+
+#warning {
+	display: none;
+	border: 1px solid #c00;
+	background-color: #ffffe0;
+	border-radius: 4px;
+	padding: 8px;
+	margin-bottom: 16px;
+}
+#warning p {
+	margin: 4px;
+}
+#warning input {
+	padding: 4px;
+	margin: 6px 0;
+	width: 228px;
+}
+
+#remove a:link, #remove a:visited, #remove a:hover, #remove a:active,
+#warning a:link, #warning a:visited, #warning a:hover, #warning a:active {
+	color: #c00;
+	text-decoration: underline;
+}
+.ok {
+	color: #008000;
+}
+.nok {
+	color: #c00;
+}
+h1 span {
+  float: right;
+  font-size: 12px;
+  font-weight: normal;
+  padding-top: 4px;
+}

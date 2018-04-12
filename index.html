@@ -13,10 +13,12 @@
 		<script src="visual.setup.js"></script>
 		<script src="lib/jquery.1.8.3.js"></script>
 		<script src="viewer/setup.js"></script>
+		<script src="lib/github.js"></script>
 	</head>
 
 	<body>
-		<h1>Visual Maker</h1>
+		<div id="warning"></div>
+		<h1>Visual Maker <span>Save is <strong class="nok">off</strong></span></h1>
 		<form id="inputs">
 			<strong>&uarr; Options</strong>
 			<div>
@@ -120,12 +122,8 @@
 			<div id="visual" class="visual"></div>
 		</div>
 
-		<p><strong>Warning</strong>: Since <a href="https://blog.github.com/2018-02-18-deprecation-notice-removing-anonymous-gist-creation/">March 19, 2018</a> charts cannot be saved.</p>
-
-<!-- 20180323: https://blog.github.com/2018-02-18-deprecation-notice-removing-anonymous-gist-creation/
 		<div id="save"></div>
-		<p><strong>Do not save unfinished charts.</strong> This page makes use of the GitHub API to store your charts. There&rsquo;s a rate limit of 60 anonymous API requests per-hour per-visitor. To avoid reaching this limit, this sofware tries to use the caching mechanisms available in modern browsers. If you cannot save your chart, please try later.</p>
--->
+		<p>This page makes use of the GitHub API to store your charts (a GitHub account is required since <a target="_blank" href="https://blog.github.com/2018-02-18-deprecation-notice-removing-anonymous-gist-creation/">March 19, 2018</a>). There&rsquo;s a rate limit of 60 anonymous API requests per-hour per-visitor. To avoid reaching this limit, this sofware tries to use the caching mechanisms available in modern browsers. If you cannot retrieve a chart, please try later.</p>
 
 		<p>To build your chart (particularly, to fill in the <em>time</em>, <em>data</em>, <em>by</em> or <em>grouped</em> fields), you might need to read the <a href="https://github.com/idescat/visual">documentation</a> or check some <a href="https://github.com/idescat/visual/tree/master/test">sample code</a>. See some <a href="examples/">visualizations done with Visual Maker</a>.</p>
 
@@ -154,9 +152,28 @@
 				leg=$( "#data legend" ),
 				lastJSONs,
 				JSONs,
-				savebutton="<a>Save chart and get embed code</a>",
-				maptable=""
+				savebutton="",
+				maptable="",
+				normal,
+				token=null,
+				savestate='Save is <strong class="nok">off</strong>'
 			;
+
+			if( window.localStorage && localStorage.getItem("Visualtok") ) {
+				if(getParam("token")==="off"){
+					localStorage.removeItem("Visualtok");
+				}else{
+					token=localStorage.getItem("Visualtok");
+				}
+			}
+
+			if(!token){
+				$( "#warning" ).show();
+				$( "#warning" ).html( '<p><strong>Visual Maker</strong> stores chart data as gists on your GitHub account. If you want to save and embed your charts, you need to create a GitHub <a href="https://github.com/settings/tokens/new" target="_blank">personal access token</a> (<strong>token description</strong>: <em>Visual</em>, <strong>scope</strong>: <em>gist</em>).</p><p><label><input name="token" placeholder="paste your token here and press enter" value=""/></label><span id="check"></span></p><p id="link"></p>' );
+			}else{
+				savebutton="<a>Save chart and get embed code</a>";
+				savestate='Save is <strong class="ok">on</strong> (<a href="?token=off" title="Your personal token will be removed from this browser and you won&rsquo;t be able to save charts">forget token</a>)';
+			}
 
 			$( "#version" ).html( "Visual v. "+VisualJS.version );
 
@@ -373,14 +390,20 @@
 				);
 
 				try {
-					JSONs=JSON.stringify( JSON.parse( "{"+code.join(",")+"}" ) );
-					$("#save").html(savebutton);
-					$("#save a").click(saveJSON);
+					normal=JSON.parse( "{"+code.join(",")+"}" );
+					JSONs=JSON.stringify( normal );
+					save();
 				}catch (e){
 					//Is not valid JSON;
 					$("#save").text("You cannot save this chart because properties are not valid JSON!");
 				}
 
+			}
+
+			function save(){
+				$("h1 span").html(savestate);
+				$("#save").html(savebutton);
+				$("#save a").click(saveJSON);
 			}
 
 			function notnull(key, comma){
@@ -421,7 +444,7 @@
 				opened=false;
 			}
 
-			//Based on Eric Mill's https://github.com/konklone/json/
+			//Originally based on Eric Mill's https://github.com/konklone/json/
 			function saveJSON() {
 				if (!JSONs || JSONs==lastJSONs){
 					return false;
@@ -430,27 +453,26 @@
 				$("#save a").text("Saving...").css({"background-color": "#800", "color": "#fff"});
 
 				var
-					gist={
-						description: "Idescat Visual",
-						public: true,
+					data=JSON.stringify({
+						description: "Visual: " + normal.title,
+						public: false,
 						files: {
 							"source.json": { "content": JSONs }
 						}
-					}
+					}),
+					gh=new GitHub({
+						token: token
+					}),
+					gist=gh.getGist()
 				;
 
-				$.ajax({
-					type: "POST",
-					url: "https://api.github.com/gists",
-					data: JSON.stringify(gist),
-					dataType: "json",
-					success: function(data, status, xhr){
-						log("Remaining this hour: " + xhr.getResponseHeader("X-RateLimit-Remaining"));
+				gist.create(data).then(function(resp) {
+					if(resp.status===201){//Created
+						//No need: limit is 5,000! log("Remaining this hour: " + resp.headers["x-ratelimit-remaining"] + " charts.");
 						lastJSONs=JSONs;
-						embedCode( data.id );
-					},
-					error: function(xhr, status, errorThrown) {
-						log(xhr);
+						embedCode( resp.data.id );
+					}else{
+						log(resp.status);
 						embedCode( null );
 					}
 				});
@@ -460,7 +482,7 @@
 
 			function embedCode(id){
 				if(id===null){
-					window.alert("Save failed! Try in an hour, please.");
+					window.alert("Save failed! Check your browser’s console.");
 					$("#save a").text(savebutton).css({"background-color": "#fff", "color": "#000"});
 				}else{
 					$("#save").html('<p><strong>Copy and paste this code in your page.</strong> Adapt height and width values to your needs.</p><div>&lt;iframe height="400" width="400" frameborder="0" scrolling="no" src="https://idescat.github.io/visual/g/?id='+id+'"&gt;&lt;/iframe&gt;</div><p>Or try the <strong>responsive code</strong>. Adapt aspect ratio (70% = h/w %) to your needs.</p><div>&lt;div style="padding:0 0 70% 0;position:relative;height:0;overflow:hidden"&gt;&lt;iframe style="border:0;position:absolute;top:0;bottom:0;left:0;width:100%;height:100%" src="https://idescat.github.io/visual/g/?id='+id+'"&gt;&lt;/iframe&gt;&lt;/div&gt;</div>');
@@ -471,8 +493,59 @@
 				window.console && console.log(s);
 			}
 
+			function checkToken(){
+				var
+					gh=new GitHub({
+				  	token: token
+					}),
+					gist=gh.getGist()
+				;
+
+				//Void gist. If token not valid, 401; if valid, 422 (unprocessable entity)
+				gist.create({}).then(null, function(reason){
+					if( String(reason).indexOf("401")===-1 ){
+						$( "#check" ).html('<span class="ok">&#10004;</span> <span id="remove"></span>');
+						savebutton="<a>Save chart and get embed code</a>";
+						savestate='Save is <strong class="ok">on</strong>';
+
+						if(window.localStorage) {
+							localStorage.setItem("Visualtok", token);
+							$( "#remove" ).html('It has been stored for future sessions (<a href="">forget</a>).');
+							$( "#remove a" ).click(function(e){
+								e.preventDefault();
+								localStorage.removeItem("Visualtok");
+								$( "#remove" ).text("Removed.");
+							});
+						}
+
+					}else{
+						$( "#check" ).html('<span class="nok">&#10006; Token is not valid!</span>');
+						savebutton="";
+						savestate='Save is <strong class="nok">off</strong>';
+						token=null;
+					}
+					save();
+				});
+			}
+
+			function getParam(name) {
+				name=name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+				var
+					regex=new RegExp("[\\?&]" + name + "=([^&#]*)"),
+					results=regex.exec(location.search)
+				;
+				return (results===null) ? "" : decodeURIComponent( results[1].replace(/\+/g, " ") );
+			}
+
 			update();
 			$( "#inputs" ).change(update);
+
+			$( "#warning input" ).change(function(){
+				$( "#check" ).text("Checking...");
+
+				token=$( "#warning input" ).val();
+				checkToken();
+			});
 
 			leg.click(function(){
 				if( opened ){

@@ -93,7 +93,7 @@
 							quota=meta["X-RateLimit-Remaining"]
 						;
 
-						log("Remaining this hour: " + quota);
+						log("Remaining this hour: " + quota + " charts.");
 
 						if(meta.status===403){ //Forbidden
 							//Do not show anything on screen
@@ -110,7 +110,7 @@
 							return;
 						}
 
-						if(d.description==="Idescat Visual"){
+						if(d.description.substr(0,8)==="Visual: "){
 							source=d.files["source.json"];
 							if(source.type==="application/json"){
 								src=source.content;
