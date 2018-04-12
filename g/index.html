@@ -110,12 +110,10 @@
 							return;
 						}
 
-						if(d.description.substr(0,8)==="Visual: "){
-							source=d.files["source.json"];
-							if(source.type==="application/json"){
-								src=source.content;
-								json=isVisual(src);
-							}
+						source=d.files["source.json"];
+						if(source.type==="application/json"){
+							src=source.content;
+							json=isVisual(src);
 						}
 						visualize(json, id, src);
 					},
