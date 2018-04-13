@@ -510,11 +510,11 @@
 
 						if(window.localStorage) {
 							localStorage.setItem("Visualtok", token);
-							$( "#remove" ).html('It has been stored for future sessions (<a href="">forget</a>).');
+							$( "#remove" ).html('It has been stored for future sessions (<a href="">delete</a>).');
 							$( "#remove a" ).click(function(e){
 								e.preventDefault();
 								localStorage.removeItem("Visualtok");
-								$( "#remove" ).text("Removed.");
+								$( "#remove" ).html("Deleted. You will not be able to save charts in the <em>next</em> session.");
 							});
 						}
 
