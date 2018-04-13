@@ -90,7 +90,8 @@
 							source,
 							d=data.data,
 							meta=data.meta,
-							quota=meta["X-RateLimit-Remaining"]
+							quota=meta["X-RateLimit-Remaining"],
+							desc=d.description
 						;
 
 						log("Remaining this hour: " + quota + " charts.");
@@ -110,10 +111,14 @@
 							return;
 						}
 
-						source=d.files["source.json"];
-						if(source.type==="application/json"){
-							src=source.content;
-							json=isVisual(src);
+						if(desc.substr(0,8)==="Visual: " || desc==="Idescat Visual"){
+							if(d.files.hasOwnProperty("source.json")){
+								source=d.files["source.json"];
+								if(source.type==="application/json"){
+									src=source.content;
+									json=isVisual(src);
+								}
+							}
 						}
 						visualize(json, id, src);
 					},
