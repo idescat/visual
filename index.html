@@ -169,7 +169,7 @@
 
 			if(!token){
 				$( "#warning" ).show();
-				$( "#warning" ).html( '<p><strong>Visual Maker</strong> stores chart data as gists on your GitHub account. If you want to save and embed your charts, you need to create a GitHub <a href="https://github.com/settings/tokens/new" target="_blank">personal access token</a> (<strong>token description</strong>: <em>Visual</em>, <strong>scope</strong>: <em>gist</em>).</p><p><label><input name="token" placeholder="paste your token here and press enter" value=""/></label><span id="check"></span></p><p id="link"></p>' );
+				$( "#warning" ).html( '<p><strong>Visual Maker</strong> stores chart data as gists on your GitHub account. If you want to save and embed your charts, you need to create a GitHub <a href="https://github.com/settings/tokens/new" target="_blank">personal access token</a> (<strong>token description</strong>: <em>Visual</em>, <strong>scope</strong>: <em>gist</em>).</p><p><label><input name="token" placeholder="paste your token here and press enter" value="" spellcheck="false" /></label><span id="check"></span></p><p id="link"></p>' );
 			}else{
 				savebutton="<a>Save chart and get embed code</a>";
 				savestate='Save is <strong class="ok">on</strong> (<a href="?token=off" title="Your personal token will be removed from this browser and you won&rsquo;t be able to save charts">forget token</a>)';
