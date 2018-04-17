@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]><html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]><html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html> <!--<![endif]-->
+	<head>
+		<title>My Charts</title>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<link rel="shortcut icon" href="https://www.idescat.cat/images/favicon.ico" type="image/x-icon" />
+		<link href="styles.css" rel="stylesheet" type="text/css" />
+		<script src="../lib/jquery.1.8.3.js"></script>
+    <script src="../lib/github.js"></script>
+	</head>
+  <body>
+    <h1>My Charts</h1>
+    <div></div>
+
+<script>
+
+var
+	div=$( "div" ),
+	user=getUser()
+;
+
+if(user){
+  user.listGists().then(function(resp){
+    if(resp.status===200){
+      var
+        charts=resp.data
+          .filter(isVisual)
+          .map(idtitle)
+      ;
+
+      div.html( table(charts) );
+
+			$(".show").click(show);
+    }else{
+      div.text( "There was an error retrieving your charts." );
+    }
+  });
+}else{
+  div.html( 'No valid token available. Please, <a href="..">provide one</a> and come back.' );
+}
+
+function show(){
+	var
+		a=$(this).children("a"),
+		sh=a.text()==="show",
+		ifr=$(this).children(".iframe")
+	;
+	if(sh){
+		//Force refresh
+		ifr.html( '<iframe src="https://idescat.github.io/visual/g/?id=' + ifr.data("id") + '"></iframe>' );
+		ifr.show();
+		a.text("hide");
+	}else{
+		ifr.html("");
+		ifr.hide();
+		a.text("show");
+	}
+}
+
+function table(v){
+  var html='<table><caption>My Charts</caption><thead><tr><th scope="col">Title</th><th scope="col">C <abbr title="Cached in this browser">(?)</abbr></th><th scope="col">Type</th><th scope="col">Id</th></tr></thead><tbody>';
+
+  v.forEach(function(e){
+		var
+			show="",
+			id=e.id,
+			cached=isCached(id),
+			cl="nok",
+			cti="Not cached",
+			gti=" (click to cache it)",
+			type="&mdash;"
+		;
+
+		if(cached){
+			cl="ok";
+			cti="Cached";
+			gti="";
+			show=' <span class="show">(<a>show</a>) <div class="iframe" data-id="'+id+'"></div></span>';
+			type=cached;
+		}
+
+    html+='<tr><th scope="row">'+e.title+'</th><td title="'+cti+'" class="'+cl+'">&#9679;</td><td>'+type+'</td><td><a title="Open chart'+gti+'" href="../g/?id='+id+'">'+id+'</a>'+show+'</td></tr>';
+  });
+
+  return html+'</tbody><tfoot><tr><td colspan="4"><a href="..">Create</a> new chart</td></tr></tfoot></table>';
+}
+
+function isCached(id){
+	if( window.localStorage && localStorage.getItem("Visual"+id) ) {
+		return JSON.parse( localStorage.getItem("Visual"+id) ).type;
+	}
+
+	return false;
+}
+
+function idtitle(e){
+  return {
+    id: e.id,
+    title: e.description.substr(8)
+  };
+}
+
+function isVisual(e){
+  var
+    desc=e.description,
+    files=e.files
+  ;
+
+  if( desc.substr(0,8)==="Visual: " ){
+    if( !e.public &&
+        files.hasOwnProperty("source.json") &&
+        files["source.json"].type==="application/json" &&
+        Object.keys(files).length===1
+      ){
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function getToken(){
+  if( window.localStorage && localStorage.getItem("Visualtok") ) {
+    return localStorage.getItem("Visualtok");
+  }
+
+  return null;
+}
+
+function getUser(){
+  var
+    gh,
+    token=getToken()
+  ;
+
+  if(token){
+    gh=new GitHub({
+    	token: token
+    });
+
+    return gh.getUser();
+  }
+
+  return null;
+}
+
+</script>
+
+  </body>
+</html>

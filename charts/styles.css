@@ -1,0 +1,71 @@
+body {
+  font-family: sans-serif;
+  margin: 14px;
+  background-color: #f6f6f6;
+}
+h1 {
+  font-size: 110%;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.iframe,
+caption {
+  display: none;
+}
+.iframe {
+  padding: 0 0 70% 0;
+  position: relative;
+  height: 0;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+iframe {
+  border: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin: 10px 0;
+}
+th {
+  text-align: left;
+  font-weight: normal;
+}
+thead th {
+  font-weight: bold;
+  border-top: 1px solid #ccc;
+}
+th, td {
+  padding: 8px 0;
+  vertical-align: top;
+}
+th, tbody td {
+  border-bottom: 1px solid #ccc;
+}
+td a:visited {
+  color: #000;
+}
+tfoot td {
+  padding-top: 14px;
+}
+abbr {
+  font-weight: normal;
+  text-decoration: none;
+  font-size: 90%;
+  vertical-align: text-top;
+  cursor: help;
+}
+.ok {
+  color: #008000;
+}
+.nok {
+  color: #c00;
+}
+.show a:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
