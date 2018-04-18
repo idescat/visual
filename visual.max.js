@@ -26,7 +26,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 /*global d3, LazyLoad*/
 
 var VisualJS={
-	version: "1.0.5",
+	version: "1.0.6",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -406,34 +406,38 @@ var VisualJS={
 				}
 				tmp[path[path.length - 1]]=val;
 			},
-			safeGet=function(obj){
-				return (typeof obj !== "undefined" ? obj : "");
+			safeGet=function(o){
+				return (typeof o!=="undefined" ? o : "");
+			},
+			isObject=function(o){
+				return typeof o==="object" && o!==null;
 			},
 			getDataType=function(){
 				var ret="invalid";
 				if(Array.isArray(o.data)){
 					if(Array.isArray(o.data[0])){
 						ret="array";
-					}
-					else if(typeof o.data[0] === "object"){
-						if(typeof o.data[0].x === "object" &&
-							typeof o.data[0].y === "object" &&
-							typeof o.data[0].z === "object"
-						){
-							ret ="xyz";
+					}else{
+						if( isObject(o.data[0]) ){
+							if( isObject(o.data[0].z) ){
+								ret ="xyz";
+							}else{
+								if( isObject(o.data[0].y) ){
+									ret ="xy";
+								}else{
+									if(typeof o.data[0].x==="undefined" &&
+										 typeof o.data[0].y==="undefined" &&
+										 Array.isArray(o.data[0].val) &&
+										 o.data[0].val[0]!==null &&
+										 (o.data[0].val[0].length==2 || o.data[0].val[0].length==3)
+									){
+										ret="points";
+									}else{
+										ret="object";
+									}
+								}
+							}
 						}
-						else if(typeof o.data[0].x === "object" &&
-							typeof o.data[0].y === "object"){
-							ret ="xy";
-						}
-						else if(typeof o.data[0].x === "undefined" &&
-								typeof o.data[0].y === "undefined" &&
-								Array.isArray(o.data[0].val) &&
-								(o.data[0].val[0].length == 2 || o.data[0].val[0].length == 3)
-						){
-							ret="points";
-						}
-						else ret="object";
 					}
 				}
 				return ret;
