@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2017 Institut d'Estadistica de Catalunya (Idescat)
+Copyright (c) 2018 Institut d'Estadistica de Catalunya (Idescat)
 http://www.idescat.cat (https://github.com/idescat/visual)
 
 Permission is hereby granted, free of charge, to any person obtaining
@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 /*global VisualJS */
 
-VisualJS.setup = { //v.1.0.0
+VisualJS.setup = { //v.1.1.0
 	//Colors for maps and series
 	colors: {
 		map: {
@@ -111,9 +111,37 @@ VisualJS.setup = { //v.1.0.0
 				es: "Para visualizar el mapa es preciso un navegador m&aacute;s moderno.",
 				en: "To view the map you must use a modern browser.",
 				fr: "Veuillez utiliser un navigateur moderne pour visualiser la carte."
+			},
+			// v.1.1.0
+			iframetitle: {
+				ca: "Visualització de dades",
+				es: "Visualización de datos",
+				en: "Data visualization",
+				fr: "Visualisation de données"
 			}
-		}
+		},
+		// v.1.1.0
+		template: "{{period}} {{year}}" //Template for time literals (object or string)
+		 /* same as
+			{
+				aaaamm: {
+					ca: "{{period}} {{year}}",
+					es: "{{period}} {{year}}",
+					en: "{{period}} {{year}}",
+					fr: "{{period}} {{year}}"
+				},
+				aaaaq: {
+					ca: "{{period}} {{year}}",
+					es: "{{period}} {{year}}",
+					en: "{{period}} {{year}}",
+					fr: "{{period}} {{year}}"
+				}
+			}
+		*/
 	},
+
+	//String used in the tooltip between the elements in the second line v.1.1
+	tooltipseparator: " / ",
 
 	//Classes and ids of elements created by visual
 	id: "visual", //id to style the container
@@ -125,9 +153,10 @@ VisualJS.setup = { //v.1.0.0
 	areaclass: "VisualJSarea", //svg:g class (D3 maps)
 	legendclass: "VisualJSlegend", //svg:g class (D3 maps)
 	footerclass: "VisualJSfooter", //Footer class of the container
-	normal: "VisualJSnormal", //visualitzation's normal size class
-	mini: "VisualJSmini", //visualitzation's small size class
+	normal: "VisualJSnormal", //Normal size class
+	mini: "VisualJSmini", //Small size class
 	colorclassprefix: "c", //prefix for color class in maps: cnohover, c0, c1, c2...
+	typeclassprefix : "VisualJS", //Meaning a chart of type "tsbar" will have class VisualJStsbar v.1.1.0
 
 	//Markup created by visual
 	html: {

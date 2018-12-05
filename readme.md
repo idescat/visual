@@ -98,7 +98,11 @@ Boolean. This determines whether the chart legend should be shown. Default (*tru
 The position of the legend in Cartesian charts is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js) (canvas *position* property). The position of the legend in maps is particular to each map and is set in the [canvas properties of the Visual map object](#canvas-properties-area-legend).
 
 #### grid
-Object with the following properties: *border* (number: grid border width), *line* (number: line width), *shadow* (number: line shadow width) and *point* (number: point radius). Default border (*0*), line (*2*), shadow (*4*) and point (*1*) are set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
+Object with the following properties: *border* (number: grid border width), *line* (number: line width), *shadow* (number: line shadow width), *point* (number: point radius) and *markings* (array of markings). Default border (*0*), line (*2*), shadow (*4*) and point (*1*) are set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js). A default collection of markings can also be set.
+
+The *markings* property is supported when *type* is "tsline", "tsbar", "bar", "rank", "pyram" or "xy". See the [Flot API](https://github.com/flot/flot/blob/master/API.md#customizing-the-grid) for details.
+
+Take into account that Visual comes with a default marking in the zero value of the Y-axis when *type* is "tsline". Specifying your own markings overrides it.
 
 #### axis
 Object with the following properties: *x* (boolean), *y* (boolean) and, since version 1, *ticks* (object) and *labels* (object). The first two determine whether the axes should be shown. Default (*true*) is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
