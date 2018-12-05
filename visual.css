@@ -84,12 +84,16 @@ body {
 .visual .VisualJSmini .flot-tick-label {
 	font-size: 8px;
 }
-.visual .flot-tick-label span {
+
+/*v.1.1.0*/
+.visual .VisualJSbar .flot-tick-label.tickLabel span {
 	display: block;
+	padding: 0 2.5em; /* Avoid x-axis label overlapping in bar charts using styles (since 0.9.6) */
 }
-/* Avoid x-axis label overlapping in bar charts using styles (since 0.9.6) */
-.visual .flot-tick-label.tickLabel span {
-	padding: 0 2.5em;
+/*v.1.1.0*/
+.visual .VisualJStsline .flot-tick-label.tickLabel,
+.visual .VisualJStsbar .flot-tick-label.tickLabel {
+	white-space: nowrap;
 }
 
 /* SVG */

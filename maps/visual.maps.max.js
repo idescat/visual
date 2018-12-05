@@ -1,6 +1,6 @@
 /*
-colors, legend, groupLegend (1.0.0)
-Copyright (c) 2017 Institut d'Estadistica de Catalunya (Idescat)
+colors, legend, groupLegend (1.1.0)
+Copyright (c) 2018 Institut d'Estadistica de Catalunya (Idescat)
 http://www.idescat.cat (https://github.com/idescat/visual)
 
 Permission is hereby granted, free of charge, to any person obtaining
@@ -22,7 +22,7 @@ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-
+/* global VisualJS, d3 */
 VisualJS.func.colors=function(cHexa, rang, atribut, clas, custcolors, id){
 	var
 		d=document,
@@ -90,7 +90,7 @@ VisualJS.func.colors=function(cHexa, rang, atribut, clas, custcolors, id){
 			return {h:Math.floor(h * 360), s:Math.floor(s * 100), l:Math.floor(l * 100)};
 		},
 		stylesheet=d.createElement("style"),
-		colors=new Array(),
+		colors=[],
 		hsl=rgb2hsl(hex2rgb(cHexa))
 	;
 
@@ -100,15 +100,15 @@ VisualJS.func.colors=function(cHexa, rang, atribut, clas, custcolors, id){
 		incr=(97-hsl.l)/--rang,
 		len=(typeof custcolors==="undefined") ? 0 : custcolors.length,
 		rules="",
-		rgb
+		rgb, i
 	;
 	id=(typeof id==="undefined") ? "" : "#"+id;
 	if(len>0){ //Custom colors
-		for(var i=0; i<len; i++){
+		for(i=0; i<len; i++){
 			rules+= id+" ."+clas+i+"{" + atribut + ": "+custcolors[i]+"} ";
 		}
 	}else{
-		for(var i=0; i<=rang; i++){
+		for(i=0; i<=rang; i++){
 			rgb=hsl2rgb (hsl);
 			colors[i]={r:rgb.r, g:rgb.g, b:rgb.b};
 			rules+= id+" ."+clas+(rang-i)+"{" + atribut + ": rgb("+rgb.r+","+rgb.g+","+rgb.b+")}";
@@ -141,6 +141,11 @@ VisualJS.func.legend=function(infsup, colors, vis, tooltip, height, strict, lab)
 			},
 		]
 	;
+
+	//To preserve height even when no label is provided
+	if(lab===""){
+		lab="\xa0";
+	}
 
 	if(hwmin>minLimit){  //Show legend
 		//color gradient
@@ -175,16 +180,14 @@ VisualJS.func.legend=function(infsup, colors, vis, tooltip, height, strict, lab)
 			.append("svg:text")
 			.attr("class","values")
 			.attr("x",function(d,i){
-				if(i === 0)
-					return bb.width - margin/8;
-				else
-					return margin/8;
+				return (i === 0) ? bb.width - margin/8 : margin/8;
 			}) //Horizontal space of 5px between square and text
 			.attr("y", bb.height + (1+1.5)*margin)
 			.attr("width", width)
 			.attr("text-anchor",function(d,i){
-				if(i === 0)
+				if(i === 0){
 					return "end";
+				}
 			})
 			.text(function(d){return d.text;})
 		;
@@ -200,8 +203,9 @@ VisualJS.func.legend=function(infsup, colors, vis, tooltip, height, strict, lab)
 		//lines
 		bb = d3.select("svg>g>rect")[0][0].getBBox();
 		hor = function (d,i){
-				if(i === 0)
-					return width;
+			if(i === 0){
+				return width;
+			}
 		};
 		leg.selectAll(".line")
 			.data([1,2])
@@ -212,12 +216,12 @@ VisualJS.func.legend=function(infsup, colors, vis, tooltip, height, strict, lab)
 			.attr("x2", hor)
 			.attr("y1", bb.y - margin/2 )
 			.attr("y2", bb.y)
+		;
 		//Align text to square horizontally
 		//text
 		leg.append("svg:text")
 			.attr("x", 0)
-			.attr("y", bb.y + bb.height + margin/4 )
-			.attr("alignment-baseline","hanging")
+			.attr("y", bb.y + bb.height + margin )
 			.text(lab)
 		;
 		bb = vis.select(".VisualJSlegend")[0][0].getBBox();
@@ -249,33 +253,32 @@ VisualJS.func.groupLegend=function(infsup, vis, tooltip, height, strict, o, scan
 			data: ["&times;","&plus;"],
 			state: false,
 		},
-		i
+		i, icolor, increment
 	;
+	//icolor is :
+	//	- equal to 0 : 1. when the user includes an array of colors in the "grouped" property, ex: grouped: [label: ["XXXXX","YYYYY"], color: ["#eb4d44" , "#2a488a"]]
+	// 								 2. when the user does not include an array of colors in the "grouped" property and o.data[0][0] < o.data[last][0]
+	//	- greather than 0 : colorOrder is not equal to 'false' and the user does not include an array of colors in the "grouped" property and o.data[0][0] > o.data[last][0]
+	icolor = ((typeof colorOrder !== "undefined" && colorOrder === false) || !o.grouped.color[0].r) ? 0 : o.grouped.color.length-1;
+	increment = (icolor == 0);
 
-	if(typeof colorOrder !== "undefined" && colorOrder === false){
-		for( i=o.grouped.label.length-1; i>=0; i--){
-			info.push(
-				{  //less than
-					color : ( o.grouped.color[i].r ? "rgb("+o.grouped.color[i].r+","+o.grouped.color[i].g+","+o.grouped.color[i].b+")":
-					o.grouped.color[i]),
-					text : o.grouped.label[i]
-				}
-			);
-		}
-	}else{
-		for( i=0; i<o.grouped.label.length; i++){
-			aux = o.grouped.color.length - 1 - i;
-			info.push(
-				{  //less than
-					color : ( o.grouped.color[aux].r ? "rgb("+o.grouped.color[aux].r+","+o.grouped.color[aux].g+","+o.grouped.color[aux].b+")":
-					o.grouped.color[aux]),
-					text : o.grouped.label[i]
-				}
-			);
+	for(i=0;i<o.grouped.label.length;i++){
+		info.push(
+			{  //less than
+				color : ( o.grouped.color[icolor].r ? "rgb("+o.grouped.color[icolor].r+","+o.grouped.color[icolor].g+","+o.grouped.color[icolor].b+")":
+				o.grouped.color[icolor]),
+				text : o.grouped.label[i]
+			}
+		);
+		if(increment){
+			icolor++;
+		}else{
+			icolor--;
 		}
 	}
 
 	if(hwmin>minLimit){  //Show legend
+		var y, x;
 		leg = d3.select("#visual.visual");
 		//get position
 		if(scanvas.position[0] === "s"){
@@ -320,7 +323,7 @@ VisualJS.func.groupLegend=function(infsup, vis, tooltip, height, strict, o, scan
 			aux =
 			Number(getComputedStyle(d3.select("#visual.visual")[0][0]).getPropertyValue("margin-bottom").replace("px",""));
 			table
-				.style(y, aux + rect.height + margin + "px")
+				.style(y, aux + rect.height + margin + "px");
 		}
 		leg.selectAll("#visual.visual>svg").on("mousemove",function(d,i){
 			var
