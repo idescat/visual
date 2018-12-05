@@ -91,7 +91,7 @@ body {
 }
 /*v.1.1.0*/
 .visual .VisualJStsline .flot-tick-label.tickLabel,
-.visual .VisualJtsbar .flot-tick-label.tickLabel {
+.visual .VisualJStsbar .flot-tick-label.tickLabel {
 	white-space: nowrap;
 }
 
