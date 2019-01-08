@@ -87,7 +87,7 @@ String. Geographical area.
 #### time
 String (optional) or array of strings (required). Time period or periods.
 
-Visual will treat the following string time formats using the *quarter* and *month* properties in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js): "20131" (first quarter of 2013) and "201301" (January 2013). Any other time pattern will be displayed untreated.
+Visual will treat the following string time formats using the *quarter*, *month* and *template* properties in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js): "20131" (first quarter of 2013) and "201301" (January 2013). Any other time pattern will be displayed untreated.
 
 #### autoheading
 Boolean. This determines whether the heading is built by composition from *title*, *geo* and *time*. If *false*, only *title* will be used as a heading. Default (*true*) is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
