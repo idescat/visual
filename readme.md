@@ -352,7 +352,7 @@ visual({
 		"2003", "2004", "2005", "2006", "2007",
 		"2008", "2009", "2010", "2011", "2012"
 	],
-	unit: {label: "M", symbol: "€", position: "start"},
+	unit: {label: "M", symbol: "€", position: "start"},
 	dec: 1,
 	type: "tsbar",
 	 data: [
@@ -409,7 +409,7 @@ visual({
 		"2003", "2004", "2005", "2006", "2007",
 		"2008", "2009", "2010", "2011", "2012"
 	],
-	unit: {label: "M", symbol: "€", position: "start"},
+	unit: {label: "M", symbol: "€", position: "start"},
 	dec: 1,
 	range: [null, null],
 	type: "tsline",
