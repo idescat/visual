@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]><html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]><html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Idescat Visual sample page</title>
+    <link href="../visual.css" rel="stylesheet" type="text/css" />
+    <script src="../lazyvisual.js"></script>
+    <script src="../visual.setup.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/jsonstat@latest/json-stat.js"></script>
+    <style type="text/css">
+      * {
+        box-sizing: border-box;
+        font-family: Verdana,Arial,Helvetica,sans-serif;
+      }
+      h1 {
+        margin: 10px;
+        font-size: 15px;
+      }
+      .visual {
+        display: inline-block;
+        vertical-align: top;
+        text-align: center;
+      }
+      .visual h1 {
+        color: #284b71;
+      }
+      .more {
+        display: inline-block;
+        height: 530px;
+      }
+      #value {
+        padding: 10px;
+        background-color: #333;
+        color: #fff;
+        margin-top: 5em;
+      }
+      #value p {
+        margin: 0.3em;
+        font-size: 13px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Gross domestic product per capita at current market prices</h1>
+    <div id="cmap" class="visual"></div>
+    <div class="more">
+      <div id="tsline" class="visual"></div>
+      <div id="card"></div>
+    </div>
+
+    <script>
+      function main(json){
+        var
+          ds=JSONstat(json),
+          time=ds.Dimension("time"),
+          geo=ds.Dimension("geo"),
+          last=time.id.slice(-1)[0],
+          countries=geo.id,
+          more=function(o){
+            var
+              id=o.id,
+              label=o.label,
+              series=ds.toTable({type: "arrobj", content: "id", status: true}).filter(function(e){ return e.geo===id; }),
+              max=Math.max.apply(null, ds.value),
+              point=series.slice(-1)[0],
+              card=function(){
+                document.getElementById("card").innerHTML=
+                  '<div id="value"><p><strong>Country</strong>: '+
+                  id+
+                  "</p>"+
+                  "<p><strong>Year</strong>: "+
+                  last + (point.status ? " (" + point.status + ")": "")+
+                  "</p>"+
+                  "<p><strong>Value</strong>: "+
+                  point.value.toLocaleString("en-EN")+
+                  " €</p>"+
+                  "</div>"
+                ;
+              }
+            ;
+
+            visual({
+              id: "tsline",
+              fixed: [300, 300],
+              lang: "en",
+
+              time: series.map(function(e){ return e.time; }),
+              geo: label,
+
+              grid: {
+                point: 4,
+                line: 3
+              },
+              legend: false,
+              unit: {symbol: "€"},
+              dec: 0,
+              range: [0, max],
+
+              type: "tsline",
+              data: [{ label: label, val: series.map(function(e){ return e.value; }) }],
+
+              //Card: we want it drawn after the tsline chart
+              callback: card
+            });
+          }
+        ;
+
+        visual({
+          id: "cmap",
+          fixed: [450, 600],
+          lang: "en",
+
+          title: "European Union (28 countries)",
+          time: last,
+
+          legend: true,
+          unit: {symbol: "€"},
+          range: 0,
+          dec: 0,
+
+          type: "cmap",
+          by: "eu28",
+          data: ds.Data( { "time": last } ).map( function(e, i){ return { id: countries[i], val: e.value }; }),
+
+          //Execute on click
+          click: more
+        });
+      }
+
+      main(
+        //Retrieved from https://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/tec00001?na_item=B1GQ&precision=1&unit=CP_EUR_HAB&time=2008&time=2009&time=2010&time=2011&time=2012&time=2013&time=2014&time=2015&time=2016&time=2017&geo=AT&geo=BE&geo=BG&geo=CY&geo=CZ&geo=DE&geo=DK&geo=EE&geo=EL&geo=ES&geo=FI&geo=FR&geo=HR&geo=HU&geo=IE&geo=IT&geo=LT&geo=LU&geo=LV&geo=MT&geo=NL&geo=PL&geo=PT&geo=RO&geo=SE&geo=SI&geo=SK&geo=UK
+        {"version":"2.0","label":"Gross domestic product at market prices","href":"http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/tec00001?na_item=B1GQ&precision=1&unit=CP_EUR_HAB&time=2008&time=2009&time=2010&time=2011&time=2012&time=2013&time=2014&time=2015&time=2016&time=2017&geo=AT&geo=BE&geo=BG&geo=CY&geo=CZ&geo=DE&geo=DK&geo=EE&geo=EL&geo=ES&geo=FI&geo=FR&geo=HR&geo=HU&geo=IE&geo=IT&geo=LT&geo=LU&geo=LV&geo=MT&geo=NL&geo=PL&geo=PT&geo=RO&geo=SE&geo=SI&geo=SK&geo=UK","source":"Eurostat","updated":"2019-09-11","status":{"39":"p","83":"p","84":"p","85":"p","86":"p","87":"p","88":"p","89":"p","98":"p","99":"p","119":"p","209":"p","229":"p","230":"b","239":"p","250":"b"},"extension":{"datasetId":"tec00001","lang":"EN","description":"GDP (gross domestic product) is an indicator for a nation´s economic situation. It reflects the total value of all goods and services produced less the value of goods and services used for intermediate consumption in their production. Expressing GDP in PPS (purchasing power standards) eliminates differences in price levels between countries, and calculations on a per head basis allows for the comparison of economies significantly different in absolute size.","subTitle":"At current prices","status":{"label":{"p":"provisional","b":"break in time series"}}},"class":"dataset","value":{"0":35300,"1":34500,"2":35400,"3":37000,"4":37800,"5":38200,"6":39000,"7":39900,"8":40800,"9":42100,"10":33100,"11":32300,"12":33500,"13":34500,"14":35000,"15":35300,"16":35800,"17":36600,"18":37600,"19":38700,"20":4900,"21":4900,"22":5100,"23":5600,"24":5700,"25":5800,"26":5900,"27":6300,"28":6800,"29":7300,"30":24200,"31":23100,"32":23300,"33":23200,"34":22600,"35":21000,"36":20700,"37":20900,"38":21700,"39":22900,"40":15500,"41":14200,"42":14900,"43":15600,"44":15400,"45":15000,"46":14900,"47":16000,"48":16700,"49":18100,"50":31500,"51":30400,"52":31900,"53":33600,"54":34100,"55":34900,"56":36100,"57":37100,"58":38100,"59":39300,"60":44000,"61":41900,"62":43800,"63":44500,"64":45500,"65":46100,"66":47100,"67":48000,"68":49200,"69":50800,"70":12300,"71":10600,"72":11000,"73":12500,"74":13500,"75":14300,"76":15200,"77":15700,"78":16500,"79":18000,"80":21800,"81":21400,"82":20300,"83":18600,"84":17300,"85":16500,"86":16400,"87":16400,"88":16400,"89":16800,"90":24300,"91":23300,"92":23200,"93":22900,"94":22200,"95":22000,"96":22300,"97":23300,"98":24100,"99":25100,"100":36500,"101":33900,"102":34900,"103":36500,"104":36900,"105":37400,"106":37600,"107":38300,"108":39300,"109":40700,"110":31000,"111":29900,"112":30700,"113":31500,"114":31800,"115":32100,"116":32400,"117":33000,"118":33400,"119":34200,"120":11200,"121":10500,"122":10500,"123":10500,"124":10300,"125":10300,"126":10300,"127":10600,"128":11200,"129":11900,"130":10800,"131":9400,"132":9900,"133":10200,"134":10000,"135":10300,"136":10700,"137":11300,"138":11600,"139":12700,"140":41800,"141":37500,"142":36800,"143":37300,"144":38100,"145":38900,"146":41900,"147":56000,"148":57200,"149":61900,"150":27600,"151":26400,"152":26800,"153":27300,"154":26700,"155":26500,"156":26700,"157":27200,"158":27900,"159":28500,"160":10200,"161":8500,"162":9000,"163":10300,"164":11200,"165":11800,"166":12500,"167":12900,"168":13500,"169":14900,"170":77900,"171":74200,"172":79200,"173":83100,"174":83000,"175":85300,"176":89200,"177":90600,"178":91300,"179":92600,"180":11200,"181":8800,"182":8500,"183":9800,"184":10800,"185":11300,"186":11800,"187":12300,"188":12800,"189":13900,"190":15000,"191":14900,"192":15900,"193":16400,"194":17100,"195":17900,"196":19600,"197":21700,"198":22700,"199":24100,"200":39400,"201":37800,"202":38500,"203":39000,"204":39000,"205":39300,"206":39800,"207":40700,"208":41600,"209":43100,"210":9600,"211":8200,"212":9400,"213":9900,"214":10100,"215":10300,"216":10700,"217":11200,"218":11100,"219":12200,"220":16900,"221":16600,"222":17000,"223":16700,"224":16000,"225":16300,"226":16600,"227":17400,"228":18100,"229":18900,"230":7100,"231":6100,"232":6200,"233":6500,"234":6600,"235":7200,"236":7600,"237":8100,"238":8600,"239":9600,"240":38300,"241":33300,"242":39400,"243":42900,"244":44500,"245":45400,"246":44700,"247":45800,"248":46700,"249":47200,"250":18800,"251":17800,"252":17700,"253":18100,"254":17600,"255":17700,"256":18300,"257":18800,"258":19600,"259":20800,"260":12200,"261":11800,"262":12400,"263":13100,"264":13400,"265":13700,"266":14000,"267":14600,"268":15000,"269":15600,"270":32100,"271":27700,"272":29500,"273":29900,"274":32800,"275":32400,"276":35400,"277":40100,"278":36600,"279":35400},"dimension":{"na_item":{"label":"na_item","category":{"index":{"B1GQ":0},"label":{"B1GQ":"Gross domestic product at market prices"}}},"unit":{"label":"unit","category":{"index":{"CP_EUR_HAB":0},"label":{"CP_EUR_HAB":"Current prices, euro per capita"}}},"geo":{"label":"geo","category":{"index":{"AT":0,"BE":1,"BG":2,"CY":3,"CZ":4,"DE":5,"DK":6,"EE":7,"EL":8,"ES":9,"FI":10,"FR":11,"HR":12,"HU":13,"IE":14,"IT":15,"LT":16,"LU":17,"LV":18,"MT":19,"NL":20,"PL":21,"PT":22,"RO":23,"SE":24,"SI":25,"SK":26,"UK":27},"label":{"AT":"Austria","BE":"Belgium","BG":"Bulgaria","CY":"Cyprus","CZ":"Czechia","DE":"Germany (until 1990 former territory of the FRG)","DK":"Denmark","EE":"Estonia","EL":"Greece","ES":"Spain","FI":"Finland","FR":"France","HR":"Croatia","HU":"Hungary","IE":"Ireland","IT":"Italy","LT":"Lithuania","LU":"Luxembourg","LV":"Latvia","MT":"Malta","NL":"Netherlands","PL":"Poland","PT":"Portugal","RO":"Romania","SE":"Sweden","SI":"Slovenia","SK":"Slovakia","UK":"United Kingdom"}}},"time":{"label":"time","category":{"index":{"2008":0,"2009":1,"2010":2,"2011":3,"2012":4,"2013":5,"2014":6,"2015":7,"2016":8,"2017":9},"label":{"2008":"2008","2009":"2009","2010":"2010","2011":"2011","2012":"2012","2013":"2013","2014":"2014","2015":"2015","2016":"2016","2017":"2017"}}}},"id":["na_item","unit","geo","time"],"size":[1,1,28,10]}
+      );
+    </script>
+  </body>
+</html>

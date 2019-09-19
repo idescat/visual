@@ -15,9 +15,13 @@
 				width: 700px;
 				margin: 3em auto;
 			}
-			#visual p {
-				margin-top: -130px;
-				margin-left: 120px;
+			#visual .VisualJSfooter {
+				overflow: visible!important;
+			}
+			#visual .VisualJSfooter p {
+				position: relative;
+				top: -244px;
+				left: 138px;
 				-webkit-transform: rotate(-30deg);
 				-moz-transform: rotate(-30deg);
 				-ms-transform: rotate(-30deg);
@@ -51,7 +55,7 @@
 							dark="rgb("+c[1].r+","+c[1].g+","+c[1].b+")",
 							symbol=this.legend.symbol
 						;
-						footer.innerHTML='<p><strong style="padding: 2px; border: 1px solid ' + VisualJS.setup.colors.map.base + '; background-color: ' + light + '">Lighter color</strong> ' + t( symbol[0] ) + text[0] + ' <strong style="padding: 2px; color: #fff; background-color: ' + dark + '">Darker color</strong> ' + t( symbol[1] ) + text[1];+'</p>'
+						footer.innerHTML='<p><strong style="padding: 2px; border: 1px solid ' + VisualJS.setup.colors.map.base + '; background-color: ' + light + '">Lighter color</strong> ' + t( symbol[0] ) + text[0] + ' <strong style="padding: 2px; color: #fff; background-color: ' + dark + '">Darker color</strong> ' + t( symbol[1] ) + text[1] + '</p>';
 					},
 					title: "Advanced example: Using the legend info in the footer",
 					//footer: "", No footer: it will be added dynamically.

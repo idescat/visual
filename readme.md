@@ -112,7 +112,7 @@ When the axes are shown, *ticks* and *labels*, both objects with properties *x* 
 #### unit
 Object with three properties: *label* (string or, since version 1, object), *symbol* (string or, since version 1, object) and symbol *position* ("start" or "end" string, or, since version 1, object). All properties are optional.
 
-To support several value axes, since version 1, *label*, *object* and *symbol* can be objects with properties *x*, *y* and *z*. Currently, only in [XY charts](#xy-properties) *x* and *y* are used simultaneously.
+To support several value axes, since version 1, *label*, *symbol* and *position* can be objects with properties *x*, *y* and *z*. Currently, *x* and *y* are only used simultaneously in [XY charts](#xy-properties).
 
 Default (no label, no symbol, position: end) is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
 
@@ -140,13 +140,13 @@ Function. This function will be called after the chart has been drawn. The *this
 
 The *legend* object is *null* unless the chart type is "cmap", [data](#data-6) includes a *val* property and [grouped.color](#grouped) is not specified. In this case, colors are automatically assigned to map regions.
 
-When *legend* is not *null*, it has three properties (three arrays): *color*, *text* and *symbol*. When [grouped](#grouped) is not specified, the first element in each array exposes information about the lighter color and the second element about the darker one. Since version 1, when [grouped](#grouped) is specified but not *grouped.color*, the elements of *color*, *text* and *symbol* expose information about each group.
+When *legend* is not *null*, it has three properties (three arrays): *color*, *text* and *symbol*. When [grouped](#grouped) is not specified, the first element in each array exposes information about the lighter color and the second element about the darker one. Since version 1, when [grouped](#grouped) is specified but not *grouped.color*, the elements of *color* and *text* expose information about each group.
 
-The elements of the *color* array are objects with three properties (numbers): *r*, *g* and *b* (RGB color). The elements of the *text* array are strings (value plus unit information the lighter/darker color has been assigned to). The elements of the *symbol* array are three possible strings: "<=", "==" or ">=" (the comparison operators associated with the *text* elements). See example [adv-05.html](https://github.com/idescat/visual/blob/master/test/adv-05.html).
+The elements of the *color* array are objects with three properties (numbers): *r*, *g* and *b* (RGB color). The elements of the *text* array are strings with label information about each color in the legend (formatted value plus unit symbol assigned to the lighter/darker color, or, when [grouped](#grouped), label assigned to each color). The elements of the *symbol* array are three possible strings: "<=", "==" or ">=" (the comparison operators associated with the *text* elements). See example [adv-05.html](https://github.com/idescat/visual/blob/master/test/adv-05.html).
 
 The *callback* property will be ignored if it is included in a Visual Object passed to [VisualJS.iframe](#visualjsiframe).
 
-Examples:  [adv-01.html](https://github.com/idescat/visual/blob/master/test/adv-01.html), [adv-02.html](https://github.com/idescat/visual/blob/master/test/adv-02.html), [adv-03.html](https://github.com/idescat/visual/blob/master/test/adv-03.html), [adv-05.html](https://github.com/idescat/visual/blob/master/test/adv-05.html).
+Examples: [adv-01.html](https://github.com/idescat/visual/blob/master/test/adv-01.html), [adv-02.html](https://github.com/idescat/visual/blob/master/test/adv-02.html), [adv-03.html](https://github.com/idescat/visual/blob/master/test/adv-03.html), [adv-05.html](https://github.com/idescat/visual/blob/master/test/adv-05.html), [adv-06.html](https://github.com/idescat/visual/blob/master/test/adv-06.html).
 
 #### show
 Boolean. This determines whether the chart should be shown. When *false*, all the necessary files will be included but the chart will not be inserted: you will need to use a callback function that executes [VisualJS.chart](#visualjschart) at some point. Default is *true*.
@@ -283,7 +283,7 @@ visual({
 });
 ```
 
-Examples:  [rank.html](https://github.com/idescat/visual/blob/master/test/rank.html), [rank10.html](https://github.com/idescat/visual/blob/master/test/rank10.html)
+Examples: [rank.html](https://github.com/idescat/visual/blob/master/test/rank.html), [rank10.html](https://github.com/idescat/visual/blob/master/test/rank10.html)
 
 #### time
 String. Time period.
@@ -376,10 +376,13 @@ visual({
 });
 ```
 
-Examples:  [tsbar.html](https://github.com/idescat/visual/blob/master/test/tsbar.html), [tsbar2.html](https://github.com/idescat/visual/blob/master/test/tsbar2.html), [tsbarns.html](https://github.com/idescat/visual/blob/master/test/tsbarns.html)
+Examples: [tsbar.html](https://github.com/idescat/visual/blob/master/test/tsbar.html), [tsbar2.html](https://github.com/idescat/visual/blob/master/test/tsbar2.html), [tsbarns.html](https://github.com/idescat/visual/blob/master/test/tsbarns.html)
 
 #### time
 Array of strings. Required. Time periods.
+
+#### first
+String. By default, Visual assumes a new year starts in January ("01") in monthly series and in the first quarter ("1") in quarterly series. This can be overridden providing a different string. For example, in time series with a monthly reference but a quarterly frequency where the first period of each year is March, *first* should be set to "03".
 
 #### data
 Array of objects. Required. The array contains as many elements as series. Each element is an object with two properties: *label* (string) and *val* (array of numbers).
@@ -434,7 +437,7 @@ visual({
 });
 ```
 
-Examples:  [tsline.html](https://github.com/idescat/visual/blob/master/test/tsline.html), [tsline2.html](https://github.com/idescat/visual/blob/master/test/tsline2.html)
+Examples: [tsline.html](https://github.com/idescat/visual/blob/master/test/tsline.html), [tsline2.html](https://github.com/idescat/visual/blob/master/test/tsline2.html)
 
 #### time
 Array of strings. Required. Time periods.
@@ -492,7 +495,7 @@ visual({
 });
 ```
 
-Examples:  [pyram.html](https://github.com/idescat/visual/blob/master/test/pyram.html)
+Examples: [pyram.html](https://github.com/idescat/visual/blob/master/test/pyram.html)
 
 #### time
 String. Time period.
@@ -547,7 +550,7 @@ visual({
 });
 ```
 
-Examples:  [xy.html](https://github.com/idescat/visual/blob/master/test/xy.html)
+Examples: [xy.html](https://github.com/idescat/visual/blob/master/test/xy.html)
 
 #### time
 String. Time period.
@@ -628,26 +631,39 @@ visual({
 });
 ```
 
-Examples:  [cmap.html](https://github.com/idescat/visual/blob/master/test/cmap.html), [cmap-prov08.html](https://github.com/idescat/visual/blob/master/test/cmap-prov08.html), [cmap-com.html](https://github.com/idescat/visual/blob/master/test/cmap-com.html), [cmap-f0.html](https://github.com/idescat/visual/blob/master/test/cmap-f0.html), [cmap-f020.html](https://github.com/idescat/visual/blob/master/test/cmap-f020.html), [cmap-groups1.html](https://github.com/idescat/visual/blob/master/test/cmap-groups1.html), [cmap-groups2.html](https://github.com/idescat/visual/blob/master/test/cmap-groups2.html),
+Examples: [cmap.html](https://github.com/idescat/visual/blob/master/test/cmap.html), [cmap-prov08.html](https://github.com/idescat/visual/blob/master/test/cmap-prov08.html), [cmap-com.html](https://github.com/idescat/visual/blob/master/test/cmap-com.html), [cmap-f0.html](https://github.com/idescat/visual/blob/master/test/cmap-f0.html), [cmap-f020.html](https://github.com/idescat/visual/blob/master/test/cmap-f020.html), [cmap-groups1.html](https://github.com/idescat/visual/blob/master/test/cmap-groups1.html), [cmap-groups2.html](https://github.com/idescat/visual/blob/master/test/cmap-groups2.html),
 [cmap-groups3.html](https://github.com/idescat/visual/blob/master/test/cmap-groups3.html), [cmap-high1.html](https://github.com/idescat/visual/blob/master/test/cmap-hight1.html), [cmap-high2.html](https://github.com/idescat/visual/blob/master/test/cmap-hight2.html),
 [cmap-usa.html](https://github.com/idescat/visual/blob/master/test/cmap-usa.html), [cmap-ny.html](https://github.com/idescat/visual/blob/master/test/cmap-ny.html), [cmap-spainnuts2.html](https://github.com/idescat/visual/blob/master/test/cmap-spainnuts2.html), [cmap-spainnuts3.html](https://github.com/idescat/visual/blob/master/test/cmap-spainnuts3.html), [cmap-norway.html](https://github.com/idescat/visual/blob/master/test/cmap-norway.html), [cmap-eu28.html](https://github.com/idescat/visual/blob/master/test/cmap-eu28.html)
 
 #### time
 String. Time period.
 
-####  data
+#### data
 Array of objects. Required. The array contains as many elements as map regions. Each element is an object with at least one property: the region *id* (string). In this case, a map  will be created with the included regions highlighted. If *val* (number) is included, it will be used to automatically assign colors to regions, unless [grouped](#grouped) has been specified. In that case, the *group* property (counter starting with 1) is required and will be used to assign colors, but *val* can still be specified if needed. If *label* (string) is included in all objects, it will be used to name the map regions; otherwise, the [label in the map](#id-properties-id-label) will be used (Visual will only check the first object to decide whether the *label* property has been provided or not).
 
-####  grouped
+#### grouped
 Object with at least one property: *label* (array of strings). Each element in this array is a group label string (the first label will be attached to regions with a *group* property of 1 in **data**, and so on). A second property (*color*, array of strings) can be provided to assign a custom color to each group. Colors must be specified as three two-digit hexadecimal numbers, starting with a # sign (for example, "#000000" means black).
 
 Since version 1, when property *val* is present in **data** and *grouped.color* is not set, the colors will be assigned assuming that the *grouped* information has been provided taking into account *val* (in ascending or descending order).
 
-####  by
+#### by
 String. Required. Selects a certain map. Possible values ("mun", "com", "prov", etc.) are set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
 
-####  range
+#### range
 Number or array. This determines the color assignment. When it is a number, it must be between 0 and 0.49. Default: 0.05, which means color assignment excludes values below the 5th percentile and above the 95th percentile. When it is an array, it defines a range: it has two and only two elements. The first one (number) is a minimum and the second one (number) is a maximum. Colors will be assigned between those values.
+
+#### click
+Function. Callback function to be executed when the user clicks on a map area. Visual will execute this function passing as argument an object exposing the area's information:
+
+	click: function(area){
+	  console.log(area.id);
+	  console.log(area.label);
+	},
+
+Example: [adv-06.html](https://github.com/idescat/visual/blob/master/test/adv-06.html).
+
+#### tooltip
+Boolean. When *false*, a tooltip is not shown when the user hovers the pointer over a map area. Default is *true*.
 
 # Maps
 The following sample maps are provided:
@@ -727,7 +743,7 @@ VisualJS.chart( );
 
 It will usually be invoked inside a [callback function](#callback).
 
-Examples:  [adv-01.html](https://github.com/idescat/visual/blob/master/test/adv-01.html), [adv-03.html](https://github.com/idescat/visual/blob/master/test/adv-03.html).
+Examples: [adv-01.html](https://github.com/idescat/visual/blob/master/test/adv-01.html), [adv-03.html](https://github.com/idescat/visual/blob/master/test/adv-03.html).
 
 ## VisualJS.iframe
 

@@ -1,6 +1,6 @@
 body {
 	font-family: Verdana,Arial,Helvetica,sans-serif;
-	font-size: 11px;
+	font-size: 12px;
 	margin: 30px;
 }
 iframe {
@@ -31,10 +31,16 @@ figure a {
 	border: 1px solid #ccc;
 	padding: 5px;
 }
-.clearfix:after { 
-	content: "."; 
-	visibility: hidden; 
-	display: block; 
-	height: 0; 
+.clearfix:after {
+	content: ".";
+	visibility: hidden;
+	display: block;
+	height: 0;
 	clear: both;
+}
+h1 {
+	font-size: 14px;
+}
+li {
+	padding-bottom: 8px;
 }

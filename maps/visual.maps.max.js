@@ -1,6 +1,6 @@
 /*
 colors, legend, groupLegend (1.1.0)
-Copyright (c) 2018 Institut d'Estadistica de Catalunya (Idescat)
+Copyright (c) 2019 Institut d'Estadistica de Catalunya (Idescat)
 http://www.idescat.cat (https://github.com/idescat/visual)
 
 Permission is hereby granted, free of charge, to any person obtaining
@@ -238,7 +238,7 @@ VisualJS.func.groupLegend=function(infsup, vis, tooltip, height, strict, o, scan
 		hwmin=Math.min(vis.attr("width"), vis.attr("height")),
 		el = d3.select("."+VisualJS.setup.legendclass),
 		bb = d3.select("#visual.visual>svg")[0][0].getBBox(),
-		rect = d3.select("#visual.visual>h1")[0][0].getClientRects()[0],
+		rect = d3.select("#visual.visual h1")[0][0].getClientRects()[0],
 		pos = {
 			top: bb.y,
 			left: rect.left,

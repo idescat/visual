@@ -26,7 +26,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 /*global d3, LazyLoad*/
 
 var VisualJS={
-	version: "1.1.1",
+	version: "1.2.0",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -111,11 +111,11 @@ var VisualJS={
 		else if(Array.isArray(arr)){
 			arr.forEach(function(el){
 				if(typeof el === "string" && el !== "")
-					ret += "<"+html.footer+">"+el+"</"+html.footer+">";
+					ret += "<p>"+el+"</p>"; //footer elements
 			});
 		}
 		else if(typeof arr === "string" && arr !== ""){
-			ret += "<"+html.footer+">"+arr+"</"+html.footer+">";
+			ret += "<p>"+arr+"</p>";		//footer elements
 		}
 		return ret;
 	},
@@ -205,7 +205,7 @@ var VisualJS={
 			d=document,
 			h1=d.createElement(vsetup.html.heading),
 			h1Content=(typeof o.title==="string") ? o.title : "",
-			par=d.createElement(vsetup.html.footer),
+			par=d.createElement("p"), //footer element
 			html = vsetup.html,
 			parContent=(typeof o.footer==="string") ? VisualJS.arr2html(o.footer, html) : "",
 			div=d.getElementById(id),
@@ -256,12 +256,14 @@ var VisualJS={
 		div.insertBefore(separator, span);
 		resize();
 
-		if(window.addEventListener){
-			window.addEventListener('resize', resize, false);
-		}else if(window.attachEvent){
-			window.attachEvent('onresize', resize);
-		}else{
-			window.onresize=resize; //Warning: it will destroy any other attachment
+		if(!VisualJS.fixed){
+			if(window.addEventListener){
+				window.addEventListener('resize', resize, false);
+			}else if(window.attachEvent){
+				window.attachEvent('onresize', resize);
+			}else{
+				window.onresize=resize; //Warning: it will destroy any other attachment
+			}
 		}
 	},
 
@@ -707,12 +709,14 @@ var VisualJS={
 					tooltip();
 					container.show && VisualJS.chart();
 
-					if(window.addEventListener){
-						window.addEventListener('resize', canvas, false);
-					}else if(window.attachEvent){
-						window.attachEvent('onresize', canvas);
-					}else{
-						window.onresize=canvas; //Warning: it will destroy any other attachment
+					if(!VisualJS.fixed){
+						if(window.addEventListener){
+							window.addEventListener('resize', canvas, false);
+						}else if(window.attachEvent){
+							window.attachEvent('onresize', canvas);
+						}else{
+							window.onresize=canvas; //Warning: it will destroy any other attachment
+						}
 					}
 
 					chart=true;
@@ -970,7 +974,7 @@ var VisualJS={
 						var
 							footerCont=atext(VisualJS.arr2html(o.footer, html) || "")
 						;
-						visual.html("<"+headingElement+" style=\"overflow:auto;\"></"+headingElement+"><div class=\""+VisualJS.setup.footerclass+"\" style=\"overflow:auto;\"></div>");
+						visual.html("<header><"+headingElement+" id=\"ARIAtitle\" style=\"overflow:auto;\" ></"+headingElement+"></header><footer class=\""+VisualJS.setup.footerclass+"\" style=\"overflow:auto;\"></footer>");
 
 						d3.select(selector+" "+headingElement).html(heading);
 						d3.select(selector+" "+footerElement).html(footerCont);
@@ -1008,7 +1012,9 @@ var VisualJS={
 								.insert("svg:svg", footerElement)
 								.attr("viewBox", "0 0 "+width+" "+height)
 								.attr("width", width)
-								.attr("height", height),
+								.attr("height", height)
+								.attr("role", "img")
+								.attr("aria-labelledby", "ARIAtitle"),
 							colorOrderAsc = true;
 
 						if(hasGroups && hasValues){
@@ -1090,8 +1096,9 @@ var VisualJS={
 							};
 						}
 
+						var r;
 						for (var i=0, odata=o.data, nobs=odata.length; i<nobs; i++){
-							var r=odata[i];
+							r=odata[i];
 							if(r.hasOwnProperty("val")){
 								if(r.val!==null){ //Remove regions with val: null
 									valors.set(r.id, r.val);
@@ -1111,7 +1118,24 @@ var VisualJS={
 
 						var
 							minval=val[0],
-							maxval=val[nobs-1]
+							maxval=val[val.length-1],
+							hideTooltip=container.tooltip === false,
+							mouseDown = false,
+							showTooltipRegion=function(d, posX, posY){
+								if(hideTooltip) return;
+								if(d.properties[map.id]!=="" && d.properties[map.label]!=="" &&//Polygon is not relevant
+									(hasValues || hasGroups || typeof valors.get(d.properties[map.id])!=="undefined")){
+										showTooltip(
+											tooltipText(
+												id,
+												getAreaLabel(groups, d.properties),
+												valors.get(d.properties[map.id])
+											),
+											posX,
+											posY
+										);
+								}
+							}
 						;
 
 						if( typeof container.range==="number" ){ //Number
@@ -1127,6 +1151,11 @@ var VisualJS={
 								map.features[i];
 						});
 						*/
+
+						//if user didn't provide a callback function to be executed on enter/click, void function
+						if(typeof container.click!=="function"){
+							container.click=function(){};
+						}
 
 						vis.style("margin-left", left+"px");
 						vis.style("margin-top", topbottom+"px");
@@ -1144,22 +1173,59 @@ var VisualJS={
 								}
 								return colorClass(groups, valors, d.properties, inf, sup);
 							})
+							.attr("tabindex", function(){return d3.select(this).classed(prefix + "nohover") ? "-1" : "0";})
+							.attr("role", "presentation")
 							.attr("d", path)
-							.on("mousemove", function(d){
-								if(d.properties[map.id]!=="" && d.properties[map.label]!=="" &&//Polygon is not relevant
-									(hasValues || hasGroups || typeof valors.get(d.properties[map.id])!=="undefined")){
-										showTooltip(
-											tooltipText(
-												id,
-												getAreaLabel(groups, d.properties),
-												valors.get(d.properties[map.id])
-											),
-											d3.event.pageX,
-											d3.event.pageY
+							.on("mousemove", function(d){showTooltipRegion(d, event.pageX, event.pageY);})
+							.on("mouseout", function(){return tooltip.style("display", "none");})
+							.on("mousedown", function(){mouseDown = true;})
+							.on("mouseup", function(){mouseDown = false;})
+							.on("focusin", function(d, i){
+								var
+									currentTime=new Date().getTime(),
+									callFunction=true
+								;
+								if(mouseDown){
+									if(container.priv && container.priv.click){
+										if(currentTime - container.priv.click > 500){
+											callFunction = true;
+											container.priv.click = currentTime;
+										}else{
+											callFunction = false;
+										}
+									}else{
+										container.priv = {"click": currentTime};
+									}
+									if(callFunction){
+										container.click.apply(null,
+											[{
+												id: d.properties[map.id],
+												label: !hasLabels ? d.properties[map.label] : (typeof labels.get(d.properties[map.id])!=="undefined" ? labels.get(d.properties[map.id]) : null),
+												position:{x: event.pageX, y: event.pageY},
+												group: hasGroups && typeof groups.get(d.properties[map.id])!=="undefined" ? {num: groups.get(d.properties[map.id]), label: container.grouped.label[(groups.get(d.properties[map.id])-1)]}	: null,
+												value: hasValues && typeof valors.get(d.properties[map.id])!=="undefined"	?	valors.get(d.properties[map.id]): null
+											}]
 										);
+									}
+								}else{
+									var bc =d3.select(this).node().getBoundingClientRect();
+									showTooltipRegion(d, (bc.left+bc.right)/2, (bc.top+bc.bottom)/2);
 								}
 							})
-							.on("mouseout", function(){return tooltip.style("display", "none");})
+							.on("keyup", function(d){
+								if(event.key==="Enter"){
+									var bc =d3.select(this).node().getBoundingClientRect();
+									container.click.apply(null,
+											[{
+												id: d.properties[map.id],
+												label: !hasLabels ? d.properties[map.label] : (typeof labels.get(d.properties[map.id])!=="undefined" ? labels.get(d.properties[map.id]) : null),
+												position: {x: bc.left, y: bc.top},
+												group: hasGroups && typeof groups.get(d.properties[map.id])!=="undefined"	? {num: groups.get(d.properties[map.id]), label: container.grouped.label[(groups.get(d.properties[map.id])-1)]}	: null,
+												value: hasValues && typeof valors.get(d.properties[map.id])!=="undefined"	?	valors.get(d.properties[map.id]) : null
+											}]
+									);
+								}
+			 	      })
 						;
 
 						//Draw the legend
@@ -1179,14 +1245,16 @@ var VisualJS={
 								]
 							;
 
-							if( container.legend ){ //If map.legend specified (area array), draw it
-								if( hasGroups ){ //No grouped nor highlighted-area map
-									VisualJS.pub[VisualJS.id].legend={
-										color: lightdark,
-									};
-									//If hasGroup & hasValue then the colour array is ignored
-									if(hasValues || typeof o.grouped.color === "undefined") o.grouped.color=colors;
+							if( hasGroups ){ //No grouped nor highlighted-area map
+								//If hasGroup & hasValue then the colour array is ignored
+								if(hasValues || typeof o.grouped.color === "undefined") o.grouped.color=colors;
 
+								VisualJS.pub[VisualJS.id].legend={
+									color: o.grouped.color,
+									text: o.grouped.label
+								};
+
+								if(container.legend){
 									VisualJS.func.groupLegend(
 										infsup,
 										vis,
@@ -1198,20 +1266,21 @@ var VisualJS={
 										colorOrderAsc
 									);
 								}
-								else if(hasValues){
-									infsup=[
-										legendText(id, null, inf),
-										legendText(id, null, sup)
-									];
-									VisualJS.pub[VisualJS.id].legend={
-										color: lightdark,
-										text: infsup,
-										symbol: [
-											(strict[0] ? "==" :  "<="),
-											(strict[1] ? "==" :  ">=")
-										]
-									};
-
+							}
+							else if(hasValues){
+								infsup=[
+									legendText(id, null, inf),
+									legendText(id, null, sup)
+								];
+								VisualJS.pub[VisualJS.id].legend={
+									color: lightdark,
+									text: infsup,
+									symbol: [
+										(strict[0] ? "==" :  "<="),
+										(strict[1] ? "==" :  ">=")
+									]
+								};
+								if(container.legend){
 									VisualJS.func.legend(
 										infsup,
 										colors,
@@ -1325,7 +1394,9 @@ var VisualJS={
 					}
 					transform=function(d,t){ // Local in load(), not ts().
 						VisualJS.ticks=[];
-						var i, len;
+						var i, len, nseries=t.length, nvalues=d.length,
+							barWidth= (container.grid && container.grid.bar && (typeof container.grid.bar === "number")) ? container.grid.bar : (nseries >= 2 && nvalues > 4  ? 0.18 : 0.2)
+						;
 						for(i=0, len=t.length; i<len; i++){
 							ticks.push([i,t[i]]);
 							VisualJS.ticks.push([i,t[i]]); //keep original ticks
@@ -1337,7 +1408,8 @@ var VisualJS={
 							if(o.type!=="tsbar" || stacked || len===1){//if tsbar with one series (len===1) must be treated like stacked (even though it's not)
 								series.push({label: d[i].label, data: data});
 							}else{
-								series.push({label: d[i].label, data: data, bars: { show: true, barWidth: 0.2, order: i+1, lineWidth: 2 }}); //barWidth should probably be computed dynamically considering number of series (this value allows only for a max of 3 series)
+
+								series.push({label: d[i].label, data: data, bars: { show: true, barWidth: barWidth, order: i+1, lineWidth: 2 }}); //barWidth should probably be computed dynamically considering number of series (this value allows only for a max of 3 series)
 							}
 						}
 						var slen=series.length;
@@ -1726,14 +1798,14 @@ var VisualJS={
 						visualJsType
 					;
 
-					$(selector).html("<"+headingElement+" style=\"overflow:auto;\">"+heading+"</"+headingElement+"><div class=\""+VisualJS.setup.footerclass+"\" style=\"overflow:auto;\">"+footerCont+"</div>");
+					$(selector).html("<header><"+headingElement+" id=\"ARIAtitle\" style=\"overflow:auto;\">"+heading+"</"+headingElement+"></header><footer class=\""+VisualJS.setup.footerclass+"\" style=\"overflow:auto;\">"+footerCont+"</footer>");
 
 					//It returns false when not enough space to draw a chart
 					if(!VisualJS.getSize(id)){return;}
 
 					visualJsType = vsetup.typeclassprefix+o.type;
 
-					$(selector+" "+headingElement).after('<div class="'+vsetup.canvasclass+' '+visualJsType+' '+VisualJS.visualsize+'" style="width: '+VisualJS.width+'px; height: '+VisualJS.height+'px;"></div>');
+					$(selector+" header").after('<main class="'+vsetup.canvasclass+' '+visualJsType+' '+VisualJS.visualsize+'" style="width: '+VisualJS.width+'px; height: '+VisualJS.height+'px; display: block;"></main>'); //'display: block;' added for visualization correctly in all browsers
 
 					setup.xaxis.tickFormatter=function(val) {
 						return tickFormatterGenerator(val,id, "x");
@@ -1934,7 +2006,10 @@ var VisualJS={
 								ratio=VisualJS.width/ticklen,
 								xticks=[],
 								freq,
-								digcrit="01" //first month
+								digcrit= (typeof o.first  === 'string') && o.first ? o.first
+									: (VisualJS.ticks[0][1].length === 6 ?
+										"01" : //first month
+										"1") 	 //first quarter
 							;
 
 							if(typeof container.range!=="number" && container.range!==null){ //isRange
@@ -1966,10 +2041,12 @@ var VisualJS={
 									}
 								break;
 								case 5: //quarterly (5 digits)
-									digcrit="1"; //first quarter
 								case 6: //monthly (6 digits)
 									//Magic rule: do not show month/quarter when width is small in comparison with # of ticks
 									if(ratio<56){
+											if(ratio<8.5 && ticklen>56){
+												$("main").addClass(vsetup.mini);
+											}
 											for(i=0; i<ticklen; i++){
 												xticks[i]=(VisualJS.ticks[i][1].slice(4)!==digcrit) ?
 													[ VisualJS.ticks[i][0], "" ]
@@ -2028,6 +2105,11 @@ var VisualJS={
 					}
 					$(canvasSel).UseTooltip(VisualJS.id);
 					VisualJS.pub[VisualJS.id].heading=heading;
+					//ACCESSIBILITY
+					$(canvasSel).find("canvas")
+						.attr("role","img")
+						.attr("aria-labelledBy", "ARIAtitle")
+					;
 				};
 				canvas();
 			};
