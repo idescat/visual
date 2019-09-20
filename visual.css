@@ -104,9 +104,11 @@ body {
 	stroke-linejoin: round;
 	vector-effect: non-scaling-stroke;
 }
-.visual .VisualJSarea path:hover {
+.visual .VisualJSarea path:hover,
+	 .visual .VisualJSarea path:focus { /*v.1.2.0*/
 	stroke: #000;
 	stroke-width: .5px;
+	outline: 0; /*v.1.2.0*/
 }
 .visual path.c80:hover,
 .visual path.c81:hover,
