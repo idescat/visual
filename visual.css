@@ -103,7 +103,8 @@ body {
 	stroke-linejoin: round;
 	vector-effect: non-scaling-stroke;
 }
-.visual .VisualJSarea path:hover, .visual .VisualJSarea path:focus {
+.visual .VisualJSarea path:hover,
+.visual .VisualJSarea path:focus {
 	stroke: #ffa500;
 	stroke-width: 1px;
 	outline: 0;
@@ -111,7 +112,8 @@ body {
 .visual .VisualJSarea path.cnohover {
 	fill: #666;
 }
-.visual .VisualJSarea path.cnohover:hover {
+.visual .VisualJSarea path.cnohover:hover,
+.visual .VisualJSarea path.cnohover:focus {
 	stroke: #000;
 	stroke-width: .05px;
 }
