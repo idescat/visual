@@ -105,10 +105,16 @@ body {
 }
 .visual .VisualJSarea path:hover,
 .visual .VisualJSarea path:focus {
-	stroke: #ffa500;
 	stroke-width: 1px;
 	outline: 0;
 }
+.visual .VisualJSarea path:hover {
+	stroke: #ffa500;
+}
+.visual .VisualJSarea path:focus {
+	stroke: #fff;
+}
+
 .visual .VisualJSarea path.cnohover {
 	fill: #666;
 }
