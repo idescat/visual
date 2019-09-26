@@ -26,7 +26,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 /*global d3, LazyLoad*/
 
 var VisualJS={
-	version: "1.2.0",
+	version: "1.2.1",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -1120,7 +1120,10 @@ var VisualJS={
 							minval=val[0],
 							maxval=val[val.length-1],
 							hideTooltip=container.tooltip === false,
-							mouseDown = false,
+							mouseDown=false,
+							bc=null,
+							pageX=null,
+							pageY=null,
 							showTooltipRegion=function(d, posX, posY){
 								if(hideTooltip) return;
 								if(d.properties[map.id]!=="" && d.properties[map.label]!=="" &&//Polygon is not relevant
@@ -1180,6 +1183,7 @@ var VisualJS={
 							.on("mouseout", function(){return tooltip.style("display", "none");})
 							.on("mousedown", function(){mouseDown = true;})
 							.on("mouseup", function(){mouseDown = false;})
+							.on("focusout", function(){return tooltip.style("display", "none");})
 							.on("focusin", function(d, i){
 								var
 									currentTime=new Date().getTime(),
@@ -1207,10 +1211,14 @@ var VisualJS={
 											}]
 										);
 									}
+									pageX=event.pageX;
+									pageY=event.pageY;
 								}else{
-									var bc =d3.select(this).node().getBoundingClientRect();
-									showTooltipRegion(d, (bc.left+bc.right)/2, (bc.top+bc.bottom)/2);
+									bc =d3.select(this).node().getBoundingClientRect();
+									pageX=(bc.left+bc.right)/2;
+									pageY=(bc.top+bc.bottom)/2;
 								}
+								showTooltipRegion(d, pageX, pageY);
 							})
 							.on("keyup", function(d){
 								if(event.key==="Enter"){
