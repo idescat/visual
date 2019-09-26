@@ -19,7 +19,7 @@ body {
 }
 .visual h1 {
 	font-size: 13px;
-	margin-top:0;
+	margin-top: 0;
 	margin-bottom: 0.67em;
 }
 .visual p {
@@ -34,7 +34,7 @@ body {
 
 .VisualJSfooter p+p{
 	font-size: 11px;
-	margin:5px 0;
+	margin: 5px 0;
 }
 
 #VisualJSleft, #VisualJSright {
@@ -108,11 +108,11 @@ body {
 	stroke-width: 1px;
 	outline: 0;
 }
-.visual .VisualJSarea path:hover {
-	stroke: #ffa500;
-}
 .visual .VisualJSarea path:focus {
 	stroke: #fff;
+}
+.visual .VisualJSarea path:hover {
+	stroke: #ffa500;
 }
 
 .visual .VisualJSarea path.cnohover {
