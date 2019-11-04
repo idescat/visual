@@ -39,7 +39,7 @@ LazyLoad=function(a){function h(b,c){var e,d=a.createElement(b);for(e in c)c.has
 /*
 Visual
 Copyright (c) 2019 Institut d'Estadistica de Catalunya (Idescat)
-http://www.idescat.cat (https://github.com/idescat/visual)
+https://www.idescat.cat (https://github.com/idescat/visual)
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -65,7 +65,7 @@ var VisualJS={version:"1.2.1",show:!0,old:!1,fixed:null,width:500,bwidth:500,hei
 
 /*
 Copyright (c) 2019 Institut d'Estadistica de Catalunya (Idescat)
-http://www.idescat.cat (https://github.com/idescat/visual)
+https://www.idescat.cat (https://github.com/idescat/visual)
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -229,55 +229,55 @@ VisualJS.setup={//v.1.2.0
 
 	//Libraries: path and existence function
 	main: { //Do not use relative paths for main files in production: they'll be relative to the path where VisualJS.iframe is executed.
-		visual: "https://idescat.github.io/visual/visual.js",
-		setup: "https://idescat.github.io/visual/visual.setup.js",
-		lazy: "https://idescat.github.io/visual/lib/lazyload.js"
+		visual: "https://visual.js.org/visual.js",
+		setup: "https://visual.js.org/visual.setup.js",
+		lazy: "https://visual.js.org/lib/lazyload.js"
 	},
 	lib: {
 		d3: {
-			js: "https://idescat.github.io/visual/lib/d3.v3.js",
+			js: "https://visual.js.org/lib/d3.v3.js",
 			exists: function(){ return typeof d3==="object"; }
 		},
 		jquery: {
-			js: "https://idescat.github.io/visual/lib/jquery.1.8.3.js",
+			js: "https://visual.js.org/lib/jquery.1.8.3.js",
 			exists: function(){ return typeof jQuery==="function"; },
 
 			flot: {
-				js: "https://idescat.github.io/visual/lib/jquery.flot.js",
+				js: "https://visual.js.org/lib/jquery.flot.js",
 				exists: function(){ return typeof jQuery.plot==="function"; },
 
 				stack: {
-					js: "https://idescat.github.io/visual/lib/jquery.flot.stack.js",
+					js: "https://visual.js.org/lib/jquery.flot.stack.js",
 					exists: function(){ return typeof jQuery.plot.plugins==="object" && typeof jQuery.plot.plugins[0]==="object" && jQuery.plot.plugins[0].name==="stack";  }
 				},
 				orderbars: {
-					js: "https://idescat.github.io/visual/lib/jquery.flot.orderbars.js",
+					js: "https://visual.js.org/lib/jquery.flot.orderbars.js",
 					exists: function(){ return typeof jQuery.plot.plugins==="object" && typeof jQuery.plot.plugins[0]==="object" && jQuery.plot.plugins[0].name==="orderBars"; }
 				},
 				pyramid: {
-					js: "https://idescat.github.io/visual/lib/jquery.flot.pyramid.js",
+					js: "https://visual.js.org/lib/jquery.flot.pyramid.js",
 					exists: function(){ return typeof FlotPyramid==="object"; }
 				},
 				categories: {
-					js: "https://idescat.github.io/visual/lib/jquery.flot.categories.js",
+					js: "https://visual.js.org/lib/jquery.flot.categories.js",
 					exists: function(){ return typeof jQuery.plot.plugins==="object" && typeof jQuery.plot.plugins[0]==="object" && jQuery.plot.plugins[0].name==="categories"; }
 				},
 				pie: {
-					js: "https://idescat.github.io/visual/lib/jquery.flot.pie.js",
+					js: "https://visual.js.org/lib/jquery.flot.pie.js",
 					exists: function(){ return typeof jQuery.plot.plugins==="object" && typeof jQuery.plot.plugins[0]==="object" && jQuery.plot.plugins[0].name==="pie"; }
 				},
 				axisLabels: {
-					js: "https://idescat.github.io/visual/lib/jquery.flot.axislabels.js",
+					js: "https://visual.js.org/lib/jquery.flot.axislabels.js",
 					exists: function(){ return typeof jQuery.plot.plugins==="object" && typeof jQuery.plot.plugins[0]==="object" && jQuery.plot.plugins.map(function(e){return e.name}).indexOf("axisLabels") !== -1 ; }
 				},
 			}
 		},
 		maps: {
-			js: "https://idescat.github.io/visual/maps/visual.maps.js",
+			js: "https://visual.js.org/maps/visual.maps.js",
 			exists: function(){ return typeof VisualJS.func.colors==="function" && typeof VisualJS.func.legend==="function";}
 		},
 		excanvas: {
-			js: "https://idescat.github.io/visual/lib/excanvas.js",
+			js: "https://visual.js.org/lib/excanvas.js",
 			exists: function(){ return typeof G_vmlCanvasManager!=="undefined"; }
 		}
 	},
@@ -286,297 +286,297 @@ VisualJS.setup={//v.1.2.0
 	map: {
 		eu28: {
 			label: "European Union: 28 member countries",
-			js: "https://idescat.github.io/visual/maps/eu28.js",
+			js: "https://visual.js.org/maps/eu28.js",
 			exists: function(){ return typeof VisualJS.map.eu28!=="undefined"; }
 		},
 		usastates: {
 			label: "USA: states",
-			js: "https://idescat.github.io/visual/maps/usa2013states.js",
+			js: "https://visual.js.org/maps/usa2013states.js",
 			exists: function(){ return typeof VisualJS.map.usastates!=="undefined"; }
 		},
 		norwaymun: {
 			label: "Norway: municipalities",
-			js: "https://idescat.github.io/visual/maps/norway2013mun.js",
+			js: "https://visual.js.org/maps/norway2013mun.js",
 			exists: function(){ return typeof VisualJS.map.norwaymun!=="undefined"; }
 		},
 		spainnuts2: {
 			label: "Spain: NUTS 2",
-			js: "https://idescat.github.io/visual/maps/spain2014nuts2.js",
+			js: "https://visual.js.org/maps/spain2014nuts2.js",
 			exists: function(){ return typeof VisualJS.map.spainnuts2!=="undefined"; }
 		},
 		spainnuts3: {
 			label: "Spain: NUTS 3",
-			js: "https://idescat.github.io/visual/maps/spain2014nuts3.js",
+			js: "https://visual.js.org/maps/spain2014nuts3.js",
 			exists: function(){ return typeof VisualJS.map.spainnuts3!=="undefined"; }
 		},
 		prov: {
 			label: "Catalonia: NUTS 3",
-			js: "https://idescat.github.io/visual/maps/cat2013prov.js",
+			js: "https://visual.js.org/maps/cat2013prov.js",
 			exists: function(){ return typeof VisualJS.map.prov!=="undefined"; }
 		},
 		com: {
 			label: "Catalonia: counties (before 2015)",
-			js: "https://idescat.github.io/visual/maps/cat2013com.js",
+			js: "https://visual.js.org/maps/cat2013com.js",
 			exists: function(){ return typeof VisualJS.map.com!=="undefined"; }
 		},
 		com2015: {
 			label: "Catalonia: counties",
-			js: "https://idescat.github.io/visual/maps/cat2015com.js",
+			js: "https://visual.js.org/maps/cat2015com.js",
 			exists: function(){ return typeof VisualJS.map.com2015!=="undefined"; }
 		},
 		mun: {
 			label: "Catalonia: municipalities",
-			js: "https://idescat.github.io/visual/maps/cat2013mun.js",
+			js: "https://visual.js.org/maps/cat2013mun.js",
 			exists: function(){ return typeof VisualJS.map.mun!=="undefined"; }
 		},
 		prov08: {
 			label: "Catalonia. Province of Barcelona: municipalities",
-			js: "https://idescat.github.io/visual/maps/prov082013mun.js",
+			js: "https://visual.js.org/maps/prov082013mun.js",
 			exists: function(){ return typeof VisualJS.map.prov08!=="undefined"; }
 		},
 		prov17: {
 			label: "Catalonia. Province of Girona: municipalities",
-			js: "https://idescat.github.io/visual/maps/prov172013mun.js",
+			js: "https://visual.js.org/maps/prov172013mun.js",
 			exists: function(){ return typeof VisualJS.map.prov17!=="undefined"; }
 		},
 		prov25: {
 			label: "Catalonia. Province of Lleida: municipalities",
-			js: "https://idescat.github.io/visual/maps/prov252013mun.js",
+			js: "https://visual.js.org/maps/prov252013mun.js",
 			exists: function(){ return typeof VisualJS.map.prov25!=="undefined"; }
 		},
 		prov43: {
 			label: "Catalonia. Province of Tarragona: municipalities",
-			js: "https://idescat.github.io/visual/maps/prov432013mun.js",
+			js: "https://visual.js.org/maps/prov432013mun.js",
 			exists: function(){ return typeof VisualJS.map.prov43!=="undefined"; }
 		},
 		com01: {
 			label: "Catalonia. L'Alt Camp: municipalities",
-			js: "https://idescat.github.io/visual/maps/com012013mun.js",
+			js: "https://visual.js.org/maps/com012013mun.js",
 			exists: function(){ return typeof VisualJS.map.com01!=="undefined"; }
 		},
 		com02: {
 			label: "Catalonia. L'Alt Empordà: municipalities",
-			js: "https://idescat.github.io/visual/maps/com022013mun.js",
+			js: "https://visual.js.org/maps/com022013mun.js",
 			exists: function(){ return typeof VisualJS.map.com02!=="undefined"; }
 		},
 		com03: {
 			label: "Catalonia. L'Alt Penedès: municipalities",
-			js: "https://idescat.github.io/visual/maps/com032013mun.js",
+			js: "https://visual.js.org/maps/com032013mun.js",
 			exists: function(){ return typeof VisualJS.map.com03!=="undefined"; }
 		},
 		com04: {
 			label: "Catalonia. L'Alt Urgell: municipalities",
-			js: "https://idescat.github.io/visual/maps/com042013mun.js",
+			js: "https://visual.js.org/maps/com042013mun.js",
 			exists: function(){ return typeof VisualJS.map.com04!=="undefined"; }
 		},
 		com05: {
 			label: "Catalonia. L'Alta Ribagorça: municipalities",
-			js: "https://idescat.github.io/visual/maps/com052013mun.js",
+			js: "https://visual.js.org/maps/com052013mun.js",
 			exists: function(){ return typeof VisualJS.map.com05!=="undefined"; }
 		},
 		com06: {
 			label: "Catalonia. L'Anoia: municipalities",
-			js: "https://idescat.github.io/visual/maps/com062013mun.js",
+			js: "https://visual.js.org/maps/com062013mun.js",
 			exists: function(){ return typeof VisualJS.map.com06!=="undefined"; }
 		},
 		com072015: {
 			label: "Catalonia. El Bages: municipalities",
-			js: "https://idescat.github.io/visual/maps/com072015mun.js",
+			js: "https://visual.js.org/maps/com072015mun.js",
 			exists: function(){ return typeof VisualJS.map.com072015!=="undefined"; }
 		},
 		com07: {
 			label: "Catalonia. El Bages: municipalities (before 2015)",
-			js: "https://idescat.github.io/visual/maps/com072013mun.js",
+			js: "https://visual.js.org/maps/com072013mun.js",
 			exists: function(){ return typeof VisualJS.map.com07!=="undefined"; }
 		},
 		com08: {
 			label: "Catalonia. El Baix Camp: municipalities",
-			js: "https://idescat.github.io/visual/maps/com082013mun.js",
+			js: "https://visual.js.org/maps/com082013mun.js",
 			exists: function(){ return typeof VisualJS.map.com08!=="undefined"; }
 		},
 		com09: {
 			label: "Catalonia. El Baix Ebre: municipalities",
-			js: "https://idescat.github.io/visual/maps/com092013mun.js",
+			js: "https://visual.js.org/maps/com092013mun.js",
 			exists: function(){ return typeof VisualJS.map.com09!=="undefined"; }
 		},
 		com10: {
 			label: "Catalonia. El Baix Empordà: municipalities",
-			js: "https://idescat.github.io/visual/maps/com102013mun.js",
+			js: "https://visual.js.org/maps/com102013mun.js",
 			exists: function(){ return typeof VisualJS.map.com10!=="undefined"; }
 		},
 		com11: {
 			label: "Catalonia. El Baix Llobregat: municipalities",
-			js: "https://idescat.github.io/visual/maps/com112013mun.js",
+			js: "https://visual.js.org/maps/com112013mun.js",
 			exists: function(){ return typeof VisualJS.map.com11!=="undefined"; }
 		},
 		com12: {
 			label: "Catalonia. El Baix Penedès: municipalities",
-			js: "https://idescat.github.io/visual/maps/com122013mun.js",
+			js: "https://visual.js.org/maps/com122013mun.js",
 			exists: function(){ return typeof VisualJS.map.com12!=="undefined"; }
 		},
 		com13: {
 			label: "Catalonia. El Barcelonès: municipalities",
-			js: "https://idescat.github.io/visual/maps/com132013mun.js",
+			js: "https://visual.js.org/maps/com132013mun.js",
 			exists: function(){ return typeof VisualJS.map.com13!=="undefined"; }
 		},
 		com14: {
 			label: "Catalonia. El Berguedà: municipalities",
-			js: "https://idescat.github.io/visual/maps/com142013mun.js",
+			js: "https://visual.js.org/maps/com142013mun.js",
 			exists: function(){ return typeof VisualJS.map.com14!=="undefined"; }
 		},
 		com15: {
 			label: "Catalonia. La Cerdanya: municipalities",
-			js: "https://idescat.github.io/visual/maps/com152013mun.js",
+			js: "https://visual.js.org/maps/com152013mun.js",
 			exists: function(){ return typeof VisualJS.map.com15!=="undefined"; }
 		},
 		com16: {
 			label: "Catalonia. La Conca de Barberà: municipalities",
-			js: "https://idescat.github.io/visual/maps/com162013mun.js",
+			js: "https://visual.js.org/maps/com162013mun.js",
 			exists: function(){ return typeof VisualJS.map.com16!=="undefined"; }
 		},
 		com17: {
 			label: "Catalonia. El Garraf: municipalities",
-			js: "https://idescat.github.io/visual/maps/com172013mun.js",
+			js: "https://visual.js.org/maps/com172013mun.js",
 			exists: function(){ return typeof VisualJS.map.com17!=="undefined"; }
 		},
 		com18: {
 			label: "Catalonia. Les Garrigues: municipalities",
-			js: "https://idescat.github.io/visual/maps/com182013mun.js",
+			js: "https://visual.js.org/maps/com182013mun.js",
 			exists: function(){ return typeof VisualJS.map.com18!=="undefined"; }
 		},
 		com19: {
 			label: "Catalonia. La Garrotxa: municipalities",
-			js: "https://idescat.github.io/visual/maps/com192013mun.js",
+			js: "https://visual.js.org/maps/com192013mun.js",
 			exists: function(){ return typeof VisualJS.map.com19!=="undefined"; }
 		},
 		com20: {
 			label: "Catalonia. El Gironès: municipalities",
-			js: "https://idescat.github.io/visual/maps/com202013mun.js",
+			js: "https://visual.js.org/maps/com202013mun.js",
 			exists: function(){ return typeof VisualJS.map.com20!=="undefined"; }
 		},
 		com21: {
 			label: "Catalonia. El Maresme: municipalities",
-			js: "https://idescat.github.io/visual/maps/com212013mun.js",
+			js: "https://visual.js.org/maps/com212013mun.js",
 			exists: function(){ return typeof VisualJS.map.com21!=="undefined"; }
 		},
 		com22: {
 			label: "Catalonia. El Montsià: municipalities",
-			js: "https://idescat.github.io/visual/maps/com222013mun.js",
+			js: "https://visual.js.org/maps/com222013mun.js",
 			exists: function(){ return typeof VisualJS.map.com22!=="undefined"; }
 		},
 		com23: {
 			label: "Catalonia. La Noguera: municipalities",
-			js: "https://idescat.github.io/visual/maps/com232013mun.js",
+			js: "https://visual.js.org/maps/com232013mun.js",
 			exists: function(){ return typeof VisualJS.map.com23!=="undefined"; }
 		},
 		com242015: {
 			label: "Catalonia. Osona: municipalities",
-			js: "https://idescat.github.io/visual/maps/com242015mun.js",
+			js: "https://visual.js.org/maps/com242015mun.js",
 			exists: function(){ return typeof VisualJS.map.com242015!=="undefined"; }
 		},
 		com24: {
 			label: "Catalonia. Osona: municipalities (before 2015)",
-			js: "https://idescat.github.io/visual/maps/com242013mun.js",
+			js: "https://visual.js.org/maps/com242013mun.js",
 			exists: function(){ return typeof VisualJS.map.com24!=="undefined"; }
 		},
 		com25: {
 			label: "Catalonia. El Pallars Jussà: municipalities",
-			js: "https://idescat.github.io/visual/maps/com252013mun.js",
+			js: "https://visual.js.org/maps/com252013mun.js",
 			exists: function(){ return typeof VisualJS.map.com25!=="undefined"; }
 		},
 		com26: {
 			label: "Catalonia. El Pallars Sobirà: municipalities",
-			js: "https://idescat.github.io/visual/maps/com262013mun.js",
+			js: "https://visual.js.org/maps/com262013mun.js",
 			exists: function(){ return typeof VisualJS.map.com26!=="undefined"; }
 		},
 		com27: {
 			label: "Catalonia. El Pla d'Urgell: municipalities",
-			js: "https://idescat.github.io/visual/maps/com272013mun.js",
+			js: "https://visual.js.org/maps/com272013mun.js",
 			exists: function(){ return typeof VisualJS.map.com27!=="undefined"; }
 		},
 		com28: {
 			label: "Catalonia. El Pla de l'Estany: municipalities",
-			js: "https://idescat.github.io/visual/maps/com282013mun.js",
+			js: "https://visual.js.org/maps/com282013mun.js",
 			exists: function(){ return typeof VisualJS.map.com28!=="undefined"; }
 		},
 		com29: {
 			label: "Catalonia. El Priorat: municipalities",
-			js: "https://idescat.github.io/visual/maps/com292013mun.js",
+			js: "https://visual.js.org/maps/com292013mun.js",
 			exists: function(){ return typeof VisualJS.map.com29!=="undefined"; }
 		},
 		com30: {
 			label: "Catalonia. La Ribera d'Ebre: municipalities",
-			js: "https://idescat.github.io/visual/maps/com302013mun.js",
+			js: "https://visual.js.org/maps/com302013mun.js",
 			exists: function(){ return typeof VisualJS.map.com30!=="undefined"; }
 		},
 		com31: {
 			label: "Catalonia. El Ripollès: municipalities",
-			js: "https://idescat.github.io/visual/maps/com312013mun.js",
+			js: "https://visual.js.org/maps/com312013mun.js",
 			exists: function(){ return typeof VisualJS.map.com31!=="undefined"; }
 		},
 		com32: {
 			label: "Catalonia. La Segarra: municipalities",
-			js: "https://idescat.github.io/visual/maps/com322013mun.js",
+			js: "https://visual.js.org/maps/com322013mun.js",
 			exists: function(){ return typeof VisualJS.map.com32!=="undefined"; }
 		},
 		com33: {
 			label: "Catalonia. El Segrià: municipalities",
-			js: "https://idescat.github.io/visual/maps/com332013mun.js",
+			js: "https://visual.js.org/maps/com332013mun.js",
 			exists: function(){ return typeof VisualJS.map.com33!=="undefined"; }
 		},
 		com34: {
 			label: "Catalonia. La Selva: municipalities",
-			js: "https://idescat.github.io/visual/maps/com342013mun.js",
+			js: "https://visual.js.org/maps/com342013mun.js",
 			exists: function(){ return typeof VisualJS.map.com34!=="undefined"; }
 		},
 		com35: {
 			label: "Catalonia. El Solsonès: municipalities",
-			js: "https://idescat.github.io/visual/maps/com352013mun.js",
+			js: "https://visual.js.org/maps/com352013mun.js",
 			exists: function(){ return typeof VisualJS.map.com35!=="undefined"; }
 		},
 		com36: {
 			label: "Catalonia. El Tarragonès: municipalities",
-			js: "https://idescat.github.io/visual/maps/com362013mun.js",
+			js: "https://visual.js.org/maps/com362013mun.js",
 			exists: function(){ return typeof VisualJS.map.com36!=="undefined"; }
 		},
 		com37: {
 			label: "Catalonia. La Terra Alta: municipalities",
-			js: "https://idescat.github.io/visual/maps/com372013mun.js",
+			js: "https://visual.js.org/maps/com372013mun.js",
 			exists: function(){ return typeof VisualJS.map.com37!=="undefined"; }
 		},
 		com38: {
 			label: "Catalonia. L'Urgell: municipalities",
-			js: "https://idescat.github.io/visual/maps/com382013mun.js",
+			js: "https://visual.js.org/maps/com382013mun.js",
 			exists: function(){ return typeof VisualJS.map.com38!=="undefined"; }
 		},
 		com39: {
 			label: "Catalonia. La Val d'Aran: municipalities",
-			js: "https://idescat.github.io/visual/maps/com392013mun.js",
+			js: "https://visual.js.org/maps/com392013mun.js",
 			exists: function(){ return typeof VisualJS.map.com39!=="undefined"; }
 		},
 		com40: {
 			label: "Catalonia. El Vallès Occidental: municipalities",
-			js: "https://idescat.github.io/visual/maps/com402013mun.js",
+			js: "https://visual.js.org/maps/com402013mun.js",
 			exists: function(){ return typeof VisualJS.map.com40!=="undefined"; }
 		},
 		com412015: {
 			label: "Catalonia. El Vallès Oriental: municipalities",
-			js: "https://idescat.github.io/visual/maps/com412015mun.js",
+			js: "https://visual.js.org/maps/com412015mun.js",
 			exists: function(){ return typeof VisualJS.map.com412015!=="undefined"; }
 		},
 		com41: {
 			label: "Catalonia. El Vallès Oriental: municipalities (before 2015)",
-			js: "https://idescat.github.io/visual/maps/com412013mun.js",
+			js: "https://visual.js.org/maps/com412013mun.js",
 			exists: function(){ return typeof VisualJS.map.com41!=="undefined"; }
 		},
 		com422015: {
 			label: "Catalonia. El Moianès: municipalities",
-			js: "https://idescat.github.io/visual/maps/com422015mun.js",
+			js: "https://visual.js.org/maps/com422015mun.js",
 			exists: function(){ return typeof VisualJS.map.com422015!=="undefined"; }
 		},
 		at: {
 			label: "Catalonia. Regions of the Territorial Plan",
-			js: "https://idescat.github.io/visual/maps/cat2014at.js",
+			js: "https://visual.js.org/maps/cat2014at.js",
 			exists: function(){ return typeof VisualJS.map.at!=="undefined"; }
 		}
 	},
