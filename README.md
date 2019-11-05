@@ -1,6 +1,6 @@
 **Visual** is a Javascript library for data visualization developed by the **Statistical Institute of Catalonia ([Idescat](https://www.idescat.cat/en/))**. It is based on popular open source solutions. **Visual** offers a simple interface that encapsulates the complexity of these solutions for the most common chart types.
 
-**Not a web developer?** Don't worry: you can try Visual online by simply filling in fields in the [Visual Maker](https://idescat.github.io/visual/).
+**Not a web developer?** Don't worry: you can try Visual online by simply filling in fields in the [Visual Maker](https://visual.js.org).
 
 * [Supported visualizations](#supported-visualizations)
 * [Test](#test)
@@ -28,7 +28,7 @@
 
 # Test
 
-Download the [full source and tests](https://github.com/idescat/visual/archive/master.zip) and then start your browser and try the examples in the [test folder](https://github.com/idescat/visual/tree/master/test). Or play with the [Visual Viewer](https://github.com/idescat/visual/tree/master/viewer/index.html) included in the package. Or build your own charts and store them online with the [Visual Maker](https://idescat.github.io/visual/).
+Download the [full source and tests](https://github.com/idescat/visual/archive/master.zip) and then start your browser and try the examples in the [test folder](https://github.com/idescat/visual/tree/master/test). Or play with the [Visual Viewer](https://github.com/idescat/visual/tree/master/viewer/index.html) included in the package. Or build your own charts and store them online with the [Visual Maker](https://visual.js.org).
 
 # Configuration
 
@@ -38,11 +38,13 @@ Edit [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setu
 
 **Visual** allows three running modes: **webpage** (recommended), **simple** and **manual**. See the examples in the [test folder](https://github.com/idescat/visual/tree/master/test).
 
-**Not ready to install?**  You can try Visual online: visit the [Visual Maker](https://idescat.github.io/visual/).
+**Not ready to install?**  You can try Visual online: visit the [Visual Maker](https://visual.js.org).
 
 ### Webpage mode
 
 In webpage mode, the visualization is the only content on an html5 page. Use the [webpage template](https://github.com/idescat/visual/blob/master/templates/webpage.html) to build your page. To embed the visualization, use an iframe pointing to your page ([example](https://github.com/idescat/visual/blob/master/test/index.html)).
+
+If you don't want to install Visual in your server, use the [CDN template](https://github.com/idescat/visual/blob/master/templates/cdn.html) to build your page ([example](https://github.com/idescat/visual/blob/master/test/cdn.html)).
 
 ### Simple mode
 
