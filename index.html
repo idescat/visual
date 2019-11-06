@@ -2,13 +2,14 @@
 <!--[if lt IE 7]><html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]><html class="lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]><html class="lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html> <!--<![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en"> <!--<![endif]-->
 	<head>
 		<title>Visual Maker</title>
 		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<link rel="shortcut icon" href="https://www.idescat.cat/images/favicon.ico" type="image/x-icon" />
-		<link href="viewer/styles.css" rel="stylesheet" type="text/css" />
+		<link href="viewer/styles.css" rel="stylesheet" />
+		<link href="https://fonts.googleapis.com/css?family=Roboto|Lato&display=swap" rel="stylesheet" />
 		<script src="visual.js"></script>
 		<script src="visual.setup.js"></script>
 		<script src="lib/jquery.1.8.3.js"></script>
@@ -18,22 +19,22 @@
 
 	<body>
 		<div id="warning"></div>
-		<h1>Visual Maker <span>Save is <strong class="nok">off</strong></span></h1>
+		<h1>Visual Maker (<strong>visual.js</strong><em>.org</em>)<span>Save is <strong class="nok">off</strong></span></h1>
 		<form id="inputs">
 			<strong>&uarr; Options</strong>
 			<div>
 				<fieldset>
 					<legend>Header and Footer</legend>
-					<input title="Title (optional)" type="text" name="title" value="[Title]" />
-					<input title="Geographic area (optional)" type="text" name="geo" value="[Geographic area]" />
-					<input title="String or ['line1', 'line2', ...] (optional)" type="text" name="footer" value="[Footer.]" />
+					<input title="Title (optional)" placeholder="Title (optional)" type="text" name="title" value="[Title]" />
+					<input title="Geographic area (optional)" placeholder="Geographic area (optional)" type="text" name="geo" value="[Geographic area]" />
+					<input title="String or ['line1', 'line2', ...] (optional)" placeholder="Footer: string or ['line1', 'line2', ...] (optional)" type="text" name="footer" value="[Footer.]" />
 					<label class="right"><input type="checkbox" name="autoheading" checked="checked" /> autoheading</label>
 				</fieldset>
 				<fieldset id="units">
 					<legend>Units</legend>
-					<label>decimals <input title="Number of decimals" type="text" name="dec" value="0" style="width:10%;"/></label>
-					<input title="Unit label or {'x': 'x-label', 'y': 'y-label'} (optional)" type="text" name="label" value="[label]" />
-					<input title="Unit symbol or {'x': 'x-symbol', 'y': 'y-symbol'} (optional)" type="text" name="symbol" value="[symbol]" />
+					<label>decimals <input title="Number of decimals" type="number" name="dec" value="0" /></label>
+					<input title="Unit label or {'x': 'x-label', 'y': 'y-label'} (optional)" placeholder="Unit label or {'x': 'x-label', 'y': 'y-label'} (optional)" type="text" name="label" value="[label]" />
+					<input title="Unit symbol or {'x': 'x-symbol', 'y': 'y-symbol'} (optional)" placeholder="Unit symbol or {'x': 'x-symbol', 'y': 'y-symbol'} (optional)" type="text" name="symbol" value="[symbol]" />
 					<select title="Symbol position" name="position" class="right"></select>
 				</fieldset>
 
@@ -112,7 +113,7 @@
 				</fieldset>
 
 				<fieldset id="data">
-					<legend>tsbar &darr;</legend>
+					<legend>bar &darr;</legend>
 					<div id="custom"></div>
 				</fieldset>
 			</div>
@@ -189,11 +190,11 @@
 						var s=JSON.stringify(custom[i][j]).replace(/"/g, "'").replace(/^'/, "").replace(/'$/, "");
 						if(j!=="data"){
 							if(custom[i][j]!==null){
-								html+='<input title="'+j+'" type="text" name="'+j+'" value="'+s+'" />';
+								html+='<input title="'+j+'" placeholder="'+j+'" type="text" name="'+j+'" value="'+s+'" />';
 							}
 						}else{
 							s=s.replace(/({|\[)/g, "$1\n").replace(/(}|\])/g, "\n$1").replace(/:/g, ": ").replace(/,(\[|\{)/g, ",\n$1").replace(/,/g, ", ");
-							html+='<textarea title="data" name="data" spellcheck="false" lang="">'+s+'</textarea>';
+							html+='<textarea title="data" placeholder="data" name="data" spellcheck="false" lang="">'+s+'</textarea>';
 						}
 						params[j]=custom[i][j];
 					}else{
@@ -310,7 +311,7 @@
 				if(last!==params["type"]){
 					addCustom(params["type"]);
 
-					$("input[name=range]").attr("title",  title.range[params["type"]]).val("");
+					$("input[name=range]").attr("title",  title.range[params["type"]]).attr("placeholder",  title.range[params["type"]]).val("");
 					params["range"]="";
 
 					last=params["type"];

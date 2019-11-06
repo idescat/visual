@@ -1,12 +1,12 @@
 body {
-	font-family: sans-serif;
-	font-size: 80%;
-	width: 760px;
-	margin: 1em auto;
+	font-family: 'Roboto', sans-serif;
+	margin: 1em 2em;
+	font-size: 14px;
 }
 
 h1 {
-	font-size: 16px;
+	font-family: 'Lato', sans-serif;
+	font-size: 21px;
 	margin: 0;
 }
 h1 a:link {
@@ -16,12 +16,20 @@ h1 a:link {
 h1 a:visited {
 	color: gray;
 }
+h1 > strong {
+	color: #527ead;
+}
+h1 > em {
+	font-style: normal;
+  color: #666;
+}
 
 #dataviz {
-	width: 700px;
 	height: 565px;
 	padding: 30px;
-	background-color: #f6f6f6;
+	background-color: #b3b3b3;
+	text-align: center;
+	border-radius: 0 0 4px 4px;
 }
 .right {
 	display: inline-block;
@@ -42,34 +50,34 @@ label.right {
 	margin: 0 0.5em 0 34%;
 }
 iframe {
+	border-radius: 4px;
 	width: 700px;
 	height: 100%;
 }
-#inputs, #code {
-	padding: 0.5em;
-}
 #inputs {
-	background-color: #bfbfbf;
-}
-#code {
-	background-color: #f6f6f6;
+	border-radius: 4px 4px 0 0;
+	padding: 0.5em;
+	background-color: #b3b3b3;
 }
 select, input {
-	padding: 2px;
+	padding: 4px;
+	border-radius: 4px;
+	border-style: none;
+	font-family: 'Roboto', sans-serif;
+	font-size: 14px;
 }
 input[type=number] {
 	width: 3em;
+	text-align: right;
 }
 .right input[type=number] {
 	width: 30px;
 }
 
 input[type=text] {
-	width: 188px;
+	width: 25%;
 }
-input.range { /*type=text too*/
-	width: 80px;
-}
+
 input[name=filter] {
 	width: 4em;
 }
@@ -78,7 +86,9 @@ input[name=filter] {
 	display: none;
 }
 #custom input {
-	width: 720px;
+	box-sizing: border-box;
+	width: 100%;
+	margin: 4px 0;
 }
 #custom a {
 	display: block;
@@ -86,31 +96,21 @@ input[name=filter] {
 	text-align: right;
 }
 textarea {
+	box-sizing: border-box;
 	display: block;
-	width: 712px;
+	width: 100%;
 	height: 300px;
 	padding: 0.5em;
+	border-radius: 6px;
 }
 fieldset {
 	border: 1px solid #fff;
 	padding: 0.5em;
 	margin-bottom: 0.5em;
+	border-radius: 4px;
 }
 legend {
-	font-weight: bold;
 	color: #fff;
-}
-#code textarea {
-	margin: 1em;
-	width: 689px;
-	height: 500px;
-	color: #00f;
-}
-#code legend {
-	color: #c0c0c0;
-}
-#code fieldset {
-	border-color: #c0c0c0;
 }
 
 #data legend {
@@ -119,9 +119,10 @@ legend {
 
 #inputs strong {
 	display: block;
-	font-size:70%;
+	font-size: 90%;
 	color: #fff;
 	cursor: pointer;
+	font-weight: normal;
 }
 
 /* Maker */
@@ -136,7 +137,6 @@ legend {
 	border: 1px solid #ccc;
 	padding: 4px 6px;
 	text-decoration: none;
-	font-weight: bold;
 	cursor: pointer;
 }
 #save a:hover {
@@ -152,7 +152,6 @@ legend {
 }
 
 p, #save {
-	font-size: 14px;
 	line-height: 1.4;
 }
 
@@ -233,5 +232,5 @@ h1 span {
   float: right;
   font-size: 12px;
   font-weight: normal;
-  padding-top: 4px;
+  padding-top: 8px;
 }
