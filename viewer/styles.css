@@ -27,7 +27,7 @@ h1 > em {
 #dataviz {
 	height: 565px;
 	padding: 30px;
-	background-color: #b3b3b3;
+	background-color: #666;
 	text-align: center;
 	border-radius: 0 0 4px 4px;
 }
@@ -45,9 +45,14 @@ label.right {
 	margin-right: 0;
 }
 #version {
-	color: #888;
-	text-shadow: 1px 1px 1px #fcfcfc;
+	color: #444;
+	text-shadow: 1px 1px 1px #999;
 	margin: 0 0.5em 0 34%;
+}
+.screenreader {
+	position: absolute;
+	top: -9999px;
+	left: -9999px;
 }
 iframe {
 	border-radius: 4px;
@@ -57,7 +62,8 @@ iframe {
 #inputs {
 	border-radius: 4px 4px 0 0;
 	padding: 0.5em;
-	background-color: #b3b3b3;
+	background-color: #666;
+	color: #fff;
 }
 select, input {
 	padding: 4px;
@@ -164,6 +170,9 @@ table {
 	border: 1px solid #eee;
 	text-align: center;
 	padding: 2px 6px;
+}
+#layout th {
+	padding: 2px 10px;
 }
 #layout th:first-child {
 	border-top: none;

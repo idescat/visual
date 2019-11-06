@@ -19,7 +19,7 @@
 
 	<body>
 		<div id="warning"></div>
-		<h1>Visual Maker (<strong>visual.js</strong><em>.org</em>)<span>Save is <strong class="nok">off</strong></span></h1>
+		<h1>Visual Maker (<strong>visual.js</strong><em>.org</em>)<span>Save is <strong class="nok">off</strong></span></h1><span class="screenreader"></span>
 		<form id="inputs">
 			<strong>&uarr; Options</strong>
 			<div>
@@ -51,7 +51,7 @@
 						<option value="cmap">cmap</option>
 					</select>
 
-					<span id="version"></span>
+					<span role="none" id="version"></span>
 
 					<label class="right">lang
 						<select name="lang">
@@ -176,7 +176,7 @@
 				savestate='<a href="charts/">My charts</a> | Save is <strong class="ok">on</strong> (<a href="?token=off" title="Your personal token will be removed from this browser and you won&rsquo;t be able to save charts">forget token</a>)';
 			}
 
-			$( "#version" ).html( "Visual v. "+VisualJS.version );
+			$( "#version, .screenreader" ).html( "Visual v. "+VisualJS.version );
 
 			for(var m in maps){
 				maptable+="<tr><th>"+m+"</th><td>"+maps[m].label+"</td></tr>";
