@@ -64,7 +64,7 @@ var VisualJS={version:"1.2.1",show:!0,old:!1,fixed:null,width:500,bwidth:500,hei
 
 
 /*
-Copyright (c) 2019 Institut d'Estadistica de Catalunya (Idescat)
+Copyright (c) 2020 Institut d'Estadistica de Catalunya (Idescat)
 https://www.idescat.cat (https://github.com/idescat/visual)
 
 Permission is hereby granted, free of charge, to any person obtaining
