@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2019 Institut d'Estadistica de Catalunya (Idescat)
+Copyright (c) 2020 Institut d'Estadistica de Catalunya (Idescat)
 https://www.idescat.cat (https://github.com/idescat/visual)
 
 Permission is hereby granted, free of charge, to any person obtaining
@@ -221,9 +221,16 @@ VisualJS.setup={ //v.1.2.0
 	//Maps: path and existence function
 	map: {
 		eu28: {
-			label: "European Union: 28 member countries",
+			label: "European Union: 28 countries (2013-2020)",
 			js: "https://visual.js.org/maps/eu28.js",
 			exists: function(){ return typeof VisualJS.map.eu28!=="undefined"; }
+		},
+		eu27: {
+			label: "European Union: 27 countries (from 2020)",
+			js: "https://visual.js.org/maps/eu272020.js",
+			exists: function () {
+				return typeof VisualJS.map.eu27 !== "undefined";
+			}
 		},
 		usastates: {
 			label: "USA: states",
