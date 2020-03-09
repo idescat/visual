@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2019 Institut d'Estadistica de Catalunya (Idescat)
+Copyright (c) 2020 Institut d'Estadistica de Catalunya (Idescat)
 http://www.idescat.cat (https://github.com/idescat/visual)
 
 Permission is hereby granted, free of charge, to any person obtaining
@@ -596,6 +596,12 @@ VisualJS.setup = { //v.1.2.0
 			js: "../maps/eu28.js",
 			exists: function () {
 				return typeof VisualJS.map.eu28 !== "undefined";
+			}
+		},
+		eu27: {
+			js: "../maps/eu272020.js",
+			exists: function () {
+				return typeof VisualJS.map.eu27 !== "undefined";
 			}
 		}
 	},
