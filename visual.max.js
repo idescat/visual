@@ -1,6 +1,6 @@
 /*
 Visual
-Copyright (c) 2019 Institut d'Estadistica de Catalunya (Idescat)
+Copyright (c) 2020 Institut d'Estadistica de Catalunya (Idescat)
 http://www.idescat.cat (https://github.com/idescat/visual)
 
 Permission is hereby granted, free of charge, to any person obtaining
@@ -26,7 +26,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 /*global d3, LazyLoad*/
 
 var VisualJS={
-	version: "1.2.1",
+	version: "1.2.2",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -1783,7 +1783,8 @@ var VisualJS={
 							axisLabelFontSizePixels: ( aux=Number($("."+VisualJS.setup.clas).css("font-size").replace("px",""))),
 							axisLabelFontFamily: $("."+VisualJS.setup.clas).css("font-family") ,
 							axisLabelPadding: aux,
-							axisLabelColour: "#545454"
+							axisLabelColour: "#545454",
+							labelWidth: 26
 						},
 						yaxis:{
 							show: container.axis.y,
