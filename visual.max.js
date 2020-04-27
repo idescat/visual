@@ -26,7 +26,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 /*global d3, LazyLoad*/
 
 var VisualJS={
-	version: "1.2.4",
+	version: "1.2.5",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -890,6 +890,7 @@ var VisualJS={
 					visRightLimit=VisualJS.bwidth-VisualJS.setup.margin, //Visual right limit
 					pos={} //Final tooltip position
 				;
+				if(typeof VisualJS.setup.tooltip!=="undefined" && !VisualJS.setup.tooltip) return;
 				tt.innerHTML=html;
 				tt.style.display="block"; //Paint to get width
 				var ttHalfWidth=tt.clientWidth/2; //Half of tooltip width
@@ -1120,13 +1121,11 @@ var VisualJS={
 						var
 							minval=val[0],
 							maxval=val[val.length-1],
-							hideTooltip=container.tooltip === false,
 							mouseDown=false,
 							bc=null,
 							pageX=null,
 							pageY=null,
 							showTooltipRegion=function(d, posX, posY){
-								if(hideTooltip) return;
 								if(d.properties[map.id]!=="" && d.properties[map.label]!=="" &&//Polygon is not relevant
 									(hasValues || hasGroups || typeof valors.get(d.properties[map.id])!=="undefined")){
 										showTooltip(
