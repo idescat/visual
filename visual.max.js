@@ -890,7 +890,7 @@ var VisualJS={
 					visRightLimit=VisualJS.bwidth-VisualJS.setup.margin, //Visual right limit
 					pos={} //Final tooltip position
 				;
-				if(typeof VisualJS.setup.tooltip!=="undefined" && !VisualJS.setup.tooltip) return;
+				if(container.tooltip === false) return;
 				tt.innerHTML=html;
 				tt.style.display="block"; //Paint to get width
 				var ttHalfWidth=tt.clientWidth/2; //Half of tooltip width
