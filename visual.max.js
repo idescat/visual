@@ -26,7 +26,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 /*global d3, LazyLoad*/
 
 var VisualJS={
-	version: "1.2.5",
+	version: "1.2.6",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -671,6 +671,9 @@ var VisualJS={
 			canvasSel=selector + " ."+vsetup.canvasclass, //Currently, only used in Flot,
 			container=VisualJS.container[VisualJS.id],
 			tformatobj = null,
+			isTooltipEnabled=function(){
+				return container.tooltip === false ? false : true;
+			},
 			getHeading=function(){
 				if(container.autoheading===false){
 					return container.title || ""; //1.0.2
@@ -707,7 +710,9 @@ var VisualJS={
 			draw=function(){
 				var chart=false;
 				if(typeof VisualJS.chart==="function"){ //can be undefined if "cmap" && old browser
-					tooltip();
+					if(isTooltipEnabled()){
+						tooltip();
+					};
 					container.show && VisualJS.chart();
 
 					if(!VisualJS.fixed){
@@ -890,7 +895,6 @@ var VisualJS={
 					visRightLimit=VisualJS.bwidth-VisualJS.setup.margin, //Visual right limit
 					pos={} //Final tooltip position
 				;
-				if(container.tooltip === false) return;
 				tt.innerHTML=html;
 				tt.style.display="block"; //Paint to get width
 				var ttHalfWidth=tt.clientWidth/2; //Half of tooltip width
@@ -1619,7 +1623,6 @@ var VisualJS={
 				transform(o.data, o.time, o.by);
 				$.fn.UseTooltip=function (id) {
 					var previousPoint=[];
-
 					$(this).bind("plothover", function (event, pos, item) {
 						var x, y, itemlab, label, tick, val, unitPosition, pre={}, post={}, el, csymbol, clabel, tooltipmsg;
 						if (item) {
@@ -2112,7 +2115,9 @@ var VisualJS={
 								setup
 							);
 					}
-					$(canvasSel).UseTooltip(VisualJS.id);
+					if(isTooltipEnabled()){
+						$(canvasSel).UseTooltip(VisualJS.id);
+					}
 					VisualJS.pub[VisualJS.id].heading=heading;
 					//ACCESSIBILITY
 					$(canvasSel).find("canvas")
