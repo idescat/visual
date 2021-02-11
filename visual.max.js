@@ -26,7 +26,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 /*global d3, LazyLoad*/
 
 var VisualJS={
-	version: "1.2.6",
+	version: "1.2.7",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -1585,7 +1585,30 @@ var VisualJS={
 									series.push([ '<span>'+d[i][0]+'</span>' , d[i][1] ]); //span: temporary solution to avoid x-axis label overlapping
 								}
 							}
-						}else{
+							series=[series];
+						} else if(o.by && o.by.length && typeof o.data[0] === "object"){
+							ticks=[];
+							//Create the legend
+							series=[];
+							for(i=0; i<o.by.length; i++){
+								series.push({label : o.by[i], data : []});
+							}
+							//Generate the bars, with a blank space between groups
+							offset=0;
+							for(i=0; i<o.data.length; i++){
+								if(o.data[i].val.length % 2 === 0){
+									ticks.push([(offset+((o.data[i].val.length-1)/2)), o.data[i].label]);
+								}else{
+									ticks.push([Math.floor(offset+((o.data[i].val.length)/2)), o.data[i].label]);
+								}
+								for(var j=0; j<o.data[i].val.length; j++){
+									series[j].data.push([offset, o.data[i].val[j]]);
+									offset++;
+								}
+								offset+=2;
+							}
+
+						} else {
 							//An array without "label" and "val"
 							if(typeof d[0]==="number"){
 								len=b.length;
@@ -1595,6 +1618,7 @@ var VisualJS={
 									}
 								}
 							}
+							series=[series];
 						}
 					};
 					shlegend=true;
@@ -1937,27 +1961,6 @@ var VisualJS={
 						case "bar":
 							setup.xaxis.tickLength=0;
 							if(o.by && o.by.length && typeof o.data[0] === "object"){
-								ticks=[];
-								//Create the legend
-								series=[];
-								for(i=0; i<o.by.length; i++){
-									series.push({label : o.by[i], data : []});
-								}
-								//Generate the bars, with a blank space between groups
-								offset=0;
-								for(i=0; i<o.data.length; i++){
-									if(o.data[i].val.length % 2 === 0){
-										ticks.push([(offset+((o.data[i].val.length-1)/2)), o.data[i].label]);
-									}else{
-										ticks.push([Math.floor(offset+((o.data[i].val.length)/2)), o.data[i].label]);
-									}
-									for(var j=0; j<o.data[i].val.length; j++){
-										series[j].data.push([offset, o.data[i].val[j]]);
-										offset++;
-									}
-									offset+=2;
-								}
-
 								//plumbing time
 								setup.xaxis.ticks=ticks;
 								if(o.axis.labels.x === false){
@@ -1966,8 +1969,6 @@ var VisualJS={
 								setup.bars={show: true};
 							}else{
 								setup.xaxis.mode="categories";
-								series=[series];
-
 								setup.yaxis.tickFormatter=function(val) {
 									return tickFormatterGenerator(val,id, "y", format);
 								};
