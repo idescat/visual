@@ -226,8 +226,8 @@ VisualJS.setup={ //v.1.2.0
 			exists: function(){ return typeof VisualJS.map.eu28!=="undefined"; }
 		},
 		eu27: {
-			label: "European Union: 27 countries (from 2020)",
-			js: "https://visual.js.org/maps/eu272020.js",
+			label: "European Union: 27 countries (from 2021)",
+			js: "https://visual.js.org/maps/eu272021.js",
 			exists: function () {
 				return typeof VisualJS.map.eu27 !== "undefined";
 			}
