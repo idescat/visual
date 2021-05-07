@@ -599,7 +599,7 @@ VisualJS.setup = { //v.1.2.0
 			}
 		},
 		eu27: {
-			js: "../maps/eu272020.js",
+			js: "../maps/eu272021.js",
 			exists: function () {
 				return typeof VisualJS.map.eu27 !== "undefined";
 			}
