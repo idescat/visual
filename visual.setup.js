@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2020 Institut d'Estadistica de Catalunya (Idescat)
+Copyright (c) 2023 Institut d'Estadistica de Catalunya (Idescat)
 https://www.idescat.cat (https://github.com/idescat/visual)
 
 Permission is hereby granted, free of charge, to any person obtaining
@@ -257,15 +257,20 @@ VisualJS.setup={ //v.1.2.0
 			js: "https://visual.js.org/maps/cat2013prov.js",
 			exists: function(){ return typeof VisualJS.map.prov!=="undefined"; }
 		},
+		com2023: {
+			label: "Catalonia: counties",
+			js: "https://visual.js.org/maps/cat2023com.js",
+			exists: function () { return typeof VisualJS.map.com2023 !== "undefined"; }
+		},
+		com2015: {
+			label: "Catalonia: counties (between 2015 and 2023)",
+			js: "https://visual.js.org/maps/cat2015com.js",
+			exists: function(){ return typeof VisualJS.map.com2015!=="undefined"; }
+		},
 		com: {
 			label: "Catalonia: counties (before 2015)",
 			js: "https://visual.js.org/maps/cat2013com.js",
 			exists: function(){ return typeof VisualJS.map.com!=="undefined"; }
-		},
-		com2015: {
-			label: "Catalonia: counties",
-			js: "https://visual.js.org/maps/cat2015com.js",
-			exists: function(){ return typeof VisualJS.map.com2015!=="undefined"; }
 		},
 		mun: {
 			label: "Catalonia: municipalities",
@@ -322,8 +327,13 @@ VisualJS.setup={ //v.1.2.0
 			js: "https://visual.js.org/maps/com062013mun.js",
 			exists: function(){ return typeof VisualJS.map.com06!=="undefined"; }
 		},
-		com072015: {
+		com072023: {
 			label: "Catalonia. El Bages: municipalities",
+			js: "https://visual.js.org/maps/com072023mun.js",
+			exists: function () { return typeof VisualJS.map.com072023 !== "undefined"; }
+		},
+		com072015: {
+			label: "Catalonia. El Bages: municipalities (between 2015 and 2023)",
 			js: "https://visual.js.org/maps/com072015mun.js",
 			exists: function(){ return typeof VisualJS.map.com072015!=="undefined"; }
 		},
@@ -412,8 +422,13 @@ VisualJS.setup={ //v.1.2.0
 			js: "https://visual.js.org/maps/com232013mun.js",
 			exists: function(){ return typeof VisualJS.map.com23!=="undefined"; }
 		},
-		com242015: {
+		com242023: {
 			label: "Catalonia. Osona: municipalities",
+			js: "https://visual.js.org/maps/com242023mun.js",
+			exists: function () { return typeof VisualJS.map.com242023 !== "undefined"; }
+		},
+		com242015: {
+			label: "Catalonia. Osona: municipalities (between 2015 and 2023)",
 			js: "https://visual.js.org/maps/com242015mun.js",
 			exists: function(){ return typeof VisualJS.map.com242015!=="undefined"; }
 		},
@@ -516,6 +531,11 @@ VisualJS.setup={ //v.1.2.0
 			label: "Catalonia. El Moianès: municipalities",
 			js: "https://visual.js.org/maps/com422015mun.js",
 			exists: function(){ return typeof VisualJS.map.com422015!=="undefined"; }
+		},
+		com432023: {
+			label: "Catalonia. El Lluçanès: municipalities",
+			js: "https://visual.js.org/maps/com432023mun.js",
+			exists: function () { return typeof VisualJS.map.com432023 !== "undefined"; }
 		},
 		at: {
 			label: "Catalonia. Regions of the Territorial Plan",
