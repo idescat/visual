@@ -16,7 +16,7 @@
 		<div id="visual" class="visual"></div>
 		<script>
 			var
-				counties=["Alt Camp", "Alt Empordà", "Alt Penedès", "Alt Urgell", "Alta Ribagorça", "Anoia", "Bages", "Baix Camp", "Baix Ebre", "Baix Empordà", "Baix Llobregat", "Baix Penedès", "Barcelonès", "Berguedà", "Cerdanya", "Conca de Barberà", "Garraf", "Garrigues", "Garrotxa", "Gironès", "Maresme", "Montsià", "Noguera", "Osona", "Pallars Jussà", "Pallars Sobirà", "Pla d'Urgell", "Pla de l'Estany", "Priorat", "Ribera d'Ebre", "Ripollès", "Segarra", "Segrià", "Selva", "Solsonès", "Tarragonès", "Terra Alta", "Urgell", "Val d'Aran", "Vallès Occidental", "Vallès Oriental"],
+				counties=["Alt Camp", "Alt Empordà", "Alt Penedès", "Alt Urgell", "Alta Ribagorça", "Anoia", "Bages", "Baix Camp", "Baix Ebre", "Baix Empordà", "Baix Llobregat", "Baix Penedès", "Barcelonès", "Berguedà", "Cerdanya", "Conca de Barberà", "Garraf", "Garrigues", "Garrotxa", "Gironès", "Maresme", "Montsià", "Noguera", "Osona", "Pallars Jussà", "Pallars Sobirà", "Pla d'Urgell", "Pla de l'Estany", "Priorat", "Ribera d'Ebre", "Ripollès", "Segarra", "Segrià", "Selva", "Solsonès", "Tarragonès", "Terra Alta", "Urgell", "Val d'Aran", "Vallès Occidental", "Vallès Oriental", "Moianès", "Lluçanès"],
 				getPar=function(param) {
 					var searchString=window.location.search.substring(1);
 					var urls=searchString.split("&");
@@ -28,16 +28,33 @@
 					}
 					return false;
 				},
+
+				getby=function(id){
+					var 
+						modif2015=[/*"07","24",*/"41","42"],
+						modif2023=["07","24","43"],
+						year=""
+					;
+
+					if(modif2023.indexOf(com)!==-1){
+						year="2023";
+					}else if(modif2015.indexOf(com)!==-1){
+						year="2015";
+					}
+
+					return "com" + id + year;
+				},
+				
 				com=getPar("id"),
-				by="com"+com,
+				by=getby(com),
 				geo=counties[com-1]
 			;
+			console.log(by);
 			if( com===false || typeof geo==="undefined" ){
 				window.location.href="counties.html";
 			}else{
 				visual({
 						geo: geo,
-						unit: {symbol: ""},
 						dec: 1,
 						legend: false,
 						by: by,

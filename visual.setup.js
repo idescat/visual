@@ -262,6 +262,12 @@ VisualJS.setup = { //v.1.2.0
 				return typeof VisualJS.map.com2015 !== "undefined";
 			}
 		},
+		com2023: {
+			js: "../maps/cat2023com.js",
+			exists: function () {
+				return typeof VisualJS.map.com2023 !== "undefined";
+			}
+		},
 		prov: {
 			js: "../maps/cat2013prov.js",
 			exists: function () {
@@ -542,6 +548,24 @@ VisualJS.setup = { //v.1.2.0
 			js: "../maps/com422015mun.js",
 			exists: function () {
 				return typeof VisualJS.map.com422015 !== "undefined";
+			}
+		},
+		com072023: {
+			js: "../maps/com072023mun.js",
+			exists: function () {
+				return typeof VisualJS.map.com072023 !== "undefined";
+			}
+		},
+		com242023: {
+			js: "../maps/com242023mun.js",
+			exists: function () {
+				return typeof VisualJS.map.com242023 !== "undefined";
+			}
+		},
+		com432023: {
+			js: "../maps/com432023mun.js",
+			exists: function () {
+				return typeof VisualJS.map.com432023 !== "undefined";
 			}
 		},
 		prov08: {
