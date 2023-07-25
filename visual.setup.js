@@ -322,6 +322,12 @@ VisualJS.setup = { //v.1.2.0
 				return typeof VisualJS.map.com07 !== "undefined";
 			}
 		},
+		com072015: {
+			js: "../maps/com072015mun.js",
+			exists: function () {
+				return typeof VisualJS.map.com072015 !== "undefined";
+			}
+		},
 		com08: {
 			js: "../maps/com082013mun.js",
 			exists: function () {
@@ -424,6 +430,18 @@ VisualJS.setup = { //v.1.2.0
 				return typeof VisualJS.map.com24 !== "undefined";
 			}
 		},
+		com242015: {
+			js: "../maps/com242015mun.js",
+			exists: function () {
+				return typeof VisualJS.map.com242015 !== "undefined";
+			}
+		},
+		com242023: {
+			js: "../maps/com242023mun.js",
+			exists: function () {
+				return typeof VisualJS.map.com242023 !== "undefined";
+			}
+		},
 		com25: {
 			js: "../maps/com252013mun.js",
 			exists: function () {
@@ -472,6 +490,12 @@ VisualJS.setup = { //v.1.2.0
 				return typeof VisualJS.map.com32 !== "undefined";
 			}
 		},
+		com322023: {
+			js: "../maps/com322023mun.js",
+			exists: function () {
+				return typeof VisualJS.map.com322023 !== "undefined";
+			}
+		},
 		com33: {
 			js: "../maps/com332013mun.js",
 			exists: function () {
@@ -488,6 +512,12 @@ VisualJS.setup = { //v.1.2.0
 			js: "../maps/com352013mun.js",
 			exists: function () {
 				return typeof VisualJS.map.com35 !== "undefined";
+			}
+		},
+		com352023: {
+			js: "../maps/com352023mun.js",
+			exists: function () {
+				return typeof VisualJS.map.com352023 !== "undefined";
 			}
 		},
 		com36: {
@@ -526,18 +556,6 @@ VisualJS.setup = { //v.1.2.0
 				return typeof VisualJS.map.com41 !== "undefined";
 			}
 		},
-		com072015: {
-			js: "../maps/com072015mun.js",
-			exists: function () {
-				return typeof VisualJS.map.com072015 !== "undefined";
-			}
-		},
-		com242015: {
-			js: "../maps/com242015mun.js",
-			exists: function () {
-				return typeof VisualJS.map.com242015 !== "undefined";
-			}
-		},
 		com412015: {
 			js: "../maps/com412015mun.js",
 			exists: function () {
@@ -548,18 +566,6 @@ VisualJS.setup = { //v.1.2.0
 			js: "../maps/com422015mun.js",
 			exists: function () {
 				return typeof VisualJS.map.com422015 !== "undefined";
-			}
-		},
-		com072023: {
-			js: "../maps/com072023mun.js",
-			exists: function () {
-				return typeof VisualJS.map.com072023 !== "undefined";
-			}
-		},
-		com242023: {
-			js: "../maps/com242023mun.js",
-			exists: function () {
-				return typeof VisualJS.map.com242023 !== "undefined";
 			}
 		},
 		com432023: {
