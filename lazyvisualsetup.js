@@ -391,13 +391,8 @@ VisualJS.setup={ //v.1.2.0
 			js: "https://visual.js.org/maps/com062013mun.js",
 			exists: function(){ return typeof VisualJS.map.com06!=="undefined"; }
 		},
-		com072023: {
-			label: "Catalonia. El Bages: municipalities",
-			js: "https://visual.js.org/maps/com072023mun.js",
-			exists: function () { return typeof VisualJS.map.com072023 !== "undefined"; }
-		},
 		com072015: {
-			label: "Catalonia. El Bages: municipalities (between 2015 and 2023)",
+			label: "Catalonia. El Bages: municipalities",
 			js: "https://visual.js.org/maps/com072015mun.js",
 			exists: function(){ return typeof VisualJS.map.com072015!=="undefined"; }
 		},
@@ -536,8 +531,13 @@ VisualJS.setup={ //v.1.2.0
 			js: "https://visual.js.org/maps/com312013mun.js",
 			exists: function(){ return typeof VisualJS.map.com31!=="undefined"; }
 		},
-		com32: {
+		com322023: {
 			label: "Catalonia. La Segarra: municipalities",
+			js: "https://visual.js.org/maps/com322023mun.js",
+			exists: function(){ return typeof VisualJS.map.com322023!=="undefined"; }
+		},
+		com32: {
+			label: "Catalonia. La Segarra: municipalities (before 2023)",
 			js: "https://visual.js.org/maps/com322013mun.js",
 			exists: function(){ return typeof VisualJS.map.com32!=="undefined"; }
 		},
@@ -551,8 +551,13 @@ VisualJS.setup={ //v.1.2.0
 			js: "https://visual.js.org/maps/com342013mun.js",
 			exists: function(){ return typeof VisualJS.map.com34!=="undefined"; }
 		},
-		com35: {
+		com352023: {
 			label: "Catalonia. El Solsonès: municipalities",
+			js: "https://visual.js.org/maps/com352023mun.js",
+			exists: function(){ return typeof VisualJS.map.com352023!=="undefined"; }
+		},
+		com35: {
+			label: "Catalonia. El Solsonès: municipalities (before 2023)",
 			js: "https://visual.js.org/maps/com352013mun.js",
 			exists: function(){ return typeof VisualJS.map.com35!=="undefined"; }
 		},
