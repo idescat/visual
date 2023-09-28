@@ -543,8 +543,13 @@ VisualJS.setup={ //v.1.2.0
 			exists: function () { return typeof VisualJS.map.com432023 !== "undefined"; }
 		},
 		at: {
-			label: "Catalonia. Regions of the Territorial Plan",
+			label: "Catalonia. Regions of the Territorial Plan (before 2023)",
 			js: "https://visual.js.org/maps/cat2014at.js",
+			exists: function(){ return typeof VisualJS.map.at!=="undefined"; }
+		},
+		at2023: {
+			label: "Catalonia. Regions of the Territorial Plan",
+			js: "https://visual.js.org/maps/cat2023at.js",
 			exists: function(){ return typeof VisualJS.map.at!=="undefined"; }
 		}
 	},
