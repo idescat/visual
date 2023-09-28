@@ -604,6 +604,12 @@ VisualJS.setup = { //v.1.2.0
 				return typeof VisualJS.map.at !== "undefined";
 			}
 		},
+		at2023: {
+			js: "../maps/cat2023at.js",
+			exists: function () {
+				return typeof VisualJS.map.at !== "undefined";
+			}
+		},
 		spainnuts2: {
 			js: "../maps/spain2014nuts2.js",
 			exists: function () {
