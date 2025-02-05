@@ -190,15 +190,11 @@ VisualJS.setup = { //v.1.2.0
 
 				stack: {
 					js: "../lib/jquery.flot.stack.js",
-					exists: function () {
-						return typeof jQuery.plot.plugins === "object" && typeof jQuery.plot.plugins[0] === "object" && jQuery.plot.plugins[0].name === "stack";
-					}
+					exists: function () { return typeof jQuery.plot.plugins==="object" && jQuery.plot.plugins.some(function(plugin){ return typeof plugin==="object" && plugin.name==="stack";}); }
 				},
 				orderbars: {
 					js: "../lib/jquery.flot.orderbars.js",
-					exists: function () {
-						return typeof jQuery.plot.plugins === "object" && typeof jQuery.plot.plugins[0] === "object" && jQuery.plot.plugins[0].name === "orderBars";
-					}
+					exists: function () { return typeof jQuery.plot.plugins==="object" && jQuery.plot.plugins.some(function(plugin){ return typeof plugin==="object" && plugin.name==="orderBars";}); }
 				},
 				pyramid: {
 					js: "../lib/jquery.flot.pyramid.js",
@@ -208,15 +204,11 @@ VisualJS.setup = { //v.1.2.0
 				},
 				categories: {
 					js: "../lib/jquery.flot.categories.js",
-					exists: function () {
-						return typeof jQuery.plot.plugins === "object" && typeof jQuery.plot.plugins[0] === "object" && jQuery.plot.plugins[0].name === "categories";
-					}
+					exists: function () { return typeof jQuery.plot.plugins==="object" && jQuery.plot.plugins.some(function(plugin){ return typeof plugin==="object" && plugin.name==="categories";}); }
 				},
 				pie: {
 					js: "../lib/jquery.flot.pie.js",
-					exists: function () {
-						return typeof jQuery.plot.plugins === "object" && typeof jQuery.plot.plugins[0] === "object" && jQuery.plot.plugins[0].name === "pie";
-					}
+					exists: function () { return typeof jQuery.plot.plugins==="object" && jQuery.plot.plugins.some(function(plugin){ return typeof plugin==="object" && plugin.name==="pie";}); }
 				},
 				axisLabels: {
 					js: "../lib/jquery.flot.axislabels.js",
