@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2020 Institut d'Estadistica de Catalunya (Idescat)
+Copyright (c) 2025 Institut d'Estadistica de Catalunya (Idescat)
 http://www.idescat.cat (https://github.com/idescat/visual)
 
 Permission is hereby granted, free of charge, to any person obtaining
@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 /*global VisualJS */
 
-VisualJS.setup = { //v.1.2.0
+VisualJS.setup = { //v.1.2.8
 	//Colors for maps and series
 	colors: {
 		map: {

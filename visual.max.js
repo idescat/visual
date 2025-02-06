@@ -1,6 +1,6 @@
 /*
 Visual
-Copyright (c) 2020 Institut d'Estadistica de Catalunya (Idescat)
+Copyright (c) 2025 Institut d'Estadistica de Catalunya (Idescat)
 http://www.idescat.cat (https://github.com/idescat/visual)
 
 Permission is hereby granted, free of charge, to any person obtaining
@@ -23,10 +23,12 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+/* Version 1.2.8 fixes the plugin existence check during setup. */
+
 /*global d3, LazyLoad*/
 
 var VisualJS={
-	version: "1.2.7",
+	version: "1.2.8",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
