@@ -23,12 +23,15 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-/* Version 1.2.8 fixes the plugin existence check during setup. */
+/*
+	Version 1.2.8 fixes the plugin existence check during setup.
+	Version 1.2.9 fixes overlapping stroke in maps.
+*/
 
 /*global d3, LazyLoad*/
 
 var VisualJS={
-	version: "1.2.8",
+	version: "1.2.9",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -715,7 +718,10 @@ var VisualJS={
 					if(isTooltipEnabled()){
 						tooltip();
 					};
-					container.show && VisualJS.chart();
+					
+					if(container.show){
+						VisualJS.chart();
+					}
 
 					if(!VisualJS.fixed){
 						if(window.addEventListener){
@@ -1311,7 +1317,14 @@ var VisualJS={
 						VisualJS.pub[VisualJS.id].heading=heading;
 					};
 					canvas();
-					};
+
+					document.querySelectorAll('.visual .VisualJSarea path').forEach(function(path) {
+						path.addEventListener('mouseenter', function() {
+							var parent = this.parentNode;
+							parent.appendChild(this);
+						});
+					});
+				};
 			}
 		}else{
 			var hasFlot;
@@ -1596,7 +1609,7 @@ var VisualJS={
 								series.push({label : o.by[i], data : []});
 							}
 							//Generate the bars, with a blank space between groups
-							offset=0;
+							var offset=0;
 							for(i=0; i<o.data.length; i++){
 								if(o.data[i].val.length % 2 === 0){
 									ticks.push([(offset+((o.data[i].val.length-1)/2)), o.data[i].label]);
