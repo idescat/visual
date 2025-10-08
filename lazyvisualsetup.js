@@ -321,8 +321,12 @@ VisualJS.setup={ //v.1.2.8
 			js: "https://visual.js.org/maps/cat2013prov.js",
 			exists: function(){ return typeof VisualJS.map.prov!=="undefined"; }
 		},
+		com2025: {
+			js: "https://visual.js.org/maps/cat2025com.js",
+			exists: function () { return typeof VisualJS.map.com2025 !== "undefined"; }
+		},
 		com2023: {
-			label: "Catalonia: counties",
+			label: "Catalonia: counties (between 2023 and 2025)",
 			js: "https://visual.js.org/maps/cat2023com.js",
 			exists: function () { return typeof VisualJS.map.com2023 !== "undefined"; }
 		},
@@ -481,8 +485,13 @@ VisualJS.setup={ //v.1.2.8
 			js: "https://visual.js.org/maps/com232013mun.js",
 			exists: function(){ return typeof VisualJS.map.com23!=="undefined"; }
 		},
-		com242023: {
+		com242025: {
 			label: "Catalonia. Osona: municipalities",
+			js: "https://visual.js.org/maps/com242025mun.js",
+			exists: function(){return typeof VisualJS.map.com242025!=="undefined";}
+		},
+		com242023: {
+			label: "Catalonia. Osona: municipalities (between 2023 and 2025)",
 			js: "https://visual.js.org/maps/com242023mun.js",
 			exists: function () { return typeof VisualJS.map.com242023 !== "undefined"; }
 		},
@@ -586,8 +595,13 @@ VisualJS.setup={ //v.1.2.8
 			js: "https://visual.js.org/maps/com402013mun.js",
 			exists: function(){ return typeof VisualJS.map.com40!=="undefined"; }
 		},
-		com412015: {
+		com412025: {
 			label: "Catalonia. El Vallès Oriental: municipalities",
+			js: "https://visual.js.org/maps/com412025mun.js",
+			exists: function () {return typeof VisualJS.map.com412025!=="undefined";}
+		},
+		com412015: {
+			label: "Catalonia. El Vallès Oriental: municipalities (between 2023 and 2025)",
 			js: "https://visual.js.org/maps/com412015mun.js",
 			exists: function(){ return typeof VisualJS.map.com412015!=="undefined"; }
 		},
