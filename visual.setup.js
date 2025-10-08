@@ -260,6 +260,12 @@ VisualJS.setup = { //v.1.2.8
 				return typeof VisualJS.map.com2023 !== "undefined";
 			}
 		},
+		com2025: {
+			js: "../maps/cat2025com.js",
+			exists: function () { 
+				return typeof VisualJS.map.com2025 !== "undefined"; 
+			}
+		},
 		prov: {
 			js: "../maps/cat2013prov.js",
 			exists: function () {
@@ -418,6 +424,7 @@ VisualJS.setup = { //v.1.2.8
 		},
 		com24: {
 			js: "../maps/com242013mun.js",
+
 			exists: function () {
 				return typeof VisualJS.map.com24 !== "undefined";
 			}
@@ -432,6 +439,12 @@ VisualJS.setup = { //v.1.2.8
 			js: "../maps/com242023mun.js",
 			exists: function () {
 				return typeof VisualJS.map.com242023 !== "undefined";
+			}
+		},
+		com242025: {
+			js: "../maps/com242025mun.js",
+			exists: function(){ 
+				return typeof VisualJS.map.com242025 !== "undefined"; 
 			}
 		},
 		com25: {
@@ -554,6 +567,12 @@ VisualJS.setup = { //v.1.2.8
 				return typeof VisualJS.map.com412015 !== "undefined";
 			}
 		},
+		com412025: {
+			js: "../maps/com412025mun.js",
+			exists: function () {
+				return typeof VisualJS.map.com412025 !== "undefined"; 
+			}
+		},
 		com422015: {
 			js: "../maps/com422015mun.js",
 			exists: function () {
@@ -598,6 +617,12 @@ VisualJS.setup = { //v.1.2.8
 		},
 		at2023: {
 			js: "../maps/cat2023at.js",
+			exists: function () {
+				return typeof VisualJS.map.at !== "undefined";
+			}
+		},
+		at2025: {
+			js: "../maps/cat2025at.js",
 			exists: function () {
 				return typeof VisualJS.map.at !== "undefined";
 			}
