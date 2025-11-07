@@ -23,15 +23,21 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-/*
-	Version 1.2.8 fixes the plugin existence check during setup.
-	Version 1.2.9 fixes overlapping stroke in maps.
+/* 
+	Version 1.2.8  fixes the plugin existence check during setup.
+   Version 1.2.9  fixes overlapping stroke in maps.
+	Version 1.3.0 	Modernizes the code (var->let+const). 
+						Added support for "bar" stacked charts. 
+						Fixed axis labels and ticks bugs. 
+						Fixed offset in grouped bars charts. 
+						Fixed labels offset in tsbar charts.
 */
 
+/*jshint esversion: 6*/
 /*global d3, LazyLoad*/
 
-var VisualJS={
-	version: "1.2.9",
+let VisualJS={
+	version: "1.3.0",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -50,7 +56,7 @@ var VisualJS={
 
 	/* Public functions */
 	getSize: function(id){
-		var
+		const
 			vsetup=VisualJS.setup,
 			html=vsetup.html,
 			headingElement=html.heading,
@@ -62,28 +68,18 @@ var VisualJS={
 			g=d.getElementsByTagName("body")[0],
 			vis=d.getElementById(id),
 			computedStyle=function(el, prop) {
-				if (typeof getComputedStyle === 'function') {
-					return getComputedStyle(el)[prop];
-				}else{
-					return el.currentStyle[prop];
-				}
+				return typeof getComputedStyle === 'function' ?
+					getComputedStyle(el)[prop] :
+					el.currentStyle[prop];
 			},
 			getNode=function(sel){
-				var el=selector(sel);
+				const el=selector(sel);
 				return (el[0] instanceof Element) ? el[0] : (el[0] && el[0][0] ? el[0][0] : undefined);
 			},
 			outerHeight=function(el) {
-				if(el){
-					var
-						h=el.offsetHeight,
-						style=computedStyle(el)
-					;
-
-					h += Math.round(parseFloat(computedStyle(el,"marginTop")) + parseFloat(computedStyle(el,"marginBottom")));
-					return h;
-				}else{
-					return 0;
-				}
+				return el ? 
+					el.offsetHeight + Math.round(parseFloat(computedStyle(el,"marginTop")) + parseFloat(computedStyle(el,"marginBottom"))) : 
+					0;
 			},
 			head=outerHeight(getNode(headingElement)),
 			foot= outerHeight(getNode(footerElement)),
@@ -108,29 +104,31 @@ var VisualJS={
 		VisualJS.visualsize=(VisualJS.width<VisualJS.normal) ? vsetup.mini : vsetup.normal;
 
 		//Return false when not enough space to draw a chart
-		return (VisualJS.width > 10 && VisualJS.height > 10);
+		return VisualJS.width > 10 && VisualJS.height > 10;
 	},
-	arr2html: function (arr, html){
-		var ret="";
+	arr2html: function (arr){
+		let ret="";
 		if(typeof arr === "undefined"){}
 		else if(Array.isArray(arr)){
 			arr.forEach(function(el){
 				if(typeof el === "string" && el !== "")
-					ret += "<p>"+el+"</p>"; //footer elements
+					ret += `<p>${el}</p>`; //footer elements
 			});
 		}
 		else if(typeof arr === "string" && arr !== ""){
-			ret += "<p>"+arr+"</p>";		//footer elements
+			ret += `<p>${arr}</p>`;		//footer elements
 		}
 		return ret;
 	},
 	iframe: function(o, css){
-		var
+		let 
 			vsetup=VisualJS.setup,
-			clas=(typeof o.clas==="string") ? o.clas : vsetup.clas,
-			html='<!DOCTYPE html>\n<!--[if lt IE 7]><html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->\n<!--[if IE 7]><html class="lt-ie9 lt-ie8"> <![endif]-->\n<!--[if IE 8]><html class="lt-ie9"> <![endif]-->\n<!--[if gt IE 8]><!--> <html> <!--<![endif]-->\n<head>',
+			clas=typeof o.clas==="string" ? o.clas : vsetup.clas,
+			html='<!DOCTYPE html>\n<!--[if lt IE 7]><html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->\n<!--[if IE 7]><html class="lt-ie9 lt-ie8"> <![endif]-->\n<!--[if IE 8]><html class="lt-ie9"> <![endif]-->\n<!--[if gt IE 8]><!--> <html> <!--<![endif]-->\n<head>'
+		;
+		const 
 			create=function(){
-				var
+				const
 					d=document,
 					iframe=d.createElement("iframe"),
 					e=d.getElementById(o.id)
@@ -141,15 +139,14 @@ var VisualJS={
 				iframe.setAttribute("aria-hidden","true");
 				iframe.setAttribute("role","widget");
 
-				//iframe.seamless="seamless";
-				iframe.frameBorder="0";
-				iframe.scrolling="no";
+				iframe.border="none";
+				iframe.overflow="hidden";
 				e.parentNode.insertBefore(iframe, e.nextSibling); //we insert iframe after script
 				return iframe;
 			},
 			content=function(iframe, html){
 				if(typeof iframe !=="undefined"){
-					var iframeDoc;
+					let iframeDoc;
 					if(iframe.contentDocument){
 						iframeDoc=iframe.contentDocument;
 					}
@@ -170,15 +167,15 @@ var VisualJS={
 
 		if(typeof css==="string"){
 			if(css.indexOf("{")===-1){ //No "{"? We assume it's a URI
-				html+= '<link href="'+ css +'" rel="stylesheet" type="text/css"\/>';
+				html+= `<link href="${css}" rel="stylesheet" type="text/css"/>`;
 			}else{
-				html+= '<style type="text/css">'+ css +'<\/style>';
+				html+= `<style type="text/css">'${css}'</style>`;
 			}
 		}
-		html+= '<script type="text/javascript" src="'+ VisualJS.setup.main.visual +'"><\/script>';
-		html+= '<script type="text/javascript" src="'+ VisualJS.setup.main.setup +'"><\/script>';
-		html+= '<script type="text/javascript" src="'+ VisualJS.setup.main.lazy +'"><\/script>';
-		html+= '<\/head><body><div id="'+ o.id +'" class="'+ clas +'"><\/div><script>window.setTimeout(function(){visual('+ JSON.stringify(o) +');},1);<\/script><\/body><\/html>';
+		html+= `<script type="text/javascript" src="${VisualJS.setup.main.visual}"></script>`;
+		html+= `<script type="text/javascript" src="${VisualJS.setup.main.setup}"></script>`;
+		html+= `<script type="text/javascript" src="${VisualJS.setup.main.lazy}"></script>`;
+		html+= `</head><body><div id="${o.id}" class="${clas}"></div><script>window.setTimeout(function(){visual(${JSON.stringify(o)});},1);</script></body></html>`;
 		content(create(), html);
 	},
 	/* Draws two charts side by side
@@ -190,12 +187,12 @@ var VisualJS={
 		}
 	*/
 	compare: function(o){
-		var
+		const
 			vsetup=VisualJS.setup,
 			sepw=VisualJS.setup.separator,
 			id=(typeof o.id==="string") ? o.id : vsetup.id,
 			css=
-				(Object.prototype.toString.call(o.css)==="[object Array]") ?
+				Array.isArray(o.css) ?
 					((o.css.length===0) ?
 						["", ""]
 						:
@@ -209,30 +206,25 @@ var VisualJS={
 					[o.css, o.css],
 			d=document,
 			h1=d.createElement(vsetup.html.heading),
-			h1Content=(typeof o.title==="string") ? o.title : "",
+			h1Content=typeof o.title==="string" ? o.title : "",
 			par=d.createElement("p"), //footer element
-			html = vsetup.html,
-			parContent=(typeof o.footer==="string") ? VisualJS.arr2html(o.footer, html) : "",
+			parContent=typeof o.footer==="string" ? VisualJS.arr2html(o.footer) : "",
 			div=d.getElementById(id),
 			separator=d.createElement("div"),
 			style=d.createElement("style"),
 			resize=function(){
 				//It returns false when not enough space to draw a chart
 				if(!VisualJS.getSize(id)){return;}
-				var
+				const
 					height=VisualJS.height+((typeof o.footer==="string" && o.footer!=="") ? 14 : 0),
 					width=VisualJS.width+vsetup.margin,
-					rule="iframe{ float: left; width: "+Math.floor(((width-sepw)/2)-vsetup.margin)+"px; height:"+height+"px; }" //Let's round it down instead of letting browsers use their own criterion
+					rule=`iframe{ float: left; width: ${Math.floor(((width-sepw)/2)-vsetup.margin)}px; height:${height}px; }` //Let's round it down instead of letting browsers use their own criterion
 				;
-				if(style.styleSheet){ //IE
-					style.styleSheet.cssText=rule;
-				}else{
-					style.innerHTML=rule;
-				}
+				style.innerHTML=rule;
 				separator.style.height=height+"px";
-			},
-			span
+			}
 		;
+		let span;
 
 		h1.innerHTML=h1Content;
 		h1.style.overflow="auto";
@@ -243,13 +235,9 @@ var VisualJS={
 		div.appendChild(par);
 		d.getElementsByTagName("head")[0].appendChild(style);
 		separator.style.width=sepw+"px";
-		if("styleFloat" in separator.style) { //IE
-			separator.style.styleFloat="left";
-		}else{
-			separator.style.cssFloat="left";
-		}
+		separator.style.cssFloat="left";
 
-		for(var i=0; i<2; i++){
+		for(let i=0; i<2; i++){
 			span=d.createElement("span");
 			if(typeof o.load[i].id!=="string"){
 				o.load[i].id=vsetup.compareids[i];
@@ -264,24 +252,19 @@ var VisualJS={
 		if(!VisualJS.fixed){
 			if(window.addEventListener){
 				window.addEventListener('resize', resize, false);
-			}else if(window.attachEvent){
-				window.attachEvent('onresize', resize);
 			}else{
 				window.onresize=resize; //Warning: it will destroy any other attachment
 			}
 		}
 	},
-
 	//if o is array, then loop
 	load: function (o) {
-		var
+		const
 			listener=function(event){
-				var
-					message,
-					post=function(obj){
-						event.source.postMessage(JSON.stringify(obj), "*");
-					}
-				;
+				let message;
+				const post=function(obj){
+					event.source.postMessage(JSON.stringify(obj), "*");
+				};
 
 				if(typeof event.data === "string"){
 					message=JSON.parse(event.data);
@@ -298,19 +281,19 @@ var VisualJS={
 						});
 					}else{
 						if(message.action==="send"){
-							var
+							const
 								id=message.id || VisualJS.id,
 								vis=VisualJS.container[id] || VisualJS.container[id]
 							;
 							if(vis){
 								if(vis.type==="cmap" && !vis.data[0].hasOwnProperty("label")){
-									var	label=[]; // key: "id", val:"label"
-									for(var m=VisualJS.map[vis.by], i=m.features.length; i--;){
+									const	label=[]; // key: "id", val:"label"
+									for(let m=VisualJS.map[vis.by], i=m.features.length; i--;){
 										label[m.features[i].properties[m.id]]=m.features[i].properties[m.label];
 									}
 
 									//add 'label' to data
-									for(var data=vis.data, j=data.length; j--;){
+									for(let data=vis.data, j=data.length; j--;){
 										data[j].label=label[data[j].id];
 									}
 								}
@@ -331,53 +314,39 @@ var VisualJS={
 				}
 			}
 		;
+
 		if(typeof VisualJS.setup==="undefined"){
 			window.alert("Visual: Setup not found (visual.setup.js)!");
 		}
 
-
 		if(Object.prototype.toString.call(o)!=="[object Array]"){
 			VisualJS.get(o);
 		}else{
-			for(var i=0, len=o.length; i<len; i++){
+			for(let i=0, len=o.length; i<len; i++){
 				VisualJS.get(o[i]);
 			}
 		}
 
-		if(VisualJS.container[VisualJS.id].listen){
-			if(window.addEventListener){
-				window.addEventListener("message", listener, false);
-			}else{
-				window.attachEvent("onmessage", listener);
-			}
+		if(VisualJS.container[VisualJS.id].listen && window.addEventListener){
+			window.addEventListener("message", listener, {once: true});
 		}
 
 	},
-
 	//o: object passed thru visual(o)
 	get: function (o) {
-		var
+		const
 			vsetup=VisualJS.setup,
 			html=vsetup.html,
 			scanvas=vsetup.canvas,
-			max,
-			aux,
 			headingElement=html.heading,
 			footerElement= "."+VisualJS.setup.footerclass,
-			ie8=VisualJS.old||vsetup.func.old("ie9"), //Means: less than IE9
 			isRange=function(r){
-				if (
-						typeof r!=="undefined" &&
-						Object.prototype.toString.call(r)==="[object Array]" &&
-						r.length===2 &&
-						typeof r[0]==="number" &&
-						typeof r[1]==="number" &&
-						r[0]<r[1]
-					){
-					return true;
-				}else{
-					return false;
-				}
+				return typeof r!=="undefined" &&
+					Array.isArray(r) &&
+					r.length===2 &&
+					typeof r[0]==="number" &&
+					typeof r[1]==="number" &&
+					r[0]<r[1];
 			},
 			validate=function(node, type, setup){
 				if(typeof node==="string"){
@@ -390,9 +359,9 @@ var VisualJS={
 					}
 				}
 			},
-			getNestedParam=function( o, path ){
-				var tmp=o;
-				for(var i=0; i < path.length; i++){
+			getNestedParam=function(o, path){
+				let tmp=o;
+				for(let i=0; i < path.length; i++){
 					if(typeof tmp[path[i]] !== "undefined"){
 						tmp=tmp[path[i]];
 					}else{
@@ -402,14 +371,12 @@ var VisualJS={
 				}
 				return tmp;
 			},
-			setNestedParam=function( o, path, val ){
+			setNestedParam=function(o, path, val){
 				//Objects are referenced. Strings are not.
 				//Therefore we set the value on the parent object.
-				var
-					tmp=o,
-					aux
-				;
-				for(var i=0; i <= path.length - 2; i++){
+				let tmp=o;
+				let aux;
+				for(let i=0; i <= path.length - 2; i++){
 					aux=tmp[path[i]];
 					if(typeof aux === "undefined"){
 						tmp[path[i]]={};
@@ -418,14 +385,11 @@ var VisualJS={
 				}
 				tmp[path[path.length - 1]]=val;
 			},
-			safeGet=function(o){
-				return (typeof o!=="undefined" ? o : "");
-			},
 			isObject=function(o){
 				return typeof o==="object" && o!==null;
 			},
 			getDataType=function(){
-				var ret="invalid";
+				let ret="invalid";
 				if(Array.isArray(o.data)){
 					if(Array.isArray(o.data[0])){
 						ret="array";
@@ -455,57 +419,61 @@ var VisualJS={
 				return ret;
 			},
 			correctUnit=function(obj){
-				var
-					type=getDataType(),
-					el
-				;
 				//From new format to old when required
-				for(var property in obj){
-					if(obj.hasOwnProperty(property)){
-						el=obj[property];
-						if(o.type === "xy"){}
-						else if(o.type === "rank" || o.type === "pyram"){
-							if(el && typeof el.x !== "undefined")
-								obj[property]=el.x;
-							else if(typeof el === "string")
-								obj[property]=el;
-							else
-								obj[property]="";
-						}
-						else{
-							if(el && typeof el.y !== "undefined")
-								obj[property]=el.y;
-							else if(typeof el === "string")
-								obj[property]=el;
-							else
-								obj[property]="";
-						}
+				const processProperty = function(property, checkProperty) {
+					const el = obj[property];
+					if (el && typeof el[checkProperty] !== "undefined") {
+					  obj[property] = el[checkProperty];
+					} else if (typeof el === "string") {
+					  obj[property] = el;
+					} else {
+					  obj[property] = "";
+					}
+				};
+
+				if (o.type !== "xy") {
+					for(let property in obj){
+						if(obj.hasOwnProperty(property))
+							processProperty(property, o.type === "rank" || o.type === "pyram" ? "x" : "y");
 					}
 				}
 				return obj;
 			},
 			retrieveMinMaxValues=function(){
-				var aux=[];
+				/*let aux=[];
 				o.data.forEach(function(el){
 					aux=aux.concat(el.val);
 				});
-				return [Math.min.apply( null, aux), Math.max.apply( null, aux)];
+				return [Math.min.apply( null, aux), Math.max.apply( null, aux)];*/
+
+				if (!o.data || o.data.length === 0) {
+					return [undefined, undefined]; // Handle empty data
+				}
+
+				let 
+					min = o.data[0].val[0], // Initialize with the first value
+					max = o.data[0].val[0]
+				;
+
+				o.data.forEach(el => {
+					el.val.forEach(value => {
+						min = value < min ? value : min;
+						max = value > max ? value : max;
+					});
+				});
+
+				 return [min, max];
 			},
 			correctRange=function(obj){
-				var
-					range,
-					type=getDataType(),
-					min, max
-				;
+				let type=getDataType();
+
 				//From new format to old when required
 				if(typeof obj === "object" && obj !== null && !Array.isArray(obj) &&
 					(type === "array" || type === "object")
 				){
-					if(o.type === "xy"){}
-					else if(o.type === "rank" || o.type === "pyram"){
+					if(o.type === "rank" || o.type === "pyram"){
 						obj=obj.x;
-					}
-					else{
+					}else if(o.type !== "xy"){
 						obj=obj.y;
 					}
 				}
@@ -516,77 +484,72 @@ var VisualJS={
 					obj[0] === null && obj[1] === null
 				){
 					//Check if null null
-					if(o.data){
-						if(type === "object"){
-							range = retrieveMinMaxValues();
-							if( range[0] >= 0 && range[1] >= 0 ){
-								obj=[ 0, null ];
-							}else if( range[0] <= 0 && range[1] <= 0){
-								obj=[ null, 0 ];
-							}
+					if(o.data && type === "object"){
+						const range = retrieveMinMaxValues();
+						if( range[0] >= 0 && range[1] >= 0 ){
+							obj=[ 0, null ];
+						}else if( range[0] <= 0 && range[1] <= 0){
+							obj=[ null, 0 ];
 						}
 					}
 				}
 				//null null case, new format
 				else if(typeof obj === "object" && !Array.isArray(obj) && obj !== null &&
-						((Array.isArray(obj.x) && obj.x[0] === null && obj.x[1] === null)||(Array.isArray(obj.y) && obj.y[0] === null && obj.y[1] === null))){
-						aux={ x : [], y : [] };
-						min={ x : [], y : [] };
-						max={ x : [], y : [] };
-
-						if(type === "points"){
-							o.data.forEach(function(el){
-								el.val.forEach(function(arr){
-									aux.x.push(arr[0]);
-									aux.y.push(arr[1]);
-								});
+					((Array.isArray(obj.x) && obj.x[0] === null && obj.x[1] === null)||
+						(Array.isArray(obj.y) && obj.y[0] === null && obj.y[1] === null)))
+					{
+					
+					let aux={ x : [], y : [] };
+					
+					if(type === "points"){
+						o.data.forEach(function(el){
+							el.val.forEach(function(arr){
+								aux.x.push(arr[0]);
+								aux.y.push(arr[1]);
 							});
-						}
-						else if(type === "xy" || type === "xyz"){
-							o.data.forEach(function(el){
-								aux.x=aux.x.concat(el.x.val);
-								aux.y=aux.y.concat(el.y.val);
-							});
-						}
+						});
+					}
+					else if(type === "xy" || type === "xyz"){
+						o.data.forEach(function(el){
+							aux.x=aux.x.concat(el.x.val);
+							aux.y=aux.y.concat(el.y.val);
+						});
+					}
 
-						//calculate min/max
-						min.x=Math.min.apply( null, aux.x);
-						max.x=Math.max.apply( null, aux.x);
-						min.y=Math.min.apply( null, aux.y);
-						max.y=Math.max.apply( null, aux.y);
-						if(Array.isArray(obj.x) && obj.x[0]===null && obj.x[1]===null){
-							if( min.x >= 0 && max.x >= 0 ){
-								obj.x=[ 0, null ];
-							}else if( min.x <= 0 && max.x <= 0){
-								obj.x=[ null, 0 ];
-							}else{
-								obj.x=[ null, null ];
+					const processAxis = function(obj, axis, min, max) {
+						if (Array.isArray(obj[axis]) && obj[axis][0] === null && obj[axis][1] === null) {
+							if (min[axis] >= 0 && max[axis] >= 0) {
+								obj[axis] = [0, null];
+							} else if (min[axis] <= 0 && max[axis] <= 0) {
+								obj[axis] = [null, 0];
+							} else {
+								obj[axis] = [null, null];
 							}
 						}
-						if(Array.isArray(obj.y) && obj.y[0]===null && obj.y[1]===null){
-							if( min.y >= 0 && max.y >= 0 ){
-								obj.y=[ 0, null ];
-							}else if( min.y <= 0 && max.y <= 0){
-								obj.y=[ null, 0 ];
-							}else{
-								obj.y=[ null, null ];
-							}
-						}
+					};
+
+					//calculate min/max
+					let
+						min={ x : Math.min(...aux.x), y : Math.min(...aux.y) },
+						max={ x : Math.max(...aux.x), y : Math.max(...aux.y) }
+					;
+					processAxis(obj, "x", min, max);
+					processAxis(obj, "y", min, max);
+				}
+				//Range corrections for the new format
+				else if( (type === "xy" || type === "xyz" || type === "points")){
+					if(typeof obj === "number" || Array.isArray(obj)){
+						obj={
+							x: [null,null],
+							y: (Array.isArray(obj) ? obj : [null,obj])
+						};
+					}else if(typeof obj !== "object" || obj === null){
+						obj={
+							x: [null,null],
+							y: [null,null]
+						};
 					}
-					//Range corrections for the new format
-					else if( (type === "xy" || type === "xyz" || type === "points")){
-						if(typeof obj === "number" || Array.isArray(obj)){
-							obj={
-								x: [null,null],
-								y: (Array.isArray(obj) ? obj : [null,obj])
-							};
-						}else if(typeof obj !== "object" || obj === null){
-							obj={
-								x: [null,null],
-								y: [null,null]
-							};
-						}
-					}
+				}
 				return obj;
 			},
 			nts=
@@ -615,7 +578,8 @@ var VisualJS={
 				[["axis","ticks", "x"], "boolean",scanvas],
 				[["axis","ticks", "y"], "boolean",scanvas]
 			]
-			;
+		;
+
 		//Normalize input
 		//Compatibility with setup < 1.*
 		if(typeof scanvas.axis.labels === "undefined"){
@@ -625,7 +589,7 @@ var VisualJS={
 			scanvas.axis.ticks={ x: true, y: true };
 		}
 		//validate all nodes
-		for(var i=0; i<nts.length; i++){
+		for(let i=0; i<nts.length; i++){
 			validate(nts[i][0], nts[i][1], nts[i][2]);
 		}
 
@@ -647,21 +611,16 @@ var VisualJS={
 		//range conversion
 		o.range=correctRange(o.range);
 		o.lang=o.lang || vsetup.i18n.lang;
-		if( !(typeof o.range==="number" || isRange(o.range)) ){
-			//Range 2D
-			if(typeof o.range === "object" &&  o.range !== null && !Array.isArray(o.range)){
-			}
-			else{
-			o.range= ( typeof o.range === "number" || (Array.isArray(o.range) && o.range.length === 2) ) ?
+		if( !(typeof o.range==="number" || isRange(o.range)) && 
+			(typeof o.range !== "object" || o.range === null || Array.isArray(o.range)) ){
+			o.range= typeof o.range === "number" || (Array.isArray(o.range) && o.range.length === 2) ?
 				o.range :
-				(
-					( scanvas.range.hasOwnProperty(o.type) && typeof scanvas.range[o.type]==="number" ) ?
-						scanvas.range[o.type]
-						:
-						null
-				) // Only possible if "bar", "tbar", tsline" as setup does not provide a default value (number)
+				( scanvas.range.hasOwnProperty(o.type) && typeof scanvas.range[o.type]==="number" ) ?
+					scanvas.range[o.type]
+					:
+					null
+				// Only possible if "bar", "tbar", tsline" as setup does not provide a default value (number)
 			;
-			}
 		}
 		//Correct unit when needed
 		o.unit=correctUnit(o.unit);
@@ -671,11 +630,16 @@ var VisualJS={
 		//add object o
 		VisualJS.container[VisualJS.id]=o;
 
-		var
+		let 
+			max,
+			aux,
+			canvas,
+			tformatobj = null
+		;
+		const
 			selector="#" + VisualJS.id,
 			canvasSel=selector + " ."+vsetup.canvasclass, //Currently, only used in Flot,
 			container=VisualJS.container[VisualJS.id],
-			tformatobj = null,
 			isTooltipEnabled=function(){
 				return container.tooltip === false ? false : true;
 			},
@@ -684,20 +648,21 @@ var VisualJS={
 					return container.title || ""; //1.0.2
 				}
 
-				var
+				let 
 					t=[],
-					add=function(s, nw){
-						if(typeof s==="string" && s!==""){
-							if(nw===true){
-								s='<span class="'+VisualJS.setup.nowrapclass+'">' + s + "</span>";
-							}
-							t.push(s);
-						}
-					},
 					time
 				;
+				const add=function(s, nw){
+					if(typeof s==="string" && s!==""){
+						if(nw===true){
+							s='<span class="'+VisualJS.setup.nowrapclass+'">' + s + "</span>";
+						}
+						t.push(s);
+					}
+				};
+
 				if(container.time!==null && typeof container.time==="object"){
-					var
+					const
 						start=tformat(container.time[0],VisualJS.id),
 						end=tformat(container.time[container.time.length-1],VisualJS.id)
 					;
@@ -713,12 +678,12 @@ var VisualJS={
 				return  atext(t.join(". "));
 			},
 			draw=function(){
-				var chart=false;
+				let chart=false;
 				if(typeof VisualJS.chart==="function"){ //can be undefined if "cmap" && old browser
 					if(isTooltipEnabled()){
 						tooltip();
-					};
-					
+					}
+
 					if(container.show){
 						VisualJS.chart();
 					}
@@ -726,8 +691,6 @@ var VisualJS={
 					if(!VisualJS.fixed){
 						if(window.addEventListener){
 							window.addEventListener('resize', canvas, false);
-						}else if(window.attachEvent){
-							window.attachEvent('onresize', canvas);
 						}else{
 							window.onresize=canvas; //Warning: it will destroy any other attachment
 						}
@@ -749,15 +712,15 @@ var VisualJS={
 			},
 			// Add "script" to scripts' array
 			// check: false adds script without verifying its existance (used when a parent lib is already missing and existing conditions cannot be met).
-			addJS=function (script, check) {
+			addJS=function(script, check){
 				if(!check || !script.exists.call()) {
 					VisualJS.scripts.push(script.js);
 					return true;
 				}
 				return false;
 			},
-			tooltipText=function(id, l, v) {
-				var
+			tooltipText=function(id, l, v){
+				const
 					lab=(typeof v==="number" && VisualJS.container[id].unit.label!=="") ? " "+VisualJS.container[id].unit.label : "",
 					si=(typeof v==="number") ? VisualJS.container[id].unit.symbol : "",
 					va=format(v,id),
@@ -766,10 +729,10 @@ var VisualJS={
 						: // Value not available
 						va
 				;
-				return l ? "<strong>"+t+"</strong> "+l : t; //no need to atext()
+				return l ? `<strong>${t}</strong> ${l}` : t; //no need to atext()
 			},
-			legendText=function(id, l, v) {
-				var
+			legendText=function(id, l, v){
+				const
 					lab= "",
 					si=(typeof v==="number") ? VisualJS.container[id].unit.symbol : "",
 					va=format(v,id),
@@ -778,36 +741,23 @@ var VisualJS={
 						: // Value not available
 						va
 				;
-				return l ? "<strong>"+t+"</strong> "+l : t; //no need to atext()
+				return l ? `<strong>${t}</strong> ${l}` : t; //no need to atext()
 			},
-			tickFormatterGenerator=function(n, id, axis,f){
-				if(o.axis.labels[axis]){
-					if(typeof f === "function")
-						return f(n, id, axis);
-					else
-						return format(n,id, axis);
-				}else{
+			tickFormatterGenerator=function(n, id, axis, f){
+				if (!o.axis.labels[axis]) {
 					return "";
 				}
+				return typeof f === "function" ? f(n, id, axis) : format(n, id, axis);
 			},
 			labelStrip=function(arr){
-				var	ret=[];
-
-				for(var i=0; i<arr.length; i++){
-					if(Array.isArray(arr[i]))
-						ret.push([arr[i][0],""]);
-					else
-						ret.push([arr[i],""]);
-				}
-
-				return ret;
+				return arr.map((item) => (Array.isArray(item) ? [item[0], ""] : [item, ""]));
 			},
-			format=function( n, id, axis ){
+			format=function(n, id, axis){
 				if(typeof n === "undefined" || n===null){
 					return VisualJS.setup.i18n.text.na[VisualJS.container[id].lang];
 				}
 				if(typeof n==="number"){
-					var
+					const
 						s= ((
 								typeof VisualJS.container[id].dec === "object" && VisualJS.container[id].dec !== null &&
 								typeof axis === "string" &&
@@ -821,10 +771,11 @@ var VisualJS={
 							)
 						),
 						rgx=/(\d+)(\d{3})/,
-						x=s.split("."),
-						x1=x[0],
-						x2=(x.length>1) ? VisualJS.setup.i18n.text.dec[VisualJS.container[id].lang] + x[1] : ""
+						x=s.split(".")
 					;
+					let x1=x[0];
+					let x2=(x.length>1) ? VisualJS.setup.i18n.text.dec[VisualJS.container[id].lang] + x[1] : "";
+
 					while(rgx.test(x1)){
 						x1=x1.replace(rgx, "$1" + VisualJS.setup.i18n.text.k[VisualJS.container[id].lang] + "$2");
 					}
@@ -833,7 +784,8 @@ var VisualJS={
 				return "";
 			},
 			tformat=function( t, id ){
-				var label, period, year, template;
+				let label;
+				let template;
 
 				if(!tformatobj){
 					if(!t){//undefined, null, "", 0
@@ -864,24 +816,23 @@ var VisualJS={
 					};
 				}
 
-				if(typeof tformatobj.label==="undefined"){
+				if(typeof tformatobj.label==="undefined" || typeof tformatobj.text==="undefined"){
 					return t;
 				}
-				if(typeof tformatobj.text==="undefined"){
-					return t;
-				}
-				period=tformatobj.text[t.slice(4)-1];
+
+				const period=tformatobj.text[t.slice(4)-1];
 				if(typeof period==="undefined"){
 					return t;
 				}
-				year=t.slice(0,4);
+
+				const year=t.slice(0,4);
 
 				return tformatobj.template.replace("{{period}}", period).replace("{{year}}",year);
 			},
 			//Return the template defined in the setup file by tcode("aaaamm" or "aaaaq") and lang,
 			//anything else "{{period}} {{year}}"
 			getTemplateTFormat=function(tcode, lang){
-				var vsetuptemplate = vsetup.i18n.template;
+				const vsetuptemplate = vsetup.i18n.template;
 				if(vsetuptemplate){
 					if(typeof(vsetuptemplate) === "string"){
 						return vsetuptemplate;
@@ -898,14 +849,14 @@ var VisualJS={
 				Returns: posTT (tooltip coordinates [x,y])
 			*/
 			showTooltip=function(html, x, y) {
-				var
+				const
 					tt=document.getElementById(VisualJS.setup.tooltipid),
 					visRightLimit=VisualJS.bwidth-VisualJS.setup.margin, //Visual right limit
-					pos={} //Final tooltip position
+					pos={}, //Final tooltip position
+					ttHalfWidth=tt.clientWidth/2 //Half of tooltip width
 				;
 				tt.innerHTML=html;
 				tt.style.display="block"; //Paint to get width
-				var ttHalfWidth=tt.clientWidth/2; //Half of tooltip width
 				//Default: tooltip top and centered
 				pos.x=x-ttHalfWidth;
 				pos.y=y-tt.clientHeight-5; //5 to avoid cursor
@@ -921,492 +872,444 @@ var VisualJS={
 				tt.style.left=pos.x+"px";
 				tt.style.top=pos.y+"px";
 			},
-			tooltip=function(){
-				var d=document;
+			tooltip=function() {
+				const d=document;
 				if(!d.getElementById(VisualJS.setup.tooltipid)){
-					var tt=d.createElement("div");
+					const tt=d.createElement("div");
 					tt.setAttribute("role", "tooltip");
 					tt.id=VisualJS.setup.tooltipid;
 					tt.style.display="none";
 					d.body.appendChild(tt);
 				}
-			},
-			canvas
+			}
 		;
 
 		if(o.type==="cmap"){
-			if(ie8){
-				document.getElementById(VisualJS.id).innerHTML="<p>"+vsetup.i18n.text.oldbrowser[container.lang]+"</p>";
-			}else{
-				if(typeof o.by!=="string"){
-					return;
-				}
-
-				addJS( vsetup.lib.maps, true );
-				addJS( vsetup.lib.d3, true );
-				addJS( vsetup.map[o.by], true );
-
-
-				///////// CHART
-				VisualJS.chart=function(){
-					var
-						heading=getHeading(),
-						map=VisualJS.map[o.by],
-						mwidth=map.area[0],
-						mheight=map.area[1],
-						//hasGroups: grouped property exists, is object (array), has content and data seems to include a group property
-						hasGroups=(
-							o.grouped !== null &&
-							typeof o.grouped === "object" &&
-							Array.isArray(o.grouped.label) &&
-							o.grouped.label.length>0 &&
-							o.data[0].hasOwnProperty("group")
-						),
-						hasValues=o.data[0].hasOwnProperty("val"),
-						num=(hasGroups) ? o.grouped.label.length : ((hasValues) ? vsetup.colors.map.max : 1),
-						prefix=vsetup.colorclassprefix,
-						//If hasGroup & hasValue then the colour array is ignored
-						colors=VisualJS.func.colors( vsetup.colors.map.base, num, "fill", prefix,
-							((hasGroups && !hasValues && typeof o.grouped.color==="object" && o.grouped.color.length===o.grouped.label.length) ?
-								o.grouped.color
-								:
-								[]
-							),
-							VisualJS.id
-						),
-						visual=d3.select(selector),
-						projection=d3.geo[map.projection](),
-						//Support for projections that don't support the center method (albersUSA, for example).
-						proj=(typeof map.center==="object" && typeof projection.center==="function") ? projection.center(map.center) : projection,
-						xy=proj
-							.scale(map.scale)
-							.translate([mwidth/2, mheight/2]),
-						path=d3.geo.path().projection(xy),
-						tooltip=d3.select("#" + vsetup.tooltipid)
-					;
-					canvas=function(){
-						var
-							footerCont=atext(VisualJS.arr2html(o.footer, html) || "")
-						;
-						visual.html("<header><"+headingElement+" id=\"ARIAtitle\" style=\"overflow:auto;\" ></"+headingElement+"></header><footer class=\""+VisualJS.setup.footerclass+"\" style=\"overflow:auto;\"></footer>");
-
-						d3.select(selector+" "+headingElement).html(heading);
-						d3.select(selector+" "+footerElement).html(footerCont);
-						//It returns false when not enough space to draw a chart
-						if(!VisualJS.getSize(VisualJS.id)){return;}
-						var
-							id=VisualJS.id,
-							valors=d3.map(),
-							labels=d3.map(),
-							hasLabels=o.data[0].hasOwnProperty("label"),
-							val=[],
-							groups, //key: id, value: group
-							setGroups=function(){},
-							legend=function(){},
-							getAreaLabel,
-							colorClass,
-							inf,
-							sup,
-							aux,
-							hh=VisualJS.height/mheight,
-							ww=VisualJS.width/mwidth,
-							width=Math.min(
-								Math.round( mwidth*hh ),
-								VisualJS.width
-							),
-							height =
-							Math.min(
-								Math.round( mheight*ww ),
-								VisualJS.height
-							),
-							left=Math.floor( (VisualJS.width-width)/2 ),
-							topbottom=Math.floor( (VisualJS.height-height)/2 ),
-							scale=(hh<ww) ? hh : ww,
-							vis=visual
-								.insert("svg:svg", footerElement)
-								.attr("viewBox", "0 0 "+width+" "+height)
-								.attr("width", width)
-								.attr("height", height)
-								.attr("role", "img")
-								.attr("aria-labelledby", "ARIAtitle"),
-							colorOrderAsc = true;
-
-						if(hasGroups && hasValues){
-							aux=[];
-							[ 1, o.grouped.label.length].forEach(function(el){
-								for(var i=0;i<o.data.length;i++){
-									if(o.data[i].group===el){
-										aux.push(o.data[i].val);
-										break;
-									}
-								}
-							});
-							if(aux[0]>aux[1]){
-								colorOrderAsc = false;
-							}
-						}
-						else if(hasGroups){
-							if(o.grouped.color)
-								colors=o.grouped.color;
-						}
-
-						if(hasGroups){
-							groups=d3.map();
-							setGroups=function(g, r){
-								g.set(r.id, r.group);
-							};
-							VisualJS.groupedLabelSize = null;//How many label items are defined in the grouped element
-							colorClass=function(g, v, p){
-								if(hasValues && !colorOrderAsc){
-									if(!VisualJS.groupedLabelSize){
-										var temp = {};
-										for (var i = 0; i < d3.values(g).length; i++) {
-										    temp[d3.values(g)[i]] = 1+ (temp[d3.values(g)[i]] || 0);
-										}
-										VisualJS.groupedLabelSize = Object.keys(temp).length;
-									}
-									return prefix + (	VisualJS.groupedLabelSize-(g.get(p[map.id])));
-								}else{
-									return prefix + (g.get(p[map.id])-1);
-								}
-							};
-							getAreaLabel=function(g, p){
-								var
-									em=o.grouped.label[(g.get(p[map.id])-1)],
-									ret=(hasLabels) ? labels.get(p[map.id]) : p[map.label]
-								;
-
-								if(typeof em!=="undefined"){
-									ret+=" <em>" + em + "</em>";
-								}
-								return ret;
-							};
-							legend=VisualJS.func.legend;
-						}else{
-							if(hasValues){
-								colorClass=function(g, v, p, inf, sup){
-									var value=v.get(p[map.id]);
-									if(typeof value==="undefined"){
-										return "";
-									}
-									if(inf===sup){ //No variation in the data: use centered color (quantize would return undefined)
-										return prefix + (num/2).toFixed(0);
-									}
-									var
-										quantize=d3.scale.quantize()
-											.domain([inf, sup])
-											.range(d3.range(num).map(function(i) { return prefix + i; }))
-									;
-									return quantize(value);
-								};
-								legend=VisualJS.func.legend;
-							}else{
-								colorClass=function(g, v, p){
-									return (v.get(p[map.id])!=="") ? "" : prefix+(num-1);
-								};
-							}
-							getAreaLabel=function(g, p){
-								return (hasLabels) ? labels.get(p[map.id]) : p[map.label];
-							};
-						}
-
-						var r;
-						for (var i=0, odata=o.data, nobs=odata.length; i<nobs; i++){
-							r=odata[i];
-							if(r.hasOwnProperty("val")){
-								if(r.val!==null){ //Remove regions with val: null
-									valors.set(r.id, r.val);
-									val.push(r.val);
-								}
-							}else{ //If no val property on data (for example, grouped info), then do not print value on tooltip.
-								valors.set(r.id, "");
-							}
-							if(hasLabels){//key=id, value=label
-								labels.set(r.id, r.label);
-							}
-							setGroups(groups, r); //Does nothing if no groups
-						}
-						val.sort(function(a, b) {
-							return a-b;
-						});
-
-						var
-							minval=val[0],
-							maxval=val[val.length-1],
-							mouseDown=false,
-							bc=null,
-							pageX=null,
-							pageY=null,
-							showTooltipRegion=function(d, posX, posY){
-								if(d.properties[map.id]!=="" && d.properties[map.label]!=="" &&//Polygon is not relevant
-									(hasValues || hasGroups || typeof valors.get(d.properties[map.id])!=="undefined")){
-										showTooltip(
-											tooltipText(
-												id,
-												getAreaLabel(groups, d.properties),
-												valors.get(d.properties[map.id])
-											),
-											posX,
-											posY
-										);
-								}
-							}
-						;
-
-						if( typeof container.range==="number" ){ //Number
-							inf=d3.quantile(val, container.range);
-							sup=d3.quantile(val, 1-container.range);
-						}else{ //isRange (can't be null)
-							inf=container.range[0];
-							sup=container.range[1];
-						}
-						/*
-						o.data.forEach(function(el,i){
-							if(typeof el.label)
-								map.features[i];
-						});
-						*/
-
-						//if user didn't provide a callback function to be executed on enter/click, void function
-						if(typeof container.click!=="function"){
-							container.click=function(){};
-						}
-
-						vis.style("margin-left", left+"px");
-						vis.style("margin-top", topbottom+"px");
-						vis.style("margin-bottom", topbottom+"px");
-						vis.append("g")
-							.attr("class", vsetup.areaclass)
-							.attr("transform", "scale("+scale+")")
-							.selectAll("path")
-							.data(map.features)
-							.enter().append("svg:path")
-							.attr("class", function(d) {
-								if(d.properties[map.id]==="" || d.properties[map.label]==="" || //Polygon is not relevant
-								(!hasValues && typeof valors.get(d.properties[map.id])==="undefined")){ //Don't hover non-highlighted areas
-									return prefix + "nohover";
-								}
-								return colorClass(groups, valors, d.properties, inf, sup);
-							})
-							.attr("tabindex", function(){return d3.select(this).classed(prefix + "nohover") ? "-1" : "0";})
-							.attr("role", "presentation")
-							.attr("d", path)
-							.on("mousemove", function(d){showTooltipRegion(d, event.pageX, event.pageY);})
-							.on("mouseout", function(){return tooltip.style("display", "none");})
-							.on("mousedown", function(){mouseDown = true;})
-							.on("mouseup", function(){mouseDown = false;})
-							.on("focusout", function(){return tooltip.style("display", "none");})
-							.on("focusin", function(d, i){
-								var
-									currentTime=new Date().getTime(),
-									callFunction=true
-								;
-								if(mouseDown){
-									if(container.priv && container.priv.click){
-										if(currentTime - container.priv.click > 500){
-											callFunction = true;
-											container.priv.click = currentTime;
-										}else{
-											callFunction = false;
-										}
-									}else{
-										container.priv = {"click": currentTime};
-									}
-									if(callFunction){
-										container.click.apply(null,
-											[{
-												id: d.properties[map.id],
-												label: !hasLabels ? d.properties[map.label] : (typeof labels.get(d.properties[map.id])!=="undefined" ? labels.get(d.properties[map.id]) : null),
-												position:{x: event.pageX, y: event.pageY},
-												group: hasGroups && typeof groups.get(d.properties[map.id])!=="undefined" ? {num: groups.get(d.properties[map.id]), label: container.grouped.label[(groups.get(d.properties[map.id])-1)]}	: null,
-												value: hasValues && typeof valors.get(d.properties[map.id])!=="undefined"	?	valors.get(d.properties[map.id]): null
-											}]
-										);
-									}
-									pageX=event.pageX;
-									pageY=event.pageY;
-								}else{
-									bc =d3.select(this).node().getBoundingClientRect();
-									pageX=(bc.left+bc.right)/2;
-									pageY=(bc.top+bc.bottom)/2;
-								}
-								showTooltipRegion(d, pageX, pageY);
-							})
-							.on("keyup", function(d){
-								if(event.key==="Enter"){
-									var bc =d3.select(this).node().getBoundingClientRect();
-									container.click.apply(null,
-											[{
-												id: d.properties[map.id],
-												label: !hasLabels ? d.properties[map.label] : (typeof labels.get(d.properties[map.id])!=="undefined" ? labels.get(d.properties[map.id]) : null),
-												position: {x: bc.left, y: bc.top},
-												group: hasGroups && typeof groups.get(d.properties[map.id])!=="undefined"	? {num: groups.get(d.properties[map.id]), label: container.grouped.label[(groups.get(d.properties[map.id])-1)]}	: null,
-												value: hasValues && typeof valors.get(d.properties[map.id])!=="undefined"	?	valors.get(d.properties[map.id]) : null
-											}]
-									);
-								}
-			 	      })
-						;
-
-						//Draw the legend
-						if( hasValues || hasGroups ){ //No grouped nor highlighted-area map
-							var
-								infsup=[
-									tooltipText(id, null, inf),
-									tooltipText(id, null, sup)
-								],
-								lightdark=[
-									colors[colors.length-1], //lighter color
-									colors[0] //darker color
-								],
-								strict=[
-									inf<minval || format(inf,id)===format(minval,id),
-									sup>maxval || format(sup,id)===format(maxval,id)
-								]
-							;
-
-							if( hasGroups ){ //No grouped nor highlighted-area map
-								//If hasGroup & hasValue then the colour array is ignored
-								if(hasValues || typeof o.grouped.color === "undefined") o.grouped.color=colors;
-
-								VisualJS.pub[VisualJS.id].legend={
-									color: o.grouped.color,
-									text: o.grouped.label
-								};
-
-								if(container.legend){
-									VisualJS.func.groupLegend(
-										infsup,
-										vis,
-										tooltip,
-										height,
-										strict,
-										o,
-										scanvas,
-										colorOrderAsc
-									);
-								}
-							}
-							else if(hasValues){
-								infsup=[
-									legendText(id, null, inf),
-									legendText(id, null, sup)
-								];
-								VisualJS.pub[VisualJS.id].legend={
-									color: lightdark,
-									text: infsup,
-									symbol: [
-										(strict[0] ? "==" :  "<="),
-										(strict[1] ? "==" :  ">=")
-									]
-								};
-								if(container.legend){
-									VisualJS.func.legend(
-										infsup,
-										colors,
-										vis,
-										tooltip,
-										height,
-										strict,
-										o.unit.label
-									);
-								}
-							}
-						}
-
-						VisualJS.pub[VisualJS.id].heading=heading;
-					};
-					canvas();
-
-					document.querySelectorAll('.visual .VisualJSarea path').forEach(function(path) {
-						path.addEventListener('mouseenter', function() {
-							var parent = this.parentNode;
-							parent.appendChild(this);
-						});
-					});
-				};
+			if(typeof o.by!=="string"){
+				return;
 			}
+
+			addJS( vsetup.lib.maps, true );
+			addJS( vsetup.lib.d3, true );
+			addJS( vsetup.map[o.by], true );
+
+			///////// CHART
+			VisualJS.chart=function(){
+				const
+					heading=getHeading(),
+					map=VisualJS.map[o.by],
+					mwidth=map.area[0],
+					mheight=map.area[1],
+					//hasGroups: grouped property exists, is object (array), has content and data seems to include a group property
+					hasGroups=(
+						o.grouped !== null &&
+						typeof o.grouped === "object" &&
+						Array.isArray(o.grouped.label) &&
+						o.grouped.label.length>0 &&
+						o.data[0].hasOwnProperty("group")
+					),
+					hasValues=o.data[0].hasOwnProperty("val"),
+					num=hasGroups ? o.grouped.label.length : (hasValues ? vsetup.colors.map.max : 1),
+					prefix=vsetup.colorclassprefix,
+					//If hasGroup & hasValue then the colour array is ignored
+					visual=d3.select(selector),
+					projection=d3.geo[map.projection](),
+					//Support for projections that don't support the center method (albersUSA, for example).
+					proj=(typeof map.center==="object" && typeof projection.center==="function") ? projection.center(map.center) : projection,
+					xy=proj.scale(map.scale).translate([mwidth/2, mheight/2]),
+					path=d3.geo.path().projection(xy),
+					tooltip=d3.select("#" + vsetup.tooltipid)
+				;
+				let colors=VisualJS.func.colors( vsetup.colors.map.base, num, "fill", prefix,
+					(hasGroups && !hasValues && typeof o.grouped.color==="object" && o.grouped.color.length===o.grouped.label.length) ? 
+					o.grouped.color : 
+					[],
+					VisualJS.id
+				);
+				canvas=function(){
+					const footerCont=atext(VisualJS.arr2html(o.footer) || "");
+					visual.html("<header><"+headingElement+" id=\"ARIAtitle\" style=\"overflow:auto;\" ></"+headingElement+"></header><footer class=\""+VisualJS.setup.footerclass+"\" style=\"overflow:auto;\"></footer>");
+
+					d3.select(selector+" "+headingElement).html(heading);
+					d3.select(selector+" "+footerElement).html(footerCont);
+					//It returns false when not enough space to draw a chart
+					if(!VisualJS.getSize(VisualJS.id)){return;}
+					const
+						id=VisualJS.id,
+						valors=d3.map(),
+						labels=d3.map(),
+						hasLabels=o.data[0].hasOwnProperty("label"),
+						val=[],
+						hh=VisualJS.height/mheight,
+						ww=VisualJS.width/mwidth,
+						width=Math.min(
+							Math.round( mwidth*hh ),
+							VisualJS.width
+						),
+						height =
+						Math.min(
+							Math.round( mheight*ww ),
+							VisualJS.height
+						),
+						left=Math.floor( (VisualJS.width-width)/2 ),
+						topbottom=Math.floor( (VisualJS.height-height)/2 ),
+						scale=(hh<ww) ? hh : ww,
+						vis=visual
+							.insert("svg:svg", footerElement)
+							.attr("viewBox", "0 0 "+width+" "+height)
+							.attr("width", width)
+							.attr("height", height)
+							.attr("role", "img")
+							.attr("aria-labelledby", "ARIAtitle")
+					;
+					let 
+						legend=function(){},
+						setGroups=function(){},
+						colorOrderAsc = true,
+						groups, //key: id, value: group
+						getAreaLabel,
+						colorClass,
+						inf,
+						sup,
+						aux
+					;
+
+					if(hasGroups && hasValues){
+						aux=[];
+						[1, o.grouped.label.length].forEach(function(el){
+							for(let i=0;i<o.data.length;i++){
+								if(o.data[i].group===el){
+									aux.push(o.data[i].val);
+									break;
+								}
+							}
+						});
+						if(aux[0]>aux[1]){
+							colorOrderAsc = false;
+						}
+					}
+					else if(hasGroups && o.grouped.color) {
+						colors=o.grouped.color;
+					}
+
+					if(hasGroups){
+						groups=d3.map();
+						setGroups=function(g, r){g.set(r.id, r.group);};
+						VisualJS.groupedLabelSize = null;//How many label items are defined in the grouped element
+						colorClass=function(g, _, p){
+							if(hasValues && !colorOrderAsc){
+								if(!VisualJS.groupedLabelSize){
+									const temp = d3.values(g).reduce((acc, val) => {
+										acc[val] = 1 + (acc[val] || 0);
+										return acc;
+									}, {});
+									VisualJS.groupedLabelSize = Object.keys(temp).length;
+								}
+								return prefix + (	VisualJS.groupedLabelSize-(g.get(p[map.id])));
+							}else{
+								return prefix + (g.get(p[map.id])-1);
+							}
+						};
+						getAreaLabel=function(g, p){
+							const	em=o.grouped.label[(g.get(p[map.id])-1)];
+							let ret=(hasLabels) ? labels.get(p[map.id]) : p[map.label];
+
+							if(typeof em!=="undefined"){
+								ret+=` <em>${em}</em>`;
+							}
+							return ret;
+						};
+						legend=VisualJS.func.legend;
+					}else if(hasValues){
+						colorClass=function(_, v, p, inf, sup){
+							const value=v.get(p[map.id]);
+							if(typeof value==="undefined"){
+								return "";
+							}
+							if(inf===sup){ //No variation in the data: use centered color (quantize would return undefined)
+								return prefix + (num/2).toFixed(0);
+							}
+							const
+								quantize=d3.scale.quantize()
+									.domain([inf, sup])
+									.range(d3.range(num).map(function(i) { return prefix + i; }))
+							;
+							return quantize(value);
+						};
+						legend=VisualJS.func.legend;
+					}else{
+						colorClass=function(_, v, p){
+							return v.get(p[map.id])!=="" ? "" : prefix+(num-1);
+						};
+					}
+					getAreaLabel=function(g, p){
+						return hasLabels ? labels.get(p[map.id]) : p[map.label];
+					};
+					
+					o.data.forEach(r => {
+						if(r.hasOwnProperty("val")){
+							if(r.val!==null){ //Remove regions with val: null
+								valors.set(r.id, r.val);
+								val.push(r.val);
+							}
+						}else{ //If no val property on data (for example, grouped info), then do not print value on tooltip.
+							valors.set(r.id, "");
+						}
+						if(hasLabels){//key=id, value=label
+							labels.set(r.id, r.label);
+						}
+						setGroups(groups, r); //Does nothing if no groups
+					});
+					val.sort(function(a, b) {
+						return a-b;
+					});
+
+					const
+						minval=val[0],
+						maxval=val[val.length-1],
+						showTooltipRegion=function(d, posX, posY){
+							if(d.properties[map.id]!=="" && d.properties[map.label]!=="" &&//Polygon is not relevant
+								(hasValues || hasGroups || typeof valors.get(d.properties[map.id])!=="undefined")){
+									showTooltip(
+										tooltipText(
+											id,
+											getAreaLabel(groups, d.properties),
+											valors.get(d.properties[map.id])
+										),
+										posX,
+										posY
+									);
+							}
+						}
+					;
+					let 
+						mouseDown=false,
+						pageX=null,
+						pageY=null,
+						bc=null
+					;
+
+					if( typeof container.range==="number" ){ //Number
+						inf=d3.quantile(val, container.range);
+						sup=d3.quantile(val, 1-container.range);
+					}else{ //isRange (can't be null)
+						inf=container.range[0];
+						sup=container.range[1];
+					}
+
+					//if user didn't provide a callback function to be executed on enter/click, void function
+					if(typeof container.click!=="function"){
+						container.click=function(){};
+					}
+
+					vis.style("margin-left", left+"px");
+					vis.style("margin-top", topbottom+"px");
+					vis.style("margin-bottom", topbottom+"px");
+					vis.append("g")
+						.attr("class", vsetup.areaclass)
+						.attr("transform", "scale("+scale+")")
+						.selectAll("path")
+						.data(map.features)
+						.enter().append("svg:path")
+						.attr("class", function(d) {
+							if(d.properties[map.id]==="" || d.properties[map.label]==="" || //Polygon is not relevant
+							(!hasValues && typeof valors.get(d.properties[map.id])==="undefined")){ //Don't hover non-highlighted areas
+								return prefix + "nohover";
+							}
+							return colorClass(groups, valors, d.properties, inf, sup);
+						})
+						.attr("tabindex", function(){return d3.select(this).classed(prefix + "nohover") ? "-1" : "0";})
+						.attr("role", "presentation")
+						.attr("d", path)
+						.on("mousemove", function(d, event){showTooltipRegion(d, d3.event.pageX, d3.event.pageY);})
+						.on("mouseout", function(){return tooltip.style("display", "none");})
+						.on("mousedown", function(){mouseDown = true;})
+						.on("mouseup", function(){mouseDown = false;})
+						.on("focusout", function(){return tooltip.style("display", "none");})
+						.on("focusin", function(d){
+							if(mouseDown){
+								let callFunction=true;
+								const currentTime=new Date().getTime();
+								if(container.priv && container.priv.click){
+									if(currentTime - container.priv.click > 500){
+										container.priv.click = currentTime;
+									} else {
+										callFunction = false;
+									}
+								}else{
+									container.priv = {click: currentTime};
+								}
+								if(callFunction){
+									container.click.apply(null,
+										[{
+											id: d.properties[map.id],
+											label: !hasLabels ? d.properties[map.label] : (typeof labels.get(d.properties[map.id])!=="undefined" ? labels.get(d.properties[map.id]) : null),
+											position:{x: d3.event.pageX, y: d3.event.pageY},
+											group: hasGroups && typeof groups.get(d.properties[map.id])!=="undefined" ? {num: groups.get(d.properties[map.id]), label: container.grouped.label[(groups.get(d.properties[map.id])-1)]}	: null,
+											value: hasValues && typeof valors.get(d.properties[map.id])!=="undefined"	?	valors.get(d.properties[map.id]): null
+										}]
+									);
+								}
+								pageX=d3.event.pageX;
+								pageY=d3.event.pageY;
+							}else{
+								bc =d3.select(this).node().getBoundingClientRect();
+								pageX=(bc.left+bc.right)/2;
+								pageY=(bc.top+bc.bottom)/2;
+							}
+							showTooltipRegion(d, pageX, pageY);
+						})
+						.on("keyup", function(d){
+							if(d3.event.key==="Enter"){
+								let bc =d3.select(this).node().getBoundingClientRect();
+								container.click.apply(null,
+										[{
+											id: d.properties[map.id],
+											label: !hasLabels ? d.properties[map.label] : (typeof labels.get(d.properties[map.id])!=="undefined" ? labels.get(d.properties[map.id]) : null),
+											position: {x: bc.left, y: bc.top},
+											group: hasGroups && typeof groups.get(d.properties[map.id])!=="undefined"	? {num: groups.get(d.properties[map.id]), label: container.grouped.label[(groups.get(d.properties[map.id])-1)]}	: null,
+											value: hasValues && typeof valors.get(d.properties[map.id])!=="undefined"	?	valors.get(d.properties[map.id]) : null
+										}]
+								);
+							}
+					})
+					;
+
+					//Draw the legend
+					if( hasValues || hasGroups ){ //No grouped nor highlighted-area map
+						let infsup=[
+								tooltipText(id, null, inf),
+								tooltipText(id, null, sup)
+							];
+						const
+							lightdark=[
+								colors[colors.length-1], //lighter color
+								colors[0] //darker color
+							],
+							strict=[
+								inf<minval || format(inf,id)===format(minval,id),
+								sup>maxval || format(sup,id)===format(maxval,id)
+							]
+						;
+
+						if( hasGroups ){ //No grouped nor highlighted-area map
+							//If hasGroup & hasValue then the colour array is ignored
+							if(hasValues || typeof o.grouped.color === "undefined") {
+								o.grouped.color=colors;
+							}
+
+							VisualJS.pub[VisualJS.id].legend={
+								color: o.grouped.color,
+								text: o.grouped.label
+							};
+
+							if(container.legend){
+								VisualJS.func.groupLegend(
+									infsup,
+									vis,
+									tooltip,
+									height,
+									strict,
+									o,
+									scanvas,
+									colorOrderAsc
+								);
+							}
+						}
+						else if(hasValues){
+							infsup=[
+								legendText(id, null, inf),
+								legendText(id, null, sup)
+							];
+							VisualJS.pub[VisualJS.id].legend={
+								color: lightdark,
+								text: infsup,
+								symbol: [
+									(strict[0] ? "==" :  "<="),
+									(strict[1] ? "==" :  ">=")
+								]
+							};
+							if(container.legend){
+								VisualJS.func.legend(
+									infsup,
+									colors,
+									vis,
+									tooltip,
+									height,
+									strict,
+									o.unit.label
+								);
+							}
+						}
+					}
+
+					VisualJS.pub[VisualJS.id].heading=heading;
+				};
+				canvas();
+
+				document.querySelectorAll('.visual .VisualJSarea path').forEach(function(path) {
+					path.addEventListener('mouseenter', function() {
+						let parent = this.parentNode;
+						parent.appendChild(this);
+					});
+				});
+			};
 		}else{
-			var hasFlot;
+			let hasFlot = true;
 			//(o.type==="tsline" || o.type==="tsbar" || o.type==="bar" || o.type==="rank"  || o.type==="pyram")
 			if( addJS( vsetup.lib.jquery, true ) ){ //No jQuery? Add Flot without checking
 				hasFlot=false;
 				addJS( vsetup.lib.jquery.flot, false );
-			}else{ //Has jQuery but not Flot?
-				if( addJS( vsetup.lib.jquery.flot, true ) ){
-					hasFlot=false;
-				}else{
-					hasFlot=true;
-				}
+			}else if( addJS( vsetup.lib.jquery.flot, true ) ){ //Has jQuery but not Flot?
+				hasFlot=false;
 			}
 
-			if(ie8){
-				addJS( vsetup.lib.excanvas, true);
-			}
-
-			var
-				transform=function(){}, //Local function in load(). It will be redefined.
-				series=[],
-				ticks=[],
+			const 
 				opt=[],
-				stacked=o.stacked || false,
 				ts=function(){
 					//If autoheading, check for leading and trailing zeros
 					if(container.autoheading){
-						var
-							tlen=o.time.length,
-							dlen=o.data.length,
-							d, t, u, n, nuls, ulen
+						let 
+							tlen=o.time.length,  
+							t, 
+							nuls
 						;
 
 						//trim leading nulls
+						const checkAllNull = (data, index) => data.every(dataItem => dataItem.val[index] === null);
 						if(o.data[0].val[0]===null){
-
-							for(t=0, n=true, nuls=[]; t<tlen; t++){
-								for(d=0; d<dlen; d++){
-									n=n && (o.data[d].val[t]===null);
-								}
-								if(!n){
+							for(t=0, nuls=[]; t<tlen; t++){
+								let allNull = checkAllNull(o.data, t);
+								if (!allNull) {
 									break;
 								}
-								nuls.push(n);
+								nuls.push(true);
 							}
-							ulen=nuls.length;
-							for(u=0; u<ulen; u++){
-								if(nuls[u]){
-									o.time.shift();
-									for(d=0; d<dlen; d++){
-										o.data[d].val.shift();
-									}
-								}
+							if (nuls.length > 0) { // Check if nuls has elements to avoid issues
+								o.time.splice(0, nuls.length);
+								o.data.forEach(dataItem => dataItem.val.splice(0, nuls.length));
 							}
 							tlen=o.time.length; //update
 						}
 
 						//trim trailing nulls (same routine in reverse order)
 						if(o.data[0].val[tlen-1]===null){
-							for(t=tlen, n=true, nuls=[]; t--;){
-								for(d=0, dlen=o.data.length; d<dlen; d++){
-									n=n && (o.data[d].val[t]===null);
-								}
-								if(!n){
+							for(t=tlen, nuls=[]; t--;){
+								let allNull = checkAllNull(o.data, t);
+								if (!allNull) {
 									break;
 								}
-								nuls.push(n);
+								nuls.push(true);
 							}
 
-							for(u=nuls.length; u--;){
-								if(nuls[u]){
-									o.time.pop();
-									for(d=0; d<dlen; d++){
-										o.data[d].val.pop();
-									}
-								}
+							if (nuls.length > 0) {
+								o.time.splice(-nuls.length);
+								o.data.forEach(dataItem => dataItem.val.splice(-nuls.length));
 							}
 						}
 					}
 
-					var fbars=function(){
+					let fbars=function(){
 						return; //When stacked an undefined is expected in bars (null or false won't work)
 					};
 					if(stacked){
@@ -1421,25 +1324,31 @@ var VisualJS={
 					}
 					transform=function(d,t){ // Local in load(), not ts().
 						VisualJS.ticks=[];
-						var i, len, nseries=t.length, nvalues=d.length,
+						let i, nseries=t.length, nvalues=d.length,
 							barWidth= (container.grid && container.grid.bar && (typeof container.grid.bar === "number")) ? container.grid.bar : (nseries >= 2 && nvalues > 4  ? 0.18 : 0.2)
 						;
-						for(i=0, len=t.length; i<len; i++){
-							ticks.push([i,t[i]]);
-							VisualJS.ticks.push([i,t[i]]); //keep original ticks
+						for(i=0; i<nseries; i++){
+							if(o.type==="tsbar"){
+								let xCentre = i - (nvalues > 1 ? barWidth / 2 : 0);
+								ticks.push([xCentre,t[i]]);
+								VisualJS.ticks.push([xCentre,t[i]]); //keep original ticks
+							} else {
+								ticks.push([i,t[i]]);
+								VisualJS.ticks.push([i,t[i]]); //keep original ticks
+							}
 						}
-						for(i=0, len=d.length; i<len; i++){
-							for(var data=[], v=d[i].val, vlen=v.length, j=0; j<vlen; j++){
+						for(i=0; i<nvalues; i++){
+							let data = [];
+							for(let v=d[i].val, vlen=v.length, j=0; j<vlen; j++){
 								data.push([j,v[j]]);
 							}
-							if(o.type!=="tsbar" || stacked || len===1){//if tsbar with one series (len===1) must be treated like stacked (even though it's not)
+							if(o.type!=="tsbar" || stacked || nvalues===1){//if tsbar with one series (nvalues===1) must be treated like stacked (even though it's not)
 								series.push({label: d[i].label, data: data});
 							}else{
-
-								series.push({label: d[i].label, data: data, bars: { show: true, barWidth: barWidth, order: i+1, lineWidth: 2 }}); //barWidth should probably be computed dynamically considering number of series (this value allows only for a max of 3 series)
+								series.push({label: d[i].label, data: data, bars: { show: true, barWidth: barWidth, order: i+1, lineWidth: 2, align: "center" }}); //barWidth should probably be computed dynamically considering number of series (this value allows only for a max of 3 series)
 							}
 						}
-						var slen=series.length;
+						const slen=series.length;
 						for (i=0; i<slen; i++){
 							opt.push({
 								data: series[i].data,
@@ -1451,9 +1360,11 @@ var VisualJS={
 						shlegend=(slen>1);
 					};
 					return getHeading();
-				},
-				shlegend, stack, lines, points, bars, pie, heading
+				}
 			;
+			let shlegend, stack, lines, points, bars, pie, heading, series=[], ticks=[];
+			let transform=function(){}; //Local function in load(). It will be redefined.
+			let stacked=o.stacked || false;
 
 			Array.max=function(a){
 				return Math.max.apply(Math, a);
@@ -1467,26 +1378,21 @@ var VisualJS={
 					bars=false;
 					lines=false;
 					heading=getHeading();
-					transform=function(d,t,b){
-						var
+					transform=function(d,_t,_b){
+						const
 							group2series=function(group){
-								var
-									ret={
-										label: group.label,
-										data: [],
-										by: (Array.isArray(group.by) && typeof group.by[0] === "string") ? group.by : null,
-									},
-									i
-								;
+								const ret={
+									label: group.label,
+									data: [],
+									by: Array.isArray(group.by) && typeof group.by[0] === "string" ? group.by : null,
+								};
 								if(typeof group.x === "object" && typeof group.y === "object"){
 									//Convertir a punts
 									vsetup.canvas.axis.labelsText={
 										x: group.x.label,
 										y: group.y.label
 									};
-									for(i=0;i<group.x.val.length;i++){
-										ret.data.push([group.x.val[i], group.y.val[i]]);
-									}
+									ret.data = group.x.val.map((xVal, i) => [xVal, group.y.val[i]]);
 								}else if(group.val && group.val.length >=1 && group.val[0].length == 2){
 									vsetup.canvas.axis.labelsText={
 										x: group.x,
@@ -1501,9 +1407,7 @@ var VisualJS={
 							series=[d];
 						}
 						else if(Array.isArray(d) && typeof d[0] === "object" && !Array.isArray(d[0])){
-							for(var i=0; i<d.length; i++){
-								series.push(group2series(d[i]));
-							}
+							series = d.map(item => group2series(item));
 						}
 					};
 					shlegend=true;
@@ -1514,15 +1418,14 @@ var VisualJS={
 					points=false;
 					bars=false;
 					heading=getHeading();
-					transform=function(d,t,b){
+					transform=function(d,_,b){
 						max=Math.max( Array.max(d[0].val) , Array.max(d[1].val) );
 						series[0]={label: d[0].label, data: [], pyramid: {direction: "L"}};
 						series[1]={label: d[1].label, data: []};
-						for(var i=0, len=b.length; i<len; i++){
-							series[0].data[i]=[ b[i] , d[0].val[i] ];
-							series[1].data[i]=[ b[i] , d[1].val[i] ];
-							// ticks[i]=b[i]; ticks are not used
-						}
+						b.forEach((value, i) => {
+							series[0].data[i] = [value, d[0].val[i]];
+							series[1].data[i] = [value, d[1].val[i]];
+						});
 					};
 					shlegend=true;
 					stack=false;
@@ -1531,17 +1434,18 @@ var VisualJS={
 				break;
 
 				case "rank":
-					var data=[];
+					let data=[];
 					lines=false;
 					points=false;
 					bars=true;
 					heading=getHeading();
-					transform=function(d,t,b){
-						var values=[];
-						for(var i=0, len=d.length; i<len; i++){
+					transform=function(d,_,b){
+						const values=[];
+						for(let i=0, len=d.length; i<len; i++){
 							//Include in reverse order
-							ticks[i]=[i, (typeof d[len-i-1][0] !== "undefined") ?  d[len-i-1][0] : b[len-i-1] ];
-							var val= (typeof d[len-i-1][1] !== "undefined") ? d[len-i-1][1] : d[len-i-1];
+							const reverseI = len-i-1;
+							ticks[i]=[i, typeof d[reverseI][0] !== "undefined" ?  d[reverseI][0] : b[reverseI] ];
+							const val= typeof d[reverseI][1] !== "undefined" ? d[reverseI][1] : d[reverseI];
 							values.push(val);
 							data[i]=[val,i];
 						}
@@ -1559,25 +1463,14 @@ var VisualJS={
 					points=false;
 					bars=false;
 					heading=getHeading();
-					transform=function(d,t,b){
-						var i, len;
+					transform=function(d,_,b){
 						if(typeof b!=="object" || b===null){  //Without "by": simplified call
 							//was simply series=d
-							len=d.length;
-							for(i=0; i<len; i++){
-								if(d[i][1]!==null){
-									series.push({ label: d[i][0], data: d[i][1] });
-								}
-							}
+							series = d.filter(item => item[1] !== null).map(item => ({label: item[0],data: item[1]}));
 						}else{
 							//An array without "label" and "val"
 							if(typeof d[0]==="number"){
-								len=b.length;
-								for(i=0; i<len; i++){
-									if(d[i]!==null){
-										series.push({ label: b[i], data: d[i] });
-									}
-								}
+								series = b.filter((_, i) => d[i] !== null).map((label, i) => ({label, data: d[i]}));
 							}
 						}
 					};
@@ -1585,53 +1478,73 @@ var VisualJS={
 				break;
 
 				case "bar":
-					addJS( vsetup.lib.jquery.flot.categories, hasFlot ); //Check plugin only if we have Flot
+					let fbars=function(){
+						return; //When stacked an undefined is expected in bars (null or false won't work)
+					};
+					if(stacked){
+						addJS( vsetup.lib.jquery.flot.stack, hasFlot ); //Check plugin only if we have Flot
+						fbars=function(si){
+							return si.bars;
+						};
+					} else {
+						addJS( vsetup.lib.jquery.flot.categories, hasFlot ); //Check plugin only if we have Flot
+					}
 					points=false;
 					bars=true;
 					heading=getHeading();
 					lines=false;
-					transform=function(d,t,b){
-						var i, len;
+					transform=function(d,_,b){
 						if(typeof b!=="object" || b===null){  //Without "by": simplified call
 							//was simply series=d
-							len=d.length;
-							for(i=0; i<len; i++){
-								if(d[i][1]!==null){
-									series.push([ '<span>'+d[i][0]+'</span>' , d[i][1] ]); //span: temporary solution to avoid x-axis label overlapping
-								}
-							}
+							series = d.filter(item => item[1] !== null).map(item => [`<span>${item[0]}</span>`, item[1]]); // span: temporary solution to avoid x-axis label overlapping
 							series=[series];
+						} else if(stacked){
+							VisualJS.ticks=[];
+							let i, len;
+							for(i=0, len=d.length; i<len; i++){
+								ticks.push([i,d[i].label]);
+								VisualJS.ticks.push([i,d[i].label]); //keep original ticks
+							}
+							for(i=0, len=b.length; i<len; i++){
+								let data = [];
+								for(let j=0; j<d.length; j++){
+									let v=d[j].val;
+									data.push([j,v[i]]);
+								}
+								series.push({label: b[i], data: data});
+							}
+							const slen=series.length;
+							for (i=0; i<slen; i++){
+								opt.push({
+									data: series[i].data,
+									label: series[i].label,
+									bars: fbars(series[i]),
+									shadowSize: container.grid.shadow
+								});
+							}
 						} else if(o.by && o.by.length && typeof o.data[0] === "object"){
-							ticks=[];
 							//Create the legend
-							series=[];
-							for(i=0; i<o.by.length; i++){
-								series.push({label : o.by[i], data : []});
-							}
+							series = o.by.map(item => ({label: item, data: []}));
 							//Generate the bars, with a blank space between groups
-							var offset=0;
-							for(i=0; i<o.data.length; i++){
-								if(o.data[i].val.length % 2 === 0){
-									ticks.push([(offset+((o.data[i].val.length-1)/2)), o.data[i].label]);
-								}else{
-									ticks.push([Math.floor(offset+((o.data[i].val.length)/2)), o.data[i].label]);
-								}
-								for(var j=0; j<o.data[i].val.length; j++){
-									series[j].data.push([offset, o.data[i].val[j]]);
+							let offset=0;
+							o.data.forEach(currentData => {
+								const dataPoints = currentData.val;
+								ticks.push([
+									dataPoints.length % 2 === 0 ?
+									  offset + (dataPoints.length - 1) / 2 :
+									  Math.floor(offset + dataPoints.length / 2),
+									  currentData.label,
+								]);
+								dataPoints.forEach((value, index) => {
+									series[index].data.push([offset, value]);
 									offset++;
-								}
-								offset+=2;
-							}
-
+								});
+								offset++;
+							});
 						} else {
 							//An array without "label" and "val"
 							if(typeof d[0]==="number"){
-								len=b.length;
-								for(i=0; i<len; i++){
-									if(d[i]!==null){
-										series.push([ '<span>'+b[i]+'</span>' , d[i] ]); //span: temporary solution to avoid x-axis label overlapping
-									}
-								}
+								series = b.filter((_, i) => d[i] !== null).map((label, i) => [`<span>${label}</span>`, d[i]]);
 							}
 							series=[series];
 						}
@@ -1661,32 +1574,37 @@ var VisualJS={
 			VisualJS.chart=function(){
 				transform(o.data, o.time, o.by);
 				$.fn.UseTooltip=function (id) {
-					var previousPoint=[];
-					$(this).bind("plothover", function (event, pos, item) {
-						var x, y, itemlab, label, tick, val, unitPosition, pre={}, post={}, el, csymbol, clabel, tooltipmsg;
+					let previousPoint=[];
+					$(this).bind("plothover", function (_, pos, item) {
+						let val; 
 						if (item) {
 							if (previousPoint!=[item.seriesIndex, item.dataIndex]) {
 								previousPoint=[item.seriesIndex, item.dataIndex];
 								if(o.type==="xy"){
-									unitPosition={
-										x : (typeof VisualJS.container[id].unit.position.x!=="undefined" && VisualJS.container[id].unit.position.x==="start") ? true : false,
-										y : (typeof VisualJS.container[id].unit.position.y!=="undefined" && VisualJS.container[id].unit.position.y==="start") ? true : false,
-										z : (typeof VisualJS.container[id].unit.position.z!=="undefined" && VisualJS.container[id].unit.position.z==="start") ? true : false,
-									};
-									for(var property in unitPosition){
-										el=unitPosition[property];
-										if(unitPosition.hasOwnProperty(property)){
-											csymbol=VisualJS.container[id].unit.symbol && typeof VisualJS.container[id].unit.symbol[property]==="string" ? VisualJS.container[id].unit.symbol[property] : "";
-											clabel=VisualJS.container[id].unit.label && typeof VisualJS.container[id].unit.label[property]==="string" ? VisualJS.container[id].unit.label[property] : "";
-											if(el){
-												pre[property]=csymbol;
-												post[property]=clabel;
-												post[property]=(post[property] !== "") ? " " + post[property] : "";
-											}else{
-												pre[property]="";
-												post[property]=" " + clabel + " " + csymbol;
-												post[property]=(post[property]!=="") ? " " + post[property] : "";
-											}
+									const 
+										pre={}, 
+										post={},
+										unit = VisualJS.container[id].unit,
+										unitPosition={
+											x : unit.position.x==="start",
+											y : unit.position.y==="start",
+											z : unit.position.z==="start",
+										}
+									;
+
+									for(let property in unitPosition){
+										const 
+											el=unitPosition[property],
+											csymbol=unit.symbol && typeof unit.symbol[property]==="string" ? unit.symbol[property] : "",
+											clabel=unit.label && typeof unit.label[property]==="string" ? unit.label[property] : ""
+										;
+										if(el){
+											pre[property]=csymbol;
+											post[property]=clabel;
+											post[property]=(post[property] !== "") ? " " + post[property] : "";
+										}else{
+											pre[property]="";
+											post[property]="  " + clabel + " " + csymbol;
 										}
 									}
 									val=
@@ -1717,61 +1635,48 @@ var VisualJS={
 										pos.pageY  //item.pageY
 									);
 								}else{
-									x=item.datapoint[0];
-									y=item.datapoint[1];
-									itemlab=(o.type==="bar" && !Boolean(o.data[0].val))  ? (series.length > 1 ? series[x][0] : series[0][x][0]) : item.series.label;
-									label=(o.type!=="rank") ? itemlab : ticks[y][1];
-									tick=( (o.type!=="rank" && o.type!=="pie" && o.type!=="bar") || ( o.type === "bar" && Boolean(o.data[0].val) ) ) ?
-										(
-											(stacked || series.length===1) ?
+									const 
+										x=item.datapoint[0],
+										y=item.datapoint[1],
+										itemlab= o.type==="bar" && !Boolean(o.data[0].val)  ? (series.length > 1 ? series[x][0] : series[0][x][0]) : item.series.label,
+										label=o.type!=="rank" ? itemlab : ticks[y][1],
+										tick= (o.type!=="rank" && o.type!=="pie" && o.type!=="bar") || (o.type === "bar" && Boolean(o.data[0].val) ) ?
+										(stacked || series.length===1 ?
 												(Array.isArray(ticks) && ticks.length > 0 ? ticks[x][1] : false)
 												:
-												(
-													(o.type==="pyram") ? series[pos.x<0 ? 0 : 1].data[item.dataIndex][0] : ticks[item.dataIndex][1] // item.series.yaxis.ticks[item.dataIndex].label won't work in pyram if axis : {y: false}
-												)
+												(o.type==="pyram" ? series[pos.x<0 ? 0 : 1].data[item.dataIndex][0] : ticks[item.dataIndex][1])
+													// item.series.yaxis.ticks[item.dataIndex].label won't work in pyram if axis : {y: false}
 										)
-										: false
-									;
-									val=(o.type==="pyram") ? Math.abs(x) :
-										(o.type!=="rank") ?
-										(
-											(o.type!=="tsbar") ?
-													(
-														o.type==="pie" ?
-															y[0][1]
-															:
-															y
-													)
-													:
-													(stacked || series.length===1) ? series[item.seriesIndex].data[x][1] : y
+										: false,
+										createTooltipMessage = function(tick, label, separator, isBarBy) {
+											if (isBarBy) {
+												return tick ? `${tick}${label ? separator + label : ""}` : label || "";
+											} else {
+												return tick ? `${label ? label + separator + tick : tick}` : label || "";
+											}
+										},
+										tooltipmsg = createTooltipMessage(
+											tick,
+											label,
+											VisualJS.container[id].tooltipseparator,
+											o.type === "bar" && o.by
 										)
-										:
-										x
 									;
-
-									if(o.type === "bar" && o.by){
-										tooltipmsg = (tick) ? tick + (label ? VisualJS.container[id].tooltipseparator + label : "") : (label ? label : "");
-										showTooltip(
-											tooltipText(
-												id,
-												tooltipmsg,
-												val
-											),
-											pos.pageX, //item.pageX
-											pos.pageY  //item.pageY
-										);
-									}else{
-										tooltipmsg = (tick) ? (label ? label + VisualJS.container[id].tooltipseparator + tick : tick) : (label ? label : "");
-										showTooltip(
-											tooltipText(
-												id,
-												tooltipmsg,
-												val
-											),
-											pos.pageX, //item.pageX
-											pos.pageY  //item.pageY
-										);
+									
+									if (o.type === "pyram") {
+										val = Math.abs(x);
+									} else if (o.type === "rank") {
+										val = x;
+									} else if (o.type === "tsbar" || (o.type === "bar" && stacked)) {
+										const isStackedOrSingleSeries = stacked || series.length === 1;
+										val = isStackedOrSingleSeries ? series[item.seriesIndex].data[x][1] : y;
+									} else if (o.type === "pie") {
+										val = y[0][1];
+									} else {
+										val = y;
 									}
+										
+									showTooltip(tooltipText(id, tooltipmsg, val), pos.pageX, pos.pageY);
 								}
 							}
 						}else{
@@ -1781,7 +1686,7 @@ var VisualJS={
 					});
 				};
 
-				var setup={
+				let setup={
 						colors: vsetup.colors.series,
 						series: {
 							stack: stack,
@@ -1820,9 +1725,9 @@ var VisualJS={
 						},
 						xaxis:{
 							show: container.axis.x,
-							axisLabel: (typeof getNestedParam(vsetup.canvas.axis,["labelsText","x"]) !== "undefined"? vsetup.canvas.axis.labelsText.x : undefined),
+							axisLabel: typeof getNestedParam(vsetup.canvas.axis,["labelsText","x"]) !== "undefined"? vsetup.canvas.axis.labelsText.x : undefined,
 							axisLabelUseCanvas: true,
-							axisLabelFontSizePixels: ( aux=Number($("."+VisualJS.setup.clas).css("font-size").replace("px",""))),
+							axisLabelFontSizePixels: (aux=Number($("."+VisualJS.setup.clas).css("font-size").replace("px",""))),
 							axisLabelFontFamily: $("."+VisualJS.setup.clas).css("font-family") ,
 							axisLabelPadding: aux,
 							axisLabelColour: "#545454",
@@ -1830,7 +1735,7 @@ var VisualJS={
 						},
 						yaxis:{
 							show: container.axis.y,
-							axisLabel: (typeof getNestedParam(vsetup.canvas.axis,["labelsText","y"]) !== "undefined" ? vsetup.canvas.axis.labelsText.y : undefined),
+							axisLabel: typeof getNestedParam(vsetup.canvas.axis,["labelsText","y"]) !== "undefined" ? vsetup.canvas.axis.labelsText.y : undefined,
 							axisLabelUseCanvas: true,
 							axisLabelFontSizePixels: aux,
 							axisLabelFontFamily: $("."+VisualJS.setup.clas).css("font-family") ,
@@ -1840,21 +1745,18 @@ var VisualJS={
 				};
 
 				canvas=function(){
-					var
+					const
 						id=VisualJS.id,
 						ticklen=ticks.length,
-						i,
-						offset,
-						footerCont=atext(VisualJS.arr2html(o.footer, html) || ""),
-						visualJsType
+						footerCont=atext(VisualJS.arr2html(o.footer) || "")
 					;
 
-					$(selector).html("<header><"+headingElement+" id=\"ARIAtitle\" style=\"overflow:auto;\">"+heading+"</"+headingElement+"></header><footer class=\""+VisualJS.setup.footerclass+"\" style=\"overflow:auto;\">"+footerCont+"</footer>");
-
+					$(selector).html(`<header><${headingElement} id="ARIAtitle" style="overflow:auto;">${heading}</${headingElement}></header><footer class=${VisualJS.setup.footerclass} style="overflow:auto;">${footerCont}</footer>`);
+	
 					//It returns false when not enough space to draw a chart
 					if(!VisualJS.getSize(id)){return;}
 
-					visualJsType = vsetup.typeclassprefix+o.type;
+					const visualJsType = vsetup.typeclassprefix+o.type;
 
 					$(selector+" header").after('<main class="'+vsetup.canvasclass+' '+visualJsType+' '+VisualJS.visualsize+'" style="width: '+VisualJS.width+'px; height: '+VisualJS.height+'px; display: block;"></main>'); //'display: block;' added for visualization correctly in all browsers
 
@@ -1907,7 +1809,7 @@ var VisualJS={
 							}
 							setup.hooks={
 								drawBackground : function (plot,canvasContext){
-									var axes=plot.getXAxes()[0];
+									const axes=plot.getXAxes()[0];
 									if(typeof axes.ticks !== "undefined" && axes.ticks.length > 0){
 									axes.datamin=axes.ticks[0].v;
 									axes.datamax=axes.ticks[axes.ticks.length-1].v;
@@ -1924,9 +1826,9 @@ var VisualJS={
 						case "pyram":
 							setup.series.pyramid={show: true, barWidth: 1};
 							//ticks are undefined for pyramid: we remove the Y-axis if too many categories. Instead of ticklen, series[0].data.length is used.
-							setup.yaxis.show=( (VisualJS.height/series[0].data.length) > 11 ) ? container.axis.y : false; //If too many categories and not enough height, remove y-labels
+							setup.yaxis.show=(VisualJS.height/series[0].data.length) > 11 && o.axis.labels.y ? container.axis.y : false; //If too many categories and not enough height, remove y-labels
 
-							setup.xaxis.max=(typeof container.range==="number") ? max*container.range : (Array.isArray(container.range) ? container.range[1] : null); //isRange (can't be null). min is ignored. If max is lower than actual max it will be discarded (but increase in VisualJS.range won't be applied). Otherwise: Increase area using VisualJS.range in the longest bar
+							setup.xaxis.max=typeof container.range==="number" ? max*container.range : (Array.isArray(container.range) ? container.range[1] : null); //isRange (can't be null). min is ignored. If max is lower than actual max it will be discarded (but increase in VisualJS.range won't be applied). Otherwise: Increase area using VisualJS.range in the longest bar
 							setup.xaxis.tickFormatter=function(val) {
 								return tickFormatterGenerator(val,id, "x", format);
 							};
@@ -1940,7 +1842,7 @@ var VisualJS={
 						case "rank":
 							//bug plugin flot
 							//setup.yaxis.tickLength=0;
-							setup.yaxis.tickLength=null;
+							//setup.yaxis.tickLength=null;
 							setup.series.bars.horizontal=true;
 							setup.yaxis.ticks=( (VisualJS.height/ticklen) > 11) ? ticks.slice(0) : 0; //If too many categories and not enough height, remove y-labels
 							if(o.axis.labels.y === false){
@@ -1975,12 +1877,16 @@ var VisualJS={
 
 						case "bar":
 							setup.xaxis.tickLength=0;
+							if(o.axis.labels.x === false){
+								setup.xaxis.ticks=labelStrip(ticks);
+								setup.xaxis.show=false;
+							}
 							if(o.by && o.by.length && typeof o.data[0] === "object"){
 								//plumbing time
 								setup.xaxis.ticks=ticks;
-								if(o.axis.labels.x === false){
-									setup.xaxis.ticks=labelStrip(setup.xaxis.ticks);
-								}
+								// if(o.axis.labels.x === false){
+								// 	setup.xaxis.ticks=labelStrip(setup.xaxis.ticks);
+								// }
 								setup.bars={show: true};
 							}else{
 								setup.xaxis.mode="categories";
@@ -2000,46 +1906,31 @@ var VisualJS={
 								series,
 								setup
 							);
-							if(o.axis.labels.x===false || o.axis.labels.y===false){
-								aux="<style>";
-								if(o.axis.labels.x === false){
-									aux += canvasSel+" .flot-x-axis .flot-tick-label{"+
-										"display:none;"+
-									"}";
-								}
-								if(o.axis.labels.y===false){
-									aux += canvasSel+" .flot-y-axis .flot-tick-label{"+
-										"display:none;"+
-									"}";
-								}
-								aux += "</style>";
-								$(canvasSel).append(aux);
-							}
 						break;
 
 						//Time series
 						case "tsline":
-							if(setup.grid.markings===null){
-								//Zero line
-								setup.grid.markings=[{color: "#333333", lineWidth: 1, yaxis: {from: 0, to: 0}}];
-							}
 						case "tsbar":
 							if(o.type==="tsbar"){
 								setup.xaxis.tickLength=0;
+							} else if(setup.grid.markings===null){
+								//Zero line
+								setup.grid.markings=[{color: "#333333", lineWidth: 1, yaxis: {from: 0, to: 0}}];
 							}
+
 							setup.yaxis.tickFormatter=function(val) {
 								return tickFormatterGenerator(val,id, "y", format);
 							};
-							var
+							const
 								ratio=VisualJS.width/ticklen,
 								xticks=[],
-								freq,
 								digcrit= (typeof o.first  === 'string') && o.first ? o.first
 									: (VisualJS.ticks[0][1].length === 6 ?
 										"01" : //first month
 										"1") 	 //first quarter
 							;
-
+							let freq;
+									
 							if(typeof container.range!=="number" && container.range!==null){ //isRange
 								setup.yaxis.min=container.range[0]; //we don't check if min provided is lower than actual min
 								setup.yaxis.max=container.range[1]; //we don't check if max provided is greater than actual max
@@ -2048,6 +1939,7 @@ var VisualJS={
 								setup.yaxis.max=container.range; //we don't check if max provided is greater than actual max
 							}
 
+							let i;
 							switch(VisualJS.ticks[0][1].length){ //Assuming all time periods follow the same pattern
 								case 4: //Annual time series (4 digits)
 									// Magic rule: Only one year of every two must be displayed if width (mini) is small in comparison with # of ticks
@@ -2130,6 +2022,7 @@ var VisualJS={
 								opt,
 								setup
 							);
+							break;
 					}
 					if(isTooltipEnabled()){
 						$(canvasSel).UseTooltip(VisualJS.id);
