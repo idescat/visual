@@ -50,7 +50,6 @@ body {
 	padding: 4px;
 	background-color: #f6f6f6;
 	opacity: 0.90;
-	white-space: nowrap;
 	font-size: 11px;
 }
 #VisualJSTooltip strong, #VisualJSTooltip em {
