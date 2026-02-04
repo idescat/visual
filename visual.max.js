@@ -24,20 +24,21 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 /* 
-	Version 1.2.8  fixes the plugin existence check during setup.
-   Version 1.2.9  fixes overlapping stroke in maps.
+	Version 1.2.8	fixes the plugin existence check during setup.
+   	Version 1.2.9	fixes overlapping stroke in maps.
 	Version 1.3.0 	Modernizes the code (var->let+const). 
 						Added support for "bar" stacked charts. 
 						Fixed axis labels and ticks bugs. 
 						Fixed offset in grouped bars charts. 
 						Fixed labels offset in tsbar charts.
+	Version 1.3.1 	Fixed path order on mouse enter.
 */
 
 /*jshint esversion: 6*/
 /*global d3, LazyLoad*/
 
 let VisualJS={
-	version: "1.3.0",
+	version: "1.3.1",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -1250,7 +1251,10 @@ let VisualJS={
 				document.querySelectorAll('.visual .VisualJSarea path').forEach(function(path) {
 					path.addEventListener('mouseenter', function() {
 						let parent = this.parentNode;
-						parent.appendChild(this);
+						/* Version 1.3.1 */
+						if (this !== parent.lastElementChild) {
+							parent.appendChild(this);
+						}
 					});
 				});
 			};
