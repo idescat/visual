@@ -51,6 +51,7 @@ body {
 	background-color: #f6f6f6;
 	opacity: 0.90;
 	font-size: 11px;
+	pointer-events: none;
 }
 #VisualJSTooltip strong, #VisualJSTooltip em {
 	display: block;
@@ -153,6 +154,11 @@ body {
 
 .visual .VisualJSlegend table .legendColorBox {
 	vertical-align: top;
+}
+
+.visually-hidden {
+	position: absolute;
+	left: -9999px;
 }
 
 @media (max-width: 600px) {

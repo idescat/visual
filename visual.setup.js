@@ -22,7 +22,8 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 /*global VisualJS */
-VisualJS.setup={ //v.1.2.8
+
+VisualJS.setup = { //1.4
 	//Colors for maps and series
 	colors: {
 		map: {
@@ -33,7 +34,7 @@ VisualJS.setup={ //v.1.2.8
 	},
 	//Default options (They can be dynamically modified thru visual().)
 	canvas: {
-		unit : {
+		unit: {
 			label: "",
 			symbol: "",
 			position: "end"
@@ -55,14 +56,14 @@ VisualJS.setup={ //v.1.2.8
 			},
 			labels: {
 				x: true,
-				y: true
+				y: true,
+				in: true
 			}
 		},
 		dec: null, //Show only needed decimals (remove ending zeros) unless (recommended) valid dec has been specified by user
 		autoheading: true,
-
-		//Arrays are not accepted here. "bar", "tsline" and "tsbar" currently don't accept a number.
-		range: {
+		header: true,
+		range: { //Arrays are not accepted here. "bar", "tsline" and "tsbar" currently don't accept a number.
 			//Quantile. No filtering: 0
 			cmap: 0.05, //Used in color assignation in maps
 
@@ -207,6 +208,10 @@ VisualJS.setup={ //v.1.2.8
 					exists: function(){ return typeof jQuery.plot.plugins==="object" && typeof jQuery.plot.plugins[0]==="object" && jQuery.plot.plugins.map(function(e){return e.name}).indexOf("axisLabels") !== -1 ; }
 				},
 			}
+		},
+		echarts: {
+			js: "https://visual.js.org/lib/echarts.js",
+			exists: function(){ return typeof echarts==="function"; },
 		},
 		maps: {
 			js: "https://visual.js.org/maps/visual.maps.js",
