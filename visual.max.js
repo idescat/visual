@@ -25,20 +25,21 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 /* 
 	Version 1.2.8	fixes the plugin existence check during setup.
-   	Version 1.2.9	fixes overlapping stroke in maps.
+   Version 1.2.9	fixes overlapping stroke in maps.
 	Version 1.3.0 	Modernizes the code (var->let+const). 
 						Added support for "bar" stacked charts. 
 						Fixed axis labels and ticks bugs. 
 						Fixed offset in grouped bars charts. 
 						Fixed labels offset in tsbar charts.
 	Version 1.3.1 	Fixed path order on mouse enter.
+	Version 1.4		Echarts for rank charts. Header option added. 
 */
 
 /*jshint esversion: 6*/
-/*global d3, LazyLoad*/
+/*global d3, LazyLoad, echarts*/
 
 let VisualJS={
-	version: "1.3.1",
+	version: "1.4",
 	show: true, //To be used when a callback function is specified: "false" means "don't run VisualJS.chart()", that is, load everything but don't draw.
 	old: false, //You can change it to true programmatically if you already know the browser is IE<9
 	fixed: null,
@@ -82,7 +83,7 @@ let VisualJS={
 					el.offsetHeight + Math.round(parseFloat(computedStyle(el,"marginTop")) + parseFloat(computedStyle(el,"marginBottom"))) : 
 					0;
 			},
-			head=outerHeight(getNode(headingElement)),
+			head=(VisualJS.container[VisualJS.id].hasOwnProperty('header') && !VisualJS.container[VisualJS.id].header) ? 0 : outerHeight(getNode(headingElement)),
 			foot= outerHeight(getNode(footerElement)),
 			bheight=w.innerHeight || e.clientHeight || g.clientHeight,
 			margin=Math.round(parseFloat(computedStyle(vis,"marginTop")) + parseFloat(computedStyle(vis,"marginBottom"))),
@@ -179,14 +180,6 @@ let VisualJS={
 		html+= `</head><body><div id="${o.id}" class="${clas}"></div><script>window.setTimeout(function(){visual(${JSON.stringify(o)});},1);</script></body></html>`;
 		content(create(), html);
 	},
-	/* Draws two charts side by side
-		Input: {
-				css : "/styles/visual.css", //CSS file or CSS rules, or array of size 2 of CSS files or CSS rules
-				title : "Optional",
-				footer : "Optional",
-				load : [{},{}]
-		}
-	*/
 	compare: function(o){
 		const
 			vsetup=VisualJS.setup,
@@ -441,12 +434,6 @@ let VisualJS={
 				return obj;
 			},
 			retrieveMinMaxValues=function(){
-				/*let aux=[];
-				o.data.forEach(function(el){
-					aux=aux.concat(el.val);
-				});
-				return [Math.min.apply( null, aux), Math.max.apply( null, aux)];*/
-
 				if (!o.data || o.data.length === 0) {
 					return [undefined, undefined]; // Handle empty data
 				}
@@ -564,6 +551,7 @@ let VisualJS={
 				//scanvas
 				["dec","number|object",scanvas],
 				["autoheading","boolean",scanvas],
+				["header","boolean",scanvas],
 				["legend","boolean",scanvas],
 				["grid","object",scanvas],
 				[["grid","border"],"number",scanvas],
@@ -574,10 +562,11 @@ let VisualJS={
 				["axis","object",scanvas],
 				[["axis","x"],"boolean",scanvas],
 				[["axis","y"],"boolean",scanvas],
-				[["axis","labels", "x"], "boolean",scanvas],
-				[["axis","labels", "y"], "boolean",scanvas],
-				[["axis","ticks", "x"], "boolean",scanvas],
-				[["axis","ticks", "y"], "boolean",scanvas]
+				[["axis","labels","x"],"boolean",scanvas],
+				[["axis","labels","y"],"boolean",scanvas],
+				[["axis","labels","in"],"boolean",scanvas],
+				[["axis","ticks","x"],"boolean",scanvas],
+				[["axis","ticks","y"],"boolean",scanvas]
 			]
 		;
 
@@ -852,26 +841,39 @@ let VisualJS={
 			showTooltip=function(html, x, y) {
 				const
 					tt=document.getElementById(VisualJS.setup.tooltipid),
-					visRightLimit=VisualJS.bwidth-VisualJS.setup.margin, //Visual right limit
-					pos={}, //Final tooltip position
-					ttHalfWidth=tt.clientWidth/2 //Half of tooltip width
+					margin=VisualJS.setup.margin,
+					visRightLimit=VisualJS.bwidth - margin
 				;
-				tt.innerHTML=html;
-				tt.style.display="block"; //Paint to get width
-				//Default: tooltip top and centered
-				pos.x=x-ttHalfWidth;
-				pos.y=y-tt.clientHeight-5; //5 to avoid cursor
+				tt.style.whiteSpace = "nowrap";
+				tt.style.visibility = "hidden";
+				tt.style.display = "block";
+				tt.innerHTML = html;
+				
+				const 
+					ttWidth=tt.offsetWidth,
+					ttHeight=tt.offsetHeight,
+					ttHalfWidth=ttWidth / 2
+				;
+				let
+					posX=x-ttHalfWidth,
+					posY=y-ttHeight-15
+				;
+				
+				if (posX + ttWidth > visRightLimit) {
+					posX = visRightLimit - ttWidth;
+				}
+				if (posX < margin) {
+					posX = margin;
+				}
 
-				if(x + ttHalfWidth > visRightLimit){ //Outside right: --> move to left
-					pos.x-= (x + ttHalfWidth)-visRightLimit;
-				}else if(pos.x<VisualJS.setup.margin){ //Outside left --> move to right
-					pos.x+=VisualJS.setup.margin-pos.x ;
-				}//Outside top --> move down
-				if(pos.y<VisualJS.setup.margin){
-					pos.y+=tt.clientHeight*1.75;
-				}//Outside bottom not possible
-				tt.style.left=pos.x+"px";
-				tt.style.top=pos.y+"px";
+				if (posY < margin) {
+					posY = y + 20; 
+				}
+
+				tt.style.whiteSpace="normal";
+				tt.style.left=posX+"px";
+				tt.style.top=posY+"px";
+				tt.style.visibility="visible";
 			},
 			tooltip=function() {
 				const d=document;
@@ -929,7 +931,7 @@ let VisualJS={
 				);
 				canvas=function(){
 					const footerCont=atext(VisualJS.arr2html(o.footer) || "");
-					visual.html("<header><"+headingElement+" id=\"ARIAtitle\" style=\"overflow:auto;\" ></"+headingElement+"></header><footer class=\""+VisualJS.setup.footerclass+"\" style=\"overflow:auto;\"></footer>");
+					visual.html("<header"+(o.hasOwnProperty('header') && o.header === false ? ' class="visually-hidden"' : '')+"><"+headingElement+" id=\"ARIAtitle\" style=\"overflow:auto;\" ></"+headingElement+"></header><footer class=\""+VisualJS.setup.footerclass+"\" style=\"overflow:auto;\"></footer>");
 
 					d3.select(selector+" "+headingElement).html(heading);
 					d3.select(selector+" "+footerElement).html(footerCont);
@@ -1258,9 +1260,169 @@ let VisualJS={
 					});
 				});
 			};
-		}else{
+		} else if (o.type==="rank") {
+			addJS( vsetup.lib.jquery, true );
+			addJS( vsetup.lib.echarts, true );
+			VisualJS.chart=function(){
+				let option = {
+					color: vsetup.colors.series,
+					legend: {
+						show: container.legend,
+						bottom: '0'
+					},
+					grid: {
+						show: false,
+						borderWidth: container.grid.border,
+						containLabel: true,
+						outerBoundsContain: 'axisLabel',
+						left: '20px',
+						right: '20px',
+						bottom: '0px',
+						top: '0px'
+					},
+					tooltip: {
+						showContent: false,
+						trigger: 'item',
+						axisPointer: {
+							type: 'none' 
+						}
+					},
+					xAxis: {
+						type: 'value',
+						scale: false,
+						boundaryGap: false,
+						axisLabel: {
+							show: !o.axis || !o.axis.labels || o.axis.labels.x,
+							margin: 15,
+							fontSize: 10,
+							formatter: function (value) {
+								return value.toLocaleString(o.lang && o.lang === 'en' ? 'en-US' : 'ca-ES' );
+							}
+						},
+						splitLine: {
+							show: !o.axis || !o.axis.ticks || o.axis.ticks.x
+						},
+						axisTick: {
+							show: false
+						},
+						axisLine: {
+							show: false
+						},
+					},
+					yAxis: {
+						type: 'category',
+						show: o.axis.labels.y,
+						boundaryGap: true,
+						inverse: true,
+						axisLabel: {
+							show: !o.axis || !o.axis.labels || (o.axis.labels.y && !o.axis.labels.in),
+							rotate: 0,
+							hideOverlap: false,
+							fontSize: 10,
+							interval: 0,
+							overflow: 'truncate',
+							ellipsis: '...',
+							width: 300,
+							color: '#000'
+						},
+						splitLine: {
+							show: false
+						},
+						axisTick: {
+							show: false
+						},
+						axisLine: {
+							show: false
+						},
+					},
+					animation: false,
+					series: []
+				};
+
+				canvas=function(){
+					const
+						id=VisualJS.id,
+						footerCont=atext(VisualJS.arr2html(o.footer) || ""),
+						heading=getHeading()
+					;
+
+					$(selector).html(`<header${o.hasOwnProperty('header') && o.header === false ? ' class="visually-hidden"' : ''}><${headingElement} id="ARIAtitle">${heading}</${headingElement}></header><footer class=${VisualJS.setup.footerclass} style="overflow:auto;">${footerCont}</footer>`);
+	
+					//It returns false when not enough space to draw a chart
+					if(!VisualJS.getSize(id)){return;}
+
+					const visualJsType = vsetup.typeclassprefix+o.type;
+
+					$(selector+" header").after('<main id="mainchart" class="'+vsetup.canvasclass+' '+visualJsType+' '+VisualJS.visualsize+'" style="width: '+VisualJS.width+'px; height: '+VisualJS.height+'px; display: block;"></main>'); //'display: block;' added for visualization correctly in all browsers
+					
+					let 
+						mainChart = document.getElementById('mainchart'),
+						chartDom = echarts.init(mainChart)
+					;
+
+					option.yAxis.data = o.data.map(item => item[0]);
+					option.series = [{
+						type: 'bar',
+						barWidth: '90%',
+						data: o.data.map(item => {
+							const baseColor = vsetup.colors.series[0];
+							return {
+								value: item[1],
+								itemStyle: {
+									color: baseColor + '80' 
+								},
+								emphasis: {
+									itemStyle: {
+										color: baseColor + '30'
+									}
+								}
+							};
+						}),
+						label: {
+							show: o.axis && o.axis.labels && (o.axis.labels.in && o.axis.labels.y),
+							position: 'insideLeft',
+							silent: true,
+							color: '#000',
+							padding: [6, 6, 6, 6],
+							fontSize: 10,
+							overflow: 'truncate',
+							ellipsis: '...',
+							width: chartDom.getWidth() - 40,
+							distance: 4,
+							formatter: params => params.name
+						},
+						cursor: 'default'
+					}];
+					option.series.map(s => s.data.push(''));
+
+					chartDom.setOption(option);
+
+					chartDom.on('mousemove', function (params) {
+						const 
+							id = VisualJS.id,
+							label = params.name,
+							val = params.value,
+							html = tooltipText(id, label, val)
+						;
+						showTooltip(html, params.event.event.pageX, params.event.event.pageY);
+					});
+
+					chartDom.on('mouseout', function () {
+						$("#" + VisualJS.setup.tooltipid).hide();
+					});
+
+					VisualJS.pub[VisualJS.id].heading=heading;
+					//ACCESSIBILITY
+					$(canvasSel).find("canvas")
+						.attr("role","img")
+						.attr("aria-labelledBy", "ARIAtitle")
+					;
+				};
+				canvas();
+			};
+		}
+		else{
 			let hasFlot = true;
-			//(o.type==="tsline" || o.type==="tsbar" || o.type==="bar" || o.type==="rank"  || o.type==="pyram")
 			if( addJS( vsetup.lib.jquery, true ) ){ //No jQuery? Add Flot without checking
 				hasFlot=false;
 				addJS( vsetup.lib.jquery.flot, false );
@@ -1755,7 +1917,7 @@ let VisualJS={
 						footerCont=atext(VisualJS.arr2html(o.footer) || "")
 					;
 
-					$(selector).html(`<header><${headingElement} id="ARIAtitle" style="overflow:auto;">${heading}</${headingElement}></header><footer class=${VisualJS.setup.footerclass} style="overflow:auto;">${footerCont}</footer>`);
+					$(selector).html(`<header${o.hasOwnProperty('header') && o.header === false ? ' class="visually-hidden"' : ''}><${headingElement} id="ARIAtitle" style="overflow:auto;">${heading}</${headingElement}></header><footer class=${VisualJS.setup.footerclass} style="overflow:auto;">${footerCont}</footer>`);
 	
 					//It returns false when not enough space to draw a chart
 					if(!VisualJS.getSize(id)){return;}

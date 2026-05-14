@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 /*global VisualJS */
 
-VisualJS.setup = { //v.1.2.8
+VisualJS.setup = { //1.4
 	//Colors for maps and series
 	colors: {
 		map: {
@@ -57,11 +57,13 @@ VisualJS.setup = { //v.1.2.8
 			},
 			labels: {
 				x: true,
-				y: true
+				y: true,
+				in: true
 			}
 		},
 		dec: null, //Show only needed decimals (remove ending zeros) unless (recommended) valid dec has been specified by user
 		autoheading: true,
+		header: true,
 		range: { //Arrays are not accepted here. "bar", "tsline" and "tsbar" currently don't accept a number.
 			//Quantile. No filtering: 0
 			cmap: 0.05, //Used in color assignation in maps
@@ -155,7 +157,7 @@ VisualJS.setup = { //v.1.2.8
 	footerclass: "VisualJSfooter", //Footer class of the container
 	normal: "VisualJSnormal", //Normal size class
 	mini: "VisualJSmini", //Small size class
-	colorclassprefix: "c", //prefix for color class in maps: cnohover, c0, c1, c2...
+	colorclassprefix: "c", //Prefix for color class in maps: cnohover, c0, c1, c2...
 	typeclassprefix : "VisualJS", //Meaning a chart of type "tsbar" will have class VisualJStsbar v.1.1.0
 
 	//Markup created by visual
@@ -219,6 +221,10 @@ VisualJS.setup = { //v.1.2.8
 					}
 				}
 			}
+		},
+		echarts: {
+			js: "../lib/echarts.js",
+			exists: function(){ return typeof echarts==="function"; },
 		},
 		maps: {
 			js: "../maps/visual.maps.js",

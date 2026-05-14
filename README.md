@@ -94,6 +94,9 @@ Visual will treat the following string time formats using the *quarter*, *month*
 #### autoheading
 Boolean. This determines whether the heading is built by composition from *title*, *geo* and *time*. If *false*, only *title* will be used as a heading. Default (*true*) is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
 
+#### header
+Boolean (optional). This determines whether the header (including the title) is visible or not. If *false*, the title will be hidden from view but available for assistive technologies. Default (*true*) is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
+
 #### legend
 Boolean. This determines whether the chart legend should be shown. Default (*true*) is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
 
@@ -110,6 +113,8 @@ Take into account that Visual comes with a default marking in the zero value of 
 Object with the following properties: *x* (boolean), *y* (boolean) and, since version 1, *ticks* (object) and *labels* (object). The first two determine whether the axes should be shown. Default (*true*) is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js).
 
 When the axes are shown, *ticks* and *labels*, both objects with properties *x* (boolean) and *y* (boolean), can be used to hide (*false*) axis ticks and axis tick labels.
+
+Since version 1.4, the labels object also accepts *in* (boolean). Default (*true*) is set in [visual.setup.js](https://github.com/idescat/visual/blob/master/visual.setup.js). If set to false, data labels are displayed next to the bars. Note: This property is only functional when type is *[rank](#rank-properties)*.
 
 #### unit
 Object with three properties: *label* (string or, since version 1, object), *symbol* (string or, since version 1, object) and symbol *position* ("start" or "end" string, or, since version 1, object). All properties are optional.
@@ -306,6 +311,10 @@ Number (multiplier) or array of numbers (minimum, maximum). By default, the mult
 Since version 1, *null* can also be used instead of the minimum or the maximum. If the minimum is *null*, it will be set to the lowest negative value, or zero if all values are non-negative. If the maximum is *null*, it will be set to the highest value.
 
 Since version 1, *range* can also be specified as an object with a property *x* (array of numbers).
+
+#### axis.labels.in
+
+Boolean. If axis *y* is *true*, the *in* boolean attribute is accepted in the *labels* object to display data labels inside the bars. This is particularly useful for rankings with long labels where space is limited.
 
 ### *pie* properties
 
